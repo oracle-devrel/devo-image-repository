@@ -1,0 +1,348 @@
+<!-- _Raw-HTML -->
+<section class="cc01w1 cc01 cc01v0 cpad crule">
+    <div class=" cc01w1 cwidth">
+        <p>The Nashorn engine has been deprecated in JDK 11 as part of <a href="https://openjdk.java.net/jeps/335"
+                target="_blank">JEP 335</a> and and has been removed from JDK15 as part of <a
+                href="https://openjdk.java.net/jeps/372" target="_blank">JEP 372</a>. To learn more, please read <a
+                href="https://www.graalvm.org/reference-manual/js/NashornMigrationGuide/" target="_blank">Migration
+                Guide from Nashorn to GraalVM JavaScript</a>.</p>
+
+        <p>This series of articles introduces Nashorn, a blazing fast JavaScript runtime engine that shipped with
+            Java SE 8 to provide a lightweight environment for extending, supplementing, and often even replacing
+            Java code. Full Java Virtual Machine (JVM) capabilities and dynamic typing represent an effective
+            tooling that will appeal to developers and admins alike.</p>
+
+        <ul class="obullets">
+            <li>Part 1: Introducing JavaScript, ECMAScript, and Nashorn</li>
+            <li>Part 2: <a data-lbl="75 - The Java in JavaScript" data-trackas="devoArticleTechDatabaseNashorn1"
+                    href="https://developer.oracle.com/databases/nashorn-javascript-part2.html">The Java in
+                    JavaScript</a></li>
+            <li>Part 3: <a data-lbl="76 - Database Scripting " data-trackas="devoArticleTechDatabaseNashorn1"
+                    href="https://developer.oracle.com/databases/nashorn-javascript-part3.html">Database Scripting
+                </a></li>
+        </ul>
+
+        <p>Nashorn is a Java implementation of JavaScript that was developed under <a
+                data-lbl="77 - JSR 292: Supporting Dynamically Typed Languages on the Java Platform"
+                data-trackas="devoArticleTechDatabaseNashorn1" href="https://jcp.org/en/jsr/detail?id=292">JSR 292:
+                Supporting Dynamically Typed Languages on the Java Platform</a>, as part of a Da Vinci Machine
+            Project inside the JVM group. Dynamic typing is achieved through the use of <code
+                class="ocode">invokedynamic</code> bytecode that delegates invocations on Java objects. This allows
+            a seamless integration between Java and JavaScript and requires only a minimal amount of boilerplate to
+            start programming on the JVM without the need to write or compile Java code.</p>
+
+        <p>The Nashorn engine is a direct successor to Mozilla Rhino, and it continues the open source model under
+            the OpenJDK project. The current implementation of Nashorn conforms to the ECMAScript 5.1 specification
+            with the addition of new ECMAScript 6 (ES6) features in subsequent JDK releases under <a
+                data-lbl="78 - JEP 292: Implement Selected ECMAScript 6 Features in Nashorn"
+                data-trackas="devoArticleTechDatabaseNashorn1" href="http://openjdk.java.net/jeps/292">JEP 292:
+                Implement Selected ECMAScript 6 Features in Nashorn</a>. Starting with Java SE 8, each Java runtime
+            environment (JRE) and Java Development Kit (JDK) ships with Nashorn by default, which makes Nashorn a
+            very easy and accessible tool for gluing together all sorts of applications, databases, and clouds.</p>
+        <strong>Running Nashorn </strong>
+
+        <p>On systems with Java SE 8 or newer installed, Nashorn is already available for use. Most of the Linux
+            distributions might simply choose to install the <code class="ocode">java-1.8.0-openjdk</code> package
+            to quickly deploy the JDK. An easy way to try out Nashorn is a Docker container with the latest stable
+            OpenJDK release, as shown in Listing 1 (the official enterprise-grade JRE container <code
+                class="ocode">store/oracle/serverjre:8</code> can be used instead for production environments).</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>$ jjs -v
+nashorn 1.8.0_141
+jjs&gt;
+
+C:\&gt; jjs.exe -v
+nashorn 1.8.0_141
+jjs&gt;
+
+$ docker run openjdk jjs -v
+nashorn 1.8.0_141
+jjs&gt;
+</code></pre>
+        </div>
+
+        <p align="center"><strong>Listing 1. Running the Nashorn shell on Linux or macOS, on Windows, or on
+                Docker.</strong></p>
+
+        <p>The binary program <code class="ocode">jjs</code> is used to launch the internal Nashorn shell, which
+            simply instantiates the <code class="ocode">jdk.nashorn.tools.Shell</code> class in Java 8 or <code
+                class="ocode">jdk.scripting.nashorn.shell</code> in Java 9. The interactive prompt is quite like the
+            interactive interpreters from Python or Ruby. To quit the prompt run the <code class="ocode">exit()</code>
+            function or press Control-C, where exit can optionally take a status
+            code as a parameter. A commonly known DBA trick is to run interactive interpreters with the <a
+                data-lbl="79 - rlwrap" data-trackas="devoArticleTechDatabaseNashorn1"
+                href="https://github.com/hanslub42/rlwrap">rlwrap</a> wrapper to benefit from persistent history and
+            typeahead search, which makes a lot of sense for shells such as <code class="ocode">jjs</code> (rlwrap
+            package is part of the Fedora EPEL repo).</p>
+
+        <p>Because Nashorn is simply a Java program, all JVM-specific attributes can be provided on the command
+            line, the most important being the classpath and system properties, which are specified with the <code
+                class="ocode">-cp</code> and <code class="ocode">-D</code> switches, respectively. Instead of the
+            built-in <code class="ocode">-cp</code> or <code class="ocode">-classpath</code>, it&#39;s often better
+            to use the <code class="ocode">-J-Djava.class.path</code> attribute to avoid class resolution
+            issues&mdash;for example, with JDBC drivers&mdash;caused by nesting execution context.</p>
+
+        <p>When JVM code comes into play, Nashorn will not throw the entire Java stack trace by default. To achieve
+            better traceability, <code class="ocode">jjs</code> must be invoked as <code
+                class="ocode">jjs --dump-on-error</code> or simply <code class="ocode">jjs -doe</code>.</p>
+
+        <p>To quickly determine all running instances of Nashorn, <code class="ocode">jcmd</code> can be used to
+            list their process IDs and parameters. This can be used to quickly confirm correct classpath parameters,
+            ES6 compatibility, or the scripting mode, as shown in Listing 2.</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>$ jcmd
+2660 jdk.nashorn.tools.Shell -scripting
+7476 jdk.nashorn.tools.Shell --language=es6 -ot
+15640 sun.tools.jcmd.JCmd
+</code></pre>
+        </div>
+
+        <p align="center"><strong>Listing 2. Viewing running Nashorn shell instances with jcmd.</strong></p>
+        <strong> ES6 and Rhino </strong>
+
+        <p>When Java 8 debuted in 2014, the latest ECMAScript specification available at the time was 5.1. That
+            version became Nashorn&#39;s baseline. Shortly thereafter, work on JEP 292 started and most important
+            ES6 features started shipping. The single largest addition was the introduction of <a
+                data-lbl="80 - JEP 203: Nashorn: Lexically-Scoped Variable &amp; Constant Declarations"
+                data-trackas="devoArticleTechDatabaseNashorn1" href="http://openjdk.java.net/jeps/203">JEP 203:
+                Nashorn: Lexically-Scoped Variable &amp; Constant Declarations</a> in Java 8 Update 40, which fixed
+            one of the biggest gripes of ES5 JavaScript: the lack of variable block scope. Nashorn&#39;s ES6 efforts
+            and JEP 203 have fixed this with the introduction of the <code class="ocode">let</code> and <code
+                class="ocode">const</code> keywords, while preserving the <code class="ocode">var</code> keyword.
+            Listing 3 demonstrates the importance of using <code class="ocode">let</code> and <code
+                class="ocode">const</code> for programmers coming to JavaScript from other backgrounds. Larger
+            Nashorn codebases will certainly benefit from running the ES6 mode by default to avoid unexpected
+            scoping behavior unless JavaScript 5 compatibility is intended.</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>var x = 1;
+function es5(b) {
+    if (b) {
+        var x = 2;
+    }
+    print(x);
+}
+
+let y = 1;
+function es6(b) {
+        let y = 2;
+    if (b) {
+    }
+    print(y); 
+}
+
+jjs&gt; es5(true);
+2
+
+jjs&gt; es5(false);
+undefined
+
+jjs&gt; es6(true);
+1
+
+jjs&gt; es6(false);
+1
+</code></pre>
+        </div>
+
+        <p align="center"><strong>Listing 3. Nashorn implementation of ES6 variable scope.</strong></p>
+
+        <p>Mozilla Rhino&ndash;compatible programs can be safely executed on Nashorn by loading the compatibility
+            library, which implements the <code class="ocode">importClass</code>, <code
+                class="ocode">importPackage</code>, and <code class="ocode">JavaAdapter</code> functions, among
+            others. To enable compatibility, execute <code
+                class="ocode">load(&quot;nashorn:mozilla_compat.js&quot;)</code> as the first step in the code. Note
+            that this feature has been kept only for backwords-compatibility purposes; using Rhino extensions by
+            default is not recommended.</p>
+
+        <p>Due to the rapid development track that Nashorn has undergone across the Java 8 lifespan, make sure you
+            work with a recent Nashorn release. An easy way to ensure a consistent Nashorn version is being used is
+            by running <code class="ocode">jjs -v</code>, which displays version information as the first line of
+            output (<code class="ocode">jjs -fv</code> displays full version information).</p>
+        <strong> JavaScript 101 </strong>
+
+        <p>JavaScript has proven itself to be a very easy language to comprehend and immediately put into use.
+            However, it comes with a set of basic principles that could be baffling to newcomers:</p>
+
+        <ul class="obullets">
+            <li>While the ECMAScript specification lists semicolons as optional, using them in all assignment
+                statements and function declarations can protect against unintentional results.</li>
+            <li>Variables are <code class="ocode">undefined</code> by default which is a different from being <code
+                    class="ocode">null</code>. To check if variable is defined, the basic condition <code
+                    class="ocode">if (variable)</code> is a sufficient check.</li>
+            <li>JavaScript introduces the concept of <em>truthy</em> and <em>falsy</em> (or <em>falsey</em>) values.
+                All values except <code class="ocode">undefined</code>, <code class="ocode">null</code>, <code
+                    class="ocode">false</code>, <code class="ocode">-0</code>, <code class="ocode">+0</code>, <code
+                    class="ocode">NaN</code>, and <code class="ocode">&#39;&#39;</code> are truthy and evaluate to
+                <code class="ocode">true</code> during comparison.
+            </li>
+            <li>Loose typing requires understanding rules behind type coercion: <code
+                    class="ocode">3 + 3 + &quot;3&quot;</code> evaluates to <code class="ocode">63</code> whereas
+                <code class="ocode">&quot;3&quot; + 3 + 3</code> yields <code class="ocode">333</code>. This
+                implicit conversion stems from left-to-right arithmetic and when a string object is found, the
+                operation continues as a concatenation.
+            </li>
+            <li>The same type of coercion applies to a comparison invoked with the <code class="ocode">==</code>
+                operator. To avoid coercing the type when comparing values, it&#39;s good to use the <code
+                    class="ocode">===</code> operator, which compares both the value and the type, for example,
+                <code class="ocode">1 == true</code> but <code class="ocode">1 !== true</code>.
+            </li>
+            <li>For all operations involving numbers, a good habit is to use the built-in <code
+                    class="ocode">parseInt</code> and <code class="ocode">parseFloat</code> functions or a shorter
+                <code class="ocode">+variable</code> expression syntax to perform number conversion.
+            </li>
+            <li>Just like Bash, conditional expressions could be simplified with the <code
+                    class="ocode">&amp;&amp;</code> and <code class="ocode">||</code> operators so that <code
+                    class="ocode">1 == &quot;1&quot; &amp;&amp; print(&quot;yes&quot;)</code> simulates the longer
+                <code class="ocode">if (1 == &quot;1&quot;) { print(&quot;yes&quot;); }</code> syntax.
+            </li>
+            <li>A function always expects an arbitrary number of positional arguments, rendering missing values as
+                <code class="ocode">undefined</code>. The predefined array-like <code class="ocode">arguments</code>
+                variable exposes the index access with square brackets. The only ways to access this variable are
+                through <code class="ocode">arguments[i]</code> and <code class="ocode">arguments.length()</code>.
+            </li>
+        </ul>
+        <strong> Module System </strong>
+
+        <p>Node.js developers attempting to execute the <code class="ocode">require()</code> function to include an
+            external module will be immediately puzzled by receiving the <code
+                class="ocode">ReferenceError: &quot;require&quot; is not defined</code> error. Nashorn itself
+            doesn&#39;t incorporate any module system built in and relies only on the <code class="ocode">load()</code>
+            function to import dependencies. Nevertheless, <code class="ocode">require()</code> is totally possible with
+            the use of third-party scripts implementing
+            the CommonJS specification, such as <a data-lbl="81 - Nodyn" data-trackas="devoArticleTechDatabaseNashorn1"
+                href="https://github.com/nodyn/jvm-npm">Nodyn</a> .
+            See Listing 4 for a demonstration of the popular JavaScript unit testing framework QUnit used against
+            Java code.</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>/* unittest.js */
+load(&quot;jvm-npm.js&quot;);
+var QUnit = require(&quot;qunit-2.4.0.js&quot;);
+
+QUnit.done(function(details) {
+    print(JSON.stringify(details, null, 4));
+});
+
+QUnit.test(&quot;Running at least Java 8&quot;, function(assert) {
+    assert.ok(java.lang.System.getProperty(&quot;java.version&quot;) &gt;= &quot;1.8&quot;);
+});
+
+QUnit.test(&quot;Always failing&quot;, function(assert) {
+    assert.fail();
+});
+
+QUnit.load();
+
+$ jjs unittest.js
+{
+    &quot;passed&quot;: 1,
+    &quot;failed&quot;: 1,
+    &quot;total&quot;: 2,
+    &quot;runtime&quot;: 295
+}
+</code></pre>
+        </div>
+
+        <p align="center"><strong>Listing 4. Using the JavaScript QUnit unit testing framework from
+                Nashorn.</strong></p>
+
+        <p>Even though JavaScript does not offer syntax for implementing modules, a commonly used pattern can be
+            used with Nashorn to leverage the built-in <code class="ocode">load()</code> function. For even fairly
+            complex code, modules are inevitable for readability and maintainability in the long run. Listing 5
+            shows a typical module implementation that covers object-oriented programming aspects&mdash;with the
+            possibility of addressing global scope, even in the absence of a browser&#39;s <code
+                class="ocode">window</code> or <code class="ocode">console</code> object in the language
+            specification.</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>/* module.js */
+(function(global) {
+    return function(moduleArg) {
+        var privateMethod = function(v) {
+            print(&quot;This is private&quot;);
+            global[&quot;v&quot;] = v;
+        }
+
+        this.publicMethod = function() {
+            print(&quot;This is public&quot;);
+        }
+
+        __proto__.staticMethod = function() {
+            print(&quot;This is static&quot;);
+        }
+
+        {
+            print(&quot;This is constructor&quot;);
+            privateMethod(42);
+        }
+    }
+})(this);
+
+jjs&gt; var Module = load(&#39;module.js&#39;);
+
+jjs&gt; Module.staticMethod()
+This is static
+
+jjs&gt; var m = new Module();
+This is constructor
+This is private
+
+jjs&gt; Module.privateMethod()
+&lt;shell&gt;:1 TypeError: Module.privateMethod is not a function
+</code></pre>
+        </div>
+
+        <p align="center"><strong>Listing 5. Nashorn module pattern.</strong></p>
+        <strong> Summary </strong>
+
+        <p>JavaScript&#39;s exponential growth, fueled by progress in web development, positions the language high
+            in the ranks. The work that was started by Mozilla and Sun continues to receive a lot attention at
+            Oracle, with a growing number of tools and products leveraging Nashorn for extensibility and scripting.
+            The language that stems from the web has successfully entered the server space and, thanks to
+            ScriptEngine and JSR 223, it has become a first-class JVM citizen. Subsequent articles in this series
+            demonstrate first-hand examples of Nashorn put into use.</p>
+
+        <div class="aboutAuthor">
+            <h3>About the Authors</h3>
+
+            <div class="author">
+                <div class="bio"><strong>Przemyslaw Piotrowsk</strong> is principal software engineer with 10+ years
+                    of experience in design, development and maintenance of database systems. He is an Oracle
+                    Database 11 <em>g</em> Certified Master, an Oracle Database 12 <em>c</em> Certified Master, and
+                    an Oracle Database Cloud Certified Master, focusing on database engineering and infrastructure
+                    automation.</div>
+            </div>
+        </div>
+
+    </div>
+</section>
+<!-- /CC01v0 -->
+<!-- / _Raw-HTML -->

@@ -1,0 +1,327 @@
+<!-- U03v5 -->
+<!-- _Raw-HTML -->
+<section class="cc01 cc01v0 cpad crule">
+    <div class="cc01w1 cwidth">
+        <p>Setting up a Kubernetes environment can be quite challenging, especially for beginners. Rather than
+            concerning yourself with manually installing Kubernetes on cluster environments, you could go for a managed,
+            cloud option. Oracle Cloud Infrastructure provides the latest managed Kubernetes offering.</p>
+
+        <p>This article shows how to deploy an example Java Platfrom, Enterprise Edition (Java EE) application in a
+            managed Oracle Cloud Kubernetes cluster.</p>
+
+        <h3>Docker Containers</h3>
+
+        <p>In order to run enterprise applications in a Kubernetes cluster, they need to be packaged as Docker
+            containers. We will use a Docker base image that already contains the application server, a Java
+            installation, and the required operating system binaries.</p>
+
+        <p>The following shows the Dockerfile of our <a href="https://github.com/sdaschner/hello-cloud/tree/oke-example"
+                target="_blank">hello-cloud project</a>:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+FROM sdaschner/open-liberty:javaee8-jdk8-b2
+
+COPY target/hello-cloud.war $DEPLOYMENT_DIR
+</code></pre>
+        </div>
+
+        <p>We can distribute the created Docker image via the public DockerHub, another Docker registry cloud service.
+            or a private Docker registry.</p>
+
+        <h3>Kubernetes Deployments</h3>
+
+        <p>Kubernetes runs Docker containers in the form of pods. A pod contains one or more containers and is usually
+            created and managed by a Kubernetes deployment. A deployment provides the ability to scale and update pods
+            without too much manual effort.</p>
+
+        <p>Our example Kubernetes deployment&#39;s YAML definition looks as follows:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+kind: Deployment
+apiVersion: apps/v1beta1
+metadata:
+  name: hello-cloud
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: hello-cloud
+        version: v1
+    spec:
+      containers:
+      - name: hello-cloud
+        image: docker.example.com/hello-cloud:1
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          httpGet:
+            port: 9080
+            path: /
+        readinessProbe:
+          httpGet:
+            port: 9080
+            path: /hello-cloud/resources/health
+      imagePullSecrets:
+      - name: regsecret
+      restartPolicy: Always
+---
+</code></pre>
+        </div>
+
+        <p>The liveness and readiness probe definitions tell Kubernetes when the container is up and running and enable
+            it to handle incoming traffic, respectively. The deployment will cause one pod to be created on a cluster
+            node with given the specification.</p>
+
+        <p>In order to pull the image from our repository&mdash;here, <code
+                class="ocode">docker.example.com</code>&mdash;we usually have to provide a Kubernetes secret, which
+            contains the Docker credentials. The secret <code class="ocode">regsecret</code> was created in the same
+            namespace for this purpose.</p>
+
+        <h3>Services</h3>
+
+        <p>To access the created pod from inside or outside of the cluster, we require a Kubernetes service. The service
+            balances the load to all instances of the running containers:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+kind: Service
+apiVersion: v1
+metadata:
+  name: hello-cloud
+  labels:
+    app: hello-cloud
+spec:
+  selector:
+    app: hello-cloud
+  ports:
+    - port: 9080
+      name: http
+---
+</code></pre>
+        </div>
+
+        <p>Kubernetes connects the service to the created pods by their labels and the defined selector. The <code
+                class="ocode">app</code> selector is a de facto standard for grouping logical applications.</p>
+
+        <p>Kubernetes has an internal DNS resolution that enables cluster-internal applications to access our
+            hello-cloud application via <code class="ocode">hello-cloud:9080</code>. This, by the way, is a big benefit
+            of minimizing the URL conuration of applications that run inside of the cluster. No matter which cluster or
+            environment runs our workload, the host name <code class="ocode">hello-cloud</code> will be resolved to the
+            corresponding <code class="ocode">hello-cloud</code> service.</p>
+
+        <h3>Ingress</h3>
+
+        <p>To access applications from outside of the cluster as well, we usually use Kubernetes ingress resources. The
+            following creates an NGINX ingress, which automatically routes ingress traffic through the external IP
+            address:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+kind: Ingress
+apiVersion: extensions/v1beta1
+metadata:
+  name: hello-cloud
+  annotations:
+    kubernetes.io/ingress.class: &quot;nginx&quot;
+spec:
+  rules:
+    - http:
+        paths:
+        - path: /hello-cloud
+          backend:
+            serviceName: hello-cloud
+            servicePort: 9080
+---
+</code></pre>
+        </div>
+
+        <h3>Enter Oracle Container Engine for Kubernetes</h3>
+
+        <p>In order to run our example application, we need a running Kubernetes cluster with an arbitrary number of
+            nodes. Oracle Container Engine for Kubernetes provides a managed cluster that doesn&#39;t require us to set
+            up the Kubernetes resources ourselves.</p>
+
+        <p>The <a href="https://docs.us-phoenix-1.oraclecloud.com/Content/ContEng/Concepts/contengoverview.htm"
+                target="_blank">documentation</a> describes how to create a cluster with a desired network setup. We
+            will use the recommended default options with two load balancer subnets, three worker subnets, RBAC
+            authorization, and an additional NGINX ingress deployment. For more information, you can also have a look at
+            my <a href="https://github.com/sdaschner/oke-resources" target="_blank">GitHub OKE repository</a>.</p>
+
+        <p>The following screenshots show the creation of our cluster with a default cluster node pool, which manages
+            the compute instances. We are creating a cluster called <code class="ocode">oke-cluster-1</code> with the
+            recommended networking options.</p>
+
+        <p align="center"><img alt="Figure 1. Creating a cluster"
+                src="//www.oracle.com/a/tech/img/java-kubernetes-f1.jpg" /></p>
+
+        <p align="center" class="xsml">Figure 1. Creating a cluster</p>
+
+        <p>The node pool, <code class="ocode">node-pool-1</code>, is created with the worker subnets and will manage two
+            nodes per subnet in <code class="ocode">VM.Standard.1.2</code> shape. In total, our cluster will contain six
+            nodes in three availability domains.</p>
+
+        <p align="center"><img alt="Figure 2. Node pool configuration"
+                src="//www.oracle.com/a/tech/img/java-kubernetes-f2.jpg" /></p>
+
+        <p align="center" class="xsml">Figure 2. Node pool configuration</p>
+
+        <p>After that, our cluster and its nodes will be created.</p>
+
+        <p align="center"><img alt="Figure 3. The created node pool"
+                src="//www.oracle.com/a/tech/img/java-kubernetes-f3.jpg" /></p>
+
+        <p align="center" class="xsml">Figure 3. The created node pool</p>
+
+        <p>The cluster detail page will guide us regarding how to connect to the newly created Kubernetes cluster. We
+            can prove that our nodes have been created by using the <code class="ocode">kubectl</code> command-line
+            tool:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+$&gt; kubectl get nodes
+NAME              STATUS    ROLES     AGE       VERSION
+129.146.112.217   Ready     node      2d        v1.9.7
+129.146.126.186   Ready     node      2d        v1.9.7
+129.146.133.104   Ready     node      2d        v1.9.7
+129.146.136.107   Ready     node      2d        v1.9.7
+129.146.66.171    Ready     node      2d        v1.9.7
+129.146.98.185    Ready     node      2d        v1.9.7
+</code></pre>
+        </div>
+
+        <p>The cluster description page shows how to connect our local <code class="ocode">kubectl</code> with the newly
+            created Oracle Cloud cluster.</p>
+
+        <p>Once we confirmed that the cluster has been set up successfully, we can start using the cluster by
+            provisioning our workload. Therefore, we send our Kubernetes YAML definitions to the cluster. In this
+            example, we packaged the deployment, service, and ingress definitions into a single YAML file:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+$&gt; kubectl apply -f deployment/hello-cloud.yaml
+service &quot;hello-cloud&quot; created
+deployment.apps &quot;hello-cloud&quot; created
+ingress.extensions &quot;hello-cloud&quot; created
+</code></pre>
+        </div>
+
+        <p>We now can check that our service, deployment, and pod have been created successfully:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+$&gt; kubectl get services
+NAME          TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)          AGE
+hello-cloud   NodePort    10.96.27.211   &lt;none&gt;        9080:32133/TCP   1m
+kubernetes    ClusterIP   10.96.0.1      &lt;none&gt;        443/TCP          1d
+
+$&gt; kubectl get deployments
+NAME          DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
+hello-cloud   1         1         1            1           1m
+
+$&gt; kubectl get pods
+NAME                        READY   STATUS    RESTARTS   AGE
+hello-cloud-d6777c66-n24bw  1/1     Running   0          1m
+</code></pre>
+        </div>
+
+        <p>The NGINX ingress service is exposed as a load balancer and we will use its IP address to access the cluster:
+        </p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+$&gt; kubectl get services --namespace ingress-nginx
+NAME                     TYPE           CLUSTER-IP      EXTERNAL-IP       PORT(S)                       AGE
+default-http-backend     ClusterIP      10.96.76.149    &lt;none&gt;            80/TCP                        1d
+ingress-nginx            LoadBalancer   10.96.191.202   129.146.88.24     80:30979/TCP,443:32339/TCP    1d</code></pre>
+        </div>
+
+        <p>Now we&#39;ll put it all together and access our hello-cloud example application via HTTPS, for example by
+            using <code class="ocode">curl</code>:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+$&gt; curl -k https://129.146.88.24/hello-cloud/resources/hello
+Hello from OKE!
+</code></pre>
+        </div>
+
+        <p>This uses the NGINX ingress that is accessed by the external IP address and routes traffic to the <code
+                class="ocode">hello-cloud</code> service and ultimately to the container, which runs in the <code
+                class="ocode">hello-cloud-d6777c66-n24bw</code> pod.</p>
+
+        <h3>See Also</h3>
+
+        <ul class="obullets">
+            <li><a href="https://kubernetes.io/docs/" target="_blank">Kubernetes documentation</a></li>
+            <li><a href="https://docs.us-phoenix-1.oraclecloud.com/Content/ContEng/Concepts/contengoverview.htm"
+                    target="_blank">Oracle Container Engine documentation</a></li>
+            <li><a href="https://github.com/sdaschner/oke-resources" target="_blank">GitHub repository for NGINX
+                    setup</a></li>
+            <li><a href="https://github.com/sdaschner/hello-cloud/tree/oke-example" target="_blank">Example hello-cloud
+                    application</a></li>
+        </ul>
+
+        <h3>About the Author</h3>
+        <p><strong>Sebastian Daschner</strong> is a self-employed Java consultant, author, and trainer who is
+            enthusiastic about programming and Java (EE). He is the author of the book <em>Architecting Modern Java EE
+                Applications</em>. Daschner is participating in the JCP&mdash;helping to form the future standards of
+            Java EE by serving in the JAX-RS, JSON-P, and Config Expert Groups&mdash;and collaborating on various open
+            source projects. For his contributions in the Java community and ecosystem he was recognized as a Java
+            Champion, Oracle Developer Champion, and double 2016 JavaOne Rock Star. Besides Java, he is also a heavy
+            user of Linux and container technologies such as Docker. He evangelizes computer science practices on his <a
+                href="https://blog.sebastian-daschner.com/" target="_blank">blog</a>, through his newsletter, and on <a
+                href="https://twitter.com/daschners?lang=en" target="_blank">Twitter</a>. When not working with Java, he
+            also loves to travel the world&mdash;either by plane or motorbike.
+        </p>
+    </div>
+</section>
+
+<!-- / _Raw-HTML -->
+<!-- _Raw-Text -->

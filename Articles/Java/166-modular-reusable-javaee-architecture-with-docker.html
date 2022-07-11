@@ -1,0 +1,477 @@
+<!-- _Raw-Text -->
+<section class="cc01 cc01v0 cpad crule">
+    <div class="cc01w1 cwidth">
+        <p>Can you easily replicate all the services your Java EE application needs to run? Every Java EE application
+            needs many services: databases, message queues, NoSQL services, authentication, user management, and much
+            more. We run some of those services inside the application server during development and small deployments.
+            But once we grow and scale our infrastructure, we need to separate each service in its own environment.
+            That's when things get complex.</p>
+
+        <p>Software containers can help us manage and tame this complexity. Containers make it easy to create
+            sophisticated architectures composed of many "moving parts." Containers also help automate this process, and
+            ease the creation of complete development-test-deploy pipelines. Best of all, containers allow for the reuse
+            of our infrastructure components. We can build infrastructures with containers from third parties, just
+            adding them to our deployments. Or we can build infrastructures from the containers we create ourselves.</p>
+
+        <p>We saw in the first article in this series how to encapsulate a Java EE application inside a container. Java
+            EE gives us portability among Java EE vendors. Containers expand this portability to many infrastructure and
+            cloud providers.</p>
+
+        <p>Let's see now how containers can help us define our architecture in a modular, reusable way!</p>
+
+        <h3>Enterprise Solutions Are Composed of Many Services</h3>
+
+        <p>When we construct applications out of several services, we have important advantages. It is much easier to
+            scale independent layers than it is to scale a single monolithic application. This is also true for our
+            pipeline when we are creating development, testing, and deployment environments. Any discussion about
+            "microservices" centers around those benefits. Separating large applications into modular services is
+            technically sound and also fashionable!</p>
+
+        <p>Not every application is composed of microservices, but the Java EE architecture does define and use multiple
+            services. Lots of Java EE functionality is deployed on external services, which makes our applications much
+            more useful and easier to create. And those services, although not microservices, are deployed (and scaled
+            and developed) independently. This is part of what allows the Java EE architecture to scale to large
+            environments.</p>
+
+        <p>Figure 1 shows a Java EE application with multiple services, such as a web server, an application server, a
+            message queue (MQ) server, and a database server.</p>
+
+        <p align="center"><img alt="Figure 1. Multiple services that support a Java EE application"
+                src="https://www.oracle.com/a/tech/img/modular-resuable-java-ee-architecture-docker-1.jpg"
+                style="width: 720px;" /></p>
+        <p align="center" class="xsml">Figure 1. Multiple services that support a Java EE application</p>
+
+        <p>Almost every Java EE application uses many of the services shown in Figure 1 as well as SQL databases,
+            message queues, NoSQL servers, user management servers, storage services, and many more. These services are
+            independently installed and managed, and applications depend upon them.</p>
+
+        <p>This usually means that we have to install, configure, and manage each one of those services. Many times,
+            they will need to run on their own machines. If we want to scale or guarantee high availability (HA), we
+            need multiple instances of each one, which adds even more configuration and installation hurdles to the
+            whole process. It gets to the point that it is hard to re-create all those services in our development and
+            testing environments. So we don't. This leads to different environments in our pipeline. Different
+            environments increase the risk of failure and make debugging much harder—even if we are able to automate
+            those disparate environments.</p>
+
+        <h3>Encapsulating Services for Independence and Scalability</h3>
+
+        <p>Containers are a great way to install and manage separate services. In the first article in this series, we
+            saw how to encapsulate an application. We can also encapsulate any of those external services. Services
+            inside a container are easy to install, manage, and scale. By running several containers on a single
+            machine, we can develop and test our architecture. Once tested, we can separate the containers onto multiple
+            machines and even replicate containers. With the same building blocks, we can create large, scalable, and
+            highly available production environments. Figure 2 shows a diagram of a Java EE architecture built using
+            containers.</p>
+
+        <p align="center"><img alt="Figure 2. Diagram of a Java EE architecture built using containers"
+                src="https://www.oracle.com/a/tech/img/modular-resuable-java-ee-architecture-docker-2.jpg"
+                style="width: 720px;" /></p>
+        <p align="center" class="xsml">Figure 2. Diagram of a Java EE architecture built using containers</p>
+
+        <h3>Modular and Reusable Services</h3>
+
+        <p>Creating scalable and highly available architectures is already wonderful, and it is even better if we can
+            reuse services that are already scalable.</p>
+
+        <p>By accessing container repositories, we can compose architectures out of existing components, and we can
+            reuse containers in multiple projects and environments.</p>
+
+        <p>If we are using services that exist in the open source community or are provided by vendors, composing an
+            architecture is even easier. There is a large pool of ready-to-use services prepackaged as containers, so we
+            can compose our infrastructure.</p>
+
+        <p>Many repositories of containers are available. Docker Hub is the leading repository, and it provide many
+            (many!) images. But Google, Amazon, and others also provide public repositories. You can even host your own
+            repository. You can search for an official (or not!) image of services, vendors, and products. The source
+            code for most images is also available on GitHub.</p>
+
+        <h3>Improving Our Original Application</h3>
+
+        <p>Let's see how we can improve the application we created in the first article in this series. Building on top
+            of our simple Java EE application that has an NGINX load balancer, we'll add several services.</p>
+
+        <p>A typical enterprise application will need a database to store information. To talk with other systems in our
+            enterprise, we can use a messaging server. We can integrate our application with legacy applications or even
+            Internet of Things (IoT) devices. And, our application will be awesome, so it needs some big data
+            capabilities. For this, let's add a NoSQL database to the mix. Figure 3 shows a diagram of the final
+            application.</p>
+
+        <p align="center"><img alt="Figure 3. Diagram of our enhanced application"
+                src="https://www.oracle.com/a/tech/img/modular-resuable-java-ee-architecture-docker-3.jpg"
+                style="width: 720px;" /></p>
+        <p align="center" class="xsml">Figure 3. Diagram of our enhanced application</p>
+
+        <p>If you want to follow along, all the commands and files that are mentioned here are at this GitHub
+            repository: <a href="https://github.com/eldermoraes/javaoneus2016"
+                target="_blank">https://github.com/eldermoraes/javaoneus2016</a>.</p>
+
+        <h3>First, the Database</h3>
+
+        <p>The most obvious thing for any Java EE application is the database. In this article, we are going to use
+            PostgreSQL, an open source, powerful database. It can run in a cluster, so if we need to scale, we can run
+            containers on multiple machines.</p>
+
+        <p>A quick search at Docker Hub shows an official PostgreSQL image. We can use the container as is, or we can
+            create a new image based on an existing one and add our own configurations. Let's do the latter to see how
+            we can customize PostgreSQL for our specific application.</p>
+
+        <p>We begin by building our PostgreSQL image. If you downloaded the project, change to the postgres directory
+            and run the following command:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+    <code>
+    docker build -t postgres-javaone .
+    </code></pre>
+        </div>
+
+        <p>Don't forget the period at the end. This command will build a new image based on the PostgreSQL Dockerfile,
+            which was provided in the downloaded project:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+    <code>
+    # Using PostgreSQL official Docker image as a basis FROM postgres:9.6  
+    
+    # Copy your local file init-user-db.sh to the image,  
+    # as it will be executed when you run a new container 
+    COPY docker-entrypoint-initdb.d/init-user-db.sh /docker-entrypoint-initdb.d/init-user-db.sh 
+    RUN chmod a+x /docker-entrypoint-initdb.d/init-user-db.sh  
+    
+    # Define default language for the database running  
+    # from this image 
+    RUN localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8 
+    ENV LANG en_US.utf8
+    </code></pre>
+        </div>
+
+        <p>We just built our own PostgreSQL image! We can use it in this or other projects. Let's start it and get it up
+            and running:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+    <code>
+    docker run --name postgresdb -p 5432:5432 postgres-javaone
+    </code></pre>
+        </div>
+
+        <p>We are giving it a name, so we can access it from our application container. We are also exporting the port,
+            so we can connect to it externally.</p>
+
+        <h3>Now, Let's Handle Messaging</h3>
+
+        <p>With the database taken care of, the next service our application needs is a message queue server. Many Java
+            EE applications use Java Message Service (JMS) to route messages between components. It works inside the
+            application or to reach out to the external world to legacy systems, external services, and Internet of
+            Things devices. A good message server can connect our application to virtually anything. It can also deal
+            with synchronous and asynchronous communication. Messaging is a powerful way of connecting systems in a
+            decoupled way.</p>
+
+        <p>Most Java EE application servers offer an internal JMS service. This can work. But the message server is an
+            independent service, and you might need to scale it independently. An external server can also provide more
+            options for connectivity. In our example, we will use Apache ActiveMQ. It supports many protocols and has an
+            active community. More important: it is open source, so you can use in projects of any size.</p>
+
+        <p>In this case, we will just run an existing image as is. A search on Docker Hub locates several images.
+            Although there is no official ActiveMQ image, there are several done by the community. We selected one that
+            looks well implemented. Now, we can just name the image in the <code>docker run</code> command, as shown in
+            the following command. The <code>docker</code> daemon will download the image, create a container, and run
+            it.</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+    <code>
+    docker run --name activemq webcenter/activemq:5.13.2
+    </code></pre>
+        </div>
+
+        <h3>How About Some Big Data?</h3>
+
+        <p>Our infrastructure is looking good! Today, every application needs some way to handle unstructured data or
+            just large amounts of data. So, let's add a NoSQL server to our environment. That way, we are ready to
+            handle some big data. Our little example app will shine!</p>
+
+        <p>Again, searching on Docker Hub, we see an official image for Cassandra. We don't need any special
+            configuration, so, let's just use this as is.</p>
+
+        <p>Again, we don't need to build an image. We can just run it. As before, Docker will download the referenced
+            image from the registry and run it:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+    <code>
+    docker run --name cassandradb cassandra:3.7
+    </code></pre>
+        </div>
+
+        <p>Isn't this fun? In just a few commands, we have a complete infrastructure ready for our application! Now we
+            can go back to the image that we created (see previous article). That image is an appliance, which means we
+            include in it the last version of our application, already deployed and ready to run. Let's make a few
+            changes to that image, so we can use the new services we just deployed.</p>
+
+        <p>To build the application container, we change to the following directory:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+    <code>
+    javaoneus2016/tree/master/tomee-db
+    </code></pre>
+        </div>
+
+        <p>And then we build the image:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+    <code>
+    docker build -t tomee-db --build-arg WAR_FILE=javaonedb.war .
+    </code></pre>
+        </div>
+
+        <p>Here is the Dockerfile we are using in the above command:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+    <code>
+    # Using TomEE official Docker image as a basis 
+    FROM tomee:8-jre-1.7.2-webprofile  
+    
+    # Configure our server with HA settings 
+    ADD server.xml /usr/local/tomee/conf/server.xml  
+    
+    # Add some users to TomEE, so we can log in  
+    # to the admin panel later to see the results 
+    ADD tomcat-users.xml /usr/local/tomee/conf/tomcat-users.xml  
+    
+    # Add DataSource configuration 
+    ADD tomee.xml /usr/local/tomee/conf/tomee.xml  
+    
+    # Add Postgres JDBC JAR file 
+    ADD postgresql-9.4-1206.jdbc42.jar /usr/local/tomee/lib/postgresql-9.4-1206.jdbc42.jar  
+    
+    # Now we add our application.  
+    # This is the last step, so we can use Docker caching capabilities  
+    # every time we re-create the container with a new version of the application  
+    
+    ARG WAR_FILE=warfile.war 
+    ADD ${WAR_FILE} /usr/local/tomee/webapps/${WAR_FILE}
+    </code></pre>
+        </div>
+
+        <p>So, now we have a new image with the latest version of the application. This version adds code to use all the
+            services we installed.</p>
+
+        <p>Note that this is a simple, standard Java EE application. There is nothing special in the application itself.
+            We are just using basic Java EE constructs.</p>
+
+        <p>In our JSP page we refer to a servlet that injects an Enterprise JavaBeans (EJB) bean to access the database.
+            Shown below is the relevant code for the JSP page, the servlet, and the bean.</p>
+
+        <p>Here's the <code>index.jsp</code> file:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+    <code>
+    <h1>The Host is</h1>
+    <h1><font color="red"><%=InetAddress.getLocalHost().getHostAddress()%></font></h1>
+    <form action="DataServlet">        
+         <input type="submit" value="Create Data and Show It!!!">
+    </form>     
+    
+    <%if (dataList != null && !dataList.isEmpty()) {%>    
+         <%for(Data data: dataList) {%>        
+              <p><%= data.print() %></p>    
+         <%}%>
+    <%} %>
+    </code></pre>
+        </div>
+
+        <p>Here's the DataServlet file:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+    <code>
+    //Inject the EJB 
+    @EJB 
+    DataBean data; 
+    ... 
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {     
+         data.create();     
+         request.setAttribute("dataList", data.getData());     
+         RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");     
+         dispatcher.forward(request, response); 
+    }
+    </code></pre>
+        </div>
+
+        <p>And here's the DataBean file:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+    <code>
+    public List getData(){     
+         return em.createNamedQuery(Data.FIND_ALL).getResultList(); 
+    }      
+    
+    public void create(){     
+         Data data = new Data();     
+         data.setNameData(new Date().toString());     
+         em.persist(data); }
+         </code></pre>
+        </div>
+
+        <p>As you can see, containers allow us to deploy virtually any Java EE application in this way. This is a simple
+            example, and it is possible to do a more-sophisticated separation of an application into containers. We
+            could even go all the way and create a complete modular microservices architecture. To get to microservices,
+            creating containers for the major services is an easy first step. It requires hardly any changes in your
+            application and provides immediate benefits.</p>
+
+        <h3>Run, Java EE, Run!</h3>
+
+        <p>There are already several containers up and running. PostgreSQL, Cassandra, and ActiveMQ are each running in
+            their own containers. We can now stop, scale, and manage each one.</p>
+
+        <p>All that is missing is the container that holds the application itself. We just built the image, but we still
+            need to run the container.</p>
+
+        <p>As we did in the previous article, from the appliance image we create the containers. We will run multiple
+            containers to have a load balancer. We also need to link everything together, so the application can see the
+            other services:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+    <code>
+    docker create --name hostdb1 -p 8080:8080 --link postgresdb:postgresdb --link cassandradb:cassandradb tomee-db 
+    docker create --name hostdb2 -p 8081:8080 --link postgresdb:postgresdb --link cassandradb:cassandradb tomee-db 
+    docker create --name hostdb3 -p 8082:8080 --link postgresdb:postgresdb --link cassandradb:cassandradb tomee-db
+    </code></pre>
+        </div>
+
+        <p>And to finish, we add another important service: our load balancer. For this, we are still using the
+            ready-to-run NGINX image by Jason Wyatt. (See the previous article for a more detailed look into the load
+            balancer configuration.)</p>
+
+        <p><code>docker create --name loadbalancerdb -p 80:80 --link hostdb1:hostdb1 --link hostdb2:hostdb2 --link hostdb3:hostdb3 --env-file ./env-load.list jasonwyatt/nginx-loadbalancer</code>
+        </p>
+
+        <p>Now that all the containers have been created, let's start them:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+    <code>
+    docker start hostdb1 
+    docker start hostdb2 
+    docker start hostdb3 
+    docker start loadbalancerdb
+    </code></pre>
+        </div>
+
+        <h3>Conclusion</h3>
+
+        <p>That is all that we need to do to create a complete Java EE application with all the services it requires.
+            The application can run in a single machine, as shown here. Or you can deploy it across a cluster. It can
+            run on premises or in the cloud. It can run on your laptop for development and be automated in your
+            continuous integration server.</p>
+
+        <p>Containers allow us to have more-consistent environments. Having similar test, quality assurance, and
+            production environments reduces risk and bugs. In production, we can even scale to multiple containers and
+            multiple machines, guaranteeing high availability.</p>
+
+        <p>This article provided a simplified example, but it outlines a robust process for experimenting with
+            containers:</p>
+
+        <p>1. Start from your own Java EE application.<br />
+            2. List all the services you are using now: application server, database, message queue, and so on.<br />
+            3. Docker Hub may have ready-to-use images for some or all those services. Do a search there, read about the
+            images; look for the ones that are more suitable for your project.<br />
+            4. Consider defining your own image. You might need to if there is no suitable image for a service or your
+            application requires extensive configuration.<br />
+            5. Either use the images directly (such as Cassandra and ActiveMQ in our example) or start from an existing
+            image and add your customizations (as we did with the PostgreSQL image).<br />
+            6. Start your containers to get your services up and running.<br />
+            7. Create the container for your application. Remember to link it to the service containers. This will allow
+            the containers to communicate. See the requirements of your orchestration platform.<br />
+            8. Have fun! Enjoy your modular architecture with Java EE and Docker!</p>
+
+        <p>Your infrastructure is now defined in containers. The next step is building your development pipeline. You
+            can use those same images to run your tests and quality assurance procedures. Although that will need to be
+            covered in another article, you already have everything you need to automate your whole development cycle!
+        </p>
+
+
+        <h3>About the Author</h3>
+
+        <p>Bruno Souza believes software developers have a huge impact in the world, and can effectively improve the
+            planet. That is why he is passionate about developer communities. Souza has dedicated his life to helping
+            developers worldwide reach their true potential. Also known as the "Brazilian JavaMan," he is a Java
+            developer at Summa Technologies and a cloud specialist at ToolsCloud, where he has participated in some of
+            the largest Java projects in Brazil. Souza is also President of SouJava and has twice been on the Board of
+            Directors at the Open Source Initiative. He believes that Java and open source are the path to career
+            excellence and that taking responsibility for delivering software is the mark of great developers. </p>
+
+        <p> Elder Moraes is a software developer passionate about Java EE development and systems architecture. He has
+            experience in projects in many areas, from financial and legal to human resources and logistics. He is a
+            speaker at events such as JavaOne and The Developers Conference, where he focuses on how developers can
+            improve their projects through a better understanding of architecture challenges. </p>
+
+        <p> André Tadeu de Carvalho is a Java consultant at Summa Technologies, a DevOps architect at ToolsCloud, and a
+            technical writer at Jelastic. He is passionate about learning and experimenting, and has certificates and
+            certifications for various courses. </p>
+
+    </div>
+</section>
+<!-- /CC01v0 -->
+
+
+<!-- / _Raw-Text -->

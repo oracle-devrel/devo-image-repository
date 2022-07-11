@@ -1,0 +1,102 @@
+<!-- _Raw-Text -->
+<section class="cc01 cc01v0 cpad crule">
+    <div class="cc01w1 cwidth">
+        <p>DevOps focuses on automation of the process of software and infrastructure development and delivery—thus
+            streamlining and removing both technical and organizational barriers.</p>
+
+        <p>So where is the connection between DevOps and Agile?</p>
+
+        </p>A key underlying requirement for the successful implementation of the Agile methodology is the ability to
+        quickly modify your software and produce quality, runnable applications quickly. This allows the Agile
+        development team to iterate over the results with customers and continuously improve the applications based on
+        user feedback. This is the spot where DevOps fits into the Agile picture.</p>
+
+        <p>Successful DevOps implementation shortens the time needed to produce a running application, and it provides
+            quicker exposure of problems in the delivered application—resulting in better quality for the deliverables.
+        </p>
+
+        <h3> Real-World Example</h3>
+
+        <p>Figure 1 shows an example of the DevOps process. I'll illustrate the benefit of an efficient DevOps process
+            for an Agile team using one of Oracle's product development teams, which I'm part of. The team has a
+            completely automated DevOps process in place that kicks off when a developer commits branch changes into a
+            Git repository. The whole process, by the way, is managed in a cloud environment leveraging Oracle Developer
+            Cloud Service.</p>
+
+        <p align="center"><img alt="Figure 1. Example of the DevOps process"
+                src="https://www.oracle.com/a/tech/img/dev-ops-process-figure.jpg" style="width: 720px;" /></p>
+        <p align="center" class="xsml">Figure 1. Example of the DevOps process</p>
+
+        <p>The process starts with a member of the team (development lead, product manager, or other member) adding a
+            task that reflects a customer need to the task repository (this can be a new feature, a fix for a bug, or an
+            enhancement request). The tasks are prioritized and assigned to a specific sprint (a short period dedicated
+            to development) and to a specific developer. </p>
+
+        <p>The developer will be working on the new task in his own local branch of code. Once he deems his code is
+            ready, he'll commit the code branch into the hosted Git server, and this operation starts a chain of events.
+        </p>
+
+        <p>The first step will be a build process creating a testable version of the feature, which will then start a
+            set of automated test scripts written by the developer. This is the first line of defense for software
+            quality.</p>
+
+        <p>If this build/test cycle succeeds, a code review process will be initiated—automatically notifying the
+            manager in charge of the specific product area that code has changed. Using a web interface, the manager can
+            review the code changes and comment on specific lines of code. Doing iterative "peer programming" this way
+            is another way to make sure that the code that is being produced is of good quality.</p>
+
+        <p>Once the code has passed the review, the manager can indicate it is ready to be merged into the main
+            development branch. The merge operation will start another set of automated build and test processes on the
+            combined development line of code.</p>
+
+        <p>Every night, an automated build takes the full set of Git repositories that makes up our team's product and
+            creates a runnable version of the product deploying it to our testing environment. This instance is used by
+            QA to verify the fixed bugs and new features.</p>
+
+        <p>Subsequently, another automated process is invoked to run a set of automated Selenium-based UI tests on the
+            deployed application. Because the feature is now incorporated into the complete runnable product, product
+            managers can then demo the feature to potential users and get their feedback on the results.</p>
+
+        <p>Once a development sprint is done (usually every two weeks), we lock the code branch and use the same DevOps
+            process to produce a release candidate of our product.</p>
+
+        <p>As you can see, this extensive DevOps process streamlines our <code>code->build->test->deploy</code> cycle
+            and removes many tasks that used to require manual steps that would delay delivering products.</p>
+
+        <h3>Advantages of DevOps Automation</h3>
+
+        <p>There are several results of this type of DevOps automation:</p>
+
+        <ul class="obullets">
+            <li>Faster software delivery: Removing the manual build, package, and deploy steps allows us to deliver our
+                software much faster. We used to release product versions once a year, but we have moved to a monthly
+                release cycle for cloud products.</li>
+            <li>Improved software quality: The introduction of automated tests, and quicker deployment into QA instances
+                for manual tests, results in higher quality for our products.</li>
+            <li>Product ownership: Because the whole process is transparent and every team member is able to see the
+                results of the latest build, team members feel deeper responsibility for their code and its role in the
+                product. You really don't want to be the guy who broke the build and delayed the whole team.</li>
+            <li>Improved team collaboration: Through a central team-activity dashboard view, everyone in the team knows
+                what's going on in the project. With common quality goals in sight, team members are more likely to help
+                each other review code, fix issues, and complete high-priority tasks.</li>
+
+        </ul>
+
+        <h3>Conclusion</h3>
+
+        <p>At the end of the day, the result of implementing a cloud-based DevOps solution is that our team is now able
+            to deliver more-frequent releases of a better product. We are also able to address specific feature requests
+            raised by our customers in shorter turnaround cycles—matching the goals of the Agile development
+            methodology.</p>
+
+
+
+        <h3>About the Author</h3>
+
+        <p>Shay Shmeltzer is director of product management for Oracle's development tools and frameworks. He is focused
+            on helping developers simplify and streamline their work by leveraging the right tools and technologies.</p>
+    </div>
+</section>
+<!-- /CC01v0 -->
+
+<!-- / _Raw-Text -->

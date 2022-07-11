@@ -1,0 +1,231 @@
+<article class="page has-sidebar has-slides" itemscope="" itemtype="https://schema.org/CreativeWork">
+
+
+    <div class="page__inner-wrap">
+
+        <section class="page__content" itemprop="text">
+
+
+            <div class="slides" id="slideshow">
+
+                <div class="slide active" id="slide-0">
+
+                    <h2 class="slide__title"><span class="slide__num">1</span> Introduction</h2>
+
+                    <p>The following walk-through guides you through setting up your environment to run Spark and Hadoop
+                        on Oracle Cloud Infrastructure (OCI).</p>
+
+                    <div class="slide__nav"><a href="javascript:cool.slides.goToSlide(1)"
+                            class="slides__btn--begin">Begin »</a></div>
+
+                </div>
+
+                <div class="slide" id="slide-1">
+
+                    <h2 class="slide__title"><span class="slide__num">2</span> Prerequisites</h2>
+
+                    <ul>
+                        <li>You’ve deployed a VM 2.1 or + with Oracle Linux 7.9 (OEL7) in OCI.</li>
+                        <li>You’re running Oracle Linux 7.9 which is running JVM by default.</li>
+                        <li>You have access to root either directly or via sudo. By default in OCI, you are connected
+                            like “opc” user with sudo privilege.</li>
+                    </ul>
+
+                    <div class="language-console highlighter-rouge">
+                        <div class="highlight">
+                            <pre class="highlight"><code><span class="gp">    [opc@xxx ~]$</span><span class="w"> </span>java <span class="nt">-version</span>
+<span class="go">    java version "1.8.0_281"
+    Java(TM) SE Runtime Environment (build 1.8.0_281-b09)
+    Java HotSpot(TM) 64-Bit Server VM (build 25.281-b09, mixed mode)
+</span></code></pre>
+                        </div>
+                    </div>
+
+                    <div class="slide__nav"><a href="javascript:cool.slides.goToSlide(0)">« Back</a> <a
+                            href="javascript:cool.slides.goToSlide(2)">Continue »</a></div>
+
+                </div>
+
+                <div class="slide" id="slide-2">
+
+                    <h2 class="slide__title"><span class="slide__num">3</span> Java Installation</h2>
+
+                    <p>The install is quite simple. It consists of setting up Java, then installing Spark and Hadoop
+                        components and libraries. Let’s start with setting up the Spark and Hadoop environment.</p>
+
+                    <p>Download the last version of JDK 1.8 because Hadoop 2.X is using this Java version.</p>
+
+                    <div class="language-console highlighter-rouge">
+                        <div class="highlight">
+                            <pre class="highlight"><code><span class="go">rpm -ivh /home/opc/jdk-8u271-linux-x64.rpm
+</span></code></pre>
+                        </div>
+                    </div>
+
+                    <p>Check Java Version.</p>
+
+                    <div class="language-console highlighter-rouge">
+                        <div class="highlight">
+                            <pre class="highlight"><code><span class="go">java -version
+</span></code></pre>
+                        </div>
+                    </div>
+
+                    <div class="slide__nav"><a href="javascript:cool.slides.goToSlide(1)">« Back</a> <a
+                            href="javascript:cool.slides.goToSlide(3)">Continue »</a></div>
+
+                </div>
+
+                <div class="slide" id="slide-3">
+
+                    <h2 class="slide__title"><span class="slide__num">4</span> Spark and Hadoop Setup</h2>
+
+                    <p>The next step is to install Spark and Hadoop environment.</p>
+
+                    <p>First, choose the version of Spark and Hadoop you want to install. Then, download the version you
+                        want to install:</p>
+
+                    <h3 id="download-spark-245-for-hadoop-27">Download Spark 2.4.5 for Hadoop 2.7<a class="header-link"
+                            href="#download-spark-245-for-hadoop-27" title="Permalink"><span
+                                class="sr-only">Permalink</span><i class="fas fa-link"></i></a></h3>
+
+                    <div class="language-console highlighter-rouge">
+                        <div class="highlight">
+                            <pre class="highlight"><code><span class="go">cd /home/opc
+wget http://apache.uvigo.es/spark/spark-2.4.5/spark-2.4.5-bin-hadoop2.7.tgz
+</span></code></pre>
+                        </div>
+                    </div>
+
+                    <h3 id="download-spark-247-for-hadoop-27">Download Spark 2.4.7 for Hadoop 2.7<a class="header-link"
+                            href="#download-spark-247-for-hadoop-27" title="Permalink"><span
+                                class="sr-only">Permalink</span><i class="fas fa-link"></i></a></h3>
+
+                    <div class="language-console highlighter-rouge">
+                        <div class="highlight">
+                            <pre class="highlight"><code><span class="go">wget http://apache.uvigo.es/spark/spark-2.4.7/spark-2.4.7-bin-hadoop2.7.tgz
+</span></code></pre>
+                        </div>
+                    </div>
+
+                    <h3 id="download-spark-311-for-hadoop-32">Download Spark 3.1.1 for Hadoop 3.2<a class="header-link"
+                            href="#download-spark-311-for-hadoop-32" title="Permalink"><span
+                                class="sr-only">Permalink</span><i class="fas fa-link"></i></a></h3>
+
+                    <div class="language-console highlighter-rouge">
+                        <div class="highlight">
+                            <pre class="highlight"><code><span class="go">wget http://apache.uvigo.es/spark/spark-3.1.1/spark-3.1.1-bin-hadoop3.2.tgz
+</span></code></pre>
+                        </div>
+                    </div>
+
+                    <h3 id="install-the-spark-and-hadoop-version">Install the Spark and Hadoop Version<a
+                            class="header-link" href="#install-the-spark-and-hadoop-version" title="Permalink"><span
+                                class="sr-only">Permalink</span><i class="fas fa-link"></i></a></h3>
+
+                    <p>Install the Spark and Hadoop Version chosen in the directory “/opt”.</p>
+
+                    <div class="language-console highlighter-rouge">
+                        <div class="highlight">
+                            <pre class="highlight"><code><span class="go">sudo -i
+cd /opt
+tar -zxvf /home/opc/spark-2.4.5-bin-hadoop2.7.tgz
+</span><span class="gp">#</span>or 
+<span class="go">tar -zxvf /home/opc/spark-2.4.7-bin-hadoop2.7.tgz
+</span><span class="gp">#</span>or
+<span class="go">tar -zxvf /home/opc/spark-3.1.1-bin-hadoop3.2.tgz
+</span></code></pre>
+                        </div>
+                    </div>
+
+                    <div class="slide__nav"><a href="javascript:cool.slides.goToSlide(2)">« Back</a> <a
+                            href="javascript:cool.slides.goToSlide(4)">Continue »</a></div>
+
+                </div>
+
+                <div class="slide" id="slide-4">
+
+                    <h2 class="slide__title"><span class="slide__num">5</span> Install PySpark in Python3 environment
+                    </h2>
+
+                    <div class="language-console highlighter-rouge">
+                        <div class="highlight">
+                            <pre class="highlight"><code><span class="go">/opt/Python-3.7.6/bin/pip3 install 'pyspark=2.4.7'
+/opt/Python-3.7.6/bin/pip3 install findspark
+</span></code></pre>
+                        </div>
+                    </div>
+
+                    <p>Next we shall create a virtual environment and enable it.</p>
+
+                    <h3 id="modify-your-environment-to-use-this-spark-and-hadoop-version">Modify your environment to use
+                        this Spark and Hadoop Version<a class="header-link"
+                            href="#modify-your-environment-to-use-this-spark-and-hadoop-version" title="Permalink"><span
+                                class="sr-only">Permalink</span><i class="fas fa-link"></i></a></h3>
+
+                    <p>Add to “.bashrc” for the user “opc” the following lines:</p>
+
+                    <div class="language-console highlighter-rouge">
+                        <div class="highlight">
+                            <pre class="highlight"><code><span class="gp">#</span><span class="w"> </span>Add by %OP%
+<span class="go">export PYTHONHOME=/opt/anaconda3
+</span><span class="gp">export PATH=$</span>PYTHONHOME/bin:<span class="nv">$PYTHONHOME</span>/condabin:<span class="nv">$PATH</span>
+<span class="go">
+</span><span class="gp">#</span><span class="w"> </span>SPARK ENV
+<span class="gp">#</span><span class="nb">export </span><span class="nv">JAVA_HOME</span><span class="o">=</span><span class="si">$(</span>/usr/libexec/java_home<span class="si">)</span>
+<span class="go">export SPARK_HOME=/opt/spark-2.4.5-bin-hadoop2.7
+</span><span class="gp">export PATH=$</span>SPARK_HOME/bin:<span class="nv">$PATH</span>
+<span class="go">export PYSPARK_PYTHON=python3
+
+export PYSPARK_DRIVER_PYTHON=jupyter
+export PYSPARK_DRIVER_PYTHON_OPTS='notebook'
+</span></code></pre>
+                        </div>
+                    </div>
+
+                    <div class="slide__nav"><a href="javascript:cool.slides.goToSlide(3)">« Back</a> <a
+                            href="javascript:cool.slides.goToSlide(5)">Continue »</a></div>
+
+                </div>
+
+                <div class="slide" id="slide-5">
+
+                    <h2 class="slide__title"><span class="slide__num">6</span> Test your Spark and Hadoop Environment
+                    </h2>
+
+                    <p>If you’re running directly on a virtual machine and have a browser installed, it should take you
+                        directly into the jupyter environment. Connect to <a
+                            href="http://xxx.xxx.xxx.xxx:8001/">http://xxx.xxx.xxx.xxx:8001/</a>.</p>
+
+                    <p>Then upload the next notebooks:</p>
+
+                    <ul>
+                        <li><a
+                                href="https://github.com/operard/oracle-cloud-tutorial/blob/main/notebooks/Test_findSpark.ipynb">Notebook
+                                test findspark</a>.</li>
+                        <li><a
+                                href="https://github.com/operard/oracle-cloud-tutorial/blob/main/notebooks/Test%20PySpark.ipynb">Notebook
+                                test Pyspark</a>.</li>
+                        <li><a
+                                href="https://github.com/operard/oracle-cloud-tutorial/blob/main/notebooks/Test_PySpark_Mysql.ipynb">Notebook
+                                test Pyspark with Mysql</a>.</li>
+                    </ul>
+
+                    <div class="slide__nav"><a href="javascript:cool.slides.goToSlide(4)">« Back</a></div>
+
+                </div>
+
+            </div>
+
+
+
+
+        </section>
+
+
+
+
+    </div>
+
+
+</article>

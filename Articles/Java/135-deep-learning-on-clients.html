@@ -1,0 +1,357 @@
+<!-- U03v5 -->
+<!-- _Raw-HTML -->
+<section class="cc01 cc01v0 cpad crule">
+    <div class="cc01w1 cwidth">
+        <p>Neural networks are increasingly being used in a myriad of applications. In the typical use case, all raw
+            input data is sent to a server or a bunch of cloud instances, where the data is used to train and evaluate a
+            model. That model is then used to make predictions based on specific input, and hands over the prediction to
+            the interested party.</p>
+
+        <p>In this article, we will explore a complementary way of training the model by leveraging the power of client
+            devices.</p>
+
+        <p><strong>The Concept </strong><br />
+            Neural networks are based on the idea of a model that accepts some input (for example, pictures, numbers,
+            characters, and so on) and produces some output that is relevant to the input (for example, &quot;that was a
+            picture of a dog,&quot; &quot;the number was 3,&quot; &quot;the next character is most likely the letter
+            b,&quot; and so on), as shown in Figure 1.</p>
+
+        <p align="center" class="xsml">Figure 1. Neural networks accept input and produce output that is relevant to the
+            input.</p>
+
+        <p>The quality of a neural network partially depends on the quality of the data that is fed to it. When a
+            specific input leads to a wrong output (Figure 2), the network can be retrained with the given data added to
+            the set of training data.</p>
+
+        <p align="center" class="xsml">Figure 2. If the output is incorrect (for example, &quot;rabbit&quot;), the
+            neural network can be retrained (for example, to provide &quot;bird&quot;).</p>
+
+        <p>Different algorithms exist for training neural networks, and lots of research is currently being performed in
+            this area. In this article, we will not focus on the training algorithms, but rather on what is required to
+            perform training.</p>
+
+        <p>Typically, the neural network is trained in a server environment. The resulting model (the numerical
+            constants that allow the algorithm to produce the &quot;best&quot; result based on the input) is used to
+            make predictions and evaluations.</p>
+
+        <p>In many cases, though, most of the data is not available in the server environment. Pictures are taken on
+            mobile phones, autonomous cars are using onboard cameras to generate media that has to be evaluated, and a
+            keyboard is used to type data.</p>
+
+        <p>While the evaluation of the model can be done relatively easily on clients, training of the data is typically
+            done on the server side. In order to improve the model, the training data is sent to the server. As a
+            consequence, the picture you take with your phone, the scenery you drive by with your car, or the words you
+            type on your smartphone have to be sent over the internet to the servers that are updating the neural
+            network.</p>
+
+        <p>Clearly, this can lead to a number of privacy issues. Also, it requires lots of bandwidth, because tons of
+            data has to be sent from clients to the server.</p>
+
+        <p>Distributed learning fixes a number of things. In this case, the local data is used to do local training on
+            the model. As a consequence of this training, the model on the client improves, leading to different
+            coefficients (internal numbers that make up the model). The gradient of the model can now be sent to the
+            server, where it can be combined with the existing model and with gradients sent by other clients.</p>
+
+        <p>As a consequence, the quality of the model improves, and the enhanced model can be sent to the client (Figure
+            3).</p>
+
+        <p align="center" class="xsml">Figure 3. The enhanced model can be sent back to the client.</p>
+
+        <p>There are a number of benefits to this approach:</p>
+
+        <ul class="bullets">
+            <li>Privacy: Sensitive data stays on the client device (or is even immediately removed) and is not sent to
+                the server. The server has the relevant information, because the data is used to retrain the model, and
+                that result is sent to the server.</li>
+            <li>Bandwidth: Rather than sending lots of data, only the changes in the model need to be sent. Those
+                changes can be sent after each new sample or, for example, once per week.</li>
+            <li>Performance: By leveraging the power of mobile devices (and their CPU/GPU chips), at least some
+                processing can be done locally. The power of single devices pales in comparison with the power of a
+                server or a cluster, but when many devices are doing local training, that might significantly reduce the
+                required calculations on the server for achieving the same result.</li>
+        </ul>
+
+        <p><strong>What Do We Need?</strong><br />
+            Many real-world scenarios where neural networks are useful involve mobile or embedded devices (for example,
+            pictures on a phone, cameras in a car, and characters on a keyboard). Hence, it is important that the
+            distributed learning techniques work on those devices.</p>
+
+        <p>A popular and open source library providing Java APIs for neural network operations is Eclipse <a
+                class="textLinks" href="https://deeplearning4j.org/" target="_blank">Deeplearning4j</a> (DL4J), which is
+            supported by SkyMind.</p>
+
+        <p>In order to use the DL4J APIs on a client, that client should be capable of executing Java code. The DL4J
+            APIs depend on native code for performance reasons; hence, Java Native Interface (JNI) needs to be
+            supported.</p>
+
+        <p>The DL4J APIs work on mobile devices using the Gluon IDE plugins at <a class="textLinks"
+                href="https://gluonhq.com/get-started/ide-plugins/"
+                target="_blank">https://gluonhq.com/get-started/ide-plugins/</a>. The plugins provide an easy way to
+            create cross-platform user interfaces based on JavaFX and to leverage existing libraries, including DL4J. In
+            order to run on Android devices, the Gluon IDE plugins perform the required steps for creating an APK that
+            can be uploaded to the Google Play Store. No Android-specific code is required, and the JavaFX code that is
+            used to create a user interface on a desktop also works on Android devices.</p>
+
+        <p>Similarly, this code also works on iOS devices. The Gluon IDE plugins will invoke the Gluon VM tools, which
+            will compile the Java code ahead of time to native code, link it with other native libraries, and create an
+            iOS app that can be executed on an iPhone or an iPad, tested in the iOS Simulator, and uploaded to the Apple
+            App Store.</p>
+
+        <p>As a consequence, the Java code that you use to create applications that leverage the DL4J neural network
+            APIs is combined with a user interface created with JavaFX that runs on a desktop, an Android device, an iOS
+            device, and also embedded devices. The important thing for developers is that your code is 100%
+            cross-platform, because it is all written in Java. The hard part of translating that to the specific, native
+            systems is done under the hood for you.</p>
+
+        <p><strong>HelloWorld (Multilayer Perceptron Classifier)</strong><br />
+            As an example, let&#39;s explore a simple linear classifier that is trained locally. </p>
+
+        <p>You can open the sample code in any IDE (NetBeans, IntelliJ, Eclipse), provided that you have the Gluon IDE
+            plugin installed. Follow the instructions at <a class="textLinks"
+                href="https://gluonhq.com/get-started/ide-plugins/"
+                target="_blank">https://gluonhq.com/get-started/ide-plugins/</a> in order to do this.</p>
+
+        <p>Once you open the sample in your IDE, you can quickly run it, and you will see the screen shown in Figure 4:
+        </p>
+
+        <p align="center" class="xsml">Figure 4. First screen displayed by the sample code.</p>
+
+        <p>Clicking the <strong>train network model</strong> button will start the local training, and it will result in
+            the screen shown in Figure 5:</p>
+
+        <p align="center" class="xsml">Figure 5. Results of training the model.</p>
+
+        <p>You can also run this sample on an Android (Figure 6) or iOS device (Figure 7), if you have one connected to
+            your system via USB. Depending on your IDE, you will see a task called <code
+                class="ocode">androidInstall</code> or <code class="ocode">launchIosDevice</code>. This task will
+            trigger the process for compiling the required dependencies, create the mobile app, and send it to your
+            device. If you want to create apps that you want to upload to the App Store or the Play Store, you select
+            the tasks <code class="ocode">createIPA</code> or <code class="ocode">createAPK</code>, respectively.</p>
+
+        <p>More information on this process can be found in the Gluon documentation at <a class="textLinks"
+                href="http://docs.gluonhq.com/charm/latest/#_getting_started"
+                target="_blank">http://docs.gluonhq.com/charm/latest/#_getting_started</a>.</p>
+
+        <p align="center" class="xsml">Figure 6. Screenshot of the app on an Android device.</p>
+
+        <p align="center" class="xsml">Figure 7. Screenshot of the app on an iOS device.</p>
+
+        <p>The source code contains only two Java files. The <code class="ocode">main.java</code> file contains the code
+            for creating the view, and the real work is done by the code in <code
+                class="ocode">TrainingView.java</code>.</p>
+
+        <p>The <code class="ocode">TrainingView.java</code> file contains code for training a neural network and for
+            showing the output in a JavaFX UI.</p>
+
+        <p>The relevant JavaFX code is shown in the following snippet:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+    private final Label label;
+
+    public TrainingView(String name) {
+        super(name);
+
+        label = new Label();
+
+        Button button = new Button(&quot;train network model&quot;);
+        button.setOnAction(e -&gt; {
+            Task task = train();
+            button.disableProperty().bind(task.runningProperty());
+        });
+
+        VBox controls = new VBox(15.0, label, button);
+        controls.setAlignment(Pos.CENTER);
+
+        setCenter(controls);
+    }
+</code></pre>
+        </div>
+        &nbsp;
+
+        <p>The user interface is defined by a <code class="ocode">VBox</code> that contains a label and a button. The
+            content of the label will be set by the training function, and it will indicate the current status of the
+            training/evaluation.</p>
+
+        <p>Clicking the button triggers the training task. The training is performed in a JavaFX task in a dedicated
+            thread. The JavaFX binding API is used to make sure the button is disabled as long as the training is in
+            progress. Once the training task is done, the button is enabled again.</p>
+
+        <p>This sample is inspired by the screencast of DL4J at <a class="textLinks"
+                href="https://www.youtube.com/watch?v=8EIBIfVlgmU"
+                target="_blank">https://www.youtube.com/watch?v=8EIBIfVlgmU</a>. If you want to learn more about the
+            concepts used in this code, check out that screencast and the related screencasts.</p>
+
+        <p>The basic idea of this sample is to take a pair of numbers between 0 and 1 as input and return an output that
+            is either 0 or 1. The model is trained by using some well-known input/output pairs. The data that is used to
+            train and test the model can be visualized as follows: the x and y axes show the input of a sample, the
+            color red is applied for samples with an output of 0, and the color blue is applied for samples with an
+            output of 1 (Figure 8).</p>
+
+        <p align="center" class="xsml">Figure 8. Red indicates input samples that return an output of 0; blue indicates
+            input samples that return an output of 1.</p>
+
+        <p>Now, we will create a simple neural network that will be trained using some of the samples and then evaluated
+            using another set of those samples.</p>
+
+        <p>When you click the <strong>train network model</strong> button, a number of things happen in sequentially.
+        </p>
+
+        <p>First, training data is read from a supplied file. Note that in real-world cases, the test data is typically
+            obtained by interactions with the user (for example, the user enters text or takes a picture).</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+     RecordReader rrTrain = new CSVRecordReader();
+     rrTrain.initialize(new 
+InputStreamInputSplit(TrainingView.class.getResourceAsStream(&quot;/linear_data_train.csv&quot;)));
+     DataSetIterator iterTrain = new RecordReaderDataSetIterator(rrTrain, batchSize, 0, 2);
+</code></pre>
+        </div>
+        &nbsp;
+
+        <p>In order to evaluate the model, we need evaluation data. This is achieved using the follow code:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+    RecordReader rrEval = new CSVRecordReader();
+    rrEval.initialize(new 
+InputStreamInputSplit(TrainingView.class.getResourceAsStream(&quot;/linear_data_eval.csv&quot;)));
+    DataSetIterator iterEval = new RecordReaderDataSetIterator(rrEval, batchSize, 0, 2);
+</code></pre>
+        </div>
+        &nbsp;
+
+        <p>The following code snippet creates a neural network with two layers (one hidden layer). The input of the
+            first layer contains two numbers that are the x and y value of the dots in Figure 8. The other layer
+            contains two numbers as output, which contain the probabilities of the outcome either being 0 (red) or 1
+            (blue).</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+int numInputs = 2;
+                int numHiddenNodes = 20;
+                int numOutputs = 2;
+
+                MultiLayerConfiguration conf = new NeuralNetConfiguration.Builder()
+                        .seed(seed)
+                        .optimizationAlgo(OptimizationAlgorithm.STOCHASTIC_GRADIENT_DESCENT)
+                        .updater(new Nesterovs.Builder()
+                                .learningRate(learningRate)
+                                .momentum(0.9)
+                                .build())
+                        .list()
+                        .layer(0, new DenseLayer.Builder()
+                                .nIn(numInputs)
+                                .nOut(numHiddenNodes)
+                                .weightInit(WeightInit.XAVIER)
+                                .activation(Activation.RELU)
+                                .build())
+                        .layer(1, new OutputLayer.Builder(LossFunctions.LossFunction.NEGATIVELOGLIKELIHOOD)
+                                .nIn(numHiddenNodes)
+                                .nOut(numOutputs)
+                                .weightInit(WeightInit.XAVIER)
+                                .activation(Activation.SOFTMAX)
+                                .build())
+                        .pretrain(false)
+                        .backprop(true)
+                        .build();
+</code></pre>
+        </div>
+        &nbsp;
+
+        <p>Now that the model is defined, we can train it:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+    MultiLayerNetwork network = new MultiLayerNetwork(conf);
+  network.init();
+  network.setListeners((IterationListener) (model, iteration, epoch) -&gt; {
+      Platform.runLater(() -&gt; label.setText(&quot;Running iteration #&quot; + iteration));
+  });
+  Platform.runLater(() -&gt; label.setText(&quot;training model...&quot;));
+  for (int n = 0; n &lt; numEpochs; n++) {
+      network.fit(iterTrain);
+  }
+</code></pre>
+        </div>
+        &nbsp;
+
+        <p>We will use a number of iterations for training the model, and whenever an iteration is done, this will be
+            indicated in the JavaFX label that indicates the current state.</p>
+
+        <p>Because we run the training in a dedicated JavaFX task that runs in its own thread, we have to make sure we
+            update the JavaFX Scene Graph by calling <code class="ocode">Platform.runLater()</code>.</p>
+
+        <p>Now that the model is trained, we can evaluate it to see how well it performs. This is achieved using the
+            following snippet, which uses the test data created above:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+    Platform.runLater(() -&gt; label.setText(&quot;evaluating model...&quot;));
+    Evaluation evaluation = new Evaluation(numOutputs);
+    while (iterEval.hasNext()) {
+        DataSet dataSet = iterEval.next();
+        INDArray features = dataSet.getFeatureMatrix();
+        INDArray labels = dataSet.getLabels();
+        INDArray predicted = network.output(features, false);
+        evaluation.eval(labels, predicted);
+    }
+    Platform.runLater(() -&gt; label.setText(&quot;model evaluation result:\n&quot; + evaluation.stats()));
+</code></pre>
+        </div>
+        &nbsp;
+
+        <p>At the end of the evaluation, we set content of the JavaFX label to the results of the evaluation, as shown
+            in Figure 8.</p>
+
+        <p><strong>Next Steps </strong><br />
+            This sample shows how you can create and train neural networks on mobile devices. This is only the basics of
+            what you can do. In a follow-on article, I will show how you can share the model with the server, where you
+            send gradient updates only and the server periodically sends enhanced versions of the model.</p>
+
+        <h3>About the Author</h3>
+
+        <p>Johan Vos started working with Java in 1995. He was part of the Blackdown team, porting Java to Linux. His
+            main focus is on end-to-end Java, combining back-end systems and mobile/embedded devices. He received a
+            Duke&#39;s Choice Award in 2014 for his work on JavaFX on mobile devices.</p>
+
+        <p>In 2015, he cofounded Gluon, which allows enterprises to create mobile Java client applications leveraging
+            their existing back-end infrastructure. Gluon received a Duke&#39;s Choice Award in 2015. Vos is a Java
+            Champion, a member of the BeJUG steering group and the Devoxx steering group, and he is a JCP member. He is
+            the lead author of Pro JavaFX 8 (Apress, 2014), and he has been a speaker at numerous conferences on Java.
+        </p>
+    </div>
+</section>
+<!-- /CC01v0 -->
+<!-- / _Raw-HTML -->

@@ -1,0 +1,639 @@
+<!-- _Raw-HTML -->
+<section class="cc01 cc01v0 cpad crule">
+    <div class="cc01w1 cwidth">
+        <p>Part 1 | <a href="/databases/oracle-rest-data-services-for-python-developers-part2.html">Part 2</a> | of
+            this
+            series explains how to develop Representational State Transfer (REST) interfaces for Oracle Database
+            data
+            using <a
+                href="http://www.oracle.com/technetwork/developer-tools/rest-data-services/overview/index.html">Oracle
+                REST Data Services</a>, a mid-tier Java application that can be deployed to a Java EE application
+            server
+            or run in standalone mode. The examples provided illustrate how you can create a RESTful service on a
+            database table or view and then consume that service from within Python code. Working through the
+            examples,
+            you will see different Oracle REST Data Services options in action. In particular, you will learn how an
+            Oracle REST Data Services RESTful service can be created with just a few clicks and how you can manually
+            build it, maintaining the necessary level of flexibility and customizability.</p>
+
+        <p>This part provides a brief overview of Oracle REST Data Services, as well as how to get started with it
+            and
+            quickly learn how to build on its foundations. In particular, it covers how to develop a RESTful
+            service,
+            using <a href="http://www.oracle.com/technetwork/developer-tools/sql-developer/overview/index.html">Oracle
+                SQL Developer</a>, Oracle REST Data Services, and <a
+                href="http://www.oracle.com/technetwork/database/enterprise-edition/overview/index.html">Oracle
+                Database</a>, and then test it from Python. Here are the main topics covered in this article:</p>
+
+        <ul class="obullets">
+            <li>Why REST?</li>
+            <li>A brief overview of Oracle REST Data Services</li>
+            <li>Preparing your working environment</li>
+            <li>Installing the <a
+                    href="http://www.oracle.com/technetwork/database/enterprise-edition/databaseappdev-vm-161299.html">Database
+                    Virtual Box Appliance</a> for <a href="https://www.virtualbox.org/">Oracle VM VirtualBox</a>
+            </li>
+            <li>Installing and administering Oracle REST Data Services</li>
+            <li>Enabling REST access to a database table with Oracle REST Data Services</li>
+            <li>Testing an Oracle REST Data Services RESTful service in Python</li>
+        </ul>
+
+        <h3>Why REST?</h3>
+
+        <p>REST is an architectural style used in web development to unify the way in which applications interact
+            with
+            their data sources. To access and manipulate data, REST-based applications use a standard set of HTTP
+            request methods, including GET, PUT, POST, and DELETE.</p>
+
+        <p>The REST architecture assumes that an application does not interact with its underlying data source
+            directly,
+            but uses a RESTful web service in between. Such a service receives a request from the application, maps
+            it
+            to the corresponding operation performed against the underlying data source, and sends the retrieved
+            results&mdash;if the operation is supposed to retrieve results&mdash;back to the application.</p>
+
+        <p>So, the implementation of data-handling operations is specific to an underlying data source and is
+            defined in
+            a RESTful service. It is fairly obvious that this design enables developing highly portable
+            applications.
+            You can switch from one data source to another without having to modify your application code.</p>
+
+        <h3>A Brief Overview of Oracle REST Data Services</h3>
+
+        <p>Oracle REST Data Services provides an easy way to build RESTful services that enable REST access to data
+            in
+            Oracle Database, an Oracle Database 12c JSON document store, and Oracle NoSQL Database. Being a Java
+            EE&ndash;based application, Oracle REST Data Services can be deployed to a Java EE application server,
+            including Oracle WebLogic Server, GlassFish Server, and Apache Tomcat. You also have the option of
+            running
+            Oracle REST Data Services in standalone mode.</p>
+
+        <p>To REST-expose database data with Oracle REST Data Services, you have the following options to choose
+            from:
+        </p>
+
+        <ul class="obullets">
+            <li>Automatic REST enabling (AutoREST) of database objects</li>
+            <li>Manually creating RESTful services, using SQL and PL/SQL operations</li>
+        </ul>
+
+        <p>The first option provides a quick way to define a RESTful service on a database object, such as a table
+            or
+            view, or a PL/SQL function, procedure, or entire package. With AutoREST, Oracle REST Data Services
+            automatically maps HTTP verbs (GET, POST, PUT, DELETE, and so on) to data operations allowed on a
+            database
+            object you want to REST-enable, thus automatically exposing it to HTTP.</p>
+
+        <p>Creating a RESTful service using the second option, although a more time-consuming process, provides you
+            with
+            more flexibility and customizability. For example, it allows you to do extra validation and customize
+            input
+            or output data formats, explicitly specifying SQL or PL/SQL for each HTTP method you define for a
+            specific
+            resource template. Figure 1 gives a simplified depiction of how this architecture works:</p>
+
+        <p align="center" class="xsml">Figure 1: Making REST calls to Oracle Database with Python via Oracle REST
+            Data
+            Services.</p>
+
+        <p>If you choose to implement the architecture shown in Figure 1, you&#39;ll need to create a resource
+            module in
+            Oracle REST Data Services, within which you can define a group of related resource templates (individual
+            RESTful services)and implement a set of necessary HTTP method handlers for each resource template
+            (RESTful
+            service). A detailed example of how this can be accomplished will be provided in the next article of
+            this
+            series.</p>
+
+        <p><strong>Note</strong>: For definitions of specific terms related to RESTful services, such as
+            <em>resource
+                template</em> and <em>method handler</em>, check the &quot;<a
+                href="https://docs.oracle.com/cd/E56351_01/doc.30/e87809/developing-REST-applications.htm#AELIG90011">RESTful
+                Services Terminology</a>&quot; section in the <a
+                href="https://docs.oracle.com/cd/E56351_01/doc.30/e87809/toc.htm"><em>REST Data Services
+                    Installation,
+                    Configuration, and Development Guide</em></a>.
+        </p>
+
+        <p>In this article, you will see an example of a simpler alternative that uses the AutoREST feature. As
+            mentioned, with AutoREST, Oracle REST Data Services automatically creates REST endpoints for a specified
+            database object, mapping HTTP verbs to database transactions behind the scenes for you.</p>
+
+        <h3>Required Software</h3>
+
+        <p>Before moving on to the article&#39;s example, you will need to prepare your working environment. In
+            particular, make sure you have access to the following software components in your system:</p>
+
+        <ul class="obullets">
+            <li>Oracle Database 12.2 (or newer)</li>
+            <li>Oracle SQL Developer 4.2 (or newer)</li>
+            <li>Oracle REST Data Services 3.0.9 (or newer)</li>
+            <li>Python 3.6.x (or newer)</li>
+        </ul>
+
+        <p>With the <a
+                href="http://www.oracle.com/technetwork/database/enterprise-edition/databaseappdev-vm-161299.html">Database
+                Virtual Box Appliance</a> for <a href="https://www.virtualbox.org/">Oracle VM VirtualBox</a>, the
+            above
+            software stack can be installed on your machine extremely easily. The appliance comes with these
+            components
+            preinstalled, configured, and ready to run. The only component missing in the appliance is Python 3.6.
+            You
+            may install it as described in the &quot;Installing Python on Oracle Linux&quot; section later in this
+            article, or you can use the Python installation you may already have in your system.</p>
+
+        <p><strong>Note</strong>: The Database Virtual Box Appliance discussed here is installed into <a
+                href="http://www.oracle.com/technetwork/server-storage/virtualbox/overview/index.html">Oracle VM
+                VirtualBox</a>, which is available for a number of operating systems, including Microsoft Windows,
+            macOS, Oracle Solaris, and a number of Linux platforms. For further details, check the <a
+                href="http://www.oracle.com/technetwork/server-storage/virtualbox/downloads/index.html">Oracle VM
+                VirtualBox downloads page</a>.</p>
+
+        <p>Alternatively, the above Oracle software components can be downloaded from <a
+                href="http://www.oracle.com/technetwork/index.html">Oracle Technology Network (OTN)</a> and then
+            installed in your system. Another option is to take advantage of Oracle Database in a cloud, choosing
+            one of
+            the <a href="https://cloud.oracle.com/database">Oracle Database Cloud Services</a> that normally come
+            preconfigured with Oracle REST Data Services.</p>
+
+        <h3><a name="wizard"></a>Installing and Deploying Oracle REST Data Services</h3>
+
+        <p>Oracle REST Data Services comes packed in a WAR file (<code>ords.war</code>) with both Oracle Database
+            and
+            Oracle SQL Developer. Or you can download the latest package from the <a
+                href="http://www.oracle.com/technetwork/developer-tools/rest-data-services/downloads/index.html">Oracle
+                REST Data Services Downloads page</a> on OTN. In any case, before you can make use of Oracle REST
+            Data
+            Services, you must install and deploy it.</p>
+
+        <p><strong>Note</strong>: If you choose to download and install the latest package, make sure that your
+            system
+            meets the <a
+                href="https://docs.oracle.com/database/ords-17/AELIG/installing-REST-data-services.htm#AELIG7175">requirements</a>
+            listed in the documentation for this release.</p>
+
+        <p>Once you have the WAR file in your system, you can install and configure Oracle REST Data Services. This
+            can
+            be done using a command-line interface. The following command starts the simple installation that
+            requires
+            minimum user input:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+      	<code>
+java -jar ords.war
+      	</code>
+      </pre>
+        </div>
+
+        <p>To perform an advanced installation, use the following command:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+      	<code>
+java -jar ords.war install advanced
+      	</code>
+      </pre>
+        </div>
+
+        <p>The entire installation process is described in detail in the &quot;<a
+                href="https://docs.oracle.com/cd/E56351_01/doc.30/e87809/installing-REST-data-services.htm#AELIG7015">Installing
+                Oracle REST Data Services</a>&quot; section of the <a
+                href="https://docs.oracle.com/cd/E56351_01/doc.30/e87809/toc.htm"><em>Oracle REST Data Services
+                    Installation, Configuration, and Development Guide</em></a>.</p>
+
+        <p>However, the quickest way to install Oracle REST Data Services is with the help of Oracle SQL
+            Developer&#39;s
+            ORDS Installation Wizard, which can be invoked by selecting the <strong>Tools &gt; REST Data Services
+                &gt;
+                Install</strong> menu item in Oracle SQL Developer.</p>
+
+        <p align="center" class="xsml">Figure 2: The first screen of the ORDS Installation Wizard in Oracle SQL
+            Developer.</p>
+
+        <p>The entire installation process is described in detail in the &quot;<a
+                href="http://www.oracle.com/webfolder/technetwork/tutorials/obe/db/ords/r30/Install_Administer_ORDS/Install_Administer_ORDS.html">Installing
+                and Administering REST Data Services with SQL Developer</a>&quot; hands-on lab on OTN.</p>
+
+        <h3>Installing Python on Oracle Linux</h3>
+
+        <p>The Database Virtual Box Appliance mentioned previously uses Oracle Linux as the operating system. So, if
+            you
+            chose this appliance for your working environment, you may want to install Python in the virtual machine
+            built in Oracle VM VirtualBox from this appliance.</p>
+
+        <p>The following steps will guide you through the process of installing Python from the source code on
+            Oracle
+            Linux. These same steps can also be used on CentOS, RHEL, and Fedora.</p>
+
+        <p>1. You must have the GCC compiler in your system to build Python from the source code. You can download
+            and
+            install it with yum, as follows:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+      	<code>
+# yum install gcc openssl-devel bzip2-devel
+      	</code>
+  </pre>
+        </div>
+
+        <p>2. Download a gzipped source tarball of the latest Python 3 release:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+      	<code>
+# cd /usr/src
+# wget https://www.python.org/ftp/python/3.6.4/Python-3.6.4.tgz
+      	</code>
+  </pre>
+        </div>
+
+        <p>3. Unpack the package:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+      	<code>
+# tar xzf Python-3.6.4.tgz
+      	</code>
+  </pre>
+        </div>
+
+        <p>4. Compile the source code and install Python:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+      	<code>
+# cd Python-3.6.4
+# ./configure --enable-optimizations
+# make altinstall
+     	</code>
+  </pre>
+        </div>
+
+        <p>The <code>altinstall</code> option is used to avoid overwriting the default Python executable used in
+            your
+            system.</p>
+
+        <p>5. Locate the newly installed Python executable:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+      	<code>
+#which python3.6
+/usr/local/bin/python3.6
+      	</code>
+  </pre>
+        </div>
+
+        <p>6. Launch the Python prompt to make sure it works:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+      	<code>
+# python3.6
+Python 3.6.4 (default, Dec 20 2017, 20:48:42) 
+[GCC 4.4.7 20120313 (Red Hat 4.4.7-18)] on linux
+Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;license&quot; for more information.
+&gt;&gt;&gt;
+      	</code>
+  </pre>
+        </div>
+
+        <p>Now that you have installed Python 3, you need to install, a Python HTTP library that simplifies working
+            with
+            HTTP requests, providing an easy-to-use interface to make REST calls from Python. You can use it as your
+            primary tool when it comes to writing Python code that consumes RESTful services.</p>
+
+        <p>There are several ways in which you can. The steps below describe how you can install Requests from the
+            source code:</p>
+
+        <p>1. Download the Requests library as the source code from GitHub, where it is actively developed:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+      	<code>
+https://github.com/requests/requests/tarball/master
+      	</code>
+  </pre>
+        </div>
+
+        <p>2. Unpack the downloaded gzipped source tarball in your system and run the cd command to change to the
+            unpacked source directory.</p>
+
+        <p>3. Install the request library using the <code>pip</code> command:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+      	<code>
+$ pip3.6 install .
+      	</code>
+  </pre>
+        </div>
+
+        <p>4. After the installation completes, check to make sure it was successful:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+      	<code>
+$ python3.6
+...
+
+&gt;&gt;&gt; import requests
+&gt;&gt;&gt;
+      	</code>
+  </pre>
+        </div>
+
+        <p>This completes the process of setting up your working environment. And now you are ready to proceed to
+            create
+            the article&#39;s sample.</p>
+
+        <h3>Building a RESTful Service with Oracle REST Data Services</h3>
+
+        <p>By following the instructions in this section, you will create a RESTful service upon a database table,
+            using
+            the AutoREST feature of Oracle REST Data Services. In particular, you will REST-expose the departments
+            table
+            from the HR sample schema that comes with Oracle Database.</p>
+
+        <p><strong>Note</strong>: As mentioned earlier in this article, AutoREST provides a no-code solution for
+            exposing database data to HTTP. And if you want more control, then you can roll your own resource
+            modules.
+            The latter option will be covered in detail in the third article of this series.</p>
+
+        <p>Follow these steps to AutoREST-enable the hr.departments table with Oracle SQL Developer:</p>
+
+        <p>1. In Oracle SQL Developer, move to the Connections pane and find the HR schema. If you do not see this
+            schema there, you have to create a new connection for it:</p>
+
+        <p>In the Connections pane, right-click the <strong>Connections</strong> node and select <strong>New
+                Connection</strong>.</p>
+
+        <p>In the New / Select Database Connection dialog box, enter the required information (if you are using the
+            VM
+            appliance, all passwords are set to <code>oracle</code>):</p>
+
+        <p align="center" class="xsml">Figure 3: Setting up a connection to the HR schema in Oracle SQL Developer.
+        </p>
+
+        <p>After filling in the dialog box&#39;s fields, click <strong>Test</strong> to test the newly created
+            connection. If it is successful, click <strong>Save</strong>.</p>
+
+        <p>2. In the Connections pane, find and expand the HR schema.</p>
+
+        <p>3. Under HR schema node, expand <strong>Tables(Filtered)</strong>. Then, right-click
+            <strong>DEPARTMENTS</strong> and select <strong>Enable REST Service</strong> from the pop-up menu to
+            invoke
+            the RESTful Services Wizard:
+        </p>
+
+        <p align="center" class="xsml">Figure 4: Auto-enabling a database object with the RESTful Services Wizard in
+            Oracle SQL Developer.</p>
+
+        <p>4. On the first screen of the wizard, select the <strong>Enable object</strong> checkbox and deselect the
+            <strong>Authorization required</strong> checkbox, as shown in the above figure.
+        </p>
+
+        <p>5. On the Summary screen of the wizard, view the summary information, and click <strong>Finish</strong>.
+        </p>
+
+        <p>Before that, however, you can look at the PL/SQL code that will be executed behind the scenes when you
+            click
+            Finish. To see it, click the <strong>SQL</strong> tab in the Summary screen. You should see the
+            following:
+        </p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+      	<code>
+DECLARE
+  PRAGMA AUTONOMOUS_TRANSACTION;
+BEGIN
+
+    ORDS.ENABLE_OBJECT(p_enabled =&gt; TRUE,
+                       p_schema =&gt; &#39;HR&#39;,
+                       p_object =&gt; &#39;DEPARTMENTS&#39;,
+                       p_object_type =&gt; &#39;TABLE&#39;,
+                       p_object_alias =&gt; &#39;departments&#39;,
+                       p_auto_rest_auth =&gt; FALSE);
+    
+    commit;
+
+END;
+      	</code>
+  </pre>
+        </div>
+
+        <p>6. Finally, check to see if the Oracle REST Data Services process is running. You should see it in the
+            Processes pane. If you do not see it there, run it using the ORDS Run Wizard, which can be launched by
+            selecting the <strong>Tools &gt; REST Data Services &gt; Run</strong> menu item.</p>
+
+        <p><strong>Note</strong>: The ORDS Installation Wizard discussed in the &quot;<a href="#wizard">Installing
+                and
+                Deploying Oracle REST Data Services</a>&quot; section earlier has the Run Standalone Mode screen,
+            where
+            you can select the <strong>Run in Standalone Mode when installation completes</strong> checkbox. If you
+            did
+            so, Oracle REST Data Services should already be running. However, the next time you load your system,
+            you
+            need to explicitly run Oracle REST Data Services.</p>
+
+        <p>That&#39;s it. A RESTful service upon the hr.departments database table is created and you are now ready
+            to
+            make an HTTP request to it, to make sure it works. The quickest way to test a RESTful service is with a
+            web
+            browser. So, point your browser to the following location:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+      	<code>
+http://yourdbserver:9090/ords/hr/departments/
+      	</code>
+  </pre>
+        </div>
+
+        <p>This assumes that 9090 is used as the HTTP port for Oracle REST Data Services to listen on in your
+            system.
+        </p>
+
+        <p>Figure 5 shows what you should see as a result:</p>
+
+        <p align="center" class="xsml">Figure 5: Using a web browser to quickly test the RESTful service.</p>
+
+        <p>Figure 5 indicates that the RESTful service you created works as expected and you can now test it from
+            your
+            Python environment. Before moving on to Python, however, let&#39;s take a closer look at what just
+            happened.
+            Oracle REST Data Services received a GET request on /ords/hr/departments/ from the browser and issued
+            the
+            <code>SELECT * FROM HR.DEPARTMENTS</code> query to the underlying database in response. The query result
+            was
+            then converted to JSON and sent back to the browser.
+        </p>
+
+        <h3>Testing Your RESTful Service in Python</h3>
+
+        <p>In this simple test, you will make a GET HTTP request to the RESTful service you just created. Using the
+            Request library, this can be done very easy:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+      	<code>
+&gt;&gt;&gt; import requests
+&gt;&gt;&gt; r = requests.get(&#39;http://yourdbserver:9090/ords/hr/departments/&#39;)
+      	</code>
+  </pre>
+        </div>
+
+        <p>Then, you can convert the result to JSON and output it to see exactly the same as what you saw in your
+            browser before:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+      	<code>
+&gt;&gt;&gt; import json
+&gt;&gt;&gt; jo = r.json()
+&gt;&gt;&gt; print(json.dumps(jo, indent=4))
+      	</code>
+  </pre>
+        </div>
+
+        <p>The output should be the following:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+      	<code>
+{
+    &quot;items&quot;: [
+        {
+            &quot;department_id&quot;: 10,
+            &quot;department_name&quot;: &quot;Administration&quot;,
+            &quot;manager_id&quot;: 200,
+            &quot;location_id&quot;: 1700,
+            &quot;links&quot;: [
+                {
+                    &quot;rel&quot;: &quot;self&quot;,
+                    &quot;href&quot;: &quot;http://yourdbserver:9090/ords/hr/departments/10&quot;
+                }
+            ]
+        },
+        {
+            &quot;department_id&quot;: 20,
+            &quot;department_name&quot;: &quot;Marketing&quot;,
+            &quot;manager_id&quot;: 201,
+            &quot;location_id&quot;: 1800,
+            &quot;links&quot;: [
+                {
+                    &quot;rel&quot;: &quot;self&quot;,
+                    &quot;href&quot;: &quot;http://yourdbserver:9090/ords/hr/departments/20&quot;
+                }
+            ]
+        },
+
+...
+      	</code>
+  </pre>
+        </div>
+
+        <h3>Conclusion</h3>
+
+        <p>This article is designed to help you get started quickly with Oracle REST Data Services. Following the
+            instructions provided, you learned how easy it is to build an Oracle REST Data Services RESTful service
+            to
+            expose Oracle Database data to HTTP and then consume the service from Python.</p>
+
+        <h3>See Also</h3>
+
+        <ul class="obullets">
+            <li><a href="http://www.oracle.com/technetwork/developer-tools/rest-data-services/overview/index.html">Oracle
+                    REST Data Services</a> website</li>
+            <li>&quot;<a
+                    href="http://www.oracle.com/webfolder/technetwork/tutorials/obe/db/ords/r30/Install_Administer_ORDS/Install_Administer_ORDS.html">Installing
+                    and Administering REST Data Services with SQL Developer</a>&quot; hands-on lab</li>
+            <li>&quot;<a
+                    href="http://www.oracle.com/webfolder/technetwork/tutorials/obe/db/ords/r30/AutoREST%20Enable/AutoREST%20Enable.html">AutoREST
+                    Enable Database Objects</a>&quot; hands-on lab</li>
+            <li><a
+                    href="http://www.oracle.com/technetwork/database/database-technologies/scripting-languages/python/index.html">Python
+                    Developer Center</a> on OTN</li>
+            <li>&quot;<a href="https://community.oracle.com/docs/DOC-1005069">Introduction to Python for PL/SQL
+                    Developers</a>&quot; tutorial series</li>
+        </ul>
+
+        <h3>About the Author</h3>
+
+        <p>Yuli Vasiliev is a software developer, freelance author, and consultant currently specializing in open
+            source
+            development, databases, business intelligence (BI), machine learning, and virtualization. He is the
+            author
+            of a series of books on Oracle technology, including <em>Oracle Business Intelligence: An introduction
+                to
+                Business Analysis and Reporting</em> (Packt Publishing) and <em>PHP Oracle Web Development: Data
+                processing, Security, Caching, XML, Web Services, and Ajax</em> (Packt Publishing).</p>
+    </div>
+</section>

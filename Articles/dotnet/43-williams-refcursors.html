@@ -1,0 +1,1028 @@
+<!-- _Raw-Text -->
+<!-- CB104v0 -->
+<!-- 
+<section class="cb104 cb104v0 cpad" data-trackas="cb104" data-ocomid="cb104">
+    <div class="cb104w1 cwidth">
+        <div class="col-framework col2 col2-thirds-col1 col-gutters col-justified">
+            <div class="col-w1">
+                <div class="col-item">
+                    <div class="col-item-w1">
+
+                        <p>Leverage the power of ref cursors and ODP.NET to create powerful, flexible, and scalable
+                            applications.</p>
+                        <p>There are several ways to return query results from an Oracle database to a client
+                            application, using Oracle Data Provider for .NET; one of the most powerful, flexible, and
+                            scalable methods is to use ref cursor. This article introduces ref cursors and why they are
+                            useful, including an example of how to use multiple active result sets with Oracle. The
+                            sample code illustrates how simple it is to begin using ref cursors in your .NET code.</p>
+                    </div>
+                </div>
+                <div class="col-item">
+                    <div class="col-item-w1 bgvlightgrey">
+                        <h3>Downloads for this article</h3>
+                        <ul class="cta-list">
+
+                            <li><a
+                                    href="https://www.oracle.com/technetwork/developer-tools/visual-studio/downloads/index.html">Oracle
+                                    Data Provider for .NET (ODP.NET) </a></li>
+                            <li><a
+                                    href="https://www.oracle.com/technetwork/database/enterprise-edition/downloads/index-092322.html">Oracle
+                                    Database 10<em>g</em> </a></li>
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+-->
+<!-- /CB104v0 -->
+
+
+<!-- CC01v0 -->
+<section class="cc01 cc01v0 cpad">
+    <div class="cc01w1 cwidth">
+        <p><strong>What you will need</strong></p>
+        <ul class="obullets">
+            <li>Access to Oracle9<em>i</em> Database or Oracle Database 10<em>g</em></li>
+            <li>Access to the HR sample user</li>
+            <li>Oracle Client 9<em>i</em> Release 2 or higher</li>
+            <li>Oracle Data Provider for .NET</li>
+            <li>Microsoft Visual Studio .NET 2002 or higher</li>
+        </ul>
+        <p><strong>What Is a Ref Cursor?</strong></p>
+        <p>If you are not familiar with ref cursors, your first question might naturally be, "Just what is a ref cursor,
+            anyway?" Simply put, a ref cursor is a PL/SQL datatype whose value is an address that represents the memory
+            location of a query work area on the database server. This may, in turn, cause you to subsequently wonder
+            just what a query work area is. A query work area can be thought of as the result set (sometimes also
+            referred to as a row set) on the server-it is the location where the results of a query are stored in server
+            memory. When you start reading terms such as "query work area" and "memory address," you may begin to think
+            that ref cursors are complicated and require dealing with C-style pointers and the like. Fortunately, this
+            is not the case with Oracle Data Provider for .NET. In fact, when using Oracle Data Provider for .NET, you
+            can think of a ref cursor as nothing more than a handle to a result set on the server. Because a ref cursor
+            is a PL/SQL datatype, you do need some way of representing the ref cursor in your .NET code, and that is
+            accomplished through the <code class="ocode"> OracleRefCursor</code>class exposed by Oracle Data Provider
+            for .NET.</p>
+        <p><strong>Ref Cursor Characteristics</strong></p>
+        <p>Ref cursors have several important characteristics that must be taken into account for proper use with Oracle
+            Data Provider for .NET in your code:</p>
+
+        <ul class="obullets">
+            <li>A ref cursor refers to <em>server</em> memory. The memory address represented by a ref cursor "lives" on
+                the database server, not on the client machine. This implies that the client must maintain the
+                connection to the database during the lifetime of the ref cursor. If the underlying connection to the
+                database is closed, the ref cursor will become inaccessible from the client.</li>
+            <li>A ref cursor involves an additional database round trip. Because a ref cursor is a pointer to memory on
+                the server that is returned to the client, the actual data contained in the ref cursor is not initially
+                returned to the client. When the client opens the ref cursor by calling the <code
+                    class="ocode">ExecuteNonQuery </code> method of an OracleCommand object, for example, only the
+                memory address where the data resides on the server is returned. The client must subsequently request
+                the data contained in the ref cursor, once it has opened the ref cursor. Although it requires an
+                additional round trip, this can be beneficial for performance in some circumstances. Data won't be
+                retrieved until the user attempts to read it, preventing a potential bottleneck if many query results
+                are returned from a stored procedure.</li>
+            <li>A ref cursor is not updatable. The result set represented by the ref cursor is read-only. You cannot
+                update the database via a ref cursor.</li>
+            <li>A ref cursor is not backward-scrollable. The data represented by the ref cursor is accessed in a
+                forward-only, serial manner. You cannot position a record pointer inside the ref cursor to point to
+                random records in the result set.</li>
+            <li>A ref cursor is a PL/SQL datatype. You create and return a ref cursor inside a PL/SQL code block. </li>
+            <li>A ref cursor can be either weak- or strong-typed. A strong-typed ref cursor has a return type defined
+                when the ref cursor itself is declared in PL/SQL. In contrast to a strong-typed ref cursor, a weak-typed
+                ref cursor has no return type defined, meaning that a weak-typed ref cursor can refer to a query work
+                area of any type. On the other hand, a strong-typed ref cursor may refer only to a query work area that
+                has the same type (or structure) as the type that was used when the ref cursor was declared. In other
+                words, a strong-typed ref cursor is specific, whereas a weak-typed ref cursor is generic. This article
+                makes use of weak-typed ref cursors.</li>
+        </ul>
+        <p><strong>The OracleRefCursor Class</strong></p>
+        <p>As briefly mentioned, the manner in which a ref cursor is represented in your .NET code is via the <code
+                class="ocode">OracleRefCursor</code> class, which is exposed by Oracle Data Provider for .NET in the
+            Oracle.DataAccess.Types namespace. The <code class="ocode">OracleRefCursor</code> class is a simple class
+            that has no constructor and exposes the <code class="ocode">GetDataReader </code> method as a means of
+            gaining access to the data stored in the query work area on the server. You can also use the <code
+                class="ocode">OracleRefCursor</code> class in conjunction with the <code
+                class="ocode">OracleDataAdapter </code> class to populate DataTables and DataSets. Because the <code
+                class="ocode">OracleRefCursor </code> class has no constructor, you do not instantiate objects of this
+            class in the standard manner. Instead, you create an instance of the <code
+                class="ocode">OracleParameter</code> class and set the <code class="ocode">OracleDbType</code> property
+            to a value of <code class="ocode">RefCursor </code> Remember that a ref cursor is a PL/SQL datatype, so an
+            instance of the <code class="ocode">OracleParameter</code> class is necessary to pass the ref cursor as a
+            parameter out of a PL/SQL block. In addition, the ref cursor may also be passed to the calling client as an
+            output parameter or a function return value. In the Oracle Database 10<em>g</em> Release 2 version of
+            ODP.NET, it is possible to pass a ref cursor as an input parameter.</p>
+        <p><strong>Why Use PL/SQL and Ref Cursors?</strong></p>
+        <p>At this point, you know what a ref cursor is, have encountered some of the important attributes of ref
+            cursors, and have learned that you need to use the <code class="ocode"> OracleRefCursor</code> class in
+            conjunction with the <code class="ocode">OracleParameter</code> class to pass a ref cursor from PL/SQL into
+            your .NET code.</p>
+        <p>Two related questions I am often asked are, "Can't I just embed SQL statements in my code and use the
+            OracleCommand object to get the data from the database?" and "If so, then why bother using PL/SQL and ref
+            cursors?"</p>
+        <p>My answer to the first question is, "Yes, you can." And my answer to the second question is, "Because it
+            makes sense to do so, depending on the circumstances." Let me explain. It is, after all, possible to create
+            entire applications without ever writing or calling a single line of PL/SQL code. However, ref cursors can
+            help optimize Oracle data retrieval. One of the primary benefits of using PL/SQL is that it is tightly
+            integrated with both Oracle Database and the SQL language. For example, Oracle column types in a table are,
+            in general, PL/SQL datatypes, and vice versa. This permits you to work with a single variable that is of the
+            correct datatype for both a table in the database and the programming language being used. Another benefit
+            that is sometimes overlooked is that you can use PL/SQL as a security tool or mechanism. It's possible to
+            create a PL/SQL procedure that returns data from a database table to which users have no direct access and
+            are thus unable to browse with an external toolthey can get to the data only via the PL/SQL code. The users
+            need the appropriate permissions to execute the PL/SQL procedure or function for this scenario to work
+            correctly, but these can be granted by the database administrator. In addition, by using PL/SQL, you are
+            moving code that deals with the data into the database and separating the client logic from the data logic.
+            Moving the code into the database implicitly centralizes it, so it needs to be managed only in a single
+            location.</p>
+        <p>The primary purpose of the ref cursor datatype is to allow PL/SQL code to return a result set to a program
+            that is written in another language and is external to the database. It is the mechanism whereby PL/SQL code
+            returns result sets to a client application. If you want to return a result set from PL/SQL code to a
+            client, using a ref cursor is the way to go about it.</p>
+        <p>Even though there are several reasons to use PL/SQL, .NET programmers may initially find that it feels a bit
+            unnatural to move code out of the .NET environment and into the database. However, keep in mind that PL/SQL
+            was created for working with data in an Oracle database and that it does an excellent job. In fact, recent
+            releases of the database, especially Oracle Database 10<em>g</em>, include enhancements to the PL/SQL
+            compiler and optimizer, which make using PL/SQL even more appealing from a pure performance perspective.</p>
+        <p>PL/SQL Packages and Package Bodies</p>
+        <p>If you are new to Oracle, you may not be familiar with PL/SQL packages and package bodies. A package is a
+            construct PL/SQL has inherited from Ada, the language on which PL/SQL is based. In a nutshell, a PL/SQL
+            package is a mechanism for storing or bundling related items as a single logical entity. A package is
+            composed of two distinct pieces:</p>
+
+
+        <ul class="obullets">
+            <li>The package specification. Defines what is contained in the package and is akin to a header file in a
+                language such as C++. Items defined in the specification are public . That is, code outside of the
+                specification and the body can "see" these items. The specification is the published interface to a
+                package.</li>
+            <li>The package body. Contains the code for the procedures and functions defined in the specification. The
+                body may also contain code not declared in the specification; in this case, this code is private and is
+                visible only to code within the package body.</li>
+        </ul>
+        <p>These two pieces are stored as separate objects in the data dictionary and can be seen in the <code
+                class="ocode"> user_source</code> view, among others. The specification is stored as the <code
+                class="ocode"> PACKAGE</code> type, and the body is stored as the <code
+                class="ocode"> PACKAGE BODY</code> type. Note that it is possible to have a specification with no body.
+            It isn't possible, however, to have a body with no specification. For example, you can use a specification
+            with no body to declare a set of public constants; because a set of constants doesn't need an
+            implementation, a body isn't necessary. You can view package bodies and specifications by using <a
+                href="https://www.oracle.com/technetwork/developer-tools/visual-studio/overview/index.html"
+                target="_blank">Oracle Developer Tools for Visual Studio .NET </a>.</p>
+        <p><strong>The Sample Application</strong></p>
+        <p>Now that you have a firm grasp of the various concepts and constructs involved in using a ref cursor from
+            within a .NET application, it's time to take a look at some code to create a sample console application that
+            illustrates how the pieces fit together. Because you will be using instances of the <code
+                class="ocode">OracleDataReader</code> and <code class="ocode">DataSet </code>classes in the client
+            application to retrieve the data from the ref cursor, modifying this sample to work as a traditional Windows
+            client or an ASP.NET client would be a straightforward task. You will be working with the HR sample schema
+            that is part of the sample schemas that ship with the Oracle9<em>i</em> and Oracle 10<em>g</em> software.
+            The sample application will retrieve a subset of the columns and rows in the <code
+                class="ocode">EMPLOYEES</code>table in the HR schema and display the results in a console window. You
+            will work with both function return values and output parameters of a procedure.</p>
+        <p><strong>The PL/SQL Code</strong></p>
+        <p>You can create either the PL/SQL code first or the .NET code first; however, because you will need to know
+            the name of the package, functions, and procedures to use in your .NET code, it seems logical to create the
+            PL/SQL code first. To create the PL/SQL package and package body, log on to the database as the HR user,
+            using SQL*Plus. Note that the HR user is locked by default. You may have to unlock the account prior to
+            logging in to the database. Once you have successfully logged in to the database, execute the <code
+                class="ocode">otn_ref_cursor.sql</code> script to create the PL/SQL package and package body. This
+            script is available as part of the sample code download. The README.txt file within the download provides
+            more details on executing it. The following is the otn_ref_cursor.sql file:</p>
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+
+create or replace package otn_ref_cursor as
+  -- used to illustrate passing a ref cursor
+  -- as a return value from a function
+  -- or as an output parameter from a procedure
+
+  function get_emp_info return sys_refcursor;
+  procedure get_emp_info(p_rc out sys_refcursor);
+
+  procedure get_multiple_cursors(p_rc1 out sys_refcursor,
+                                 p_rc2 out sys_refcursor,
+                                 p_rc3 out sys_refcursor);
+end;
+/
+
+</code></pre>
+        </div>
+        <p>Now that you have created the PL/SQL package, you can create the PL/SQL package body. The following code that
+            creates the PL/SQL package body is also part of the otn_ref_cursor.sql file:</p>
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+create or replace package body otn_ref_cursor as
+  function get_emp_info return sys_refcursor is
+    -- declare the cursor variable
+    -- sys_refcursor is a built in type
+    l_cursor sys_refcursor;
+  begin
+    open l_cursor for
+    select   employee_id,
+             last_name,
+             first_name,
+             to_char(hire_date, 'DD-MON-YYYY') hire_date
+    from     employees
+    where    last_name like 'A%'
+    order by last_name,
+             first_name;
+
+    return l_cursor;
+  end;
+
+  procedure get_emp_info(p_rc out sys_refcursor) is
+  begin
+    -- open the cursor using the passed in ref cursor
+    -- sys_refcursor is a built in type
+    open p_rc for
+    select   employee_id,
+             last_name,
+             first_name,
+             to_char(hire_date, 'DD-MON-YYYY') hire_date
+    from     employees
+    where    last_name like 'A%'
+    order by last_name,
+             first_name;
+  end;
+
+  procedure get_multiple_cursors(p_rc1 out sys_refcursor,
+                                 p_rc2 out sys_refcursor,
+                                 p_rc3 out sys_refcursor) is
+  begin
+    -- open the cursors using the passed in ref cursor parameters
+    -- sys_refcursor is a built in type
+    open p_rc1 for
+    select   employee_id,
+             last_name,
+             first_name,
+             to_char(hire_date, 'DD-MON-YYYY') hire_date
+    from     employees
+    where    last_name like 'A%'
+    order by last_name,
+             first_name;
+
+    open p_rc2 for
+    select   employee_id,
+             last_name,
+             first_name,
+             to_char(hire_date, 'DD-MON-YYYY') hire_date
+    from     employees
+    where    last_name like 'B%'
+    order by last_name,
+             first_name;
+
+    open p_rc3 for
+    select   employee_id,
+             last_name,
+             first_name,
+             to_char(hire_date, 'DD-MON-YYYY') hire_date
+    from     employees
+    where    last_name like 'C%'
+    order by last_name,
+             first_name;
+  end;
+end;
+/
+
+</code></pre>
+        </div>
+
+        <p><strong>The Class Methods</strong></p>
+        <p>Creating class methods illustrates the various ways of working with ref cursors. In addition, you will create
+            "helper" class methods for displaying the results to the console window:</p>
+        <ul class="obullets">
+            <li>The <code class="ocode">DisplayRefCursorData</code> method: This method is an overloaded method that
+                displays all the data in a DataSet object or an OracleDataReader object.</li>
+            <li>The <code class="ocode">DisplayDataReaderRow</code> method: This method is used to display a single row
+                of data in an OracleDataReader object.</li>
+            <li>The <code class="ocode">GetCursorFunction</code> method: This method is used to retrieve a ref cursor as
+                a function return value.</li>
+            <li>The <code class="ocode">GetCursorParameter</code> method: This method is used to retrieve a ref cursor
+                as an output parameter from a procedure.</li>
+            <li>The <code class="ocode">TraverseResultSets</code> method: This method is used to retrieve multiple
+                cursors and illustrates serially traversing each result set.</li>
+            <li>The <code class="ocode">MultipleActiveResultSets</code> method: This method is used to retrieve and
+                "randomly" process multiple active result sets.</li>
+
+        </ul>
+
+        <p><strong>The Main Method</strong></p>
+        <p>The purpose of the Main method in our sample code is to establish a connection with the database and then
+            call each of the member methods to illustrate using ref cursors. Note: To run the sample, be sure to modify
+            the User Id, Password , and Data Sourceparameters in the connection string if they are different from the
+            ones below.</p>
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+// C#
+static void Main(string[] args)
+{
+  // create a connection to the database
+  // change values as needed for your environment
+  OracleConnection con = new OracleConnection("User Id=hr; Password=hr; Data Source=otndemo; Pooling=false");
+
+  // attempt to open the connection
+  try
+  {
+    con.Open();
+  }
+  catch (OracleException ex)
+  {
+    Console.WriteLine(ex.Message);
+  }
+
+  // only call our methods if we are connected
+  // to the database
+  if (con.State == ConnectionState.Open)
+  {
+    // call method that gets a ref cursor from pl/sql function
+    GetCursorFunction(con);
+
+    // call method that gets a ref cursor from pl/sql procedure
+    GetCursorParameter(con);
+
+    // call method that serially traverses multiple result sets
+    TraverseResultSets(con);
+
+    // call method that illustrates multiple active result sets (MARS)
+    MultipleActiveResultSets(con);
+  }
+
+  // clean up the connection object
+  con.Dispose();
+}
+
+' Visual Basic .NET
+Sub Main()
+  ' create a connection to the database
+  ' change values as needed for your environment
+  Dim con As OracleConnection = New OracleConnection
+                                
+
+
+      ("User Id=hr;Password=hr;Data Source=otndemo;Pooling=false")
+
+  ' attempt to open the connection
+  Try
+    con.Open()
+  Catch ex As OracleException
+    Console.WriteLine(ex.Message)
+  End Try
+
+  ' only call our methods if we are connected
+  ' to the database
+  If con.State = ConnectionState.Open Then
+    ' call method that gets a ref cursor from pl/sql function
+    GetCursorFunction(con)
+
+    ' call method that gets a ref cursor from pl/sql procedure
+    GetCursorParameter(con)
+
+    ' call method that serially traverses multiple result sets
+    TraverseResultSets(con)
+
+    ' call method that illustrates multiple active result sets (MARS)
+    MultipleActiveResultSets(con)
+  End If
+
+  con.Dispose()
+End Sub
+</code></pre>
+        </div>
+
+        <p>The various methods used to demonstrate working with ref cursors all follow the same general pattern. Each
+            method creates an OracleCommand object that is used to invoke the PL/SQL code in the database. The <code
+                class="ocode">CommandType</code> property for the OracleCommand object is set to a value of <code
+                class="ocode"> CommandType.StoredProcedure</code> , to indicate that the command text represents a name
+            for stored PL/SQL code in the database. The command text and the database connection for the OracleCommand
+            object are initialized in the <code class="ocode"> OracleCommand</code> object constructor call. After
+            creation of the OracleCommand object, an OracleParameter object is created. It is the OracleParameter object
+            that will represent the ref cursor in the .NET code. You do this by setting the <code
+                class="ocode">OracleDbType</code> property to <code class="ocode"> OracleDbType.RefCursor</code> for
+            each parameter object. It is essential that you set this property correctly when using ref cursors. You set
+            the <code class="ocode">ParameterDirection </code>property to an appropriate value, based on whether you are
+            calling a function or a procedure in the PL/SQL package you created earlier. The parameter is then added to
+            the collection for the command object and executed. The ref cursor is then accessed as either an
+            OracleDataReader object or a DataSet, by use of the <code class="ocode">OracleDataAdapter</code> class.
+            Finally, objects are disposed of to release resources.</p>
+        <p>The <code class="ocode"> GetCursorFunction</code> method code invokes the <code
+                class="ocode">  get_emp_info</code> function in the PL/SQL package. When working with PL/SQL functions,
+            it is important to properly declare the ParameterDirection, as in our example. This code is as follows:</p>
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+// C#
+static void GetCursorFunction(OracleConnection con)
+{
+  // display a simple marker line to the console
+  // to indicate where we are
+  Console.WriteLine("In GetCursorFunction...");
+  Console.WriteLine();
+
+  // create the command object and set attributes
+  OracleCommand cmd = new OracleCommand("otn_ref_cursor.get_emp_info", con);
+  cmd.CommandType = CommandType.StoredProcedure;
+
+  // create parameter object for the cursor
+  OracleParameter p_refcursor = new OracleParameter();
+
+  // this is vital to set when using ref cursors
+  p_refcursor.OracleDbType = OracleDbType.RefCursor;
+
+  // this is a function return value so we must indicate that fact
+  p_refcursor.Direction = ParameterDirection.ReturnValue;
+
+  // add the parameter to the collection
+  cmd.Parameters.Add(p_refcursor);
+
+  // create a data adapter to use with the data set
+  OracleDataAdapter da = new OracleDataAdapter(cmd);
+
+  // create the data set
+  DataSet ds = new DataSet();
+
+  // fill the data set
+  da.Fill(ds);
+
+  // display the data to the console window
+  DisplayRefCursorData(ds);
+
+  // clean up our objects release resources
+  ds.Dispose();
+  da.Dispose();
+  p_refcursor.Dispose();
+  cmd.Dispose();
+
+  Console.WriteLine();
+}
+
+' Visual Basic .NET
+Sub GetCursorFunction(ByVal con As OracleConnection)
+  ' display a simple marker line to the console
+  ' to indicate where we are
+  Console.WriteLine("In GetCursorFunction...")
+  Console.WriteLine()
+
+  ' create the command object and set attributes
+  Dim cmd As OracleCommand = New OracleCommand("otn_ref_cursor.get_emp_info", con)
+  cmd.CommandType = CommandType.StoredProcedure
+
+  ' create parameter object for the cursor
+  Dim p_refcursor As OracleParameter = New OracleParameter
+
+  ' this is vital to set when using ref cursors
+  p_refcursor.OracleDbType = OracleDbType.RefCursor
+
+  ' this is a function return value so we must indicate that fact
+  p_refcursor.Direction = ParameterDirection.ReturnValue
+
+  ' add the parameter to the collection
+  cmd.Parameters.Add(p_refcursor)
+
+  ' create a data adapter to use with the data set
+  Dim da As OracleDataAdapter = New OracleDataAdapter(cmd)
+
+  ' create the data set
+  Dim ds As DataSet = New DataSet
+
+  ' fill the data set
+  da.Fill(ds)
+
+  ' display the data to the console window
+  DisplayRefCursorData(ds)
+
+  ' clean up our objects release resources
+  ds.Dispose()
+  da.Dispose()
+  p_refcursor.Dispose()
+  cmd.Dispose()
+
+  Console.WriteLine()
+End Sub
+</code></pre>
+        </div>
+        <p>The <code class="ocode">GetCursorParameter</code> method code invokes the <code
+                class="ocode">get_emp_info</code> procedure in the PL/SQL package. As is the case when working with
+            PL/SQL functions, it is important to properly declare the ParameterDirection when working with output
+            parameters from a procedure. This code is as follows:</p>
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+// C#
+static void GetCursorParameter(OracleConnection con)
+{
+  // display a simple marker line to the console
+  // to indicate where we are
+  Console.WriteLine("In GetCursorParameter...");
+  Console.WriteLine();
+
+  // create the command object and set attributes
+  OracleCommand cmd = new OracleCommand("otn_ref_cursor.get_emp_info", con);
+  cmd.CommandType = CommandType.StoredProcedure;
+
+  // create parameter object for the cursor
+  OracleParameter p_refcursor = new OracleParameter();
+
+  // this is vital to set when using ref cursors
+  p_refcursor.OracleDbType = OracleDbType.RefCursor;
+
+  // this is an output parameter so we must indicate that fact
+  p_refcursor.Direction = ParameterDirection.Output;
+
+  // add the parameter to the collection
+  cmd.Parameters.Add(p_refcursor);
+
+  // create a data adapter to use with the data set
+  OracleDataAdapter da = new OracleDataAdapter(cmd);
+
+  // create the data set
+  DataSet ds = new DataSet();
+
+  // fill the data set
+  da.Fill(ds);
+
+  // display the data to the console window
+  DisplayRefCursorData(ds);
+
+  // clean up our objects release resources
+  ds.Dispose();
+  da.Dispose();
+  p_refcursor.Dispose();
+  cmd.Dispose();
+
+  Console.WriteLine();
+}
+
+' Visual Basic .NET
+Sub GetCursorParameter(ByVal con As OracleConnection)
+  ' display a simple marker line to the console
+  ' to indicate where we are
+  Console.WriteLine("In GetCursorParameter...")
+  Console.WriteLine()
+
+  ' create the command object and set attributes
+  Dim cmd As OracleCommand = New OracleCommand("otn_ref_cursor.get_emp_info", con)
+  cmd.CommandType = CommandType.StoredProcedure
+
+  ' create parameter object for the cursor
+  Dim p_refcursor As OracleParameter = New OracleParameter
+
+  ' this is vital to set when using ref cursors
+  p_refcursor.OracleDbType = OracleDbType.RefCursor
+
+  ' this is an output parameter so we must indicate that fact
+  p_refcursor.Direction = ParameterDirection.Output
+
+  ' add the parameter to the collection
+  cmd.Parameters.Add(p_refcursor)
+
+  ' create a data adapter to use with the data set
+  Dim da As OracleDataAdapter = New OracleDataAdapter(cmd)
+
+  ' create the data set
+  Dim ds As DataSet = New DataSet
+
+  ' fill the data set
+  da.Fill(ds)
+
+  ' display the data to the console window
+  DisplayRefCursorData(ds)
+
+  ' clean up our objects release resources
+  ds.Dispose()
+  da.Dispose()
+  p_refcursor.Dispose()
+  cmd.Dispose()
+
+  Console.WriteLine()
+End Sub
+</code></pre>
+        </div>
+        <p>The <code class="ocode">TraverseResultSets</code> method code retrieves multiple cursors in a single database
+            call and illustrates how Oracle Data Provider for .NET allows result sets to be serially accessed, one after
+            the other.</p>
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+// C#
+static void TraverseResultSets(OracleConnection con)
+{
+  // display a simple marker line to the console
+  // to indicate where we are
+  Console.WriteLine("In TraverseResultSets...");
+  Console.WriteLine();
+
+  // create the command object and set attributes
+  OracleCommand cmd = new OracleCommand("otn_ref_cursor.get_multiple_cursors", con);
+  cmd.CommandType = CommandType.StoredProcedure;
+
+  // create parameter objects for the cursors
+  OracleParameter p_rc1 = new OracleParameter();
+  OracleParameter p_rc2 = new OracleParameter();
+  OracleParameter p_rc3 = new OracleParameter();
+
+  // this is vital to set when using ref cursors
+  p_rc1.OracleDbType = OracleDbType.RefCursor;
+  p_rc2.OracleDbType = OracleDbType.RefCursor;
+  p_rc3.OracleDbType = OracleDbType.RefCursor;
+
+  // these are output parameters so we must indicate that fact
+  p_rc1.Direction = ParameterDirection.Output;
+  p_rc2.Direction = ParameterDirection.Output;
+  p_rc3.Direction = ParameterDirection.Output;
+
+  // add the parameters to the collection
+  cmd.Parameters.Add(p_rc1);
+  cmd.Parameters.Add(p_rc2);
+  cmd.Parameters.Add(p_rc3);
+
+  // work with an OracleDataReader rather
+  // than a DataSet to illustrate ODP.NET features
+  OracleDataReader dr = cmd.ExecuteReader();
+
+  // display the data in the first ref cursor
+  Console.WriteLine("Displaying ref cursor #1:");
+  DisplayRefCursorData(dr);
+  Console.WriteLine();
+
+  // the Oracle Data Provider follows the standard
+  // by exposing the NextResult method to traverse
+  // multiple result sets
+  
+  // display the data in the second ref cursor
+  if (dr.NextResult())
+  {
+    Console.WriteLine("Displaying ref cursor #2:");
+    DisplayRefCursorData(dr);
+    Console.WriteLine();
+  }
+
+  // display the data in the third ref cursor
+  if (dr.NextResult())
+  {
+    Console.WriteLine("Displaying ref cursor #3:");
+    DisplayRefCursorData(dr);
+    Console.WriteLine();
+  }
+
+  // clean up our objects and release resources
+  dr.Dispose();
+  p_rc1.Dispose();
+  p_rc2.Dispose();
+  p_rc3.Dispose();
+  cmd.Dispose();
+}
+
+' Visual Basic .NET
+Sub TraverseResultSets(ByVal con As OracleConnection)
+  ' display a simple marker line to the console
+  ' to indicate where we are
+  Console.WriteLine("In TraverseResultSets...")
+  Console.WriteLine()
+
+  ' create the command object and set attributes
+  Dim cmd As OracleCommand = New OracleCommand("otn_ref_cursor.get_multiple_cursors", con)
+  cmd.CommandType = CommandType.StoredProcedure
+
+  ' create parameter objects for the cursors
+  Dim p_rc1 As OracleParameter = New OracleParameter
+  Dim p_rc2 As OracleParameter = New OracleParameter
+  Dim p_rc3 As OracleParameter = New OracleParameter
+
+  ' this is vital to set when using ref cursors
+  p_rc1.OracleDbType = OracleDbType.RefCursor
+  p_rc2.OracleDbType = OracleDbType.RefCursor
+  p_rc3.OracleDbType = OracleDbType.RefCursor
+
+  ' these are output parameters so we must indicate that fact
+  p_rc1.Direction = ParameterDirection.Output
+  p_rc2.Direction = ParameterDirection.Output
+  p_rc3.Direction = ParameterDirection.Output
+
+  ' add the parameters to the collection
+  cmd.Parameters.Add(p_rc1)
+  cmd.Parameters.Add(p_rc2)
+  cmd.Parameters.Add(p_rc3)
+
+  ' work with an OracleDataReader rather
+  ' than a DataSet to illustrate ODP.NET features
+  Dim dr As OracleDataReader = cmd.ExecuteReader()
+
+  ' display the data in the first ref cursor
+  Console.WriteLine("Displaying ref cursor #1:")
+  DisplayRefCursorData(dr)
+  Console.WriteLine()
+
+  ' the Oracle Data Provider follows the standard
+  ' by exposing the NextResult method to traverse
+  ' multiple result sets
+
+  ' display the data in the second ref cursor
+  If (dr.NextResult()) Then
+    Console.WriteLine("Displaying ref cursor #2:")
+    DisplayRefCursorData(dr)
+    Console.WriteLine()
+  End If
+
+  ' display the data in the third ref cursor
+  If (dr.NextResult()) Then
+    Console.WriteLine("Displaying ref cursor #3:")
+    DisplayRefCursorData(dr)
+    Console.WriteLine()
+  End If
+
+  ' clean up our objects and release resources
+  dr.Dispose()
+  p_rc1.Dispose()
+  p_rc2.Dispose()
+  p_rc3.Dispose()
+  cmd.Dispose()
+End Sub
+</code></pre>
+        </div>
+        <p>The <code class="ocode">MultipleActiveResultSets</code> method illustrates a feature of Oracle Data Provider
+            for .NET, by retrieving and "randomly" processing multiple result sets that are concurrently active. This
+            feature has been available since the first version of ODP.NET. In addition, note that this code "skips" the
+            second ref cursor during processing. The first and third result sets are retrieved to the .NET client, but
+            the second result set's data is deferred and remains on the database server. This improves response time,
+            because the second result set's data retrieval can be deferred until a time when it may be needed.</p>
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+// C#
+static void MultipleActiveResultSets(OracleConnection con)
+{
+  // display a simple marker line to the console
+  // to indicate where we are
+  Console.WriteLine("In MultipleActiveResultSets...");
+  Console.WriteLine();
+
+  // create the command object and set attributes
+  OracleCommand cmd = new OracleCommand("otn_ref_cursor.get_multiple_cursors", con);
+  cmd.CommandType = CommandType.StoredProcedure;
+
+  // create parameter objects for the cursors
+  OracleParameter p_rc1 = new OracleParameter();
+  OracleParameter p_rc2 = new OracleParameter();
+  OracleParameter p_rc3 = new OracleParameter();
+
+  // this is vital to set when using ref cursors
+  p_rc1.OracleDbType = OracleDbType.RefCursor;
+  p_rc2.OracleDbType = OracleDbType.RefCursor;
+  p_rc3.OracleDbType = OracleDbType.RefCursor;
+
+  // these are output parameters so we must indicate that fact
+  p_rc1.Direction = ParameterDirection.Output;
+  p_rc2.Direction = ParameterDirection.Output;
+  p_rc3.Direction = ParameterDirection.Output;
+
+  // add the parameters to the collection
+  cmd.Parameters.Add(p_rc1);
+  cmd.Parameters.Add(p_rc2);
+  cmd.Parameters.Add(p_rc3);
+
+  // execute the command to open the ref cursors
+  cmd.ExecuteNonQuery();
+
+  // work with an OracleDataReader rather
+  // than a DataSet to illustrate ODP.NET features
+  OracleDataReader dr1 = ((OracleRefCursor) p_rc1.Value).GetDataReader();
+
+  // notice we are skipping the second (or "middle") ref cursor
+  OracleDataReader dr3 = ((OracleRefCursor) p_rc3.Value).GetDataReader();
+
+  // illustrate the multiple result sets are active
+  // by "randomly" displaying data from each one
+  if (dr1.Read())
+  {
+    Console.WriteLine("Displaying data from ref cursor #1:");
+    DisplayDataReaderRow(dr1);
+    Console.WriteLine();
+  }
+
+  if (dr3.Read())
+  {
+    Console.WriteLine("Displaying data from ref cursor #3:");
+    DisplayDataReaderRow(dr3);
+    Console.WriteLine();
+  }
+
+  if (dr1.Read())
+  {
+    Console.WriteLine("Displaying data from ref cursor #1:");
+    DisplayDataReaderRow(dr1);
+    Console.WriteLine();
+  }
+  
+  if (dr3.Read())
+  {
+    Console.WriteLine("Displaying data from ref cursor #3:");
+    DisplayDataReaderRow(dr3);
+    Console.WriteLine();
+  }
+
+  // clean up our objects and release resources
+  dr1.Dispose();
+  dr3.Dispose();
+  p_rc1.Dispose();
+  p_rc2.Dispose();
+  p_rc3.Dispose();
+  cmd.Dispose();
+}
+
+' Visual Basic .NET
+Sub MultipleActiveResultSets(ByVal con As OracleConnection)
+  ' display a simple marker line to the console
+  ' to indicate where we are
+  Console.WriteLine("In MultipleActiveResultSets...")
+  Console.WriteLine()
+
+  ' create the command object and set attributes
+  Dim cmd As OracleCommand = New OracleCommand("otn_ref_cursor.get_multiple_cursors", con)
+  cmd.CommandType = CommandType.StoredProcedure
+
+  ' create parameter objects for the cursors
+  Dim p_rc1 As OracleParameter = New OracleParameter
+  Dim p_rc2 As OracleParameter = New OracleParameter
+  Dim p_rc3 As OracleParameter = New OracleParameter
+
+  ' this is vital to set when using ref cursors
+  p_rc1.OracleDbType = OracleDbType.RefCursor
+  p_rc2.OracleDbType = OracleDbType.RefCursor
+  p_rc3.OracleDbType = OracleDbType.RefCursor
+
+  ' these are output parameters so we must indicate that fact
+  p_rc1.Direction = ParameterDirection.Output
+  p_rc2.Direction = ParameterDirection.Output
+  p_rc3.Direction = ParameterDirection.Output
+
+  ' add the parameters to the collection
+  cmd.Parameters.Add(p_rc1)
+  cmd.Parameters.Add(p_rc2)
+  cmd.Parameters.Add(p_rc3)
+
+  ' execute the command to open the ref cursors
+  cmd.ExecuteNonQuery()
+
+  ' work with an OracleDataReader rather
+  ' than a DataSet to illustrate ODP.NET features
+  Dim dr1 As OracleDataReader = DirectCast(p_rc1.Value, OracleRefCursor).GetDataReader()
+
+  ' notice we are skipping the second (or "middle") ref cursor
+  Dim dr3 As OracleDataReader = DirectCast(p_rc3.Value, OracleRefCursor).GetDataReader()
+
+  ' illustrate the multiple result sets are active
+  ' by "randomly" displaying data from each one
+  If (dr1.Read()) Then
+    Console.WriteLine("Displaying data from ref cursor #1:")
+    DisplayDataReaderRow(dr1)
+    Console.WriteLine()
+  End If
+
+  If (dr3.Read()) Then
+    Console.WriteLine("Displaying data from ref cursor #3:")
+    DisplayDataReaderRow(dr3)
+    Console.WriteLine()
+  End If
+
+  If (dr1.Read()) Then
+    Console.WriteLine("Displaying data from ref cursor #1:")
+    DisplayDataReaderRow(dr1)
+    Console.WriteLine()
+  End If
+
+  If (dr3.Read()) Then
+    Console.WriteLine("Displaying data from ref cursor #3:")
+    DisplayDataReaderRow(dr3)
+    Console.WriteLine()
+  End If
+
+  ' clean up our objects and release resources
+  dr1.Dispose()
+  dr3.Dispose()
+  p_rc1.Dispose()
+  p_rc2.Dispose()
+  p_rc3.Dispose()
+  cmd.Dispose()
+End Sub
+</code></pre>
+        </div>
+        <p><strong>Running the Sample Application</strong></p>
+        <p>Now that you have created all the required components and code, you can run the sample and view its output in
+            the console window. Here is what the output should resemble:</p>
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+In GetCursorFunction...
+
+174, Abel, Ellen, 11-MAY-1996
+166, Ande, Sundar, 24-MAR-2000
+130, Atkinson, Mozhe, 30-OCT-1997
+105, Austin, David, 25-JUN-1997
+
+In GetCursorParameter...
+
+174, Abel, Ellen, 11-MAY-1996
+166, Ande, Sundar, 24-MAR-2000
+130, Atkinson, Mozhe, 30-OCT-1997
+105, Austin, David, 25-JUN-1997
+
+In TraverseResultSets...
+
+Displaying ref cursor #1:
+174, Abel, Ellen, 11-MAY-1996
+166, Ande, Sundar, 24-MAR-2000
+130, Atkinson, Mozhe, 30-OCT-1997
+105, Austin, David, 25-JUN-1997
+
+Displaying ref cursor #2:
+204, Baer, Hermann, 07-JUN-1994
+116, Baida, Shelli, 24-DEC-1997
+167, Banda, Amit, 21-APR-2000
+172, Bates, Elizabeth, 24-MAR-1999
+192, Bell, Sarah, 04-FEB-1996
+151, Bernstein, David, 24-MAR-1997
+129, Bissot, Laura, 20-AUG-1997
+169, Bloom, Harrison, 23-MAR-1998
+185, Bull, Alexis, 20-FEB-1997
+
+Displaying ref cursor #3:
+187, Cabrio, Anthony, 07-FEB-1999
+148, Cambrault, Gerald, 15-OCT-1999
+154, Cambrault, Nanette, 09-DEC-1998
+110, Chen, John, 28-SEP-1997
+188, Chung, Kelly, 14-JUN-1997
+119, Colmenares, Karen, 10-AUG-1999
+
+In MultipleActiveResultSets...
+
+Displaying data from ref cursor #1:
+174, Abel, Ellen, 11-MAY-1996
+
+Displaying data from ref cursor #3:
+187, Cabrio, Anthony, 07-FEB-1999
+
+Displaying data from ref cursor #1:
+166, Ande, Sundar, 24-MAR-2000
+
+Displaying data from ref cursor #3:
+148, Cambrault, Gerald, 15-OCT-1999
+</code></pre>
+        </div>
+
+
+        <p><strong>Summary</strong></p>
+        <p>This article has introduced you to using ref cursors from within your .NET applications. It examined what ref
+            cursors are and explored some characteristics of ref cursors that are important to take into account. You've
+            learned that the <code class="ocode">OracleRefCursor</code> class-in conjunction with the <code
+                class="ocode">OracleParameter, OracleDataReader, OracleDataAdapter , and DataSet</code> classes-can
+            easily be used to get data from the server into your .NET code, and you've worked through a sample console
+            application to tie these various pieces together. After following the steps in this article, you should be
+            able to begin implementing ref cursors in your .NET applications.</p>
+
+        <p> Mark A. Williams is the author of Pro .NET Oracle Programming (Apress, November 2004) and currently works as
+            a Production DBA in the medical diagnostics industry. He has been working with Oracle since release 7.0.1.16
+            of the database and is an Oracle ACE as well as Oracle Certified Professional Database Administrator for
+            versions 7, 8, 8<em>i</em>, 9<em>i</em>, and 10<em>g</em>.</p>
+        <p><a
+                href="mailto:otnfeedback_us@oracle.com?subject=Optimize%20Result%20Set%20Retrieval%20Using%20ODP.NET%20and%20Ref%20Cursors">Send
+                us your comments</a></p>
+    </div>
+</section>
+<!-- /CC01v0 -->
+<!-- / _Raw-Text -->

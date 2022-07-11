@@ -1,0 +1,1135 @@
+<!-- _Raw-Text -->
+<section class="cc01 cc01v0 cpad crule">
+    <div class="cc01w1 cwidth">
+
+
+
+        <p><strong> Learn to use Oracle Database's "client identifier" feature in your PHP applications.</strong></p>
+
+
+
+        <p>The OCI8 extension for the PHP language lets applications set a small string identifier token on each
+            database connection. This "client identifier" can be used by Oracle Database to distinguish between
+            individual web application users who all connect to the database using one common set of database
+            credentials. For example, every page in a web site might physically connect to the database as the same
+            database user <code class="ocode">PHPUSER</code>. If two different people 'Chris' and 'Alison' are using the
+            site, these two user names can be set as their respective client identifiers and be passed into the
+            database.</p>
+
+
+        <p>By associating a unique client identifier with each web user Oracle Database can:</p>
+
+        <ul class="obullets">
+            <li>Provide an audit trail on individual web users</li>
+            <li>Automatically apply rules to individual web users to restrict data access</li>
+            <li>Monitor and trace applications per web user</li>
+        </ul>
+
+        <h3>Setting Client Identifiers</h3>
+
+        <p>Each PHP file in a typical Oracle PHP application calls <a
+                href="//www.php.net/manual/en/function.oci-connect.php"><code class="ocode">oci_connect()</code></a>
+            with an identical database user name. Once the application's own authentication system decides a particular
+            web user is OK, then a unique token is passed back and forth in HTTP responses and requests so that the web
+            user doesn't have to re-authenticate each time a new web page is loaded.</p>
+
+
+        <p>Implementing application level authentication and passing PHP session information need careful design to
+            ensure security. Setting client identifiers in the application also requires care to ensure consistency of
+            use. The overall nature of stateless web applications that utilize shared database connections means
+            application code integrity is a very important part of ensuring data security. This article gives advice on
+            when to set client identifiers, and on how using them helps development and management of web sites. It does
+            not cover PHP authentication or session handling best practices.</p>
+
+
+        <p>Client identifiers should be set with <a
+                href="//www.php.net/manual/en/function.oci-set-client-identifier.php"><code
+                    class="ocode">oci_set_client_identifier()</code></a> after connecting but before executing any
+            statements or OCI8 calls on behalf of the web user. At its most basic, the client identifier could be the
+            web user's name stored in PHP's session data by a previous authentication request:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+            <pre>
+<code>session_start();
+$c = oci_pconnect('phpuser', 'welcome', 'localhost/orcl');
+oci_set_client_identifier($c, $_SESSION['app_user_name']);
+. . .
+</code></pre>
+        </div>
+
+        <p>If the identity of the end user alters during the run time of the script (perhaps if PHP is executing a long
+            running command-line process, or perhaps in an administrative web page that runs different components
+            representing different end users) then <code class="ocode">oci_set_client_identifier()</code> can be called
+            at each point the end-user identity changes:</p>
+
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+            <pre>
+<code>$c = oci_pconnect('phpuser', 'welcome', 'localhost/orcl');
+
+$myuser = 'Chris';
+oci_set_client_identifier($c, $myuser);
+. . .
+$myuser = 'Alison';
+oci_set_client_identifier($c, $myuser);
+. . .
+</code></pre>
+        </div>
+
+
+        <p>In practice, consider using more secure values for identifiers.</p>
+
+        <p>Client identifiers can be set when using <code class="ocode">oci_connect()</code>, <code
+                class="ocode">oci_new_connect()</code>, or <code class="ocode">oci_pconnect()</code> connection calls.
+            Identifiers can be used when the database is configured to use any of the three types of server processes:
+            "Dedicated" servers, "Shared" servers, and when using <a
+                href="//www.oracle.com/technetwork/topics/php/whatsnew/php-scalability-ha-twp-128842.pdf">Database
+                Resident Connection Pooling</a> (DRCP) servers.</p>
+
+        <p>The <code class="ocode">oci_set_client_identifier()</code> function was added in PHP OCI8 1.4 (first included
+            in PHP 5.3.1). With older versions of OCI8 you can use the PL/SQL <a
+                href="//download.oracle.com/docs/cd/E11882_01/appdev.112/e10577/d_sessio.htm#ARPLS68032"><code
+                    class="ocode">DBMS_SESSION</code></a> package instead:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+            <pre>
+<code>session_start();
+$c = oci_pconnect('phpuser', 'welcome', 'localhost/orcl');
+$s = oci_parse($c, "begin dbms_session.set_identifier(:id); end;");
+oci_bind_by_name($s, ":id", $_SESSION['app_user_name']);
+oci_execute($s);
+</code></pre>
+        </div>
+
+
+        <p>The <code class="ocode">oci_set_client_identifier()</code> function is preferred because unlike <code
+                class="ocode">DBMS_SESSION.SET_IDENTIFIER</code> it doesn't force a database round-trip
+            request-and-response. With <code class="ocode">oci_set_client_identifier</code> the identifier is
+            piggy-backed on any subsequent OCI8 call that actually does reach the database from PHP. Unnecessary
+            round-trips slow down each PHP page and impact application scalability.</p>
+
+        <p>To set the identifier in PHP frameworks, you will currently need to call OCI8 directly. In Zend Framework
+            this could conceptually be like:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+            <pre>
+<code>$auth = Zend_Auth::getInstance();
+if ($auth-&gt;hasIdentity()) {
+  $db = $this-&gt;getAdapter();
+  $conn = $db-&gt;getConnection();
+  if ($conn) {
+    oci_set_client_identifier($conn, $auth-&gt;getIdentity()-&gt;USERNAME);
+  }
+}
+</code></pre>
+        </div>
+
+
+        <p>In practice a separation of responsibilities would be preferred.</p>
+
+        <p>PHP OCI8 does not clear the client identifier at the end of an HTTP request since the overhead of a
+            round-trip to clear the value would impact scalability of every application. This is not detrimental for
+            standard OCI8 connections since the database connection is destroyed at the end of the HTTP request and the
+            identifier value is cleared as a result. However identifiers may remain in effect across web requests that
+            use persistent connections. To avoid an incorrect or no identifier being recorded by the database, all PHP
+            files that connect to the database should set the identifier so it is correct for the duration of the
+            request's execution. If this cannot be guaranteed, then every script that sets the client identifier should
+            forcefully clear it at the script end with:</p>
+
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+            <pre>
+<code>$s = oci_parse($c, "begin dbms_session.clear_identifier; end;");
+oci_execute($s);
+</code></pre>
+        </div>
+
+
+        <p>This causes a round-trip to the database.</p>
+
+
+        <p>PHP's <a href="//www.php.net/manual/en/function.oci-set-client-identifier.php"><code
+                    class="ocode">oci_set_client_identifier()</code></a> function corresponds to setting Oracle's C
+            level <a href="//download.oracle.com/docs/cd/E11882_01/appdev.112/e10646/oci08sca.htm#LNOCI16566"><code
+                    class="ocode">OCI_ATTR_CLIENT_IDENTIFIER</code></a> attribute. Oracle literature on this, and on
+            PL/SQL's equivalent <a
+                href="//download.oracle.com/docs/cd/E11882_01/appdev.112/e10577/d_sessio.htm#i996935"><code
+                    class="ocode">DBMS_SESSION.SET_IDENTIFIER</code></a>, provide good references about client
+            identifiers.</p>
+
+
+        <h3>A Sample Application</h3>
+
+        <p>A sample PHP "Parts" application illustrates how client identifiers can be used in the OCI8 extension.
+            Overall, the application shows an inventory of electrical and plumbing parts. An application-level
+            authentication system handles web user logins. For successful logins, an identifier unique for each web user
+            is passed between HTTP requests in the PHP session data. It is used for the client identifier value. The
+            application has just enough complexity so the Oracle technologies being discussed are not abstract, but it
+            is <i>no where near</i> a production example. The sample application is simply intended to show the
+            relationship between the web user and the database user, and to show how a client identifier can be used in
+            the database. PHP session management requires careful design to minimize security issues. There are many
+            external references discussing this problem which should be closely studied by every PHP developer. Michael
+            McLaughlin's <a href="//www.oracle.com/technetwork/articles/mclaughlin-phpid1-091467.html">Database-Based
+                Authentication for PHP Apps</a> is a good place to begin reading more.</p>
+
+
+        <p>The core of the Parts application is a <code class="ocode">setup.sql</code> file that creates the database
+            objects. All the PHP scripts in the application will connect to the database using the <code
+                class="ocode">PHPUSER</code> schema, which owns the <code class="ocode">PARTS</code> application table.
+            The SQL script creates a second user <code class="ocode">PHP_SEC_ADMIN</code> to hold security information
+            about the application. This user is given some extra database privileges needed for the auditing example,
+            shown later. The <code class="ocode">PHP_AUTHENTICATION</code> table contains the application user names and
+            passwords. Query access on this table is granted to the <code class="ocode">PHPUSER</code> user so the PHP
+            application only has to open one connection to the database, but that connection cannot modify the security
+            information.</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+            <pre>
+<code>-- setup.sql
+
+set echo on
+
+-- Create PHP application user
+connect system/welcome
+
+-- Create the PHP application user
+drop user phpuser cascade;
+create user phpuser identified by welcome;
+grant connect, resource to phpuser;
+alter user phpuser default tablespace users
+  temporary tablespace temp account unlock;
+
+-- Create user owner security information about the application
+drop user php_sec_admin cascade;
+create user php_sec_admin identified by welcome;
+alter user php_sec_admin default tablespace system 
+  temporary tablespace temp account unlock;
+grant create procedure, create session, create table, 
+  resource, select any dictionary to php_sec_admin;
+
+connect phpuser/welcome
+
+-- "Parts" table for the application demo
+create table parts 
+  (id       number primary key, 
+   category varchar2(20),
+   name     varchar2(20));
+
+insert into parts values (1, 'electrical', 'lamp');
+insert into parts values (2, 'electrical', 'wire');
+insert into parts values (3, 'electrical', 'switch');
+insert into parts values (4, 'plumbing',   'pipe');
+insert into parts values (5, 'plumbing',   'sink');
+insert into parts values (6, 'plumbing',   'toilet');
+commit;
+
+connect php_sec_admin/welcome
+
+-- Authentication table with the web user user names &amp; passwords.
+-- A real application would NEVER store plain-text passwords but this
+-- article is about uses of client identifiers and not about
+-- authentication.
+create table php_authentication
+  (app_username varchar2(20) primary key,
+   app_password varchar2(20) not null);
+
+insert into php_authentication values ('chris', 'tiger');
+insert into php_authentication values ('alison', 'red');
+commit;
+
+grant select on php_authentication to phpuser;
+</code></pre>
+        </div>
+
+        <p>Production applications would not use such simple passwords and would <i>never</i> store clear text passwords
+            in tables. Applications could do end user authentication in a number of ways, including using LDAP.</p>
+
+        <p>Each script in the PHP application needs to know the Oracle DB credentials so they are stored in a common
+            include file <code class="ocode">dbinfo.inc.php</code>:</p>
+
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+            <pre>
+<code>&lt;?php
+// dbinfo.inc.php
+// All connections to the database use these credentials
+define("ORA_CON_UN", "phpuser");
+define("ORA_CON_PW", "welcome");
+define("ORA_CON_DB", "localhost/orcl");
+?&gt;
+</code></pre>
+        </div>
+
+
+        <p>In real life, consider using Oracle Wallet Manager and connecting with <code
+                class="ocode">OCI_CRED_EXT</code> instead of hard coding the database password. The operating system
+            account for application administration, and the owner of the web server processes should be the only users
+            with access to the wallet.</p>
+
+        <p>The application login page <code class="ocode">login.php</code> is a typical simple PHP script that when
+            first loaded displays a form:</p>
+
+        <p align="center"><img alt="phpclientid-f1"
+                src="//www.oracle.com/ocom/groups/public/@otn/documents/webcontent/171424.png"></p>
+
+        <p>The <code class="ocode">login.php</code> file looks like:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+            <pre>
+<code>&lt;?php
+
+// login.php
+
+require_once('./dbinfo.inc.php');
+
+session_start();
+
+function login_form($message)
+{
+  echo &lt;&lt;&lt;EOD
+  &lt;body style="font-family: Arial, sans-serif;"&gt;
+
+  &lt;h2&gt;Login Page&lt;/h2&gt;
+  &lt;p&gt;$message&lt;/p&gt;
+  &lt;form action="login.php" method="POST"&gt;
+    &lt;p&gt;Username: &lt;input type="text" name="username"&gt;&lt;/p&gt;
+
+    &lt;p&gt;Password: &lt;input type="text" name="password"&lt;/p&gt;
+    &lt;input type="submit" value="Login"&gt;
+  &lt;/form&gt;
+  &lt;/body&gt;
+EOD;
+}
+
+if (!isset($_POST['username']) || !isset($_POST['password'])) {
+  login_form('Welcome');
+} else {
+  // Check validity of the supplied username &amp; password
+  $c = oci_pconnect(ORA_CON_UN, ORA_CON_PW, ORA_CON_DB);
+  // Use a "bootstrap" identifier for this administration page
+  oci_set_client_identifier($c, 'admin');
+
+  $s = oci_parse($c, 'select app_username
+                      from   php_sec_admin.php_authentication 
+                      where  app_username = :un_bv
+                      and    app_password = :pw_bv');
+  oci_bind_by_name($s, ":un_bv", $_POST['username']);
+  oci_bind_by_name($s, ":pw_bv", $_POST['password']);
+  oci_execute($s);
+  $r = oci_fetch_array($s, OCI_ASSOC);
+
+  if ($r) {
+    // The password matches: the user can use the application
+
+    // Set the user name to be used as the client identifier in
+    // future HTTP requests:
+    $_SESSION['username'] = $_POST['username'];
+
+    echo &lt;&lt;&lt;EOD
+    &lt;body style="font-family: Arial, sans-serif;"&gt;
+
+    &lt;h2&gt;Login was successful&lt;/h2&gt;
+    &lt;p&gt;&lt;a href="application.php"&gt;Run the Application&lt;/a&gt;&lt;p&gt;
+    &lt;/body&gt;
+EOD;
+    exit;
+  }
+  else {
+    // No rows matched so login failed
+    login_form('Login failed. Valid usernames/passwords ' .
+               'are "chris/tiger" and "alison/red"');
+  }
+}
+
+?&gt;
+
+</code></pre>
+        </div>
+
+        <p>If you copy this code, make sure the "heredoc" <code class="ocode">EOD</code> tokens are at the very start of
+            their lines.</p>
+
+        <p>For form submission, the script calls back to itself, which now validates the entered user name and password
+            against the users in the <code class="ocode">PHP_AUTHENTICATION</code> table. A client identifier of <code
+                class="ocode">admin</code> is set as a bootstrap value since at this initial point we don't know if we
+            have a valid end user. Also the login script is an administrative component not doing any actual application
+            work on behalf of an end user.</p>
+
+
+        <p>From the login page, authenticated users can click to the application inventory page:</p>
+
+        <p align="center"><img alt="phpclientid-f2"
+                src="//www.oracle.com/ocom/groups/public/@otn/documents/webcontent/171426.png"></p>
+
+        <p>The user name is passed to the application page in PHP session data as <code
+                class="ocode">$_SESSION['username']</code>. This value will be used as the client identifier for the web
+            user. In a real application a less obvious identifier would be recommended. For example, as part of
+            application authentication for a successful end-user login, an initial look-up query or PL/SQL function
+            could return a pre-computed obscure value to be used as the user's client identifier. This value would then
+            be stored in the PHP session information for use in subsequent "real" application work. An obscure value
+            would make it harder for attackers to predict identifier values. Also an identifier could be quickly changed
+            if there was ever a concern about the authenticity of HTTP requests using it.&nbsp;</p>
+
+        <p>The application <code class="ocode">page application.php </code> checks that the user is authenticated - this
+            application's definition of an authenticated user is simply that a user name is set. The code then sets the
+            client identifier and shows the inventory list by querying the <code class="ocode">PARTS</code> table: </p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+            <pre>
+<code>&lt;?php
+
+// application.php
+
+require_once('./dbinfo.inc.php');
+
+session_start();
+
+// Check the user is logged in according to our application authentication
+if (!isset($_SESSION['username'])) {
+  echo &lt;&lt;&lt;EOD
+    &lt;h2&gt;Unauthorized&lt;/h2&gt;
+    &lt;p&gt;You are not authenticated.&lt;br&gt;
+    Valid usernames/passwords are "chris/tiger" and "alison/red"&lt;p&gt;
+
+    &lt;p&gt;&lt;a href="login.php"&gt;Login Page&lt;/a&gt;&lt;p&gt;
+EOD;
+  exit;
+}
+
+// Generate the application page
+
+$c = oci_pconnect(ORA_CON_UN, ORA_CON_PW, ORA_CON_DB);
+// Set the client identifier after every connection call
+// using a value unique for the web end user.
+oci_set_client_identifier($c, $_SESSION['username']);
+
+$username = htmlentities($_SESSION['username'], ENT_QUOTES);
+echo &lt;&lt;&lt;EOD
+&lt;body style="font-family: Arial, sans-serif;"&gt;
+&lt;h2&gt;Parts Company&lt;/h2&gt;
+&lt;table border='1'&gt;
+
+&lt;caption&gt;&lt;b&gt;Inventory for $username &lt;/b&gt;&lt;/caption&gt;
+EOD;
+
+$s = oci_parse($c, "select * from parts order by id");
+oci_execute($s);
+while (($row = oci_fetch_array($s, OCI_ASSOC+OCI_RETURN_NULLS))
+        != false) {
+  echo "&lt;tr&gt;\n";
+  foreach ($row as $item) {
+    echo "  &lt;td&gt;" .
+      ($item!==null?htmlentities($item, ENT_QUOTES):"&amp;nbsp;") .
+      "&lt;/td&gt;\n";
+  }
+  echo "&lt;/tr&gt;\n";
+}
+
+echo &lt;&lt;&lt;EOD
+
+&lt;/table&gt;
+&lt;p&gt;&lt;a href="logout.php"&gt;Logout&lt;/a&gt;&lt;/p&gt;
+&lt;/body&gt;
+EOD;
+
+?&gt;
+</code></pre>
+        </div>
+
+        <p>When logged in as Chris, the application shows:</p>
+
+
+        <p align="center"><img alt="phpclientid-f3"
+                src="//www.oracle.com/ocom/groups/public/@otn/documents/webcontent/171428.png"></p>
+
+        <p>A logout script <code class="ocode">logout.php</code> clears PHP's session information:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+            <pre>
+<code>&lt;?php
+
+// logout.php
+
+session_start();
+unset($_SESSION['username']);
+
+echo &lt;&lt;&lt;EOD
+&lt;body style="font-family: Arial, sans-serif;"&gt;
+&lt;h2&gt;Goodbye&lt;/h2&gt;
+
+&lt;p&gt;You are logged out.&lt;p&gt;
+
+&lt;p&gt;&lt;a href="login.php"&gt;Login Page&lt;/a&gt;&lt;p&gt;
+&lt;/body&gt;
+EOD;
+
+?&gt;
+</code></pre>
+        </div>
+
+        <p>The logout page does not call <code class="ocode">dbms_session.clear_identifier</code> to clear the database
+            connection's identifier: that would need to be done in the files that use a database connection if there was
+            concern about whether <code class="ocode">oci_set_client_identifier()</code> was consistently used
+            throughout the application.</p>
+
+        <p>The same application code will be used in the next sections without any modifications.</p>
+
+        <p>To summarize, this simple application is designed to show the relationship between database users and end
+            users so that client identifiers can be discussed. It does not constitute a suitable example for production
+            use. The application sets a client identifier with <code class="ocode">oci_set_client_identifier()</code>
+            immediately after each <code class="ocode">oci_pconnect()</code> connection call. This identifier uniquely
+            identifies the end user who is sitting at his or her web browser. For existing real-life applications,
+            adding a call to <code class="ocode">oci_set_client_identifier()</code> with a unique identifier per web
+            user is the only application change that needs to be made to take advantage of client identification.</p>
+
+        <h3>Using a Client Identifier in PHP for Auditing</h3>
+
+        <p>Auditing lets you:</p>
+
+        <ul class="obullets">
+            <li>Identify inappropriate database changes</li>
+            <li>Investigate suspicious activity</li>
+            <li>Verify authorization or access control policies</li>
+            <li>Satisfy business compliance regulations</li>
+            <li>Gather data about database activities for use in capacity and resource allocation planning</li>
+        </ul>
+
+        <p>Oracle auditing is powerful and multi-faceted. You can audit general activities such as the type of SQL
+            statement executed. You can audit fine grained activities such as when specific values occur, or what IP
+            address initiated a request. Auditing can occur on both successful and failed activities. The audit trail
+            can be stored inside the database or outside it, suitable for analysis with various tools.</p>
+
+        <p>Setting a client identifier allows auditing to be associated with unique web users, and not just with the
+            database table owner who authenticated the PHP OCI8 <code class="ocode">oci_pconnect()</code> call to the
+            database.</p>
+
+
+        <p>The <code class="ocode">auditon.sql</code> script is a basic example of query auditing on the <code
+                class="ocode">PARTS</code> table:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+            <pre>
+<code>-- auditon.sql
+
+-- Turn on object auditing for the PARTS table
+
+connect system/welcome
+
+audit select on phpuser.parts by access; 
+&nbsp;</code></pre>
+        </div>
+
+
+        <p>Run the script above in SQL*Plus. Then run the application and login as 'chris' or 'alison' (their passwords
+            are in <code class="ocode">setup.sql</code>). You can even query the table as the <code
+                class="ocode">SYSTEM</code> user in SQL*Plus outside the application:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+            <pre>
+<code>select * from phpuser.parts;
+</code></pre>
+        </div>
+
+        <p>This returns the expected parts list.</p>
+
+        <p>To show the audit trail from all these table accesses, the SQL script <code
+                class="ocode">auditreport.sql</code> queries the <code class="ocode">DBA_AUDIT_TRAIL</code> view, which
+            contains the audit data when the database initialization parameter <code class="ocode">AUDIT_TRAIL</code> is
+            set to <code class="ocode">DB</code>.</p>
+
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+            <pre>
+<code>-- auditreport.sql
+
+-- View the audit trail for the PARTS table
+
+connect system/welcome
+
+set pagesize 100
+
+col app_username format a13
+col username format a13
+col extended_timestamp format a37
+col action_name format a13
+
+select auth.app_username,
+       dat.username,
+       extended_timestamp, 
+       action_name
+from   dba_audit_trail dat 
+       left outer join
+       php_sec_admin.php_authentication auth 
+       on auth.app_username = client_id
+where  obj_name = 'PARTS'
+order by extended_timestamp;
+</code></pre>
+        </div>
+
+        <p>Running the reports shows the time each person accessed the <code class="ocode">PARTS</code> table:</p>
+
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+            <pre>
+<code>APP_USERNAME  USERNAME      EXTENDED_TIMESTAMP                    ACTION_NAME
+------------- ------------- ------------------------------------- -------------
+chris         PHPUSER       16-AUG-10 12.25.42.846153 PM -07:00   SELECT
+alison        PHPUSER       16-AUG-10 12.25.50.870773 PM -07:00   SELECT
+              SYSTEM        16-AUG-10 12.25.58.660922 PM -07:00   SELECT
+</code></pre>
+        </div>
+
+
+        <p>There is no <code class="ocode">APP_USERNAME</code> shown for the <code class="ocode">SYSTEM</code> user
+            because there was no client identifier set in the SQL*Plus session. Sometimes identifying data accesses
+            where the client identifier is not correctly set is the desired auditing goal. Oracle's Fine-Grained
+            Auditing can be used to audit specific events like this, helping monitor suspicious activity. This can be
+            useful when client identifiers are used by Virtual Private Databases to restrict data access but complete
+            auditing is not required.</p>
+
+
+        <p>When you are finished exploring the example, you can turn auditing off using the <code
+                class="ocode">NOAUDIT</code> command in SQL*Plus:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+            <pre>
+<code>-- auditoff.sql
+
+-- Turn off object auditing for the PARTS table
+
+connect system/welcome
+
+noaudit all on phpuser.parts;
+</code></pre>
+        </div>
+
+
+
+        <h3>Using a Client Identifier in PHP with a VPD for Restricting Data Access</h3>
+
+
+        <p>Limiting access to avoid misuse of sensitive data is an architectural goal of all applications. Oracle PHP
+            applications can use the client identifier to restrict data access in a manually coded or an automatic way.
+            The manual way is to modify every SQL and PL/SQL statement to use <code class="ocode">SYS_CONTEXT()</code>,
+            which returns the client identifier of the PHP connection. For example, queries could be written to returns
+            rows from <code class="ocode">PARTS</code> only when the identifier of the current connection is 'chris':
+        </p>
+
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+            <pre>
+<code>select * from parts
+where sys_context('userenv', 'client_identifier') = 'chris';
+</code></pre>
+        </div>
+
+
+        <p>When Alison (or any user with a different client identifier) is connected, then the <code
+                class="ocode">WHERE</code> clause evaluates to false and no rows will be returned. This kind of logic is
+            cumbersome to code and error prone to consistently implement everywhere. Oracle Database Enterprise
+            Edition's Virtual Private Database (VPD) technology comes to the rescue. It will automatically add a <code
+                class="ocode">WHERE</code> predicate to each statement the application executes.</p>
+
+        <p>To set up VPD, a PL/SQL function that returns the desired text of the restrictive <code
+                class="ocode">WHERE</code> clause needs to be created. To automatically restrict data returned from the
+            query <code class="ocode">select * from parts</code> the function would just need to return the string:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+            <pre>
+<code>sys_context('userenv', 'client_identifier') = 'chris'
+</code></pre>
+        </div>
+
+        <p>With VPD enabled to use such a function, the query would be executed by Oracle as if it had the restrictive
+            <code class="ocode">WHERE</code> clause, resulting in the same application behavior as discussed above for
+            the manual implementation. Technically Oracle uses a transient view that enforces the <code
+                class="ocode">WHERE</code> clause and rewrites the application query to use the view instead of the base
+            table, as described in the VPD documentation. Regardless of the implementation details, Oracle transparently
+            handles the authorization, so security is consistent and programmers can be more productive on other tasks.
+            Remember that from the database perspective, client identifiers are "insecure" because the database has to
+            rely on externally provided information for policy enforcement. This is the outcome of using shared database
+            connections and middle-tier authentication in a stateless web architecture and it places a reliance on
+            having correct application code.
+        </p>
+
+
+        <p>For the Parts application, the SQL script <code class="ocode">vpdon.sql</code> sets up VPD. First it creates
+            an application specific table of privileges. I've decided that Chris can only see electrical items, but
+            Alison can see electrical and plumbing supplies. The VPD policy function <code
+                class="ocode">F_POLICY_PARTS</code> returns a subquery that checks the current client identifier has
+            access to the part category of the row. Although <code class="ocode">F_POLICY_PARTS</code> is passed the
+            schema and table name that the policy is being applied to, in this example the policy is only used for one
+            table so the function parameters are not referenced. With the policy function defined, the <code
+                class="ocode">DBMS_RLS.ADD_POLICY</code> procedure is used to enable it for the <code
+                class="ocode">PARTS</code> table.</p>
+
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+            <pre>
+<code>-- vpdon.sql
+
+set echo on
+
+connect / as sysdba
+grant execute on sys.dbms_rls to php_sec_admin;
+
+connect php_sec_admin/welcome
+
+-- Application policy table
+drop table php_privs;
+create table php_privs (username varchar2(64), category varchar2(20));
+
+-- Chris should only see electrical items.  Alison can see
+-- electrical and plumbing items
+insert into php_privs values ('chris',  'electrical');
+insert into php_privs values ('alison', 'electrical');
+insert into php_privs values ('alison', 'plumbing');
+commit;
+
+grant select on php_privs to phpuser;
+
+-- Policy function F_POLICY_PARTS returns a where clause to restrict access
+
+create or replace function f_policy_parts
+  (schema in varchar2, tab in varchar2) return varchar2 
+as 
+  predicate  varchar2(400);
+ 
+begin
+  predicate :=
+   'category in 
+     (select category 
+      from php_sec_admin.php_privs
+      where username = sys_context(''userenv'', ''client_identifier''))';
+  return predicate;
+end;
+/
+show errors
+
+begin
+    dbms_rls.add_policy (
+       object_schema   =&gt; 'PHPUSER',
+       object_name     =&gt; 'PARTS',
+       policy_name     =&gt; 'ACCESS_CONTROL_PARTS',
+       function_schema =&gt; 'PHP_SEC_ADMIN',
+       policy_function =&gt; 'F_POLICY_PARTS',
+       policy_type     =&gt; DBMS_RLS.STATIC);
+end;
+/
+
+</code></pre>
+        </div>
+
+
+        <p>The policy functions in an application can be as complex as needed. Your own web sites can implement policy
+            rules in the most suitable way for them, which is likely to be completely different to that used in this
+            example. Take care with the <code class="ocode">POLICY_TYPE</code> argument. Here the policy function
+            returns a simple string, making the function identical for all uses. This means the type can be specified as
+            <code class="ocode">STATIC</code> allowing the function to be cached. The client identifier is not
+            considered part of the user defined application context so if the policy function logic evaluates the
+            identifier value then you will need to set the type to <code class="ocode">DYNAMIC</code>.
+        </p>
+
+
+        <p>Login to the Parts application as Chris see how the inventory list now only shows electrical supplies:</p>
+
+        <p align="center"><img alt="phpclientid-f4"
+                src="//www.oracle.com/ocom/groups/public/@otn/documents/webcontent/171431.png"></p>
+
+
+        <p>When logged in as Alison you can continue to see everything:</p>
+
+
+        <p align="center"><img alt="phpclientid-f5"
+                src="//www.oracle.com/ocom/groups/public/@otn/documents/webcontent/171433.png"></p>
+
+
+        <p>Oracle Database has a number of views for VPD management. One is the <code class="ocode">V$VPD_POLICY</code>
+            view that can be used to find the policies that were applied to executed SQL statements. This can be useful
+            for debugging the values returned by the policy function.</p>
+
+        <p>A fun thing to do with VPD is to login to SQL*Plus as the owner of the <code class="ocode">PARTS</code> table
+            and check its contents:</p>
+
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+            <pre>
+<code>connect phpuser/welcome
+select * from parts;
+</code></pre>
+        </div>
+
+        <p>No rows will be returned because the policy function <code class="ocode">F_POLICY_PARTS</code> is applied
+            even for the table owner. Without having an identifier validly set, the condition can never be satisfied. To
+            remove this restriction and make administration of objects easier, Oracle has an <code
+                class="ocode">EXEMPT ACCESS POLICY</code> privilege for exempting users from VPD policies.</p>
+
+        <p>VPD is useful for more than personnel access control. The model can be extended to allow "shared hosting".
+            The infrastructure for one application can be shared between multiple different groups of people who are
+            never authorized to see data from any other group.</p>
+
+
+        <p>When you are finished with the VPD example, you can remove the policy by dropping it:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+            <pre>
+<code>-- vpdoff.sql
+
+set echo on
+
+connect php_sec_admin/welcome
+
+begin
+   dbms_rls.drop_policy (
+       object_schema =&gt; 'PHPUSER',
+       object_name   =&gt; 'PARTS',
+       policy_name   =&gt; 'ACCESS_CONTROL_PARTS');
+end;
+/
+</code></pre>
+        </div>
+
+
+
+
+        <h3>Using a Client Identifier in PHP for Monitoring and Tracing</h3>
+
+        <p>While many tuning projects start with the automatic performance diagnostics run by Oracle Database, or
+            analyze overall system performance manually using AWR snapshots, this may not be possible in all
+            environments. Sometimes on a shared system, monitoring and analyzing the behavior of one web user is more
+            practical and simplifies the process of diagnosing performance problems in PHP. During development, the
+            behavior of a proposed application patch can be isolated from what else is happening on the system. The
+            client identifier allows focused monitoring via Oracle's End to End Application Tracing, a feature
+            introduced for multi-tier applications.</p>
+
+        <p>To collect database statistics about a user's database resource usage, the database administrator can execute
+            the <code class="ocode">DBMS_MONITOR.CLIENT_ID_STAT_ENABLE</code> procedure in SQL*Plus:</p>
+
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+            <pre>
+<code>connect system/welcome
+execute dbms_monitor.client_id_stat_enable(client_id =&gt; 'chris');
+</code></pre>
+        </div>
+
+        <p>The application can be run normally for any chosen actions and duration. Statistics can be accessed in
+            various way, including from the <code class="ocode">V$CLIENT_STATS</code> view. After Chris views the Parts
+            application inventory once, the view might contain:</p>
+
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+            <pre>
+<code>STAT_NAME                                VALUE
+----------------------------------- ----------
+user calls                                   1
+DB time                                    943
+DB CPU                                    2000
+parse count (total)                          1
+parse time elapsed                          91
+execute count                                1
+sql execute elapsed time                   494
+opened cursors cumulative                    1
+session logical reads                        7
+physical reads                               0
+physical writes                              0
+. . .
+</code></pre>
+        </div>
+
+
+        <p>This particular example shows a single SQL statement was parsed and executed. Standard Oracle manuals and
+            literature describes interpreting all the values, and describe the other statistics views.</p>
+
+        <p>Statistics can be turned off and reset to zero with:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+            <pre>
+<code>execute dbms_monitor.client_id_stat_disable(client_id =&gt; 'chris');
+</code></pre>
+        </div>
+
+
+        <p>A database trace to show the SQL "Explain Plan" output for analyzing executed statements can also be turned
+            on for each web user. It will show how statements actually got optimized - not just how you thought they
+            would be run. The database administrator can enable tracing with the <code
+                class="ocode">DBMS_MONITOR.CLIENT_ID_TRACE_ENABLE</code> procedure in SQL*Plus:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+            <pre>
+<code>connect system/welcome
+execute dbms_monitor.client_id_trace_enable(client_id =&gt; 'chris', waits =&gt; true, binds =&gt; true);
+</code></pre>
+        </div>
+
+
+        <p>The application can then be run normally. After completion of the analysis period, tracing can be turned off
+            with:</p>
+
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+            <pre>
+<code>execute dbms_monitor.client_id_trace_disable(client_id =&gt; 'chris');
+</code></pre>
+        </div>
+
+        <p>To examine the created trace files, find the trace directory using <code class="ocode">SHOW PARAMETER</code>
+            in SQL*Plus:</p>
+
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+            <pre>
+<code>show parameter user_dump_dest
+</code></pre>
+        </div>
+
+        <p>This gives output like::</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+            <pre>
+<code>NAME                                 TYPE        VALUE
+------------------------------------ ----------- ------------------------------
+user_dump_dest                       string      /home/oracle/app/diag/rdbms/or
+                                                 cl/orcl/trace
+</code></pre>
+        </div>
+
+        <p>The trace directory typically contains many trace files from normal operation. The <code
+                class="ocode">trcsess</code> utility can consolidate any of those created by Chris's use of the
+            application. The consolidation (or an individual file) can then be formatted with <code
+                class="ocode">TKPROF</code>. For example, start a terminal window as the Oracle software owner and run:
+        </p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+            <pre>
+<code>cd /home/oracle/app/diag/rdbms/orcl/orcl/trace
+trcsess output=/tmp/all.trc clientid=chris *.trc
+tkprof /tmp/all.trc /tmp/tkprof.out explain=phpuser/welcome
+</code></pre>
+        </div>
+
+        <p>This looks through all the trace files in the directory and aggregates those created by Chris. If you need to
+            run <code class="ocode">trcsess</code> on a subset of files, such as the files for a particular day, search
+            for the client identifier near the top of the files and pass the relevant file names to <code
+                class="ocode">trcsess</code>. Individual trace files contain a section like:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+            <pre>
+<code>*** 2010-08-16 15:29:12.481
+*** SESSION ID:(143.943) 2010-08-16 15:29:12.481
+*** CLIENT ID:(chris) 2010-08-16 15:29:12.481
+*** SERVICE NAME:(orcl) 2010-08-16 15:29:12.481
+*** MODULE NAME:(httpd@localhost (TNS V1-V3)) 2010-08-16 15:29:12.481
+*** ACTION NAME:() 2010-08-16 15:29:12.481
+</code></pre>
+        </div>
+
+
+        <p>Oracle Database can also name files with a given suffix, for example 'php', to make them easier to identify.
+            Do this by executing the SQL command <code
+                class="ocode">ALTER SESSION SET TRACEFILE_IDENTIFIER = 'php'</code> in PHP after connecting. Database
+            server trace file names would then look like <code class="ocode"> orcl_ora_9414_php.trc</code>. Logic would
+            need to be added to each PHP file to decide the suffix to use, and what conditions to set it.</p>
+
+
+        <p>The output from <code class="ocode">TKPROF</code> in <code class="ocode">tkprof.out</code> contains analysis
+            of the executed statements. Here is a section of the file analyzing results on my system:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+            <pre>
+<code>SQL ID: af69s0fa3cjnp
+Plan Hash: 3769467330
+select * 
+from
+ parts order by id
+
+
+call     count       cpu    elapsed       disk      query    current        rows
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+Parse        5      0.00       0.16          0          8          0           0
+Execute     33      0.00       0.00          0          0          0           0
+Fetch       33      0.00       0.00          0        231          0         198
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+total       71      0.01       0.17          0        239          0         198
+
+Misses in library cache during parse: 1
+Optimizer mode: ALL_ROWS
+Parsing user id: 1602  (PHPUSER)
+
+Rows     Row Source Operation
+-------  ---------------------------------------------------
+      6  SORT ORDER BY (cr=7 pr=0 pw=0 time=5 us cost=4 size=222 card=6)
+      6   TABLE ACCESS FULL PARTS (cr=7 pr=0 pw=0 time=5 us cost=3 size=222 card=6)
+
+
+Rows     Execution Plan
+-------  ---------------------------------------------------
+      0  SELECT STATEMENT   MODE: ALL_ROWS
+      6   SORT (ORDER BY)
+      6    TABLE ACCESS (FULL) OF 'PARTS' (TABLE)
+
+
+Elapsed times include waiting on following events:
+  Event waited on                             Times   Max. Wait  Total Waited
+  ----------------------------------------   Waited  ----------  ------------
+  SQL*Net message to client                      33        0.00          0.00
+  SQL*Net message from client                    32     2219.78       5720.55
+  cursor: mutex S                                 1        0.02          0.02
+  library cache lock                              1        0.01          0.01
+  cursor: pin S wait on X                         1        0.01          0.01
+  Disk file operations I/O                        4        0.00          0.00
+********************************************************************************
+</code></pre>
+        </div>
+
+
+
+
+        <p>For lover's of GUIs, Enterprise Manager 11g (Database Control) has a number of ways to check the impact of
+            the application on the database. For example, to see statistics for a particular client identifier, start
+            the Enterprise Manager console <code class="ocode">http://localhost:5500/em/</code> in a browser and
+            navigate to <i>Performance &gt; Top Consumers &gt; Top Clients</i>. Set the <i>View</i> drop-down to
+            "Clients with Aggregation Enabled". Click <i>Add Client</i> and specify the client identifier 'chris'. You
+            can then select the row 'chris' and click the <i>Enable SQL Trace</i> button (this is same as <code
+                class="ocode">DBMS_MONITOR.CLIENT_ID_TRACE_ENABLE</code>). Aggregation allows each run to be totalled
+            together:</p>
+
+
+        <p align="center"><img alt="phpclientid-f6"
+                src="//www.oracle.com/ocom/groups/public/@otn/documents/webcontent/171434.png"></p>
+
+        <p>Other areas of Enterprise Manager can also filter by client identifier, including the <i>Top Activity</i>
+            report.</p>
+
+        <p>A single run of the small Parts application may not make Enterprise Manager's monitoring thresholds or be
+            visible in the aggregation periods - I ran it several times in a row to capture the screen shot.</p>
+
+        <p>You might have noticed that <code class="ocode">trcsess</code> and Enterprise Manager also let data be
+            aggregated by <i>Action</i> and by <i>Module</i>. These values can be set in PHP OCI8 with the functions <a
+                href="//www.php.net/manual/en/function.oci-set-action.php">oci_set_action()</a> and <a
+                href="//www.php.net/manual/en/function.oci-set-module-name.php">oci_set_module_name()</a> respectively
+            to identify which parts of a PHP application are being executed. Monitoring and tracing can show up the
+            application-wide hot spots, and the SQL statements being executed can easily be identified.</p>
+
+
+        <p>Enterprise Manager is useful for tracing performance bottlenecks and tracking causes of database slowdowns
+            during development. It allows live analysis in a large system without impacting other concurrent web users.
+        </p>
+
+        <h3>Conclusion</h3>
+
+        <p>Client identifiers should be used by PHP web applications that allow multiple application users to connect to
+            the database via a single database user name. The identifier is a developer chosen value that can be derived
+            from session information about the end user already present in most web applications. Client identifiers are
+            set by simply calling the <code class="ocode">oci_set_client_identifier()</code> function in PHP scripts
+            connecting to the database. Oracle Database uses identifiers to audit, automatically restrict access to
+            sensitive data, and allow focused monitoring and tracing of resource usage. Oracle PHP applications should
+            use client identifiers so these Oracle Database features can be utilized at any point in the lifetime of the
+            application.</p>
+
+
+        <p><strong>Christopher Jones</strong> is a Consulting Technical Staffer with Oracle. He is the author of the <a
+                href="//blogs.oracle.com/opal/" target="">PHP and Oracle Blog</a>.</p>
+
+
+
+
+    </div>
+</section>
+
+<!--</article>-->
+<!-- / _Raw-Text -->
+
+
+
+<link rel="stylesheet" href="style.css">

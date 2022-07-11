@@ -1,0 +1,495 @@
+<!-- _Raw-Text -->
+<section class="cc01 cc01v0 cpad crule">
+    <div class="cc01w1 cwidth">
+
+        <p>cx_Oracle is a Python extension module that enables querying and updating of Oracle databases using a <a
+                href="//www.python.org/dev/peps/pep-0249">database API</a> that is common to all database access
+            modules. A number of extensions to the common database API have also been included in order to take
+            advantage of some of the features available exclusively to Oracle.</p>
+
+        <p>cx_Oracle has been in development for more than ten years and has covered most of the requirements of those
+            needing access to Oracle in Python. In December 2008, however, a major new release addressed a number of
+            limitations in earlier versions and added support for Python 3.0 and some new features recently made
+            available in Oracle. This article aims to cover the new features in depth and give reasons why you might
+            want to use them in your code.</p>
+
+
+        <h3>Support for Unicode and Python 3.0</h3>
+
+        <p>In earlier versions of cx_Oracle, no help was given to those wishing to use Unicode strings in their code.
+            Code would have to be written something like that shown in Listing 1.</p>
+
+        <p><strong>Listing 1: Old-style Unicode handling in cx_Oracle 4.x</strong></p>
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+            <pre>
+<code>import cx_Oracle 
+import os 
+
+os.environ["NLS_LANG"] = ".AL32UTF8" 
+
+START_VALUE = u"Unicode \u3042 3" 
+END_VALUE = u"Unicode \u3042 6" 
+
+connection = cx_Oracle.Connection("cx_Oracle/dev@t11g") 
+cursor = connection.cursor() 
+cursor.execute(""" 
+        select UnicodeCol 
+        from TestUnicodes 
+        where UnicodeCol &gt; :startValue 
+          and UnicodeCol &lt; :endValue""", 
+        startValue = START_VALUE.encode(connection.nencoding), 
+        endValue = END_VALUE.encode(connection.nencoding)) 
+for rawValue, in cursor: 
+    actualValue = rawValue.decode(connection.nencoding) 
+    print "Actual Value:", actualValue
+
+</code></pre>
+        </div>
+
+        <p>
+            Note that any time data was passed to Oracle Database, it would have to be encoded into the client character
+            set; any time data was retrieved from the database it would have to be decoded from the client character
+            set. Although clearly code could be written to handle Unicode strings properly, it was messy and prone to
+            error. With the advent of Python 3.0, in which all strings are Unicode strings, cx_Oracle obviously needed
+            to adapt. Just as clearly, the changes to the Python 3.x C API were significant enough to make introducing
+            support for Python 3.x and Unicode strings at the same time difficult. For this reason, support for Unicode
+            strings was first added to Python 2.x in a form of <em>Unicode mode</em>, and then support for Python 3.x
+            was added later. </p>
+
+
+        <p>In Unicode mode, all strings passed to Oracle are expected to be in Unicode, and all strings returned are
+            also in Unicode. This not only includes bind variables and result sets from queries but also statement text,
+            connection parameters, and attribute values, just as would take place in Python 3.x. Unicode mode is a
+            compile time option that is disabled by default in Python 2.x but can be enabled by setting the environment
+            variable WITH_UNICODE before building the module.</p>
+
+        <p>Regardless of which mode is in use, all data represented by the national character set (NCLOB and NVARCHAR2
+            columns, for example) is now returned in Unicode and expected to be bound in Unicode. This means that the
+            code sample shown in Listing 1 can be simplified by removing all encoding and decoding operations. Listing 2
+            demonstrates this.</p>
+
+        <p><strong>Listing 2: Simplified handling of Unicode in cx_Oracle 5.0</strong></p>
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+            <pre>
+<code>import cx_Oracle 
+
+START_VALUE = u"Unicode \u3042 3" 
+END_VALUE = u"Unicode \u3042 6" 
+
+connection = cx_Oracle.Connection("cx_Oracle/dev@t11g") 
+cursor = connection.cursor() 
+cursor.execute(""" 
+        select UnicodeCol 
+        from TestUnicodes 
+        where UnicodeCol &gt; :startValue 
+          and UnicodeCol &lt; :endValue""", 
+        startValue = START_VALUE, 
+        endValue = END_VALUE) 
+for actualValue, in cursor: 
+    print "Actual Value:", actualValue 
+</code></pre>
+        </div>
+
+        <p>When Unicode mode is not in use, though, all data represented in the database character set is still expected
+            to be represented as Python strings, just as in cx_Oracle 4.x. Fortunately, the enhancement described next
+            in this article explains how this can also be avoided if desired, without resorting to Unicode mode or
+            upgrading to Python 3.x. </p>
+
+        <h3>Input/Output Type Handlers</h3>
+
+        <p>A second major feature of cx_Oracle 5.x is the introduction of input and output type handlers. With these in
+            place, a great deal of flexibility and customizability is now possible. For example, if it was considered
+            desirable to have all strings returned as Unicode, the code in Listing 3 could be used. <strong>Listing 3:
+                How to return all strings as Unicode strings</strong></p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+            <pre>
+<code>import cx_Oracle 
+ 
+def OutputTypeHandler(cursor, name, defaultType, size,
+        precision, scale): 
+    if defaultType in (cx_Oracle.STRING, cx_Oracle.FIXED_CHAR): 
+        return cursor.var(unicode, size, cursor.arraysize) 
+
+connection = cx_Oracle.Connection("cx_Oracle/dev@t11g") 
+connection.outputtypehandler = OutputTypeHandler 
+cursor = connection.cursor() 
+cursor.execute(""" 
+        select * 
+        from TestStrings 
+        where StringCol &gt; :startValue 
+          and StringCol &lt; :endValue""", 
+        startValue = u"String 3", 
+        endValue = u"String 6") 
+for row in cursor: 
+    print "Row:", row 
+</code></pre>
+        </div>
+
+        <p>Input and output type handlers can be set at either the cursor level (where only that cursor is affected) or
+            the connection level (all cursors created using that connection are affected unless they have their own
+            input or output type handlers). A value of None for either the input or output type handler means that
+            processing will take place using cx_Oracle’s default algorithms. </p>
+
+        <p>An input type handler method is called whenever a bind variable needs to be created to pass data from Python
+            into Oracle. The cursor, the value being bound, and the number of elements that need to be created are
+            passed to the method. The return value is expected to be a variable object or None, meaning that default
+            processing will take place. The variable object created should be able to bind the Python value. In order to
+            help in this regard, variable objects can now be created with input converters. These methods are called
+            with the Python value being bound and expect in return a Python value that cx_Oracle already knows how to
+            bind directly. One final point: calling PL/SQL procedures and functions or anonymous PL/SQL blocks
+            introduces the possibility of input/output or even output-only bind variables. These are still covered by
+            input type handlers, even though data can be returned to Python from Oracle.</p>
+
+        <p>An output type handler method is called whenever a bind variable needs to be created to return data to Python
+            from Oracle after a query has been executed. In this case, the cursor; the name of the column being
+            returned; the default variable type; and the size, precision, and scale of the column being returned are
+            passed to the method. As with input type handlers, the return value is expected to be a variable object or
+            None, meaning that default processing will take place. If further manipulation of the data returned to
+            Python is desired, an output converter can be set on the variable. These methods are called with the value
+            that would otherwise be returned to Python and return the value that will actually be returned to Python.
+        </p>
+
+
+        <p>A couple more examples should make clear how powerful this enhancement can be in controlling the interface
+            between Python and Oracle. Listing 4 demonstrates how to bind an arbitrary object to a cursor. Listing 5
+            demonstrates how to return numbers as decimal.Decimal objects or as strings in order to manage numbers that
+            are much larger than floating precision numbers can handle.</p>
+
+        <p>Suppose you need to upload a couple of binary large objects (BLOBs) to the database and save them to the
+            blob_tab table that you might have created in a custom database schema, as follows:</p>
+
+        <p><strong>Listing 4: Binding an arbitrary Python object to a cursor</strong></p>
+
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+            <pre>
+<code>import cx_Oracle 
+
+class ArbitraryObject(object): 
+
+    def __init__(self, intValue, someOtherData): 
+        self.intValue = intValue 
+        self.someOtherData = someOtherData 
+
+    def BindValue(self): 
+        return self.intValue 
+
+def InputTypeHandler(cursor, value, numElements): 
+    if isinstance(value, ArbitraryObject): 
+        return cursor.var(int, arraysize = numElements, 
+                inconverter = ArbitraryObject.BindValue) 
+
+connection = cx_Oracle.Connection("cx_Oracle/dev@t11g") 
+connection.inputtypehandler = InputTypeHandler 
+cursor = connection.cursor() 
+cursor.execute(""" 
+        select * 
+        from TestNumbers 
+        where IntCol = :obj""", 
+        obj = ArbitraryObject(1, "arbitrary")) 
+for row in cursor: 
+    print "Row:", row 
+</code></pre>
+        </div>
+
+
+        <p><strong>Listing 5: Returning numbers as strings or decimal.Decimal objects</strong></p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+            <pre>
+<code>import cx_Oracle 
+import decimal 
+
+def NumbersAsDecimal(cursor, name, defaultType, size, precision,
+        scale): 
+    if defaultType == cx_Oracle.NUMBER: 
+        return cursor.var(str, 100, cursor.arraysize, 
+                outconverter = decimal.Decimal) 
+
+def NumbersAsString(cursor, name, defaultType, size, precision,
+        scale): 
+    if defaultType == cx_Oracle.NUMBER: 
+        return cursor.var(str, 100, cursor.arraysize) 
+
+connection = cx_Oracle.Connection("cx_Oracle/dev@t11g") 
+connection.outputtypehandler = NumbersAsDecimal 
+cursor = connection.cursor() 
+cursor.execute(""" 
+        select * 
+        from TestNumbers 
+        where IntCol &lt; 3""") 
+for row in cursor: 
+    print "Row (as decimal):", row 
+
+cursor = connection.cursor() 
+cursor.outputtypehandler = NumbersAsString 
+cursor.execute(""" 
+        select * 
+        from TestNumbers 
+        where IntCol between 6 and 8""") 
+for row in cursor: 
+    print "Row (as string):", row 
+
+</code></pre>
+        </div>
+
+
+        <h3>Database Resident Connection Pooling (DRCP) Support</h3>
+
+        <p>In Oracle Database 11<em>g</em> Release 1, Oracle introduced Database Resident Connection Pooling. Unlike
+            session pooling, where connections are pooled in the client and are only effective within a single threaded
+            process, DRCP pools connections on the server, enabling pooling across multiple client processes. This
+            enhancement is particularly useful with Web servers such as Apache that are frequently set up to spawn a
+            process for each hit. The performance increase gained and the resource requirements reduced by using DRCP in
+            this situation can be quite dramatic. Support for this feature was added to PHP in 2008; with version 5,
+            cx_Oracle adds support for this feature to Python as well.</p>
+
+        <p>Once the DRCP pool has been started on the database and a tnsnames.ora entry augmented with SERVER=POOLED,
+            use of this feature within Python is very straightforward. The only difference between creating a normal
+            connection and creating a connection using DRCP is the use of the parameter cclass. This parameter is a
+            string that specifies the connection class, a logical grouping of servers. Connections made using the same
+            connection class may be shared, whereas connections made using different connection classes will never be
+            shared. One other parameter available in the connection constructor that influences whether or not an
+            existing connection in the pool can be used is the purity parameter. If this value is set to
+            cx_Oracle.ATTR_PURITY_SELF (which is also the default value), then existing sessions in the pool will be
+            used if available. If this value is set to cx_Oracle.ATTR_PURITY_NEW, however, then a new session will be
+            created.</p>
+
+        <p>Once a connection has been created, it can be used in exactly the same way as any other connection. When the
+            connection is closed (or the connection object is garbage collected), the session is returned to the pool
+            for possible reuse. Listing 6 shows a simple example of creating connections using DRCP.</p>
+
+        <p><strong>Listing 6: Creating connections with DRCP</strong></p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+            <pre>
+<code>import cx_Oracle 
+
+o       connection = cx_Oracle.Connection("cx_Oracle/dev@t11g_drcp", 
+        cclass = "TEST1.CLASS") 
+
+connection2 = cx_Oracle.Connection("cx_Oracle/dev@t11g_drcp", 
+        cclass = "TEST2.CLASS", 
+        purity = cx_Oracle.ATTR_PURITY_NEW) 
+</code></pre>
+        </div>
+
+        <h3>Database Change Notification</h3>
+
+        <p>Another feature of Oracle Database, initially introduced in Oracle Database 10<em>g</em> Release 2 and
+            enhanced further in Oracle Database 11<em>g</em> Release 1, is Database Change Notification. This feature
+            enables client applications to register queries with the database and receive notification of data
+            manipulation language (DML) or data definition language (DDL) changes to the tables underlying those queries
+            when the transaction making those changes is committed. Notification can be done via e-mail, HTTP URL PL/SQL
+            procedure, or callback. cx_Oracle currently only supports the callback method but the other methods will be
+            supported in future releases.</p>
+
+
+        <p>In order to get started with database change notification, a subscription object must be created. This object
+            describes the conditions under which notification takes place and the action to take when those conditions
+            are met. A subscription object is created by calling the subscribe method on the connection. The parameters
+            to this method control the behavior of the subscription and cannot be changed once the subscription has been
+            created. Any number of subscription objects can be created, however, each with different characteristics.
+            The values of these characteristics are available as read-only attributes on the created subscription object
+            for convenience.</p>
+
+        <p>The only parameter that is required for any useful work to be done is the callback parameter. It specifies a
+            callable object that accepts a single argument: a message object that is generated during the callback and
+            describes the event that triggered the notification (more on that later). All of the other parameters are
+            optional, and their default values are reasonable for most uses.</p>
+
+        <p>In order to filter the operations on which notifications will be sent, use the operations parameter which is
+            constructed from a bitwise-include OR of flags from the table below. The following table describes the
+            various options and their meanings. The values can be "or’ed" together in order to cover multiple operations
+            at the same time.</p>
+
+        <section class="cc02 cc02v3 cpad" data-trackas="cc02" data-ocomid="cc02">
+            <div class="cc02w1 cwidth">
+                <div class="otable otable-scrolling otable-bordered">
+                    <div class="otable-w1">
+                        <table class="otable-w2">
+                            <thead>
+                                <tr>
+                                    <th class="otable-col-head">Parameter Value</th>
+                                    <th class="otable-col-head">Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+
+                                <tr>
+                                    <td>
+                                        <p>cx_Oracle.OPCODE_ALTER</p>
+                                    </td>
+                                    <td>
+                                        <p>The table has been altered.</p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <p>cx_Oracle.OPCODE_DELETE</p>
+                                    </td>
+                                    <td>
+                                        <p>Rows have been deleted from the table.</p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <p>cx_Oracle.OPCODE_DROP</p>
+                                    </td>
+                                    <td>
+                                        <p>The table has been dropped.</p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <p>cx_Oracle.OPCODE_INSERT</p>
+                                    </td>
+                                    <td>
+                                        <p>Rows have been inserted into the table.</p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <p>cx_Oracle.OPCODE_UPDATE</p>
+                                    </td>
+                                    <td>
+                                        <p>Rows have been updated in the table.</p>
+                                    </td>
+                                </tr>
+
+
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <p>In order to reduce the amount of time during which notifications will be sent, use the timeout parameter. The
+            default value of 0 means that notifications will be sent until the subscription object is deleted or goes
+            out of scope. Any other value represents the number of seconds during which notifications will be sent. </p>
+
+        <p>The final parameter that can have a meaningful value is called rowids and is a Boolean value specifying
+            whether or not the rowids of the affected rows should be included in the notification messages that are
+            sent. The other two parameters (namespace and protocol) are reserved for future expansion and should be left
+            at their default values.</p>
+
+        <p>Once a subscription object has been created, the final step is to register queries, each of which will result
+            in notifications sent for each table underlying those queries that is changed. A single message is sent for
+            each transaction that changes the registered tables. Queries are registered by calling the registerquery
+            method, which behaves similarly to the execute method on a cursor. It accepts the SQL for the query and
+            optionally a list of arguments. In the current version, the arguments have no bearing on the messages that
+            are sent. In a future version, cx_Oracle will add support for query change notification (available in Oracle
+            Database 11<em>g</em> Release 1) and then the arguments can be important.</p>
+
+        <p>Once queries have been registered on the subscription object, callbacks will take place every time one of the
+            requested operations takes place on a registered table. This takes place in a separate thread, so care
+            should be taken to avoid using the same connection in two threads at the same time. The message object that
+            is passed to the callback has three attributes describing the event that took place. The first is called
+            dbname and gives the name of the database that generated the notification. The second is type and describes
+            the type of event that took place, but its value in this version is always the same:
+            cx_Oracle.EVENT_OBJCHANGE. The third parameter is called tables and is a list of message table objects.</p>
+
+        <p>Message table objects have these attributes: name (the name of the table affected), operation (the operation
+            that took place on the table), and rows. The rows attribute is a list of message row objects if the value of
+            the rowids parameter when creating the subscription object was true. The message row object has two
+            attributes: operation (the operation that took place on that row) and rowid (contains the rowid of the row
+            that was affected).</p>
+
+        <p>Listing 7 is an example of how to use database change notification in cx_Oracle. Once the code is running,
+            insert, update, or delete rows in the table cx_Oracle.TestExecuteMany to see the notifications taking place.
+        </p>
+
+
+        <p><strong>Listing 7: Notification Demonstration</strong></p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+            <pre>
+<code>import cx_Oracle 
+
+def OperationToString(operation): 
+    operations = [] 
+    if operation &amp; cx_Oracle.OPCODE_INSERT: 
+        operations.append("insert") 
+    if operation &amp; cx_Oracle.OPCODE_DELETE: 
+        operations.append("delete") 
+    if operation &amp; cx_Oracle.OPCODE_UPDATE: 
+        operations.append("update") 
+    if operation &amp; cx_Oracle.OPCODE_ALTER: 
+        operations.append("alter") 
+    if operation &amp; cx_Oracle.OPCODE_DROP: 
+        operations.append("drop") 
+    if operation &amp; cx_Oracle.OPCODE_ALLOPS: 
+        operations.append("all operations") 
+    return ", ".join(operations) 
+
+def OnChanges(message): 
+    print "Message received" 
+    print "    Database Name:", message.dbname 
+    print "    Tables:" 
+    for table in message.tables: 
+        print "        Name:", table.name, 
+        print "        Operations:",
+        print OperationToString(table.operation) 
+        if table.rows is None \
+                or table.operation &amp; cx_Oracle.OPCODE_ALLROWS: 
+            print "        Rows: all rows" 
+        else: 
+            print "        Rows:" 
+            for row in table.rows: 
+                print "            Rowid:", row.rowid 
+                print "            Operation:", 
+                print OperationToString(row.operation) 
+
+connection = cx_Oracle.Connection("cx_Oracle/dev@t11g",
+        events = True) 
+sql = "select * from TestExecuteMany"
+subscriptionAll = connection.subscribe(callback = OnChanges) 
+subscriptionAll.registerquery(sql) 
+subscriptionInsertUpdate = \
+        connection.subscribe(callback = OnChanges, 
+        operations = cx_Oracle.OPCODE_INSERT | \
+        cx_Oracle.OPCODE_UPDATE, rowids = True) 
+subscriptionInsertUpdate.registerquery(sql) 
+
+raw_input("Hit enter to terminate...\n") 
+</code></pre>
+        </div>
+
+
+        <h3>Conclusion</h3>
+        <p>With the release of version 5, cx_Oracle has kept pace with the ongoing development of Python, enabled
+            greater flexibility and customization for those requiring it, and added support for a number of exciting new
+            features in Oracle Database.</p>
+
+
+        <p><strong>Anthony Tuininga</strong> is an Oracle DBA and developer based in Edmonton, Alberta. He is the author
+            of cx_Oracle, the defacto standard for accessing Oracle databases with Python.</p>
+    </div>
+</section>
+</article>
+<!-- / _Raw-Text -->

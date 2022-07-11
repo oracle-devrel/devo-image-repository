@@ -1,0 +1,443 @@
+<!-- _Raw-Text -->
+<!-- CC01v3 -->
+<section class="cc01 cc01v3 cpad">
+    <div class="cc01w1 cwidth">
+        <h2>Deploy a Microservices-Driven Application on Oracle Cloud Infrastructure</h2>
+
+        <p>This tutorial walks you through the process of deploying and configuring a microservices-driven application
+            on Oracle Cloud Infrastructure (OCI). Here are the main steps:</p>
+
+        <ol class="decimal">
+            <li>Create a Kubernetes cluster</li>
+            <li>Set up the Cloud Shell environment to access the cluster</li>
+            <li>Deploy the application and verify the deployment</li>
+            <li>Change the application code and redeploy the application</li>
+        </ol>
+        <br />
+        <h3>What you Create</h3>
+
+        <p>You configure and deploy a set of microservices by using Oracle Cloud Infrastructure Container Engine for
+            Kubernetes (OKE). These microservices create a pet store named MuShop.</p>
+
+        <p>The following image shows the architecture of the MuShop retail application.</p>
+        <p align="center"><img alt="Figure 1. Example of the DevOps process"
+                src="https://oracle-devrel.github.io/devo-image-repository/images/architecture-mushop.png"
+                style="width: 720px;" /></p>
+        <p align="center" class="xsml">Figure 1: MuShop pet store retail application architecture</p>
+
+        <h3>What You Need</h3>
+
+        <p>To complete this exercise, you need the following resources:</p>
+
+        <ul class="obullets">
+            <li>An Oracle Cloud Infrastructure tenancy</li>
+            <li>Policies that allow you to create the required resources</li>
+            <li>Capacity availability</li>
+        </ul>
+        <br />
+        <h3>Creating a Kubernetes Cluster</h3>
+
+        <p>In this exercise, you create a cluster by using the Oracle Cloud Infrastructure Console. Using the Console
+            provides a quick way to create a cluster with several defaults automatically applied. For more detailed
+            setup information, and to take more direct control of the resources, see the documentation.</p>
+
+        <ol class="decimal">
+            <li>In the Console, open the navigation menu. Under <strong>Solutions and Platform</strong>, go to
+                <strong>Developer Services</strong> and click <strong>Container Clusters</strong>.
+            </li>
+            <li>Choose the compartment that you prepared for the exercise.</li>
+            <li>On the <strong>Cluster List</strong> page, click <strong>Create Cluster</strong>.</li>
+            <li>In the <strong>Create Cluster</strong> dialog box, select <strong>Quick Create</strong> and click
+                <strong>Launch Workflow</strong>.
+            </li>
+            <li>On the <strong>Create Cluster</strong> page, accept the default configuration details for the cluster.
+            </li>
+            <li>Click <strong>Next</strong> to review the details for the cluster.</li>
+            <li>Click <strong>Create Cluster</strong> to create the network resources and the cluster.</li>
+            <li>Wait for the status of the cluster to become <strong>Active</strong>.</li>
+        </ol>
+        <br />
+        <h3>Access the cluster from the Cloud Shell environment</h3>
+
+        <p>After the cluster is active, you can use standard Kubernetes tools like kubectl and helm to interact with it.
+            For these tools to connect to your cluster, Kubernetes uses a file that contains the cluster access
+            configuration.</p>
+
+        <p>In this exercise, you use Oracle Cloud Infrastructure&rsquo;s Cloud Shell to interact with the cluster. Cloud
+            Shell is a cloud-based terminal that&rsquo;s preconfigured and loaded with essential tools and settings to
+            make interactivity with Oracle Cloud Infrastructure easy. Note that we&rsquo;re using Cloud Shell only for
+            convenience here. The tools can always be set up on developer workstations instead.</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code> 
+kubectl get nodes
+</code></pre>
+        </div>
+
+        <ol class="decimal">
+            <li>On the details page for your cluster, click <strong>Access Cluster</strong>.</li>
+            <li>Choose <strong>Cloud Shell Access</strong> (the default).</li>
+            <li>Click <strong>Launch Cloud Shell</strong>.</li>
+            <li>To verify access to the cluster, run the following command:</li>
+        </ol>
+        <br />
+        <p>The command should return a list of nodes in the cluster that you created and some information about them.
+            For example:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>  
+NAME        STATUS   ROLES   AGE    VERSION
+10.0.10.2   Ready    node    124d   v1.14.8
+10.0.10.3   Ready    node    124d   v1.14.8
+</code></pre>
+        </div>
+        <br />
+        <h3>Deploy the application and verify the deployment</h3>
+
+        <p>Now that you have a cluster and can interact with it, the next step is to build your application and deploy
+            it to the cluster. The following steps outline the process of deploying this application:</p>
+
+        <ol class="decimal">
+            <li>Get the application source code</li>
+            <li>Prepare the cluster</li>
+            <li>Deploy the application components</li>
+            <li>Verify the deployment</li>
+        </ol>
+        <br />
+        <h3>Get the application source</h3>
+
+        <p>Clone the code repository for the application. The Git source control tool is built in to Cloud Shell, and
+            you can run the following command to get the source code:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code> 
+git clone \
+  https://github.com/oracle-quickstart/oci-cloudnative.git \
+  mushop 
+</code></pre>
+        </div>
+
+        <p>Then, change the directory. This is necessary because the following steps use file locations relative to the
+            root of the source code.</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code> 
+cd mushop
+</code></pre>
+        </div>
+        <br />
+        <h3>Prepare the cluster</h3>
+
+        <p>The application consists of two sets of components:</p>
+
+        <ul class="obullets">
+            <li>The microservices that make up the application</li>
+            <li>Supporting and optional components, such as Grafana dashboards and ingress controllers (Nginx)</li>
+        </ul>
+
+        <p>We separate them in Kubernetes by using namespaces, a resource that can route traffic to multiple
+            applications without each application having to create its own load balancer.</p>
+
+        <p>To prepare the cluster for the application, run the following commands:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code> 
+kubectl create namespace mushop
+ 
+kubectl create namespace mushop-utilities
+ 
+kubectl config set-context \
+  --current --namespace=mushop
+ 
+helm dependency update deploy/complete/helm-chart/setup
+</code></pre>
+        </div>
+        <br />
+        <h3>Deploy the application components</h3>
+
+        <p>Helm manages the application deployment as a set of Helm charts, which lets you manage the various individual
+            services and their lifecycles easily.</p>
+
+        <p>Install the Helm charts for the application as follows:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code> 
+helm install mushop-utils deploy/complete/helm-chart/setup \
+  --namespace mushop-utilities
+ 
+helm install mushop \
+deploy/complete/helm-chart/mushop \
+-f deploy/complete/helm-chart/mushop/values-mock.yaml
+</code></pre>
+        </div>
+        <br />
+        <h3>Verify the deployment</h3>
+
+        <p>Now that the application is deployed, you should be able to access it from anywhere. The application
+            manifest&mdash;the description of the application for Kubernetes&mdash;includes an ingress controller, a
+            resource in Kubernetes that can route traffic to multiple applications. It has already set up an Oracle
+            Cloud Infrastructure load balancer for you and has wired the routes for the MuShop application that you
+            deployed.</p>
+
+        <p>To access the application, use the public IP address of the load balancer that was created. To find this, use
+            the following command:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code> 
+kubectl get svc -n mushop-utilities | grep ingress-controller
+</code></pre>
+        </div>
+
+        <p>The second IP address in the output is the external public IP address where the application is available.</p>
+
+        <p>The application is fully functional, and navigating to the IP address by using your browser should display
+            the home page for the application, as shown in the following image.</p>
+        <p align="center"><img alt="MuShop home page"
+                src="https://oracle-devrel.github.io/devo-image-repository/images/mushop-application.jpg"
+                style="width: 720px;" /></p>
+        <p align="center" class="xsml">Figure 2: MuShop home page</p>
+
+        <h3>Make a change to the application</h3>
+
+        <p>Now that the application is deployed, you can make a change to it and deploy the change. Here&rsquo;s the
+            process:</p>
+
+        <ol class="decimal">
+            <li>Make a code change</li>
+            <li>Create a Docker image with the updated application</li>
+            <li>Push your local image</li>
+            <li>Redeploy the application</li>
+            <li>Verify the application</li>
+        </ol>
+
+        <h3>Make a code change</h3>
+
+        <p>This application&rsquo;s home page has a promotional banner, and you can change it quickly to see the effect.
+        </p>
+
+        <ol class="decimal">
+            <li>Go to the storefront source code folder.<br />
+                <code>cd src/storefront/src/templates/data/</code>
+            </li>
+            <li>Open the <code>_data.pug</code> file using your favorite editor.</li>
+            <li>Go to the <code>var promo</code> section.</li>
+            <li>Change the title Food! to OCI is Awesome!, and save the file. The following screenshot shows this
+                change.</li>
+        </ol>
+
+        <p align="center"><img alt="MuShop code sample"
+                src="https://oracle-devrel.github.io/devo-image-repository/images/code-example.jpg"
+                style="width: 720px;" />
+        </p>
+        <p align="center" class="xsml">Figure 3: Storefront service code change</p>
+
+        <h3>Create a Docker image with the updated application</h3>
+
+        <p>Rebuild the application with a new beta flag.</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code> 
+docker build --build-arg version=2.0.1-beta -t mushop/storefront ~/mushop/src/storefront
+</code></pre>
+        </div>
+
+        <h3>Push your local image</h3>
+
+        <p>Now that you have an updated image for the application that contains changes, you can push this image to
+            Oracle Cloud Infrastructure Registry (OCIR), Oracle&#39;s enterprise-class private Docker registry.</p>
+
+        <p>To push a container image to a Registry repository, you first need to generate a user auth token. Use the
+            following steps to generate a token.</p>
+
+        <ol class="decimal">
+            <li>From the main menu in the <strong>Console</strong>, select <strong>Identity</strong>, and then select
+                <strong>Users</strong>.
+            </li>
+            <li>Click the name of the user.</li>
+            <li>Under <strong>Resources</strong>, click <strong>Auth Tokens</strong>.</li>
+            <li>Click <strong>Generate Token</strong>.</li>
+            <li>Enter a description and click <strong>Generate Token</strong>.</li>
+            <li>Click the <strong>Copy</strong> link to copy the token, and save it somewhere. You need it to log in to
+                <strong>Registry</strong> in the next section.
+            </li>
+        </ol>
+
+        <p>Now you can log in to Registry and push the image:</p>
+
+        <p>1. Log in to Registry:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code> 
+docker login &lt;region-key&gt;.ocir.io
+</code></pre>
+        </div>
+
+        <p>2. When prompted, enter your login name (email address) and password (auth token):</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code> 
+**Username**: &lt;tenancy-name&gt;/&lt;user-name&gt;
+**Password**: &lt;auth-token&gt;
+</code></pre>
+        </div>
+
+        <p>3. Tag the image with the path to the repository:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code> 
+docker tag mushop/storefront &lt;region-key&gt;.ocir.io/&lt;tenancy-name&gt;/&lt;repository-name&gt;/mushop-storefront:2.0.1
+
+docker push &lt;region-key&gt;.ocir.io/&lt;tenancy-name&gt;/&lt;repository-name&gt;/mushop-storefront:2.0.1
+</code></pre>
+        </div>
+
+        <p>You need to change this repository to public so that you can pull this image during redeployment without
+            adding <code>imagepullsecrets</code> in the Kubernetes YAML.</p>
+
+        <p>4. From the main menu in the <strong>Console</strong>, select <strong>Developer Services</strong>, and then
+            select <strong>Container Registry</strong>.</p>
+
+        <p>5. Click the repository, and from the <strong>Actions</strong> menu, select <strong>Change to
+                Public</strong>. To reconfigure the application to use the new image, you update the Helm chart that
+            specifies which version of the application to use for your deployments.</p>
+
+        <p>6. Edit the <code>deploy/complete/helm-chart/mushop/values-mock.yaml</code> configuration file, and add the
+            following text:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code> 
+storefront:
+  image:
+    repository: .ocir.io///mushop-storefront
+    tag: 2.0.1
+</code></pre>
+        </div>
+
+        <h3>Redeploy the application</h3>
+
+        <p>With the values configured, deploy the application:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code> 
+helm upgrade --install mushop \
+deploy/complete/helm-chart/mushop \
+-f deploy/complete/helm-chart/mushop/values-mock.yaml
+</code></pre>
+        </div>
+
+        <p>To watch the progress and readiness of the deployment, run the following command:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code> 
+kubectl get pod --watch
+</code></pre>
+        </div>
+
+        <h3>Verify the application</h3>
+
+        <p>Refresh the MuShop application web page to see the change. A new promotional banner of &ldquo;OCI is
+            Awesome!&rdquo; is displayed, as shown in the following screenshot.</p>
+
+        <p align="center"><img alt="Figure 4. Updated MuShop home page"
+                src="https://oracle-devrel.github.io/devo-image-repository/images/mushop-final.jpg"
+                style="width: 720px;" /></p>
+        <p align="center" class="xsml">Figure 4: Updated MuShop home page</p>
+
+        <p><a data-trackas="cc01-lightbox" href="?ytid=3ZdHjDBSr9A" rel="vbox">Watch the video version of this tutorial
+                (8:37)</a></p>
+    </div>
+</section>
+<!-- /CC01v3 -->
+
+
+
+<!-- / _Raw-Text -->
+
+<!-- _Raw-Text -->
+<section class="cb27 cb27v5 rw-ocean-150bg" data-trackas="cb27">
+
+    <div class="cb27w1 cwidth">
+        <div class="cb27w2">Try Oracle Cloud Free Tier</div>
+        <div class="cb27w3">
+            <div class="obttns">
+                <div class="obttn1">
+                    <a href="https://www.oracle.com/cloud/free/" data-cxdtrack=":ow:o:s:nav::Devobanner"
+                        data-adbtrack=":ow:o:s:nav::Devobanner">Start for free</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+<!-- / _Raw-Text -->
+<!-- U10v0 -->

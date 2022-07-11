@@ -1,0 +1,919 @@
+<!-- _Raw-Text -->
+<section class="cc01 cc01v0 cpad crule">
+    <div class="cc01w1 cwidth">
+
+        <p>To leverage the parallelism and scalability of Oracle Database, Oracle R Enterprise users don&rsquo;t have to
+            learn SQL, and the marriage of the two worlds of R and SQL is extremely powerful and has a number of
+            advantages that make it very suitable for data analysis. Because SQL remains the primary tool when it comes
+            to accessing and manipulating database data, the ability to integrate R with SQL opens the door for R data
+            analysts to take full advantage of all those capabilities available in Oracle Database for production
+            applications.</p>
+
+        <p>This article will show you how to manipulate R script invocations and their results in SQL. To follow along,
+            you will need to have Oracle R Enterprise installed on your system. For a quick overview of the Oracle R
+            Enterprise installation, you can refer to the "Setting Up Your Working Environment" section in my previous
+            OTN article, "<a href="https://community.oracle.com/docs/DOC-1013840">Machine Learning with R in Oracle
+                Database</a>," or refer to the <a href="http://docs.oracle.com/cd/E67822_01/OREAD/toc.htm"><em>Oracle R
+                    Enterprise Installation and Administration Guide</em></a> for a detailed description.</p>
+
+        <h3>SQL Interface for In-Database R Executions</h3>
+
+        <p>This section provides a simple example of how you can invoke R code through a SQL interface, using <a
+                href="http://docs.oracle.com/cd/E67822_01/OREUG/GUID-35BB03B6-1E2A-4D9F-892C-EC1ACD093F57.htm">embedded
+                R execution in Oracle R Enterprise</a>.</p>
+
+        <p>In this particular example, you start with creating an OREdm R model object through an R interface, saving
+            that model object in the database for further usage. Then, you create a stored R script in SQL. The function
+            you define in this script loads the OREdm R model object from the database and then uses it for making
+            predictions on a dataset passed in as a parameter. Finally, the function returns the prediction results as a
+            data.frame object.</p>
+
+        <p>Below are the detailed steps.</p>
+
+        <p>Assuming you have installed Oracle R Enterprise on your system, you can launch an R session with the ORE
+            script, as follows:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+$ ORE
+</code></pre>
+        </div><br />
+
+        <p>Next, at the R prompt, you load the ORE packages and then connect to an Oracle Database instance:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+&gt; library(ORE)
+&gt; ore.connect(user = "ruser", sid = "orcl", host = "localhost", password = "pswd", port = 1521 )
+</code></pre>
+        </div><br />
+
+
+        <p>In the next step, you create a proxy ore.frame object for a dt_ontime table that is supposed to be in the
+            ruser database schema already:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+&gt; ore.sync(table = c("dt_ontime"))
+&gt; ore.attach()
+</code></pre>
+        </div><br />
+
+        <p>The dt_ontime table used in this example contains a sample of the <a
+                href="https://www.transtats.bts.gov/DL_SelectFields.asp?Table_ID=236">Airline On-Time Performance Data
+                dataset</a>. You can download such a sample as a comma-separated values (CSV) file. Further details on
+            how you can turn it into a database table through an R interface can be found in my previous article "<a
+                href="https://community.oracle.com/docs/DOC-1013840">Machine Learning with R in Oracle Database</a>."
+        </p>
+
+        <p>Now that you have the dataset as an ore.frame in your R session, you can build a model on it. In this
+            particular example, you build an Oracle Data Mining Naive Bayes model, using the <a
+                href="https://docs.oracle.com/cd/E67822_01/OREUG/GUID-65D8FF60-6760-4815-B307-AD9A6E49247D.htm">ore.odmNB</a>
+            function from the <a
+                href="https://docs.oracle.com/cd/E67822_01/OREUG/GUID-F1325A4C-BFF3-41F5-B720-41E4A4F0A83B.htm">OREdm</a>
+            package.</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+&gt; nb.mod &lt;- ore.odmNB(DAY_OF_WEEK~DEP_DELAY+DISTANCE+AIR_TIME+ARR_DELAY+CARRIER, dt_ontime) 
+</code></pre>
+        </div><br />
+
+        <p>The next step is to store the model object in the database. With the invocation of ore.save, as shown below,
+            you define datastore dt_store1 in the database and save the nb.mod object in it.</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+&gt; ore.save(nb.mod, name="dt_store1")
+</code></pre>
+        </div><br />
+
+        <p>Now you have a model object saved in the database, ready to be loaded in R for further use. The key point to
+            understand here is that such an object can be loaded and used in later sessions, through both an R interface
+            and a SQL interface. The following examples, however, focus on using a SQL interface only. So, to follow
+            along, you&rsquo;ll need a tool such as SQL*Plus or Oracle Developer to connect to your Oracle Database
+            instance.</p>
+
+        <p>To be able to create and drop R scripts, you must connect to the database as a user granted the <a
+                href="http://docs.oracle.com/cd/E67822_01/OREAD/ore_admin.htm#GUID-D28E06AA-9BA9-4B34-9137-A11495A3707">RQADMIN</a>
+            role.</p>
+
+        <p>In this example, you need to create a stored R script, say, NBModelOnFlights1. If you already have script
+            NBModelOnFlights1 in the Oracle R Enterprise R script repository, you first have to drop it:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+BEGIN
+  sys.rqScriptDrop('NBModelOnFlights1');
+END;
+/
+</code></pre>
+        </div><br />
+
+        <p>In the following code, you create the NBModelOnFlights1 script in the Oracle R Enterprise R script
+            repository.</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+BEGIN
+  sys.rqScriptCreate('NBModelOnFlights1',
+    'function(dat, ds, obj) {
+       ore.load(name=ds, list=obj)
+       mod &lt;- get(obj)
+       dat &lt;- ore.frame(dat)
+       prd &lt;- predict(mod, dat,supplemental.cols="DAY_OF_WEEK")
+       ore.pull(prd)
+    }');
+END;
+/
+</code></pre>
+        </div><br />
+
+        <p>When invoked, this script loads the nb.mod model object you saved through an R interface earlier, and then it
+            uses the predict function to score new data with this model. Because an R function defined within a script
+            must return a data.frame, you explicitly invoke ore.pull for the output of the predict function to convert
+            an ore.frame to a data.frame.</p>
+
+        <p>Now that you have the script created in the Oracle R Enterprise R script repository, you can invoke it for
+            execution in one or more R engines embedded in the database. In the following example, you invoke the script
+            through a SQL interface, using the rqTableEval SQL table function for embedded R execution:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+SELECT * FROM table(rqTableEval(
+             cursor(select DAY_OF_WEEK, DEP_DELAY, DISTANCE, AIR_TIME, 
+ARR_DELAY,CARRIER, ORIGIN_AIRPORT_ID from dt_ontime_t),
+             cursor(SELECT 'dt_store1' as "ds", 
+               'nb.mod' as "obj", 
+               1 as "ore.connect" FROM dual),
+             'SELECT 1 "1", 1 "2", 1 "3", 1 "4", 1 "5", 1 "6", 1 "7", 1 
+"DAY_OF_WEEK", 1 "PREDICTION" FROM dual',
+            'NBModelOnFlights1'));
+</code></pre>
+        </div><br />
+
+        <p>As you might notice, the SELECT statement in the cursor that specifies the data to pass to the script&rsquo;s
+            function issues a query against table dt_ontime_t. This table is assumed to be in the same database schema
+            as the dt_ontime table used for creating the model, and it must have the same structure, containing some
+            data for testing the model.</p>
+
+        <p>The produced output might look like this:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+1                 2                 3                 4                 
+5                 6                 7                	      DAY_OF_WEEK    
+PREDICTION 
+-----------------------------------------------------------------------
+-----------------------------------------------------------------------
+---------------
+0.131442070007324 0.070445157587528 0.486642211675644 0.035652171820402 
+0.030754357576370 0.034674596041441 0.210389420390129       7              
+7
+0.302076458930969 0.122818924486637 0.208635210990906 0.101462550461292 
+0.115317955613136 0.065017424523830 0.084671482443809       1              
+1
+0.143176630139351 0.171820178627968 0.153432667255402 0.132373556494713 
+0.131715834140777 0.138901546597481 0.128579586744308       5              
+2
+0.163881450891495 0.178976818919182 0.136870324611664 0.150399625301361 
+0.143106788396835 0.14751261472702 0.079252384603023 1              2
+</code></pre>
+        </div><br />
+
+        <p>Examining the arguments of the rqTableEval SQL table function used in the above query, you may notice that
+            the column names of the returned result set are hardcoded in a select list. This is possible because, in
+            this particular example, you know the structure of the returned result set in advance. Sometimes, however,
+            you may not know ahead of time what columns will be included in the returning result set, as in the
+            following example.</p>
+
+        <p>Suppose you want your script to return a confusion matrix rather than an entire prediction dataset as in the
+            preceding example. The problem is that the prediction algorithm may not include some of the possible target
+            values to the prediction dataset, due to their low probability. In that case, the columns for those values
+            will be omitted in the confusion matrix, which often happens when you make predictions on a small dataset.
+            For example, a confusion matrix computed from the results you got in the preceding example might look like
+            this:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+            PREDICTION
+DAY_OF_WEEK
+            1 2 7
+          1 2 1 0
+          2 0 1 0
+          3 0 1 0
+          4 1 0 1
+          5 0 1 0
+          6 1 0 0
+          7 0 0 1
+</code></pre>
+        </div><br />
+
+        <p>As can be seen from the matrix, the test dataset on which it was built contains only 10 records. Also, you
+            can see that only Mondays, Tuesdays, and Sundays were chosen by the prediction algorithm when it worked on
+            the provided dataset. Let&rsquo;s now look at what would happen if you tried to invoke a script that returns
+            such a confusion matrix.</p>
+
+        <p>First, you need to modify the script from the preceding example so that it returns a confusion matrix. The
+            NBModelOnFlights2 script, which you can create as shown below, does just that:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+BEGIN
+  sys.rqScriptCreate('NBModelOnFlights2',
+    'function(dat, ds, obj) {
+       ore.load(name=ds, list=obj)
+       mod &lt;- get(obj)
+       dat &lt;- ore.frame(dat)
+       prd &lt;- predict(mod, dat,supplemental.cols="DAY_OF_WEEK")
+       rslt &lt;- with(prd, table(DAY_OF_WEEK, PREDICTION))
+       as.data.frame.matrix(rslt)
+    }');
+END;
+/
+</code></pre>
+        </div><br />
+
+        <p>In the following SQL statement, you invoke the above script, using the rqTableEval SQL table function, just
+            as in the preceding example. Because you don&rsquo;t know in advance what columns will be included in the
+            returned matrix, you include all possible variants:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+SELECT * FROM table(rqTableEval(
+     cursor(select DAY_OF_WEEK, DEP_DELAY, DISTANCE, AIR_TIME, 
+ARR_DELAY,CARRIER, ORIGIN_AIRPORT_ID from dt_ontime_t),
+     cursor(SELECT 'dt_store2' as "ds", 
+       'nb.mod' as "obj", 
+       1 as "ore.connect" FROM dual),
+    'SELECT 1 "1", 1 "2", 1 "3", 1 "4", 1 "5", 1 "6", 1 "7" FROM dual',
+    'NBModelOnFlights2'));
+</code></pre>
+        </div><br />
+
+        <p>If some of the columns specified in the SELECT statement passed as the third parameter to the rqTableEval
+            function are missed in the returned matrix (as in the example of the confusion matrix provided earlier in
+            this section), you&rsquo;ll get the following error message:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+ORA-20000: RQuery error 
+output data.frame does not match output specification
+</code></pre>
+        </div><br />
+
+        <p>Actually, there are several different ways in which you can overcome the above problem.</p>
+
+        <p>The simplest way is to add missing columns to the matrix, filling their fields with zeros or nulls. Because
+            this is supposed to be done entirely on the R side, doing that is not really the focus of this article. In
+            contrast, the other options described below require you to do some work on both sides: R and SQL.</p>
+
+        <p>Examining the confusion matrix provided earlier in this section, you may notice that it contains the complete
+            set of rows: 7, each representing a certain day of week. So, to match the output specification defined in
+            the above query, you could simply rotate the matrix, converting rows into columns. Then, in the SQL
+            statement, you could perform the opposite operation, converting columns back into rows. You&rsquo;ll see in
+            detail how this can be done in the next section.</p>
+
+        <p>Of course, the scenario described above is a very specific example of how you might merge R data into SQL. In
+            most cases, however, the number of rows in a returning dataset can be very large and also is unknown in
+            advance, making the above technique inapplicable.</p>
+
+        <p>So, if you don&rsquo;t know ahead of time what columns will be included in the result set returned by an R
+            script, the most generic and flexible way to handle this problem is to retrieve the data as XML. Oracle R
+            Enterprise SQL table functions, such as rqTableEval used in the preceding examples, allow you to specify the
+            retrieved data to be XML. You will see a detailed example of using this feature in the "Getting Results as
+            XML" section later in this article.</p>
+
+        <h3>Merging R Data into SQL</h3>
+
+        <p>Data retrieved from an R script by a SQL table function can be further processed in this same SQL statement.
+            The example in this section shows how you can transform a retrieved dataset, converting its columns into
+            rows. As outlined in the previous section, you may need to do this, for example, when some columns of a
+            confusion matrix returned by an R script may be omitted, but the structure of the rowset, in contrast, is
+            constant and known in advance.</p>
+
+        <p>Let&rsquo;s return to the NBModelOnFlights2 script discussed in the previous section. You need to modify this
+            script so that it returns a rotated matrix, in which rows are transformed into columns.</p>
+
+        <p>First, drop the script:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+BEGIN
+  sys.rqScriptDrop('NBModelOnFlights2');
+END;
+/
+</code></pre>
+        </div><br />
+
+        <p>Now, create it again, as follows:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+BEGIN
+  sys.rqScriptCreate('NBModelOnFlights2',
+    'function(dat, ds, obj) {
+       ore.load(name=ds, list=obj)
+       mod &lt;- get(obj)
+       dat &lt;- ore.frame(dat)
+       prd &lt;- predict(mod, dat,supplemental.cols="DAY_OF_WEEK")
+       rslt &lt;- with(prd, table(DAY_OF_WEEK, PREDICTION))
+       rst &lt;-as.data.frame.matrix(rslt)
+       <strong>as.data.frame.matrix(cbind(as.numeric(names(rst)), t(rst)))</strong>
+    }');
+END;
+/
+</code></pre>
+        </div><br />
+
+        <p>As you can see, the revised NBModelOnFlights2 script rotates the confusion matrix and adds a column that
+            includes the column names of the matrix that existed before the rotation was made. As a result, the
+            returning matrix should look like this:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+  V1 1 2 3 4 5 6 7
+1  1 2 0 0 1 0 1 0
+2  2 1 1 1 0 1 0 0
+7  7 0 0 0 1 0 0 1
+</code></pre>
+        </div><br />
+
+        <p>After the sys.rqScriptCreate function shown above has been successfully completed, you can invoke the
+            NBModelOnFlights2 script from within the following SQL query:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+SELECT * FROM(
+   SELECT n_v, val, "v" FROM(
+      SELECT
+            "n_v" n_v,
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7"
+      FROM (
+         SELECT * FROM table(rqTableEval(
+             cursor(select DAY_OF_WEEK, DEP_DELAY, DISTANCE, AIR_TIME, 
+ARR_DELAY,CARRIER, ORIGIN_AIRPORT_ID from dt_ontime_t),
+             cursor(SELECT 'dt_store1' as "ds", 
+               'nb.mod' as "obj", 
+               1 as "ore.connect" FROM dual),
+             'SELECT 1 "n_v", 1 "1", 1 "2", 1 "3", 1 "4", 1 "5", 1 "6", 
+1 "7" FROM dual',
+            'NBModelOnFlights2'))       
+        )
+    )
+    UNPIVOT
+    (
+        val 
+        for "v" in ("1","2","3","4","5","6","7")
+    )
+ )
+ PIVOT 
+ (
+  MAX(val) 
+  FOR n_v 
+  IN (1, 2, 3, 4, 5, 6, 7)
+ )
+ORDER BY "v";
+</code></pre>
+        </div><br />
+
+        <p>To summarize, in the above SQL query, you use several nested SELECT statements to accomplish the following:
+        </p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+# Retrieve a confusion matrix generated and rotated in the NBModelOnFlights2 script
+# Restore the matrix to its original order
+</code></pre>
+        </div><br />
+
+        <p>In this example, you accomplish restoring the matrix to its original order with the PIVOT and UNPIVOT
+            operators first introduced in Oracle Database 11<em>g</em>. You can find more examples of using
+            PIVOT/UNPIVOT operators in <a
+                href="http://www.oracle.com/technetwork/articles/sql/11g-pivot-097235.html">this OTN article</a>.</p>
+
+        <p>The output generated by the above query might look like this:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+v     1     2         3           4         5          6      7
+---------------------------------------------------------------
+1     2     1     (null)     (null)     (null)     (null)     0
+2     0     1     (null)     (null)     (null)     (null)     0
+3     0     1     (null)     (null)     (null)     (null)     0
+4     1     0     (null)     (null)     (null)     (null)     1
+5     0     1     (null)     (null)     (null)     (null)     0
+6     1     0     (null)     (null)     (null)     (null)     0
+7     0     0     (null)     (null)     (null)     (null)     1
+</code></pre>
+        </div><br />
+
+        <p>As you can see, the only difference between the above matrix and the original one is that the above matrix
+            includes columns with nulls.</p>
+
+        <h3>Getting Results as XML</h3>
+
+        <p>Even if you deal with a confusion matrix, it still may contain not only an incomplete set of columns but also
+            an incomplete set of rows, meaning that not all possible factor levels have a corresponding row in the
+            matrix. This happens when the test dataset on which predictions are made has no instances containing a
+            certain factor value. For example, in the preceding example, you might have a test dataset that has no
+            instances with Thursdays in the DAY_OF_WEEK field. So, the matrix generated on such a dataset might look
+            like this:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+            PREDICTION
+DAY_OF_WEEK 
+            1 2 7
+          1 2 1 0
+          2 0 2 0
+          3 0 1 0
+          5 0 1 0
+          6 1 0 0
+          7 0 1 1
+</code></pre>
+        </div><br />
+
+        <p>Obviously, the technique of rotating described in the previous section will not work for the above matrix. As
+            mentioned, the most flexible solution in such cases will be to retrieve the data returned by a script as
+            XML. Then, the retrieved XML can be shredded into relational data, if necessary.</p>
+
+        <p>In this particular example, however, you&rsquo;ve got a problem concerning XML naming rules. The point is
+            that XML element names must start with a letter or underscore. But here, you will have elements with names
+            composed of digits: 1, 2, 7. The entire list of the naming rules that XML elements must follow can be found
+            in the "XML Naming Rules" section on the <a href="https://www.w3schools.com/xml/xml_elements.asp">XML
+                Elements</a> page of the <a href="https://www.w3schools.com/">w3schools.com</a> website.</p>
+
+        <p>Thus, to be parsed properly, you need to modify the XML document so that it meets the specification. For
+            example, you might prepend an underscore to the element names, as illustrated in the example below.</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+BEGIN
+  sys.rqScriptCreate('NBModelOnFlights4',
+    'function(dat, ds, obj) {
+       ore.load(name=ds, list=obj)
+       mod &lt;- get(obj)
+       dat &lt;- ore.frame(dat)
+       prd &lt;- predict(mod, dat,supplemental.cols="DAY_OF_WEEK")
+       rslt &lt;- with(prd, table(DAY_OF_WEEK, PREDICTION))
+       rst &lt;-as.data.frame.matrix(rslt)
+       <strong>for (i in 1:ncol(rst)) {</strong>
+         <strong>names(rst)[i]=paste("_", names(rst)[i], sep="")</strong>
+       <strong>}</strong>
+       <strong>rst</strong>
+    }');
+END;
+/
+</code></pre>
+        </div><br />
+
+        <p>As you can see, this is mostly the same script you used in the preceding example but with a few new lines
+            appended at the end.</p>
+
+        <p>If you now invoke the NBModelOnFlights4 script from within rqTableEval:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+SELECT * FROM table(rqTableEval(
+             cursor(select DAY_OF_WEEK, DEP_DELAY, DISTANCE, AIR_TIME, 
+ARR_DELAY,CARRIER, ORIGIN_AIRPORT_ID from dt_ontime_t),
+             cursor(SELECT 'dt_store2' as "ds", 
+               'nb.mod' as "obj", 
+               1 as "ore.connect" FROM dual),
+             'XML',
+            'NBModelOnFlights4'));
+</code></pre>
+        </div><br />
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+NAME  VALUE
+----- ------
+null  &lt;root&gt;
+       &lt;frame_obj&gt;
+        &lt;ROW-frame_obj&gt;&lt;_1&gt;2&lt;/_1&gt;&lt;_2&gt;1&lt;/_2&gt;&lt;_7&gt;0&lt;/_7&gt;&lt;/ROW-frame_obj&gt;
+        &lt;ROW-frame_obj&gt;&lt;_1&gt;0&lt;/_1&gt;&lt;_2&gt;1&lt;/_2&gt;&lt;_7&gt;0&lt;/_7&gt;&lt;/ROW-frame_obj&gt;
+        &lt;ROW-frame_obj&gt;&lt;_1&gt;0&lt;/_1&gt;&lt;_2&gt;1&lt;/_2&gt;&lt;_7&gt;0&lt;/_7&gt;&lt;/ROW-frame_obj&gt;
+        &lt;ROW-frame_obj&gt;&lt;_1&gt;1&lt;/_1&gt;&lt;_2&gt;0&lt;/_2&gt;&lt;_7&gt;1&lt;/_7&gt;&lt;/ROW-frame_obj&gt;
+        &lt;ROW-frame_obj&gt;&lt;_1&gt;0&lt;/_1&gt;&lt;_2&gt;1&lt;/_2&gt;&lt;_7&gt;0&lt;/_7&gt;&lt;/ROW-frame_obj&gt;
+        &lt;ROW-frame_obj&gt;&lt;_1&gt;1&lt;/_1&gt;&lt;_2&gt;0&lt;/_2&gt;&lt;_7&gt;0&lt;/_7&gt;&lt;/ROW-frame_obj&gt;
+        &lt;ROW-frame_obj&gt;&lt;_1&gt;0&lt;/_1&gt;&lt;_2&gt;0&lt;/_2&gt;&lt;_7&gt;1&lt;/_7&gt;&lt;/ROW-frame_obj&gt;
+       &lt;/frame_obj&gt;
+      &lt;/root&gt;
+</code></pre>
+        </div><br />
+
+        <p>Now that you know the structure of the XML document returned by rqTableEval, you can extract XML elements
+            representing rows of the matrix. To do this, you might use the XMLQuery SQL/XML function, as illustrated
+            below:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+SELECT XMLQuery('/root/frame_obj/ROW-frame_obj' PASSING xmltype(VALUE) 
+RETURNING CONTENT) FROM table(rqTableEval(
+             cursor(select DAY_OF_WEEK, DEP_DELAY, DISTANCE, AIR_TIME, 
+ARR_DELAY,CARRIER, ORIGIN_AIRPORT_ID from dt_ontime_t),
+             cursor(SELECT 'dt_store2' as "ds", 
+               'nb.mod' as "obj", 
+               1 as "ore.connect" FROM dual),
+             'XML',
+            'NBModelOnFlights4'));
+</code></pre>
+        </div><br />
+
+        <p>The generated output would look as follows:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+&lt;ROW-frame_obj&gt;&lt;_1&gt;2&lt;/_1&gt;&lt;_2&gt;1&lt;/_2&gt;&lt;_7&gt;0&lt;/_7&gt;&lt;/ROW-frame_obj&gt;
+&lt;ROW-frame_obj&gt;&lt;_1&gt;0&lt;/_1&gt;&lt;_2&gt;1&lt;/_2&gt;&lt;_7&gt;0&lt;/_7&gt;&lt;/ROW-frame_obj&gt;
+&lt;ROW-frame_obj&gt;&lt;_1&gt;0&lt;/_1&gt;&lt;_2&gt;1&lt;/_2&gt;&lt;_7&gt;0&lt;/_7&gt;&lt;/ROW-frame_obj&gt;
+&lt;ROW-frame_obj&gt;&lt;_1&gt;1&lt;/_1&gt;&lt;_2&gt;0&lt;/_2&gt;&lt;_7&gt;1&lt;/_7&gt;&lt;/ROW-frame_obj&gt;
+&lt;ROW-frame_obj&gt;&lt;_1&gt;0&lt;/_1&gt;&lt;_2&gt;1&lt;/_2&gt;&lt;_7&gt;0&lt;/_7&gt;&lt;/ROW-frame_obj&gt;
+&lt;ROW-frame_obj&gt;&lt;_1&gt;1&lt;/_1&gt;&lt;_2&gt;0&lt;/_2&gt;&lt;_7&gt;0&lt;/_7&gt;&lt;/ROW-frame_obj&gt;
+&lt;ROW-frame_obj&gt;&lt;_1&gt;0&lt;/_1&gt;&lt;_2&gt;0&lt;/_2&gt;&lt;_7&gt;1&lt;/_7&gt;&lt;/ROW-frame_obj&gt;
+</code></pre>
+        </div><br />
+
+        <p>Using the XMLTable SQL/XML function, you can shred the XML document into relational data.</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+WITH rst AS(
+SELECT /*+ materialize */ x.name, "1", "2", "3", "4", "5","6", "7" FROM 
+table(rqTableEval(
+             cursor(select DAY_OF_WEEK, DEP_DELAY, DISTANCE, AIR_TIME, 
+ARR_DELAY,CARRIER, ORIGIN_AIRPORT_ID from dt_ontime_t),
+             cursor(SELECT 'dt_store2' as "ds", 
+               'nb.mod' as "obj", 
+               1 as "ore.connect" FROM dual),
+             'XML',
+            'NBModelOnFlights4')) x,
+XMLTable(
+      'for $i in $r/root/frame_obj/ROW-frame_obj return $i'
+      PASSING xmltype.createxml(x.value) as "r" 
+       COLUMNS "1" VARCHAR2(1) PATH '_1',
+               "2" VARCHAR2(1) PATH '_2', 
+               "3" VARCHAR2(1) PATH '_3',
+               "4" VARCHAR2(1) PATH '_4',
+               "5" VARCHAR2(1) PATH '_5',
+               "6" VARCHAR2(1) PATH '_6',
+               "7" VARCHAR2(1) PATH '_7') xt)
+SELECT "1", "2", "3", "4", "5", "6", "7" FROM rst;
+</code></pre>
+        </div><br />
+
+        <p>You&rsquo;ll get the following output as the result:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+1     2          3          4          5         6      7 
+---------------------------------------------------------
+2     1     (null)     (null)     (null)     (null)     0
+0     1     (null)     (null)     (null)     (null)     0
+0     1     (null)     (null)     (null)     (null)     0
+1     0     (null)     (null)     (null)     (null)     1
+0     1     (null)     (null)     (null)     (null)     0
+1     0     (null)     (null)     (null)     (null)     0
+0     0     (null)     (null)     (null)     (null)     1
+</code></pre>
+        </div><br />
+
+        <h3>Passing in JSON or XML Data</h3>
+
+        <p>In the examples so far, the data passed to the R function has been selected from a relational database table.
+            In particular, you passed the following SELECT statement in the cursor as the first parameter of
+            rqTableEval:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+select DAY_OF_WEEK, DEP_DELAY, DISTANCE, AIR_TIME, ARR_DELAY,CARRIER, 
+ORIGIN_AIRPORT_ID from dt_ontime_t
+</code></pre>
+        </div><br />
+
+        <p>Actually, you are not limited to relational datasets when it comes to the data to pass to the R function
+            defined in a stored R script. Because Oracle Database can transform data in other formats to relational
+            representations, you can easily access nonrelational datasources (such as JSON or XML) in SQL statements.
+        </p>
+
+        <p>Suppose you have the test dataset from the previous examples in JSON format stored in a dt_ontime_t.json
+            file, as follows:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+{"rows":[
+{
+"DAY_OF_WEEK":7,
+"DEP_DELAY":195.0,
+"DISTANCE":1189.0,
+"AIR_TIME":155.0,
+"ARR_DELAY":204.0,
+"CARRIER":"B6",
+"ORIGIN_AIRPORT_ID":13204
+},
+{
+"DAY_OF_WEEK":1,
+"DEP_DELAY":84.0,	
+"DISTANCE":541.0,
+"AIR_TIME":83.0,
+"ARR_DELAY":90.0,
+"CARRIER":"B6",
+"ORIGIN_AIRPORT_ID":11057
+},
+...
+]
+}
+</code></pre>
+        </div><br />
+
+        <p>Starting with Oracle Database 12<em>c</em> Release 1 (12.1.0.2), you can use the JSON_TABLE SQL function for
+            translating JSON data into relational format. In this particular example, it might work as follows:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+SELECT * FROM JSON_TABLE(
+     httpuritype('http://localhost/dt_ontime_t.json').getCLOB(), '$.rows[*]'
+  COLUMNS (DAY_OF_WEEK NUMBER PATH '$.DAY_OF_WEEK',
+           DEP_DELAY NUMBER PATH '$.DEP_DELAY',
+           DISTANCE NUMBER PATH '$.DISTANCE',
+           AIR_TIME NUMBER PATH '$.AIR_TIME',
+           ARR_DELAY NUMBER PATH '$.ARR_DELAY',
+           CARRIER VARCHAR2(2) PATH '$.CARRIER',
+           ORIGIN_AIRPORT_ID NUMBER PATH '$.ORIGIN_AIRPORT_ID'));
+</code></pre>
+        </div><br />
+
+        <p>which produces the following output:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+DAY_OF_WEEK DEP_DELAY DISTANCE AIR_TIME ARR_DELAY CARRIER ORIGIN_AIRPORT_ID
+7           195           1189      155       204      B6             13204
+1            84            541       83        90      B6             11057
+...
+</code></pre>
+        </div><br />
+
+        <p>For convenience, you might create a view on the above query:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+CREATE VIEW dt_ontime_v AS 
+SELECT * FROM JSON_TABLE(
+     httpuritype('http://localhost/dt_ontime_t.json').getCLOB(), '$.rows[*]'
+  COLUMNS (DAY_OF_WEEK NUMBER PATH '$.DAY_OF_WEEK',
+           DEP_DELAY NUMBER PATH '$.DEP_DELAY',
+           DISTANCE NUMBER PATH '$.DISTANCE',
+           AIR_TIME NUMBER PATH '$.AIR_TIME',
+           ARR_DELAY NUMBER PATH '$.ARR_DELAY',
+           CARRIER VARCHAR2(2) PATH '$.CARRIER',
+           ORIGIN_AIRPORT_ID NUMBER PATH '$.ORIGIN_AIRPORT_ID'));
+</code></pre>
+        </div><br />
+
+        <p>After that, you can refer to this view as if it were a regular database table:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+SELECT * FROM table(rqTableEval(
+             cursor(select DAY_OF_WEEK, DEP_DELAY, DISTANCE, AIR_TIME, 
+ARR_DELAY,CARRIER, ORIGIN_AIRPORT_ID from dt_ontime_v),
+             cursor(SELECT 'dt_store2' as "ds", 
+               'nb.mod' as "obj", 
+               1 as "ore.connect" FROM dual),
+             'XML',
+            'NBModelOnFlights4'));
+</code></pre>
+        </div><br />
+
+        <p>As always, the generated output depends on the dataset passed in; it might look as follows in this particular
+            example:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+NAME  VALUE
+----- ------
+null  &lt;root&gt;
+       &lt;frame_obj&gt;
+        &lt;ROW-frame_obj&gt;&lt;_1&gt;2&lt;/_1&gt;&lt;_2&gt;1&lt;/_2&gt;&lt;_7&gt;0&lt;/_7&gt;&lt;/ROW-frame_obj&gt;
+        &lt;ROW-frame_obj&gt;&lt;_1&gt;0&lt;/_1&gt;&lt;_2&gt;1&lt;/_2&gt;&lt;_7&gt;0&lt;/_7&gt;&lt;/ROW-frame_obj&gt;
+        &lt;ROW-frame_obj&gt;&lt;_1&gt;0&lt;/_1&gt;&lt;_2&gt;1&lt;/_2&gt;&lt;_7&gt;0&lt;/_7&gt;&lt;/ROW-frame_obj&gt;
+        &lt;ROW-frame_obj&gt;&lt;_1&gt;1&lt;/_1&gt;&lt;_2&gt;0&lt;/_2&gt;&lt;_7&gt;1&lt;/_7&gt;&lt;/ROW-frame_obj&gt;
+        &lt;ROW-frame_obj&gt;&lt;_1&gt;0&lt;/_1&gt;&lt;_2&gt;1&lt;/_2&gt;&lt;_7&gt;0&lt;/_7&gt;&lt;/ROW-frame_obj&gt;
+        &lt;ROW-frame_obj&gt;&lt;_1&gt;1&lt;/_1&gt;&lt;_2&gt;0&lt;/_2&gt;&lt;_7&gt;0&lt;/_7&gt;&lt;/ROW-frame_obj&gt;
+        &lt;ROW-frame_obj&gt;&lt;_1&gt;0&lt;/_1&gt;&lt;_2&gt;0&lt;/_2&gt;&lt;_7&gt;1&lt;/_7&gt;&lt;/ROW-frame_obj&gt;
+       &lt;/frame_obj&gt;
+      &lt;/root&gt;
+</code></pre>
+        </div><br />
+
+        <p>In a similar manner, you could work with XML, employing the XMLTable SQL function you already saw in the
+            example in the preceding section.</p>
+
+        <h3>See Also</h3>
+
+        <ul class="obullets">
+            <li><a href="//www.oracle.com/technetwork/topics/bigdata/r-offerings-1566363.html">R technologies from
+                    Oracle </a></li>
+            <li><a
+                    href="//www.oracle.com/technetwork/database/database-technologies/r/r-enterprise/overview/index.html">Oracle
+                    R Enterprise</a></li>
+            <li><a href="//www.oracle.com/technetwork/database/options/advanced-analytics/r-enterprise/learnmore/session-5-pa-3832285.pdf"
+                    target="_blank">Oracle R Enterprise 1.5.1 Predictive Analytics (PDF)</a></li>
+            <li><a href="//community.oracle.com/docs/DOC-1013840">Machine Learning with R in Oracle Database</a></li>
+            <li><a href="//community.oracle.com/docs/DOC-994731">Bringing Data Pieces Together with Oracle Database
+                    12c</a></li>
+        </ul>
+
+        <h3>About the Author</h3>
+
+        <p><strong>Yuli Vasiliev</strong> is a software developer, freelance author, and consultant currently
+            specializing in open source development, databases, business intelligence (BI), machine learning, and
+            virtualization. He is the author of a series of books on Oracle technology, including <em>Oracle Business
+                Intelligence: An introduction to Business Analysis and Reporting</em> (Packt Publishing) and <em>PHP
+                Oracle Web Development: Data processing, Security, Caching, XML, Web Services, and Ajax</em> (Packt
+            Publishing).</p>
+
+    </div>
+</section>
+
+<!-- / _Raw-Text -->
+<!-- _Raw-Text -->

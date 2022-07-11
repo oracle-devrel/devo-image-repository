@@ -1,0 +1,532 @@
+<!-- RC24v0 -->
+<section class="rc24 rc24v0 cpad">
+    <div class="rc24w1 cwidth">
+        <p>What do Disney, Tesla, and weed-killing robots have in common? They're all using PyTorch to realize their <a
+                href="https://www.oracle.com/data-science/machine-learning/what-is-machine-learning/">machine
+                learning</a> goals. </p>
+
+        <p>The fact that two of the largest corporations are using an open-source framework should be enough, on its
+            own, to raise a few eyebrows. This is in part due to the PyTorch vs Tensorflow debate, with Tensorflow being
+            the better-known of the two. </p>
+
+        <p>PyTorch has a lot more going for it than simply being <a href="/open-source/what-is-open-source/">open
+                source</a>, however. There are many reasons why Disney prefers the machine learning framework for their
+            innovative facial recognition projects. </p>
+
+
+
+
+
+
+
+
+
+    </div>
+</section>
+<!-- /RC24v0 -->
+
+
+<!-- RC24v0 -->
+<section class="rc24 rc24v0 cpad" id="link2">
+    <div class="rc24w1 cwidth">
+        <h2>PyTorch defined </h2>
+
+        <p>We're going to give you a guided tour of the machine learning framework developed by Facebook.</p>
+
+        <p>What Is PyTorch? It is an open-source library designed with Python in mind and built for machine learning
+            projects. It specializes in automatic differentiation, tensor computations, and GPU acceleration. This makes
+            it uniquely suited for cutting-edge machine learning applications like deep learning.</p>
+
+        <p>PyTorch is particularly popular among researchers due to the customizability of Python. Creating custom data
+            layers and network architectures is especially easy using Python. </p>
+
+
+        <div class="obttns">
+
+            <div><a href="https://github.com/pytorch" target="_blank">Pytorch on Github</a></div>
+        </div>
+
+
+
+
+    </div>
+</section>
+<!-- /RC24v0 -->
+
+
+<!-- RC24v0 -->
+<section class="rc24 rc24v0 cpad" id="link3">
+    <div class="rc24w1 cwidth">
+        <h2>PyTorch Deep Learning</h2>
+
+        <p>PyTorch is based on Torch, an early framework for deep learning. PyTorch just takes the deep learning
+            potential of Torch and ports it into the Python environment. </p>
+
+        <p>Python has become one of the most popular programming languages for web-related applications, alongside other
+            modern programming languages like R. Naturally, data scientists, programmers, and developers would want to
+            integrate neural networks and deep learning in their Python projects. </p>
+
+        <p>The first attempt at integrating deep learning into Python was Keras. Developed in 2015, Keras exposed an API
+            for training neural networks in Python. The Keras API was closely modeled after scikit-learn, which is one
+            of the most popular frameworks for working with machine learning in Python. </p>
+
+        <p>TensorFlow was soon to follow. Also created in 2015, TensorFlow became the de facto backend for Keras. It
+            also features some low-level functionality that is more difficult to implement using Keras. </p>
+
+        <p>TensorFlow's early API wasn't particularly well-suited for Python, however. Facebook set out to remedy this
+            dilemma. Launched in September 2016, PyTorch was their solution to some of the problems researchers were
+            having with Keras and TensorFlow. </p>
+
+        <p>PyTorch solved two problems with one blow. It remedied a few of the shortcomings found in Keras as well as
+            providing a more intuitive API. </p>
+
+        <p>With that said, both Keras and TensorFlow have since fixed a lot of these early bugs. At this point, the
+            answer in the TensorFlow vs PyTorch debate is there isn't a clear victor. Both perform similar functions but
+            with different syntax. </p>
+
+        <p>There are some differences, however. Let's take a moment with the PyTorch vs TensorFlow conversation before
+            we go any further.</p>
+
+
+
+    </div>
+</section>
+<!-- /RC24v0 -->
+
+<!-- RC24v0 -->
+<section class="rc24 rc24v0 cpad" id="link4">
+    <div class="rc24w1 cwidth">
+        <h2>PyTorch Vs TensorFlow</h2>
+
+        <p>There were far more differences in PyTorch vs <a
+                href="//developer.oracle.com/what-is-tensorflow/">TensorFlow</a> when they were first released. Many of
+            these inconsistencies have since been ironed out. There are still some disparities, however, which are worth
+            looking at: </p>
+
+        <!--	<div class="obttns">
+      
+	<div><a href="//developer.oracle.com/what-is-tensorflow/">What is Tensorflow </a></div>
+						</div>-->
+
+        <p><strong> API</strong><br />
+            The limitations of TensorFlow's API was the first thing that prompted the creation of PyTorch in the first
+            place. TensorFlow's API has since been updated quite a bit, but PyTorch was created specifically to port a
+            machine learning library into the Python environment.</p>
+
+        <p><strong>Computation Graph</strong><br />
+            Computation graphs are some of the more significant differences between PyTorch and TensorFlow. </p>
+
+        <p>TensorFlow uses static computation graphs to allocate resources. It creates a graph for the series of
+            calculations you want to perform. When resources are being allocated, it uses placeholder data to make its
+            calculations. </p>
+
+        <p>The data is then plugged in, after the fact. </p>
+
+        <p>PyTorch uses dynamic computation graphs, on the other hand. This means that calculations are performed after
+            each line of code is
+            complete.</p>
+
+        <p>Static computation graphs are easier on processors. They're a pain to debug, however, which makes dynamic
+            computation preferable for a lot of applications.</p>
+
+        <p><strong>Distributed Computing</strong><br />
+            In its earliest days, running TensorFlow across multiple devices or platforms was prohibitively difficult.
+            You would have to fine-tune TensorFlow by hand for it to run smoothly in decentralized applications.</p>
+
+        <p>PyTorch doesn't have the same limitations. As with many of the other issues we've been discussing, TensorFlow
+            has solved a lot of these issues in the ensuing years. For this particular issue, TensorFlow created Tensor
+            Programming Units (TPU). </p>
+
+        <p>TPUs are even faster than GPUs and are now widely used and available. PyTorch isn't as adept at handling
+            TPUs, but this can be addressed using 3rd party plugins like XLA.</p>
+
+
+
+    </div>
+</section>
+<!-- /RC24v0 -->
+
+
+
+
+<!-- RC24v0 -->
+<section class="rc24 rc24v0 cpad" id="link5">
+    <div class="rc24w1 cwidth">
+        <h2>Getting Started With PyTorch</h2>
+
+        <p>Now that we've answered the "What is PyTorch?" question, we're going to show you how to get started with a
+            brief tutorial. This way, you can see this language framework in action and see how it fits into your
+            workflow.
+
+            For the sake of this PyTorch tutorial, we'll be using Python and a barebones command prompt on a PC. Feel
+            free to adjust these instructions for Python environments like Anaconda if that's what you're more
+            comfortable with.
+        </p>
+
+
+
+
+
+    </div>
+</section>
+<!-- /RC24v0 -->
+
+<!-- RC24v0 -->
+<section class="rc24 rc24v0 cpad" id="link6">
+    <div class="rc24w1 cwidth">
+        <h2>Install PyTorch</h2>
+
+        <p>To start, navigate to your programming folder using the command prompt. Type in the command md PyTorch to
+            create a directory for this tutorial. Then navigate into the new folder.</p>
+
+        <p>Now we're going to install the PyTorch library using Python's Pip command.</p>
+
+        <p><code>$pip install torch torchvision</code></p>
+
+        <p>Now you'll be able to import torch and torchvision into your Python programs. </p>
+
+    </div>
+</section>
+<!-- /RC24v0 -->
+
+
+<!-- RC24v0 -->
+<section class="rc24 rc24v0 cpad" id="link7">
+    <div class="rc24w1 cwidth">
+        <h2>Understanding Tensors</h2>
+
+        <p>PyTorch represents data in multi-dimensional arrays known as tensors. This is similar to how data is handled
+            in other popular Python frameworks like NumPy. </p>
+
+        <p>Here's an example of creating a tensor using NumPy:</p>
+
+
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+$import numpy as np
+$np.array([[0.0, 1.3], [2.8, 3.3], [4.1, 5.2], [6.9, 7.0]])
+array([[0. , 1.3],
+[2.8, 3.3],
+[4.1, 5.2],
+[6.9, 7. ]])
+</code></pre>
+        </div>
+
+        <p>Here's an example of the same thing implemented using PyTorch:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+$import torch
+
+$torch.tensor([[0.0, 1.3], [2.8, 3.3], [4.1, 5.2], [6.9, 7.0]])
+tensor([[0.0000, 1.3000],
+[2.8000, 3.3000],
+[4.1000, 5.2000],
+[6.9000, 7.0000]])
+</code></pre>
+        </div>
+
+
+        <p>These might look nearly identical. The difference is that PyTorch can automatically create graphs and use
+            differentiation automatically. </p>
+
+    </div>
+</section>
+<!-- /RC24v0 -->
+
+
+<!-- RC24v0 -->
+<section class="rc24 rc24v0 cpad" id="link8">
+    <div class="rc24w1 cwidth">
+        <h2>Working With Data in PyTorch</h2>
+
+        <p>PyTorch features two functions for working with data. They are torch.utils.data.DataLoader and
+            torch.utils.data.Dataset. Dataset stores the variable into a tensor and DataLoader wraps an iterable around
+            the dataset.</p>
+
+        <p>PyTorch also has libraries for specific applications. These are TorchText, TorchVision, and TorchAudio. Each
+            of these has its own datasets.</p>
+
+        <p>We'll use a TorchVision dataset for this tutorial. Every TorchVision has two variables: transform and
+            target_transform. Transform modifies the samples, while target_transform works on labels.</p>
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+# Download training data from open datasets.
+training_data = datasets.FashionMNIST(
+root="data",
+train=True,
+download=True,
+transform=ToTensor(),
+)
+
+# Download test data from open datasets.
+test_data = datasets.FashionMNIST(
+root="data",
+train=False,
+download=True,
+transform=ToTensor(),
+)
+</code></pre>
+        </div>
+
+
+
+
+
+
+
+
+    </div>
+</section>
+<!-- /RC24v0 -->
+
+
+
+
+<!-- RC24v0 -->
+<section class="rc24 rc24v0 cpad" id="link9">
+    <div class="rc24w1 cwidth">
+        <h2>Creating Models in PyTorch</h2>
+        <p>Creating a neural network in PyTorch is easy. You just need to create a class that inherits input from
+            nn.module. Then you define the layers of the network in the __init__ function. Then you specify how data
+            moves through the network using the forward function.</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+# Define model
+class NeuralNetwork(nn.Module):
+def __init__(self):
+super(NeuralNetwork, self).__init__()
+self.flatten = nn.Flatten()
+self.linear_relu_stack = nn.Sequential(
+nn.Linear(28*28, 512),
+nn.ReLU(),
+nn.Linear(512, 512),
+nn.ReLU(),
+nn.Linear(512, 10)
+)
+
+def forward(self, x):
+x = self.flatten(x)
+logits = self.linear_relu_stack(x)
+return logits
+
+model = NeuralNetwork().to(device)
+print(model)
+
+</code></pre>
+        </div>
+
+
+
+
+
+
+    </div>
+</section>
+<!-- /RC24v0 -->
+
+
+
+<!-- RC24v0 -->
+<section class="rc24 rc24v0 cpad" id="link10">
+    <div class="rc24w1 cwidth">
+        <h2>Optimize Pytorch Models</h2>
+        <p>Training neural networks in PyTorch is also simple. You just need to create a loss function and an optimizer.
+        </p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+loss_fn = nn.CrossEntropyLoss()
+optimizer = torch.optim.SGD(model.parameters(), lr=1e-3)
+</code></pre>
+        </div>
+
+
+        <p>This way, the model makes predictions based on the input its given. This probability is then fed into the
+            current data to optimize the model's performance.</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+def train(dataloader, model, loss_fn, optimizer):
+size = len(dataloader.dataset)
+model.train()
+for batch, (X, y) in enumerate(dataloader):
+X, y = X.to(device), y.to(device)
+
+# Compute prediction error
+pred = model(X)
+loss = loss_fn(pred, y)
+
+# Backpropagation
+optimizer.zero_grad()
+loss.backward()
+optimizer.step()
+
+if batch % 100 == 0:
+loss, current = loss.item(), batch * len(X)
+print(f"loss: {loss:>7f} [{current:>5d}/{size:>5d}]")
+
+
+</code></pre>
+        </div>
+
+        <p>We'll also want to test the dataset to make sure it's performing properly.</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+def test(dataloader, model, loss_fn):
+     size = len(dataloader.dataset)
+     num_batches = len(dataloader)
+     model.eval()
+     test_loss, correct = 0, 0
+     with torch.no_grad():
+       for X, y in dataloader:
+           X, y = X.to(device), y.to(device)
+          pred = model(X)
+          test_loss += loss_fn(pred, y).item()
+          correct += (pred.argmax(1) == y).type(torch.float).sum().item()
+     test_loss /= num_batches
+     correct /= size
+     print(f"Test Error: Accuracy: {(100*correct):>0.1f}%, Avg loss: {test_loss:>8f} ")
+</code></pre>
+        </div>
+
+
+        <p>This setup optimizes PyTorch with each passing iteration, which are known as epochs. </p>
+    </div>
+</section>
+<!-- /RC24v0 -->
+
+
+
+<!-- RC24v0 -->
+<section class="rc24 rc24v0 cpad" id="link11">
+    <div class="rc24w1 cwidth">
+        <h2>Saving and Loading Models </h2>
+        <p>A common method for saving modes in PyTorch is to save the internal state dictionary.</p>
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+torch.save(model.state_dict(), "model.pth")
+print("Saved PyTorch Model State to model.pth")
+</code></pre>
+        </div>
+
+
+
+        <p>Loading models is just as simple. You just have to re-create the model structure and load the state
+            dictionary into it. </p>
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+model = NeuralNetwork()
+
+model.load_state_dict(torch.load("model.pth"))
+
+This model can now be used to make predictions. 
+
+classes = [
+"T-shirt/top",
+"Trouser",
+"Pullover",
+"Dress",
+"Coat",
+"Sandal",
+"Shirt",
+"Sneaker",
+"Bag",
+"Ankle boot",
+]
+
+model.eval()
+x, y = test_data[0][0], test_data[0][1]
+with torch.no_grad():
+pred = model(x)
+predicted, actual = classes[pred[0].argmax(0)], classes[y]
+print(f'Predicted: "{predicted}", Actual: "{actual}"')
+
+</code></pre>
+        </div>
+        <p>This model can now be used to make predictions. </p>
+
+        <p>If you'd like to see the code for this tutorial, you can check out the Jupyter Notebook or view the project
+            on GitHub.</p>
+        <p>That's all there is to it! It's an exciting time to be a developer, programmer, or business owner looking to
+            take advantage of the powerful tech at your disposal.</p>
+        <p>After completing this tutorial, you should have a sense of how easy it is to get up and running with just a
+            few commands!</p>
+
+    </div>
+</section>
+<!-- /RC24v0 -->
+
+
+
+
+<!-- RC24v0 -->
+<section class="rc24 rc24v0 cpad" id="link12">
+    <div class="rc24w1 cwidth">
+        <h2>Pytorch—Ready For the Cloud?</h2>
+        <p>The world is becoming more decentralized with each passing year. Cloud computing and decentralized technology
+            empower you and your customers to flourish and thrive in this new paradigm.</p>
+
+        <p>Cloud computing platforms provide powerful infrastructure for training and deploying machine learning models.
+            Learn how to serve PyTorch Models from Oracle Cloud Infrastructure (OCI) for free - step by step guide.</p>
+
+
+        <div class="obttns">
+
+            <div><a href="https://github.com/oracle-devrel/TorchServe-OCI" target="_blank">Serve Pytorch models from
+                    OCI</a></div>
+        </div>
+
+
+
+    </div>
+</section>
+<!-- /RC24v0 -->

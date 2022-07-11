@@ -1,0 +1,540 @@
+<!-- U03v5 -->
+<!-- _Raw-HTML -->
+<section class="cc01 cc01v0 cpad crule">
+    <div class="cc01w1 cwidth">
+        <p>Now that the web services have been created and integrated into the client side in <a
+                href="https://developer.oracle.com/databases/building-apps-odb12c-apex-part1.html">Part 1 of this
+                series</a>, we can spend some time on the database tier using database features to modify which rows get
+            returned. There will be no more code changes in the client-side portion of the application for the rest of
+            this article; all updates will simply be enabling different database features or slightly modifying the SQL
+            query used in the web service.</p>
+
+        <h3>Analytic Functions</h3>
+
+        <p>Analytic functions are a powerful no-cost feature of Oracle Database that allow developers to use
+            sophisticated analytics in their SQL queries and PL/SQL code. Because these calculations occur on the
+            database server, they are highly optimized and can slice through large volumes of data with ease.</p>
+
+        <p>Several different analytic functions are supported; a comprehensive list can be found <a
+                href="https://oracle-base.com/articles/misc/analytic-functions#using_analytic_functions">here</a>.</p>
+
+        <p>We can easily incorporate analytic functions into the SQL statements that our web service uses. This can be
+            done in such a way that only minor, if any, changes to the user interface need to be made. The heavy
+            lifting, so to speak, will be done at the database tier.</p>
+
+        <p>Our current SQL query returns all employees and orders them by salary from least to greatest. This was done
+            using a simple inline query with an ORDER BY clause. If we run this query, we can see that SMITH has the
+            smallest salary while KING enjoys the largest, as shown in Figure 1.</p>
+
+        <p align="center" class="xsml">Figure 1: Results of SQL sorting on salary.</p>
+
+        <p>But what if we want to find the same information but segment it by department? We could simply run the SQL
+            query for each department, adding a WHERE clause to only look at a specific department, and then use UNION
+            to put all of those queries together. With a small dataset, this approach might work. But for a table with
+            many departments and hundreds, if not thousands of employees, this approach is very impractical.</p>
+
+        <p>A better approach is to seek the help of analytic functions and use either the RANK or DENSE_RANK function to
+            produce our results. Both functions will rank a dataset based on some criteria; the difference is that
+            DENSE_RANK will assign consecutive values in the event of two of more values being the same, whereas RANK
+            will not.</p>
+
+        <p>Table 1 illustrates the difference in how RANK and DENSE_RANK assign values to a simple dataset:</p>
+        <strong>Table 1. Comparison of RANK and DENSE_RANK values</strong>
+
+        <table border="1" cellpadding="3" cellspacing="0" class="dataTable3padd" style="width:548px">
+            <tbody>
+                <tr>
+                    <th scope="col">Value</th>
+                    <th scope="col">RANK</th>
+                    <th scope="col">DENSE_RANK</th>
+                </tr>
+                <tr>
+                    <td>10</td>
+                    <td>1</td>
+                    <td>1</td>
+                </tr>
+                <tr>
+                    <td>20</td>
+                    <td>2</td>
+                    <td>2</td>
+                </tr>
+                <tr>
+                    <td>20</td>
+                    <td>2</td>
+                    <td>2</td>
+                </tr>
+                <tr>
+                    <td>30</td>
+                    <td>4</td>
+                    <td>3</td>
+                </tr>
+            </tbody>
+        </table>
+        &nbsp;
+
+        <p>We&#39;ll apply RANK to our SQL query, and use <code>deptno</code> as the partitioned column. Thus, our new
+            query now looks like Listing 1:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+
+
+SELECT 
+  e.empno,
+  d.dname,
+  e.ename,
+  e.job,
+  e.sal,
+  0 sal_diff,
+  NVL(e.comm, 0) comm,
+  RANK() OVER (PARTITION BY e.deptno ORDER BY sal DESC) AS rank
+FROM 
+  emp e,
+  dept d
+WHERE
+  d.deptno = e.deptno</code></pre>
+        </div>
+
+        <p>Listing 1: Modified query using the <code>RANK()</code> analytic function.</p>
+
+        <p>To incorporate the updated SQL query into the existing web service, do the following:</p>
+
+        <ol>
+            <li>In Oracle SQL Developer, expand the <strong>REST Data Services</strong> node in the tree. From there,
+                expand <strong>Modules</strong>, <strong>demo</strong>, and <strong>emp</strong> to reveal a leaf node
+                called <strong>GET</strong>.</li>
+            <li>Right-click <strong>GET</strong> and select <strong>Open</strong>.</li>
+            <li>You should now see a <strong>Worksheet</strong> tab, where the SQL query from the creation of the web
+                service is displayed.</li>
+            <li>Replace the SQL query that is there with the SQL query shown in Listing 1 and save your changes by
+                clicking the single floppy disk icon.</li>
+        </ol>
+
+        <p align="center" class="xsml">Figure 2: Updating the SQL query of the web service.</p>
+
+        <p>Now, the <strong>RANK</strong> column will contain the rank of an employee&#39;s salary within a specific
+            department, not overall across all departments, as shown in Figure 3.</p>
+
+        <p align="center" class="xsml">Figure 3: Results of SQL query with RANK analytic function.</p>
+
+        <p>The results of the web service call and web page will also reflect the updated results.</p>
+
+        <p>We can also apply multiple analytic functions to a single SQL statement. Let&#39;s say we wanted to easily
+            see the difference in salary between the current employee and the previous employee in the same department.
+            We can turn to the LAG and LEAD analytic functions to help us with this. LAG will &quot;look back&quot; any
+            number of rows and return that value, whereas LEAD will &quot;look forward&quot; any number of rows and
+            return that value. These two analytic functions eliminate the need to create a complex self-join, and they
+            can be easily implemented in any SQL query.</p>
+
+        <p>We can modify our query slightly to include the difference between a current employee&#39;s salary and the
+            next-highest paid employee&#39;s salary in the same the department by using the SQL query in Listing 2.</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+SELECT 
+  e.empno,
+  d.dname,
+  e.ename,
+  e.job,
+  e.sal,
+  e.sal - LAG(e.sal, 1, 0) OVER (PARTITION BY e.deptno ORDER BY e.sal DESC) AS sal_diff,
+  NVL(e.comm, 0) comm,
+  RANK() OVER (PARTITION BY e.deptno ORDER BY e.sal DESC) AS rank
+FROM 
+  emp e,
+  dept d
+WHERE
+  d.deptno = e.deptno</code></pre>
+        </div>
+
+        <p>Listing 2: SQL query that makes use of two analytical functions: LAG and RANK.</p>
+
+        <p>To modify the SQL query used in the web service, do the following:</p>
+
+        <ol>
+            <li>In Oracle SQL Developer, expand the <strong>REST Data Services</strong> node in the tree. From there,
+                expand <strong>Modules</strong>, <strong>demo</strong>, and <strong>emp</strong> to reveal a leaf node
+                called <strong>GET</strong>.</li>
+            <li>Right-click <strong>GET</strong> and select <strong>Open</strong>.</li>
+            <li>You should now see a <strong>Worksheet</strong> tab, where the SQL query from the creation of the web
+                service is displayed.</li>
+            <li>Replace the SQL query that is there with the SQL query shown in Listing 2 and save your changes by
+                clicking the single floppy disk icon.</li>
+        </ol>
+
+        <p>When the SQL query in Listing 2 is run, the <strong>SAL_DIFF</strong> column is computed using the LAG
+            function. This column represents the difference in salary between the current and previous row. In the case
+            of the highest paid employee per department, the value is the same as that employee&#39;s salary, because
+            there is no previous row to compare to. The results of the new query can be seen in Figure 4.</p>
+
+        <p align="center" class="xsml">Figure 4: The results of the LAG function, illustrating the differences in
+            salary.</p>
+
+        <p>RANK, DENSE_RANK, LAG, and LEAD are just a few of the many analytic functions that you can easily incorporate
+            into your SQL statements&mdash;regardless of whether they are called as part of a web service. Read more
+            about analytic functions in the <a
+                href="http://docs.oracle.com/database/121/SQLRF/functions004.htm#SQLRF06174">Oracle documentation</a> or
+            on the <a href="https://oracle-base.com/articles/misc/analytic-functions">Oracle-Base website</a>.</p>
+
+        <div class="subheaders">Redaction</div>
+
+        <p>Another powerful database feature that can be easily implemented in Data Redaction, which is feature of the
+            Oracle Advanced Security option for Oracle Database. Data Redaction can conditionally redact sensitive data
+            from being displayed to the user. Data can be completely or partially redacted or replaced with random data.
+        </p>
+
+        <p><strong>Note</strong>: In order to manage redaction policies, your schema will need EXECUTE privileges on
+            DBMS_REDACT. Your DBA might have to assist in granting these privileges.</p>
+
+        <p>We can create a simple redaction policy that will apply to our query&mdash;all without having to change a
+            single line of code on the client or the server. This policy will completely redact any values in the COMM
+            or commission column. With the policy enabled, any time the EMP table is queried, the value of the COMM
+            column will simply show <code>0</code>.</p>
+
+        <p>To create a redaction policy, do the following:</p>
+
+        <ol>
+            <li>From Oracle SQL Developer, select the <strong>SQL Worksheet</strong> that corresponds to your schema.
+                You can use the one that was used to create the EMP and DEPT tables in Part 1. If you don&#39;t see a
+                <strong>SQL Worksheet</strong> tab, create a new one by clicking the icon circled in Figure 5.<br />
+                &nbsp;
+                <p align="center" class="xsml">Figure 5. Icon for opening a new SQL worksheet</p>
+            </li>
+            <li>Enter the following SQL query in the <strong>SQL Worksheet</strong> tab:<br />
+                &nbsp;
+                <div class="ocode">
+                    <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                        <div><a href="#copy">Copy</a></div>
+                    </div>
+
+                    <pre>
+<code>
+BEGIN
+DBMS_REDACT.add_policy
+  (
+  object_schema =&gt; &#39;SCOTT&#39;,
+  object_name   =&gt; &#39;EMP&#39;,
+  policy_name   =&gt; &#39;REDACT_COMM&#39;,
+  expression    =&gt; &#39;1=1&#39;,
+  column_name   =&gt; &#39;COMM&#39;,
+  function_type =&gt; DBMS_REDACT.FULL
+  );
+END;
+/</code></pre>
+                </div>
+            </li>
+            <li>Execute the SQL query by clicking the <strong>Run Statement</strong> icon.<br />
+                &nbsp;
+                <p align="center" class="xsml">Figure 6.</p>
+            </li>
+        </ol>
+
+        <p>If the query executes successfully, you will see a message that reads &quot;PL/SQL procedure successfully
+            completed.&quot; If you re-query the data from either Oracle SQL Developer or the web service, all values
+            for COMM should read <code>0</code>, as shown in Figure 7.</p>
+
+        <p align="center" class="xsml">Figure 7: The results of the same query after a redaction policy was applied.</p>
+
+        <p>Let&#39;s keep the redaction policy in force as we enable additional database functionality.</p>
+        Oracle Virtual Private Database
+
+        <p>Security is always on the mind of developers today. With incidents of breaches on the rise and no end in
+            sight, it is critical that you ensure that access to your data is restricted to only authorized users. While
+            this article is not intended to serve as a checklist for securing Oracle Database, it would be remiss to not
+            include a portion on security, specifically one that can be easily applied to a query used with a web
+            service.</p>
+
+        <p>While Oracle Database has many ways to restrict access to data, one of the more common methods is called
+            Oracle Virtual Private Database&mdash;a no-cost feature of Oracle Database, Enterprise Edition that can be
+            easily enabled. This feature aims to hide rows of data that don&#39;t match specific criteria. For example,
+            we&#39;ll set up a rule that restricts any query on EMP to return only employees of a specific department.
+        </p>
+
+        <p>Oracle Virtual Private Database can work in concert with other Oracle Database security features, such as
+            Data Redaction. Once we have our rule in place, the same query that we have been using will return only
+            employees that are in department 30. The redaction rules that we set up&mdash;where commission is fully
+            redacted&mdash;will still be applied.</p>
+
+        <p><strong>Note</strong>: To manage Oracle Virtual Private Database policies, your schema will need EXECUTE
+            privileges on DBMS_RLS. Your DBA might have to assist in granting these privileges.</p>
+
+        <p>Before an Oracle Virtual Private Database policy can be created, a policy function needs to exist. A policy
+            function is a standard Oracle Database function that will return the WHERE clause that Oracle Virtual
+            Private Database will automatically apply to the query against a specified object. So in our case, all we
+            need to do is return <code>deptno = 30</code> to limit the query to return only employees in department 30.
+        </p>
+
+        <p>Best practices dictate that the policy function be created in a different schema than where your data lives.
+            This can ensure that developers will not be able to modify the function and circumvent its logic. For this
+            example, we&#39;ll simply create it in the same schema to keep things simple.</p>
+
+        <p>To create an Oracle Virtual Private Database policy function and enable it for the EMP table, do the
+            following:</p>
+
+        <ol>
+            <li>From Oracle SQL Developer, select the <strong>SQL Worksheet</strong> that corresponds to your schema. If
+                you don&#39;t see a <strong>SQL Worksheet</strong> tab, create a new one by clicking the icon circled in
+                Figure 8.<br />
+                &nbsp;
+                <p align="center" class="xsml">Figure 8. Icon for opening a new SQL worksheet.</p>
+            </li>
+            <li>Enter the following SQL query in the <strong>SQL Worksheet</strong> tab:<br />
+                &nbsp;
+                <div class="ocode">
+                    <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                        <div><a href="#copy">Copy</a></div>
+                    </div>
+
+                    <pre>
+<code>
+CREATE OR REPLACE FUNCTION restrict_by_dept
+  (
+  owner     IN VARCHAR2, 
+  objname   IN VARCHAR2
+  ) 
+RETURN VARCHAR2 AS
+BEGIN
+RETURN &#39;DEPTNO = 30&#39;;
+END;
+/</code></pre>
+                </div>
+            </li>
+            <li>Execute the SQL query by clicking the <strong>Run Statement</strong> icon shown in Figure 9.<br />
+                &nbsp;
+                <p align="center" class="xsml">Figure 9. Icon for creating a executing the query.</p>
+            </li>
+            <li>Enter the following SQL query in the <strong>SQL Worksheet</strong> tab, replacing the previous
+                content:<br />
+                &nbsp;
+                <div class="ocode">
+                    <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                        <div><a href="#copy">Copy</a></div>
+                    </div>
+
+                    <pre>
+<code>
+BEGIN
+DBMS_RLS.ADD_POLICY
+  (  
+  object_schema   =&gt; &#39;SCOTT&#39;,
+  object_name     =&gt; &#39;EMP&#39;,
+  policy_name     =&gt; &#39;RESTRICT_BY_DEPT&#39;,
+  policy_function =&gt; &#39;RESTRICT_BY_DEPT&#39;,
+  statement_types =&gt; &#39;SELECT&#39;
+  );
+END;
+/</code></pre>
+                </div>
+            </li>
+            <li>Execute the SQL query by clicking the <strong>Run Statement</strong> icon.</li>
+        </ol>
+
+        <p>If you simply reload the web page now, only employees in department 30 will be returned in both the report
+            and the chart, as illustrated in Figure 10.</p>
+
+        <p align="center" class="xsml">Figure 10: The report and chart after a rule restricting data to the sales
+            department was applied.</p>
+
+        <p>Note that the commission values are still being redacted, and the employees are still sorted from most paid
+            to least paid, per the RANK analytic function. Differences in salaries are still being displayed, per the
+            LAG analytic function as well. Not a single line in the HTML file or even the JavaScript file was changed.
+        </p>
+
+        <p>Also, Oracle Virtual Private Database applies to anytime the database queries the EMP table. This means that
+            data will be restricted when we view both the form and the report. If you edit any of the employees in the
+            SALES department, notice the URL in your browser. It should look something like this:</p>
+        <code>file:///Users/scott/OTN/Files/html/form.html#7698</code>
+
+        <p>The last parameter is the EMPNO of the user that we&#39;re editing; in this case, BLAKE. If we want to tamper
+            with the URL and try to see KING&#39;s record, all we need to do is change that last parameter to 7839 and
+            reload the page, right? Wrong.</p>
+
+        <p>As shown in Figure 11, if we try to view any employee who is not in the accounting department, we&#39;ll
+            simply get a blank form. Oracle Virtual Private Database is doing its job by protecting the data, regardless
+            how it is accessed.</p>
+
+        <p align="center" class="xsml">Figure 11: The results of trying to alter the URL and view an employee not in the
+            accounting department.</p>
+
+        <h3>Auditing</h3>
+
+        <p>As a final step, we can enable auditing to record each time the query used in the web service was accessed.
+            This will allow us to monitor its usage and ensure that it is being run by expected clients for authorized
+            purposes. In fact, auditing can be configured for almost any transaction in Oracle Database; both data
+            definition language (DDL), for creating and modifying objects, and data manipulation language (DML), for
+            querying and modifying data, are supported.</p>
+
+        <p><strong>Note</strong>: In order to manage audit policies, your schema will need EXECUTE privileges on
+            DBMS_FGA. Your DBA might have to assist in granting these privileges.</p>
+
+        <p>In our example, we can use something called fine-grained auditing, which allows us to specify a condition
+            that will be triggered when an object is audited. We might only want to audit the EMP table if an employee
+            of a specific department is included in the results or if the value of a salary exceeds a specific value.
+        </p>
+
+        <p>To create an audit policy on EMP that will audit any transaction where the salary of an employee is updated
+            to be greater than 4000, do the following:</p>
+
+        <ol>
+            <li>From Oracle SQL Developer, select the <strong>SQL Worksheet</strong> that corresponds to your schema.
+            </li>
+            <li>Enter the following SQL query in the <strong>SQL Worksheet</strong> tab:<br />
+                &nbsp;
+                <div class="ocode">
+                    <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                        <div><a href="#copy">Copy</a></div>
+                    </div>
+
+                    <pre>
+<code>
+BEGIN
+DBMS_FGA.add_policy
+  (
+  object_schema   =&gt; &#39;SCOTT&#39;,
+  object_name     =&gt; &#39;EMP&#39;,
+  policy_name     =&gt; &#39;WEBSERVICE&#39;,
+        statement_types =&gt; &#39;INSERT,UPDATE&#39;,
+  audit_condition =&gt; &#39;SAL &gt; 4000&#39;,
+  audit_column    =&gt; &#39;SAL&#39;
+  );
+END;
+/</code></pre>
+                </div>
+            </li>
+            <li>Execute the SQL query by clicking the <strong>Run Statement</strong> icon.</li>
+        </ol>
+
+        <p>Now, edit any employee and set their salary to a value less than 4000 and save the changes. Because the new
+            salary is less than 4000&mdash;which is the threshold defined in the rule&mdash;nothing was written to the
+            audit logs. Now, edit any employee and set the salary to 4001 or greater. Because the threshold of 4000 was
+            exceeded, an entry was written to the audit log.</p>
+
+        <p>If you&#39;re using Oracle Database 12<em>c</em>, the audit logs are written to the new unified audit table,
+            UNIFIED_AUDIT_TRAIL. This new view consolidates all the older audit views into a single place. If you&#39;re
+            still on Oracle Database 11<em>g</em>, the audit logs will be written to the standard DBA_FGA_* tables.</p>
+
+        <p>To view the audit logs in Oracle Database 12<em>c</em>, as the SYS or SYSTEM/PDB_ADMIN user, issue the
+            following query:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+SELECT * from unified_audit_trail WHERE fga_policy_name = &#39;WEBSERVICE&#39; 
+  ORDER BY event_timestamp desc</code></pre>
+        </div>
+
+        <p>To view the audit logs in Oracle Database 11<em>g</em>, as the SYS or SYSTEM user, issue the following query:
+        </p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+SELECT * FROM  dba_fga_audit_trail WHERE policy_name = &#39;WEBSERVICE&#39; 
+  ORDER BY timestamp desc</code></pre>
+        </div>
+
+        <p>In either case, many columns will be returned. If you look closely, you should be able to spot the SQL query
+            that was executed, as well as the schema and table that were impacted.&emsp;</p>
+
+        <h3>Disabling Functionality</h3>
+
+        <p>At the conclusion of this article, you might want to reset your schema to how it was before different
+            database features were enabled. To do that, simply run the corresponding SQL commands in Oracle SQL
+            Developer.</p>
+
+        <p><strong>Redaction</strong><br />
+            To disable the redaction rule, execute the following:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+BEGIN
+DBMS_REDACT.drop_policy(
+  object_schema =&gt; &#39;SCOTT&#39;,
+  object_name   =&gt; &#39;EMP&#39;,
+  policy_name   =&gt; &#39;REDACT_COMM&#39;);
+END;
+/</code></pre>
+        </div>
+
+        <p><strong>Oracle Virtual Private Database</strong><br />
+            To disable Oracle Virtual Private Database, execute the following:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+BEGIN
+DBMS_RLS.DROP_POLICY(
+  object_schema   =&gt; &#39;SCOTT&#39;,
+  object_name     =&gt; &#39;EMP&#39;,
+  policy_name     =&gt; &#39;RESTRICT_BY_DEPT&#39;);
+END;
+/</code></pre>
+        </div>
+
+        <p><strong>Fine-Grained Auditing</strong><br />
+            To disable fine-grained auditing, execute the following:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+BEGIN
+DBMS_FGA.drop_policy(
+  object_schema   =&gt; &#39;SCOTT&#39;,
+  object_name     =&gt; &#39;EMP&#39;,
+  policy_name     =&gt; &#39;WEBSERVICE&#39;);
+END;
+/</code></pre>
+        </div>
+
+        <h3>Summary</h3>
+
+        <p>No matter what front end you prefer, using Oracle Database as a back end provides a wealth of robust, mature,
+            and easy-to-use functionality that can be tailored to suit your individual needs. No longer do you need to
+            learn and incorporate complex libraries to help with analyzing and securing your data; all of this can
+            happen by using native functionality of Oracle Database, regardless of the front end.</p>
+
+        <h3>About the Author</h3>
+
+        <p><strong>Scott Spendolini</strong> is president and founder of Sumner Technologies, a world-class Oracle
+            services, education, and solutions firm. Throughout his career, he has assisted clients with their Oracle
+            Application Express development and training needs. Spendolini is a long-time, regular presenter at many
+            Oracle-related conferences, including Oracle OpenWorld, Kscope, and Rocky Mountain Oracle Users Group
+            (RMOUG). He is an Oracle Ace Director, the author of Expert Oracle Application Express Security, and a
+            coauthor of Pro Oracle Application Express. Spendolini is also an Oracle Certified Oracle Application
+            Express developer. Spendolini started his career at Oracle Corporation, where he worked with Oracle
+            E-Business Suite for almost seven years and was a senior product manager for Oracle Application Express for
+            over three years. He holds a dual bachelor&#39;s degree from Syracuse University in management information
+            systems and telecommunications management.</p>
+    </div>
+</section>

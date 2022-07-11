@@ -1,0 +1,220 @@
+<!-- _Raw-HTML -->
+<!-- CC01v0 -->
+<section class="cc01 cc01v0 cpad">
+    <div class="cc01w1 cwidth">
+
+        <p align="center"><img alt="Figure 1. Root Tenancy"
+                src="https://oracle-devrel.github.io/devo-image-repository/images/blog-root-tenancy.jpg" /></p>
+        <p align="center" class="xsml">Figure 1. Root Tenancy</p>
+
+
+
+        <h2>Tenancies and Compartments</h2>
+
+        <p>When you <a href="https://www.oracle.com/cloud/free/">sign up</a> for an Oracle Cloud Infrastructure
+            account, you&rsquo;re assigned a secure and isolated partition within the cloud infrastructure called a
+            <strong>tenancy</strong>.
+        </p>
+
+        <p>The tenancy has the same name as the cloud account that you selected during the sign-up process. If you
+            want to change the tenancy name, you can do so by following these <a
+                href="https://docs.cloud.oracle.com/en-us/iaas/Content/General/Concepts/renamecloudaccount.htm">instructions</a>.
+        </p>
+
+        <p>The tenancy is a logical concept. You can think of it as a root container where you can create, organize,
+            and administer your cloud resources.</p>
+
+        <p>The second logical concept used for organizing and controlling access to cloud resources is
+            <strong>compartments</strong>. A compartment is a collection of related cloud resources. Your tenancy is
+            also your root compartment.
+        </p>
+
+        <p>You can create more compartments within your tenancy (up to six-levels deep) and use corresponding
+            policies to control access to the resources in each compartment. Every time you create a cloud resource,
+            you must specify the compartment that you want the resource to belong to.</p>
+
+        <p>The following figure shows a compartment called Engineering inside the root compartment. The Engineering
+            compartment has two sub-compartments (for Project-A and Project-B), and each one of those compartments
+            is further separated into multiple compartments.</p>
+
+        <p>This structure isolates resources between environments (development, QA, production) and different
+            projects. You can apply policies to and designate administrators for each compartment. Creating more
+            fine-grained policies ensures that users have access to the compartments that they need and that
+            resources can connect to each other.</p>
+
+
+        <h2>Create compartments</h2>
+
+        <p>Let&rsquo;s create a compartment structure like the one in the previous figure.</p>
+
+        <p>1. <a href="https://www.oracle.com/cloud/sign-in.html">Sign in to your OCI account</a>.</p>
+
+        <p>2. Open the navigation menu, select Identity, and then select Compartments.</p>
+
+        <p>3. To create a sub-compartment in your tenancy, click Create Compartment.</p>
+
+        <p>4. In the Create Compartment dialog, enter the name of the first compartment (in our example, Engineering)
+            and a description, and then select the tenancy or root compartment from the Parent Compartment menu. Click
+            Create Compartment.</p>
+    </div>
+</section>
+<!-- /CC01v0 -->
+<!-- / _Raw-HTML -->
+
+<!-- _Raw-HTML -->
+<!-- CC01v0 -->
+<section class="cc01 cc01v0 cpad">
+    <div class="cc01w1 cwidth">
+        <!--<div class="cc01w2"><img src="https://oracle-devrel.github.io/devo-image-repository/images/cc01-create-compartments.jpg" /></div>-->
+        <p>When it&rsquo;s created, the compartment is assigned an Oracle Cloud Identifier (OCID), like any other
+            resource in OCI. You can read more about OCID and other resource identifiers in the documentation.</p>
+
+        <p>The OCID uses the following syntax:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+	ocid1...[REGION][.FUTURE USE].
+	
+</code></pre>
+        </div>
+
+        <p>The following example, shows what the OCID of your compartment might look like:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+
+ocid1.compartment.oc1..aaaaaaaaexampleuniqueID 
+
+
+</code></pre>
+        </div>
+
+        <p>You can follow the same steps to create sub-compartments for Project A and Project B inside the Engineering
+            compartment and the Dev, QA, and Prod compartments inside each project.</p>
+
+        <p>Here&rsquo;s what the Project-A compartment details page looks like after its subcompartments are created:
+        </p>
+    </div>
+</section>
+
+<!-- / _Raw-HTML -->
+
+<!-- _Raw-HTML -->
+<section class="cc01 cc01v0 cpad">
+    <div class="cc01w1 cwidth">
+        <h2>Policy inheritance and attachment</h2>
+
+        <p>With the compartment hierarchy set up as described, the sub-compartments inherit all access permissions from
+            the compartments higher up in the hierarchy. For example, the Prod compartment inherits the permissions from
+            Project-A and Project-A inherits the permissions from the Engineering compartment.</p>
+
+        <p>When you create an access policy, you need to specify which compartment to attach it to. This setting
+            controls who can later modify or delete the policy. For example, you could create an access policy for the
+            Project-A compartment and attach it to the same compartment. With this design, you can give the
+            administrators of the Project-A compartment access to manage their own compartment&rsquo;s policies.
+            However, if you attach that same access policy to the Engineering compartment, only people who have access
+            to manage policies in the Engineering compartment can modify or delete the policy.</p>
+
+        <h2>Moving resources between compartments</h2>
+
+
+        <p>Most of the resources created in a compartment can be moved to another compartment. However, some resources
+            can’t be moved, such as Container Engine for Kubernetes clusters, functions, or policies.</p>
+
+        <p>Additionally, some resources might have attached resource dependencies. When you move such resources, the
+            attached dependencies move asynchronously. So, even if the parent resource is moved and immediately visible
+            in the new compartment, it might take time for the attached dependencies to move and become visible in the
+            new compartment.</p>
+
+        <p>For some resources, the attached resource dependencies don’t automatically move to the new compartment. You
+            must move these resources independently.</p>
+
+        <p>Finally, be aware of how the policies work when moving resources between compartments. When you move a
+            resource to a new compartment, the policies that govern the new compartment are immediately applied and will
+            affect access to the resource.</p>
+
+        <p>To learn more about compartments, see the Managing compartments documentation.</p>
+
+        <h2>Regions and Realms</h2>
+
+
+        <p>Now that you understand what tenancies and compartments are and how they work, let&rsquo;s look at regions
+            and realms. When you signed up for your account, you selected your home region, and a tenancy was created
+            for you in that region. Your home region is the geographic location where your account and Identity Access
+            Management (IAM) resources are created.</p>
+
+        <p>You can create and update the following resources only in the home region:</p>
+
+        <ul class="obullets">
+            <li>Users</li>
+            <li>Groups</li>
+            <li>Policies</li>
+            <li>Compartments</li>
+            <li>Dynamic groups</li>
+            <li>Federation resources</li>
+        </ul>
+
+
+        <p align="center"><img alt="Figure 2. Multiple Regions "
+                src="https://oracle-devrel.github.io/devo-image-repository/images/cc01-multiple-regions.jpg" /></p>
+        <p align="center" class="xsml">Figure 2. Multiple Regions </p>
+
+
+
+        <p>You can&rsquo;t change your home region. However, through the Console or the Oracle Cloud Infrastructure
+            CLI, you can subscribe your tenancy to other regions.</p>
+
+        <p>When you subscribe to a region, the IAM resources in your home region are propagated and enforced in that
+            region. Using policies you can define access levels for each region separately.</p>
+
+        <p>If we take the compartment hierarchy from the previous example and subscribe to two more regions, we can
+            then create individual resources in those regions as shown in the following figure. Notice that the
+            compartments span the regions, but the resources within those compartments are created in specific
+            regions.</p>
+
+        <p>For more information more about supported regions, see the Data Regions page.</p>
+
+        <p>All Oracle Cloud Infrastructure resources are physically hosted in regions and in one or more
+            availability domains. An availability domain is a data center located in a region. Availability domains
+            (AD) are isolated from each other - they don&rsquo;t share infrastructure, such as power or networking.
+            This isolation minimizes the possibility of simultaneous failures. By using multiple availability
+            domains, you can create a highly-available and resilient architecture.</p>
+
+        <p>A realm is a logical collection of regions. Realms are isolated from each other, and they don&rsquo;t
+            share any data. A tenancy can exist in a single realm, and it has access to the regions that belong to
+            that realm. Currently, Oracle Cloud Infrastructure has a single commercial realm (OC1) and multiple
+            realms for the Government Cloud.</p>
+
+
+        <h3>Additional OCI Resources</h3>
+
+        <p>This blog post gave you a short overview of some of the key concepts and terminology you need to
+            understand when working with the Oracle Cloud Infrastructure. We briefly mentioned access policies, and
+            we&rsquo;ll explain those in more detail in the next post.</p>
+
+        <ul class="obullets">
+            <li><a href="https://docs.cloud.oracle.com/en-us/iaas/Content/General/Concepts/renamecloudaccount.htm">Renaming
+                    a Cloud Account</a></li>
+            <li><a href="https://docs.cloud.oracle.com/en-us/iaas/Content/General/Concepts/identifiers.htm">Resource
+                    Identifiers</a></li>
+            <li><a href="https://docs.cloud.oracle.com/en-us/iaas/Content/Identity/Tasks/managingcompartments.htm">Managing
+                    Compartments</a></li>
+            <li><a href="https://www.oracle.com/cloud/data-regions.html">Data Regions for Platform and
+                    Infrastructure Services</a></li>
+        </ul>
+
+
+
+    </div>
+</section>
+<!-- CC01v2 -->

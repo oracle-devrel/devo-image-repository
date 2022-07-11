@@ -1,0 +1,332 @@
+<!-- _Raw-Text -->
+<!-- CC01v3 -->
+<section class="cc01 cc01v3 cpad">
+    <div class="cc01w1 cwidth">
+
+        <h2>Create an Application on Oracle Cloud Infrastructure</h2>
+
+        <p>This tutorial shows how straightforward it is to set up an Oracle Cloud Infrastructure Compute VM and create
+            a <a href="https://pythonbasics.org/flask-tutorial-hello-world/" target="_blank">Python Flask &ldquo;hello
+                world&rdquo; application</a>.</p>
+
+        <p>Here are the high-level steps:</p>
+
+        <ol class="decimal">
+            <li>Create an SSH key pair</li>
+            <li>Create a Compute VM instance</li>
+            <li>Open a port in your virtual cloud network (VCN)</li>
+            <li>Open a port in the Linux firewall</li>
+            <li>Create the Flask application</li>
+            <li>Test the application</li>
+            <li>Clean up your environment</li>
+        </ol>
+        <br />
+        <h3>Before you begin</h3>
+
+        <p>To successfully perform this tutorial, <strong>you must have an Oracle Cloud account</strong>. If you
+            don&rsquo;t have one, you can sign up for the <a href="https://www.oracle.com/cloud/free">Oracle Cloud
+                Infrastructure Free Tier</a>.</p>
+
+        <h3>Create an SSH key pair in Cloud Shell</h3>
+
+        <p>1. In the Oracle Cloud Infrastructure Console, click the Cloud Shell icon in the Console header.<br />
+            Cloud Shell opens in a &quot;drawer&quot; at the bottom of the Console. It provides a preconfigured VM that
+            you will use to access and set up your project.</p>
+
+        <p>2. If you don&rsquo;t already have a key pair that you can use, follow these steps to create one:</p>
+
+        <p>A. Create the .ssh directory, if it doesn&rsquo;t exist:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code> 
+mkdir ~/.ssh
+chmod 700 ~/.ssh
+</code></pre>
+        </div>
+
+        <p>B. Create an <a href="https://docs.cloud.oracle.com/iaas/Content/Compute/Tasks/managingkeypairs.htm">SSH key
+                pair</a> in Cloud Shell:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code> 
+ssh-keygen -t rsa -N &quot;&quot; -b 2048 -C &quot;&quot; -f ~/.ssh/id_rsa
+</code></pre>
+        </div>
+
+        <p>3. Display your public key:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code> 
+cat ~/.ssh/id_rsa.pub
+</code></pre>
+        </div>
+
+        <p>4. Highlight the public key and use CTRL-C to copy it. You will use it in the next section.</p>
+
+        <p>5. Minimize Cloud Shell.</p>
+
+        <p align="center"><img alt="Figure 1." src="https://oracle-devrel.github.io/devo-image-repository/images/cloudshell.png" style="width: 720px;" /></p>
+
+
+
+        <h3>Create a VM instance</h3>
+
+        <p>Perform the following steps in the Console.</p>
+
+        <p>1. In the <strong>Quick Actions</strong> section of the Console dashboard, click <strong>Create a VM
+                instance</strong>.</p>
+
+        <p align="center"><img alt="Figure 1." src="https://oracle-devrel.github.io/devo-image-repository/images/clouddashboard.png" style="width: 720px;" /></p>
+
+
+
+        <p>2. Enter a name or keep the default.</p>
+
+
+        <p align="center"><img alt="Figure 1." src="https://oracle-devrel.github.io/devo-image-repository/images/createComputeForm1.png" style="width: 720px;" /></p>
+
+        <p>3. Accept the default values for all the other sections.</p>
+
+        <p>4. Scroll to the <strong>Add SSH keys</strong> section, and select <strong>Paste SSH keys</strong>.</p>
+
+
+        <p align="center"><img alt="Figure 1." src="https://oracle-devrel.github.io/devo-image-repository/images/createComputeForm2.png" style="width: 720px;" /></p>
+
+
+        <p>5. Paste your public key from your Cloud Shell.</p>
+
+        <p>6. Click <strong>Create</strong>.</p>
+
+        <h3>Open port 5000 in your virtual cloud network (VCN)</h3>
+
+        <ol class="decimal">
+            <li>On the VM instance details page, click <strong>Public Subnet</strong>.</li>
+
+            <p align="center"><img alt="Figure 1." src="https://oracle-devrel.github.io/devo-image-repository/images/clickPubSub.png" style="width: 720px;" /></p>
+
+            <li>Click the default security list.</li>
+
+            <p align="center"><img alt="Figure 1." src="https://oracle-devrel.github.io/devo-image-repository/images/clickSecList.png" style="width: 720px;" /></p>
+
+
+            <li>Click <strong>Add Ingress Rules</strong>.</li>
+
+            <p align="center"><img alt="Figure 1." src="https://oracle-devrel.github.io/devo-image-repository/images/addIngressRule.png" style="width: 720px;" /></p>
+
+            <li>For <strong>Source CIDR</strong>, enter 0.0.0.0/0.</li>
+            <li>For <strong>Destination Port Range</strong>, enter 5000.</li>
+            <li>Click <strong>Add Ingress Rules</strong>.</li>
+
+            <p align="center"><img alt="Figure 1." src="https://oracle-devrel.github.io/devo-image-repository/images/createRule.png" style="width: 720px;" /></p>
+
+            <li>Return to the VM instance details page.</li>
+        </ol>
+
+        <h3>Use SSH to connect to your VM instance</h3>
+
+        <p>After your instance is running, perform the following steps to access it:</p>
+
+        <p>1. Copy the public IP address.</p>
+
+
+        <p align="center"><img alt="Figure 1." src="https://oracle-devrel.github.io/devo-image-repository/images/copyIp.png" style="width: 720px;" /></p>
+
+
+        <p>2. Maximize your Cloud Shell.</p>
+
+
+        <p align="center"><img alt="Figure 1." src="https://oracle-devrel.github.io/devo-image-repository/images/maxCloudShell.png" style="width: 720px;" /></p>
+
+        <p>3. Use SSH to log in to the instance:</p>
+
+        <p><code>ssh opc@&lt;yourPublicIP&gt;</code> </p>
+
+        <h3>Open port 5000 in the Linux firewall</h3>
+
+        <p>Run the following commands to open port 5000:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+
+sudo firewall-cmd --permanent --zone=public --add-port=5000/tcp
+sudo firewall-cmd --reload
+
+
+
+
+</code></pre>
+        </div>
+
+        <h3>Create the Flask application</h3>
+
+        <p>1. Create a directory to work in:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code> 
+mkdir flaskexample
+cd flaskexample
+</code></pre>
+        </div>
+
+        <p>2. Create and activate a Python virtual environment:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code> 
+python3 -m venv venv
+source venv/bin/activate
+</code></pre>
+        </div>
+
+        <p>3. Install Flask:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code> 
+pip install flask
+</code></pre>
+        </div>
+
+        <p>4. Use nano to create your application:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code> 
+nano flaskexample.py
+</code></pre>
+        </div>
+
+        <p>5. Copy the following code and paste it into Cloud Shell (ensure that the indentation is correct):</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code> 
+from flask import Flask
+app = Flask(__name__)
+
+@app.route(&quot;/&quot;)
+def index():
+    return &quot;Web App with Python Flask!&quot;
+
+if __name__ == &quot;__main__&quot;:
+    app.run(host=&#39;0.0.0.0&#39;)
+</code></pre>
+        </div>
+
+        <p>6. Exit and save the file: press <strong>Ctrl-X</strong>, type y, and then press <strong>Enter</strong>.</p>
+
+        <p>7. Run the application:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code> 
+python flaskexample.py
+</code></pre>
+        </div>
+        <br />
+        <h3>Test the application</h3>
+
+        <p>Open the application in a browser by entering http://:5000.</p>
+
+
+        <p align="center"><img alt="Screenshot that shows the Flask application running in a web browser"
+                src="https://oracle-devrel.github.io/devo-image-repository/images/runIt.png" style="width: 720px;" /></p>
+
+        <h3>Clean up your environment</h3>
+
+        <ol class="decimal">
+            <li>On the VM instance details page, click <strong>Public Subnet</strong>.</li>
+
+            <p align="center"><img alt="Screenshot that shows the Flask application running in a web browser"
+                    src="https://oracle-devrel.github.io/devo-image-repository/images/clickPubSub.png" style="width: 720px;" /></p>
+
+
+            <li>Click the default security list.</li>
+
+            <p align="center"><img alt="Screenshot that shows the Flask application running in a web browser"
+                    src="https://oracle-devrel.github.io/devo-image-repository/images/clickSecList.png" style="width: 720px;" /></p>
+
+
+
+            <li>Under <strong>Ingress Rules</strong>, select the check box for the 5000 rule.</li>
+
+
+
+            <li>Click <strong>Remove</strong>.</li>
+
+            <p align="center"><img
+                    alt="Screenshot that shows the location of the Remove button and the rule selection check box."
+                    src="https://oracle-devrel.github.io/devo-image-repository/images/removeRule.png" style="width: 720px;" /></p>
+
+
+
+
+            <li>Click <strong>Remove</strong>.</li>
+            <li>Return to the VM instance details page.</li>
+            <li>Click <strong>More Actions</strong>.</li>
+            <li>Click <strong>Terminate</strong>.</li>
+
+            <p align="center"><img alt="" src="https://oracle-devrel.github.io/devo-image-repository/images/terminate1.png" style="width: 720px;" /></p>
+
+
+
+            <li>Select <strong>Permanently Delete the Attached Boot Volume</strong>.</li>
+            <li>Click <strong>Terminate Instance</strong>.</li>
+
+            <p align="center"><img alt="" src="https://oracle-devrel.github.io/devo-image-repository/images/terminate2.png" style="width: 720px;" /></p>
+
+
+        </ol>
+
+        <p><a data-trackas="cc01-lightbox" href="?ytid=0U97pasCbio" rel="vbox">Watch the video version of this tutorial
+                (3:35)</a></p>
+
+    </div>
+</section>
+<!-- /CC01v3 -->
+<!-- / _Raw-Text -->

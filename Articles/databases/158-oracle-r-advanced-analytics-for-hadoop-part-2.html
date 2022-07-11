@@ -1,0 +1,355 @@
+<!-- U03v5 -->
+<!-- _Raw-Text -->
+<section class="cc01 cc01v0 cpad crule">
+    <div class="cc01w1 cwidth">
+
+        <p>In this article, which is Part 2 of a series, we will look at some of the more advanced features of Oracle R
+            Advanced Analytics for Hadoop, including advanced analytics and machine learning, and how to use Spark.
+            Oracle R Advanced Analytics for Hadoop is a component of Oracle Big Data Connectors and provides a set of R
+            functions allowing you to connect to and process data stored in Hadoop Distributed File System (HDFS), using
+            Hive transparency, as well as data stored in Oracle Database.</p>
+
+        <p>In <a href="https://developer.oracle.com/databases/oracle-r-advanced-analytics-for-hadoop-part-1.html">Part 1
+                of this series</a>, we looked at some of the more typical use cases for using Oracle R Advanced
+            Analytics for Hadoop, including working with Oracle Database, HDFS, and Hive and initiating map-reduce jobs.
+            Oracle R Advanced Analytics for Hadoop has a number of highly scalable machine learning algorithms and
+            utilizes some of the Apache Spark machine learning algorithms for greater performance of in-memory
+            distributed machine learning. This will be the focus of this article.</p>
+
+        <h3>Analytical and Machine Learning Features in Oracle R Advanced Analytics for Hadoop</h3>
+
+        <p>When using Oracle R Advanced Analytics for Hadoop, you also have access to the wide range of analytic
+            functions available from the many thousands of R packages. It would take a very long time to cover all of
+            those here, but when we look closer at what analytic functions are specific to Oracle R Advanced Analytics
+            for Hadoop, we find the functions listed in Table 1. To find this list, you can use the following R command
+            once the <code class="ocode">ORCH</code> package has been loaded.</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+apropos("^orch")
+</code></pre>
+        </div><br />
+
+        <p><strong>Table 1: Statistical and analytic functions available in Oracle R Advanced Analytics for
+                Hadoop</strong></p>
+        <table border="1" cellpadding="3" cellspacing="0" class="dataTable3padd" style="width:250px">
+            <tbody>
+                <tr>
+                    <th scope="col">Function Name</th>
+                </tr>
+                <tr>
+                    <td><code class="ocode">orch.cor</code></td>
+                </tr>
+                <tr>
+                    <td><code class="ocode">orch.cov</code></td>
+                </tr>
+                <tr>
+                    <td><code class="ocode">orch.glm</code></td>
+                </tr>
+                <tr>
+                    <td><code class="ocode">orch.glm2</code>*</td>
+                </tr>
+                <tr>
+                    <td><code class="ocode">orch.glm.control</code></td>
+                </tr>
+                <tr>
+                    <td><code class="ocode">orch.kmeans</code></td>
+                </tr>
+                <tr>
+                    <td><code class="ocode">orch.lm</code></td>
+                </tr>
+                <tr>
+                    <td><code class="ocode">orch.lm2</code>*</td>
+                </tr>
+                <tr>
+                    <td><code class="ocode">orch.lmf</code></td>
+                </tr>
+                <tr>
+                    <td><code class="ocode">orch.multivar</code></td>
+                </tr>
+                <tr>
+                    <td><code class="ocode">orch.neural</code></td>
+                </tr>
+                <tr>
+                    <td><code class="ocode">orch.neural2</code>*</td>
+                </tr>
+                <tr>
+                    <td><code class="ocode">orch.nmf</code></td>
+                </tr>
+                <tr>
+                    <td><code class="ocode">orch.predict</code></td>
+                </tr>
+                <tr>
+                    <td><code class="ocode">orch.princomp</code></td>
+                </tr>
+                <tr>
+                    <td><code class="ocode">orch.sample</code></td>
+                </tr>
+                <tr>
+                    <td><code class="ocode">orch.scale</code></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p><strong>Note</strong>: * These are Spark-enabled versions of the functions.</p>
+        <p>With each release or Oracle R Advanced Analytics for Hadoop, you will find that the list of analytic and
+            machine learning functions will increase. These functions have been specifically tuned to work in big data
+            environments with data in HDFS and Hive. This allows these functions to be available for scaling using
+            map-reduce jobs as well as for improvements in memory usage and so on.</p>
+        <p>The following example illustrates the creation of a linear regression model, using the <code
+                class="ocode">orch.lm()</code> function, using the on-time flight dataset.</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+# Attach the dataset containing the details of flights
+# Data file is located in HDFS
+ontime_DS &lt;- hdfs.attach("/user/oracle/ontime_s")
+
+# Create a linear regression model on this dataset to 
+# predict the possible flight delay time
+# 
+# Map-Reduce is used to scale the processing to create the model
+# using 4 mappers and 2 reducers 
+lm_model &lt;- orch.lm(ARRDELAY ~ DISTANCE + DEPDELAY, 
+                  dfs.dat = ontime_DS,
+                  numMappers = 4, 
+                  numReducers = 2)
+
+# Display the summary details of the LM model
+summary(lm_model)
+</code></pre>
+        </div>
+
+        <p>As you can see, these Oracle R Advanced Analytics for Hadoop analytic and machine learning functions are easy
+            to use and are highly scalable. Make sure you check the <a
+                href="//www.oracle.com/technetwork/database/database-technologies/bdc/r-advanalytics-for-hadoop/documentation/oraah-271-reference-manual-4110647.pdf">documentation</a>
+            for each function to ensure that you are maximizing them fully.</p>
+
+        <h3>Spark Machine Learning Feature in Oracle R Advanced Analytics for Hadoop</h3>
+
+        <p>Over the past few releases of Oracle R Advanced Analytics for Hadoop, Oracle has been increasing the support
+            for using Spark. By doing this, Oracle is making it easier to access and use the various machine learning
+            functions available in Spark, thereby utilizing their memory-resident efficiency. Additionally, some of the
+            HDFS functions have been updated to allow data to be easily transferred from Spark RDDs into HDFS. Similarly
+            these Spark-based functions can be run on data stored in HDFS and Hive. Table 2 lists the Spark-enabled
+            functions in Oracle R Advanced Analytics for Hadoop (version 2.7.1).</p>
+
+        <p><strong>Table 2: Spark-enabled functions available in Oracle R Advanced Analytics for Hadoop</strong></p>
+        <table border="1" cellpadding="3" cellspacing="0" class="dataTable3padd" style="width:250px">
+            <tbody>
+                <tr>
+                    <th scope="col">Function Name</th>
+                </tr>
+                <tr>
+                    <td><code class="ocode">orch.lm2</code></td>
+                </tr>
+                <tr>
+                    <td><code class="ocode">orch.glm2</code></td>
+                </tr>
+                <tr>
+                    <td><code class="ocode">orch.ml.gmm</code></td>
+                </tr>
+                <tr>
+                    <td><code class="ocode">orch.ml.linear</code></td>
+                </tr>
+                <tr>
+                    <td><code class="ocode">orch.ml.lasso</code></td>
+                </tr>
+                <tr>
+                    <td><code class="ocode">orch.ml.ridge</code></td>
+                </tr>
+                <tr>
+                    <td><code class="ocode">orch.ml.logistic</code></td>
+                </tr>
+                <tr>
+                    <td><code class="ocode">orch.ml.dt</code></td>
+                </tr>
+                <tr>
+                    <td><code class="ocode">orch.ml.random.forest</code></td>
+                </tr>
+                <tr>
+                    <td><code class="ocode">orch.ml.svm</code></td>
+                </tr>
+                <tr>
+                    <td><code class="ocode">orch.ml.kmeans</code></td>
+                </tr>
+                <tr>
+                    <td><code class="ocode">orch.ml.pca</code></td>
+                </tr>
+            </tbody>
+        </table><br />
+
+        <p>It is expected that the list of functions in Table 2 will be expanded with each subsequent release of Oracle
+            R Advanced Analytics for Hadoop.</p>
+        <p>Additionally, some Oracle R Advanced Analytics for Hadoop functions have been updated to support the use of
+            these algorithms in Spark. These include an updated <code class="ocode">predict()</code> function for
+            scoring new datasets using the Spark-based models. The <code class="ocode">orch.save.model()</code> function
+            saves the Spark-based model details to a file in HDFS. This allows the model to be saved for later use or
+            for sharing with other data scientists. The <code class="ocode">orch.load.model()</code> function can then
+            be used to reload the Spark model back into the environment.</p>
+        <p>To enable access to Spark from your R and Oracle R Advanced Analytics for Hadoop environment, it is important
+            that you have Spark installed and the necessary environment variables enabled to make it accessible. This
+            can be easily configured by editing the <code class="ocode">Renviron.site</code> file to ensure that the
+            <code class="ocode">SPARK_HOME</code> and <code class="ocode">SPARK_JAVA_OPTS</code> environment variables
+            are set and to ensure that the necessary Spark directories are included in the <code
+                class="ocode">CLASSPATH</code>. Some of this setup is dependent on your environment. The working
+            environment for the articles in this series is the Oracle VM VirtualBox prebuilt virtual machine called
+            Oracle Big Data Lite VM (see Part 1 for more information).</p>
+        <p>The first step is to create a Spark connection. A Spark connection can be set up to use Yarn or it can be set
+            up in a standalone mode. The following example illustrates the <code class="ocode">spark.connect()</code>
+            function. This function has four parameters:</p>
+        <ul class="obullets">
+            <li>The first is to define if you are going to use Yarn or standalone mode. This first parameter is called
+                the master.</li>
+            <li>The second (optional) parameter is a name variable that helps centralize logging in the session on the
+                Spark master. By default, this is set to <code class="ocode">ORCH</code> and does not need to be defined
+                in the call to the function.</li>
+            <li>The third parameter is used to define the amount of memory to allocate per Spark worker for this Spark
+                context.</li>
+            <li>The fourth parameter, <code class="ocode">dfs.namenode</code>, points to the HDFS namenode server in
+                order to exchange information with HDFS.</li>
+        </ul>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+# Load the ORCH R package 
+library(ORCH) 
+
+# Create the Spark connection using Yarn 
+spark.connect("yarn-client", 
+               memory="512m", 
+               dfs.namenode="bigdatalite.localdomain")
+</code></pre>
+        </div>
+
+        <p>After the Spark connection is set up, you can proceed to process the data and run the Spark-enabled
+            algorithms that you need to use. The following example illustrates using the Spark algorithm <code
+                class="ocode">orch.glm2()</code> to fit a model for the kyphosis dataset that is part of the <code
+                class="ocode">rpart</code> R package.</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+# Load the rpart package to allow access to the kyphosis dataset
+# Create a local copy of the dataset
+library(ORCH)
+library(rpart)
+k_dataset &lt;- kyphosis
+
+# Write the dataset to HDFS. 
+# It will be this dataset that will be used with Spark
+k_hdfs &lt;- hdfs.put(kyphosis)
+# List the contents of the default directory in HDFS 
+# and verify the file exists
+hdfs.ls()
+
+# Call the Spark-enabled GLM2 function to generate the 
+# machine learning model
+sparkModel &lt;- orch.glm2(Kyphosis ~ Age + Number + Start, 
+                        dfs.dat = dfs.dat)
+
+ ORCH GLM: processed 1 factor variables, 0.365 sec 
+ ORCH GLM: created model matrix, 2  partitions, 0.398 sec 
+ ORCH GLM: iter  1,  deviance   1.12289843250711020E+02,  elapsed time 0.216 sec 
+ ORCH GLM: iter  2,  deviance   6.64219993846240600E+01,  elapsed time 0.304 sec 
+ ORCH GLM: iter  3,  deviance   6.18628545282569460E+01,  elapsed time 0.277 sec 
+ ORCH GLM: iter  4,  deviance   6.13897990884807400E+01,  elapsed time 0.313 sec 
+ ORCH GLM: iter  5,  deviance   6.13799331446360300E+01,  elapsed time 0.460 sec 
+ ORCH GLM: iter  6,  deviance   6.13799272764552550E+01,  elapsed time 0.214 sec
+</code></pre>
+        </div>
+
+        <p>The GLM2 Spark model can be saved to HDFS using the <code class="ocode">orch.save.model</code> function. This
+            function takes the name of the model as the first parameter and the name of the file in HDFS as the second
+            parameter.</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+orch.save.model(sparkModel, "sparkmodel_hdfs", overwite=TRUE)
+</code></pre>
+        </div>
+
+        <p>When you want to reuse the saved model, you can use the <code class="ocode">orch.load.model</code> function
+            to load the model details back into your R environment, for example:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+modelReloaded &lt;- orch.load.model("sparkmodel_hdfs")
+</code></pre>
+        </div>
+
+        <p>When you are finished performing your analytics and machine learning using Spark, you can close the
+            connection using the <code class="ocode">spark.disconnect</code> function. This function does not delete the
+            current Spark context but instead marks it as nonactive. Within a short time, all resources will be freed up
+            by the R environment and Java garbage collectors.</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+# Disconnect from Spark
+spark.disconnect()
+</code></pre>
+        </div>
+
+        <h3>Summary</h3>
+
+        <p>In this article, we looked at using Oracle R Advanced Analytics to perform some advanced analytics work. This
+            included using some of the machine learning algorithms and how to use Spark to enable machine learning.</p>
+
+        <p>In <a href="/databases/oracle-r-advanced-analytics-for-hadoop-part-1">Part 1 of this series</a>, we looked at
+            how to work with data in Oracle Database, HDFS, and Hive and how to initiate map-reduce jobs. Make sure to
+            check out this article.</p>
+
+        <h3>About the Author</h3>
+
+        <p>Oracle ACE Director <a
+                href="https://twitter.com/brendantierney?ref_src=twsrc%5Egoogle%7Ctwcamp%5Eserp%7Ctwgr%5Eauthor"
+                target="_blank">Brendan Tierney</a> is an independent consultant (<a href="http://www.oralytics.com/"
+                target="_blank">Oralytics</a>) and lectures on data science, databases, and big data at the Dublin
+            Institute of Technology/Dublin Technological University. He has 24+ years of experience working in the areas
+            of data mining, data science, big data, and data warehousing. As a recognized data science and big data
+            expert, Tierney has worked on projects in Ireland, the UK, Belgium, Holland, Norway, Spain, Canada, and the
+            US. He is active in the UK Oracle User Group (UKOUG) community and one of the user group leaders in Ireland.
+            Tierney has also been editor of the UKOUG <em>Oracle Scene</em> magazine, is a regular speaker at
+            conferences around the world, and writes for several publications. In addition, he has published four books,
+            three with Oracle Press/McGraw-Hill (<em>Predictive Analytics Using Oracle Data Miner</em>, <em>Oracle R
+                Enterprise: Harnessing the Power of R in Oracle Database</em>, and <em>Real World SQL and PL/SQL: Advice
+                from the Experts</em>) and one with MIT Press (<em>Essentials of Data Science</em>).</p>
+
+    </div>
+</section>
+<!-- / _Raw-Text -->
+<!-- _Raw-Text -->

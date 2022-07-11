@@ -1,0 +1,674 @@
+<!-- _Raw-Text -->
+<section class="cc01 cc01v0 cpad crule">
+    <div class="cc01w1 cwidth">
+
+        <p><strong> This article is Part 1 of a two-part series that describes the steps for creating a JavaScript-based
+                data management application that integrates with Oracle Database via RESTful service calls. </strong>
+        </p>
+        <h3>Overview</h3>
+        <p>If you're a JavaScript developer, you're likely used to a diverse and constantly changing set of frameworks
+            to choose from when starting a project. Trying to keep up with all of the features and functionality of this
+            landscape is a full-time job in and of itself. While mastering the basics of multiple frameworks is
+            something that you're probably good at by now, taking things to the next level—especially when it comes to
+            more-sophisticated requirements such as analytics and security—is likely a constant struggle.</p>
+        <p>Fortunately, there is a better way: leverage the full power of Oracle Database, Oracle REST Data Services,
+            JavaScript Extension Toolkit (Oracle JET).</p>
+        <p>Oracle Database is so much more than a place to just store data. It has a robust, mature, and powerful set of
+            features and functions that can easily be leveraged from any JavaScript framework via RESTful calls.
+            Features such as built-in analytics, auditing, security, and advanced text searching capabilities are just
+            the beginning. And the best part is that if you leverage these features in Oracle Database, you won't have
+            to change anything on the back end if and when you decide to change JavaScript frameworks.</p>
+        <p>Oracle REST Data Services is a free tool from Oracle that provides a seamless interface between Oracle
+            Database and any technology than can interact with RESTful services. As a Java application that can run
+            anywhere, Oracle REST Data Services can either run in an application server or by itself via Jetty. With its
+            support for OAuth2, Oracle REST Data Services can provide a low-maintenance yet secure pipeline from any
+            JavaScript library to Oracle Database 10<em>g</em> Release 2 and later.</p>
+        <p>Oracle JET is a new, open source JavaScript library provided by Oracle. In addition to a number of popular
+            open source libraries, Oracle JET also includes custom libraries that provide beautiful, responsive
+            visualizations; advanced two-way binding with a common model layer; and single-page application navigation
+            controls. Developers can use as much or as little of Oracle JET as they need. This article will simply use
+            one of the visualizations, which will get its data source from Oracle REST Data Services.</p>
+        <p>This series will walk you through the steps for creating a JavaScript-based data management application that
+            integrates with Oracle Database via RESTful service calls. While it uses jQuery as a front end, the bulk of
+            the logic is set up on the back end in PL/SQL. Thus, if you prefer a different JavaScript library, it should
+            be fairly simple to adapt the jQuery examples to a framework of your choosing.</p>
+        <h3>Preparing the Environment</h3>
+        <p>In order to complete the examples described in this series, you'll need two things: a browser and access to
+            an instance of Oracle Database 11<em>g</em> Release 2 or newer. Browsers are relatively easy to come by;
+            chances are you're using one right now to read this. But on the other hand, not everyone has a spare Oracle
+            Database instance lying around. That's OK, because they are easier and cheaper to get access to than you
+            probably think.</p>
+        <h3>Choosing a Database Environment</h3>
+        <p>There are a number of different ways to get access to an Oracle Database instance quickly, easily, and for
+            free. Let's review them:</p>
+        <ul class="obullets">
+            <li>Oracle Cloud. You can easily request a trial account of the Oracle Cloud service—either Oracle Database
+                Cloud Service or Oracle Database Exadata Express Cloud Service (Exadata Express). Once activated, you'll
+                have all that you need to start building and populating your tables. The steps outlined in this article
+                should work with either of these options; however, connecting via Oracle SQL Developer might differ. To
+                get started with a free trial of any of the Oracle Cloud services, visit this site: <a
+                    href="https://cloud.oracle.com/tryit">cloud.oracle.com/tryit</a>.<br>&nbsp;</li>
+            <li>Oracle Technology Network Developer Day virtual machines (VMs). If you want to have something local to
+                your machine and don't want to sign up for anything other than a free Oracle Technology Network account,
+                you can use one of the freely available Oracle Technology Network Developer Day VMs. These VMs are based
+                on Oracle VM VirtualBox, which is also free, and can be used for learning or tinkering environments.
+                However, they are not suitable nor are they licensed to be used for developing production applications.
+                They can run natively in Oracle VM VirtualBox or they can easily be converted to run in other VM
+                software, such as VMware. The best-suited VM for this article is the <a
+                    href="http://www.oracle.com/technetwork/database/enterprise-edition/databaseappdev-vm-161299.html">Database
+                    App Development VM</a>. <strong>Note</strong>: Oracle SQL Developer might have to be updated to at
+                least version 4.2 if you are using the Oracle Technology Network Developer Day VMs. Oracle SQL Developer
+                4.2 was released in late April, and might not yet be found in the VMs.<br>&nbsp;</li>
+            <li>Ask your DBA. If your organization already has Oracle Database on premises or in the cloud, you might be
+                able to get access to a schema for testing purposes. Reach out to your DBA and see if that's possible.
+                Your systems will need to meet the following minimum criteria to follow the steps in this article
+                accurately:<ul class="obullets">
+                    <li>Database tier: Oracle Database 11<em>g</em> Release 2 Enterprise Edition or later (auditing
+                        requires Oracle Database 12<em>c</em> Release 1 Enterprise Edition)</li>
+                    <li> Web server tier: Oracle REST Data Services 3.0.9 or later on the web server</li>
+                    <li> Client tier: Oracle SQL Developer 4.2 or greater</li>
+                </ul>
+            </li>
+        </ul>
+        <h3>Downloading and Installing Oracle SQL Developer</h3>
+        <p>Once you have chosen a database platform, the next step is to download and install Oracle SQL Developer.
+            Oracle SQL Developer is Oracle's free IDE designed for database developers who work in either on-premises or
+            cloud environments. In addition to the wide variety of tools designed for database developers, Oracle SQL
+            Developer also includes a DBA console that can be used to manage databases. Make sure that the version of
+            Oracle SQL Developer you download is at least 4.2; anything earlier will not have the required components
+            for managing web services.</p>
+        <p>Oracle SQL Developer can be downloaded for free here: <a
+                href="https://oracle.com/sqldeveloper">oracle.com/sqldeveloper</a>. Simply choose your corresponding
+            platform. To complete the download, you will need to log in to your Oracle Technology Network account.
+            Oracle Technology Network accounts are free; simply navigate to the following site and click the
+            <strong>Create Account</strong> button: <a
+                href="https://login.oracle.com/mysso/signon.jsp">https://login.oracle.com/mysso/signon.jsp</a>.
+        </p>
+        <p>Depending on your platform, you might have to also download and install a JDK. JDKs for several different
+            platforms can be downloaded <a
+                href="http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html">here</a>.</p>
+        <h3>Configuring Oracle SQL Developer</h3>
+        <p>Once Oracle SQL Developer has been installed, the next step is to create a connection to your database.
+            Depending on which Oracle Cloud environment you selected, the steps for connecting will differ slightly.</p>
+        <ul class="obullets">
+            <li>For Oracle Database Cloud Service, see <a
+                    href="https://docs.oracle.com/en/cloud/paas/database-dbaas-cloud/csdbi/get-started-this-service.html"><em>Using
+                        Oracle Database Cloud Service</em></a>.</li>
+            <li>For Oracle Database Exadata Express Cloud Service (Exadata Express), see <em>Using Oracle Database
+                    Exadata Express Cloud Service</em>.</li>
+        </ul>
+        <p>If you're using a local VM or an on-premises instance of Oracle Database, you can simply create a new
+            database connection using the schema name, password, and connection details as you normally would. You might
+            need your DBA to assist with the account creation.</p>
+        <h3>Creating the EMP and DEPT Tables</h3>
+        <p>Before any front-end development starts, it's best to look at the two tables that will be used in this
+            article. For those who have used Oracle Database in the past, the tables EMP and DEPT should be nothing new.
+            But for those who are new to Oracle Database, EMP and DEPT are the tried-and-true demonstration tables that
+            have been used for years. Figure 1 illustrates a data model of the two tables.</p>
+        <p align="center"><img src="//www.oracle.com/technetwork/articles/dsl/odb-browser-apps-f1-3844848.gif"
+                alt="ODB-apps-Figure1 "><br>
+        <p></p><strong>Figure 1: A data model of the EMP and DEPT tables.</strong></p>
+        <p>The elegance of the EMP and DEPT tables lies in their simplicity: with only a few columns and a handful of
+            rows, it's possible to demonstrate almost any relational database concept with these two tables.</p>
+        <p>Your schema might or might not include EMP and DEPT. If it does, no further action is required. However, if
+            it does not, you'll have to create them. This can be done by running the script shown in <a
+                href="#listing3">Listing 3</a> of Appendix A.</p>
+        <p>To create the EMP and DEPT tables, do the following:</p>
+        <ol class="decimal">
+            <li>Start Oracle SQL Developer.</li>
+            <li>Connect to the schema defined in the previous step.</li>
+            <li>Locate the script in <a href="#listing3">Listing 3</a> of Appendix A and copy it.</li>
+            <li>Paste the contents of the script into the <strong>Worksheet</strong> tab of Oracle SQL Developer.</li>
+            <li>Click the <strong>Run Script</strong> icon, which is circled in red in Figure 2. <strong>Note</strong>:
+                If you have an EMP and DEPT table, this script will first remove and then re-create them.<br>&nbsp;</li>
+        </ol>
+        <p align="center"><img src="//www.oracle.com/technetwork/articles/dsl/odb-browser-apps-f2-3844849.gif"
+                alt="ODB-apps-Figure2 "><br>
+        <p></p><strong>Figure 2: Results of running the script after clicking the Run Script icon.</strong></p>
+        <p>As the script runs, a list of messages should be displayed in a new window called Script Output. Once the
+            script is finished running, the last line will say "Commit Complete."</p>
+        <p>Scroll through the Script Output window to ensure that there were no errors when the tables were created or
+            populated.</p>
+        <p>Next, let's inspect the tables in our schema. We can do that by expanding the connection node in the tree to
+            reveal a list of schema objects and other associated services. If you expand the <strong>Tables</strong>
+            node, you should see at least two entries: <strong>EMP</strong> and <strong>DEPT</strong>. Simply select
+            <strong>EMP</strong> and notice that a new tab called EMP was created in the main section of Oracle SQL
+            Developer. This tab has a number of subtabs.
+        </p>
+        <p align="center"><img src="//www.oracle.com/technetwork/articles/dsl/odb-browser-apps-f3-3844850.gif"
+                alt="ODB-apps-Figure3"><br>
+        <p></p><strong>Figure 3: The Columns tab of the EMP table.</strong></p>
+        <p>By default, the <strong>Columns</strong> tab is selected. Take a minute to explore the different properties
+            of the EMP table by clicking each of the subtabs. Ensure that the <strong>Data</strong> tab contains the 14
+            records that were created as part of the script that was just run. Repeat this process with for the DEPT
+            table and ensure that four rows exist there.</p>   <h3>Creating the Web Services</h3>
+        <p>In the following sections, we will create the needed web services.</p>
+        <h3>Creating the Module and the First Web Service</h3>
+        <p>Before a database schema can be used with a web service, REST services for that schema must be enabled. This
+            allows Oracle REST Data Services—the web services application server—to access data stored in the specified
+            schema. This step takes only a few seconds to complete and needs to be done only once.</p>
+        <p>To enable your schema to work with Oracle REST Data Services, do the following:</p>
+        <ol class="decimal">
+            <li>Right-click the name of your schema. Then select <strong>REST Services &gt; Enable REST
+                    Services</strong>. <p align="center"><img
+                        src="//www.oracle.com/technetwork/articles/dsl/odb-browser-apps-f4-3844851.gif"
+                        alt="ODB-apps-Figure4"> </p><strong>Figure 4: Selecting your schema to enable REST
+                    services.</strong><br>&nbsp;</li>
+            <li>A wizard will appear. For the first step, ensure that <strong>Enable Schema</strong> checkbox is
+                selected. It's also a good idea to create an alias for the schema, so that we're not letting a potential
+                malicious user know our source schema name. While this bit of information by itself is harmless, it
+                could augment other attacks. Thus, we'll set the <strong>Schema Alias</strong> to <code
+                    class="ocode">db</code>. Deselect the <strong>Authorization required</strong> checkbox and click
+                <strong>Next</strong>. <p align="center"><img
+                        src="//www.oracle.com/technetwork/articles/dsl/odb-browser-apps-f5-3844852.gif"
+                        alt="ODB-apps-Figure5"> </p><strong>Figure 5: Specify Details page of the
+                    wizard.</strong><br>&nbsp;
+            </li>
+            <li>Click <strong>Finish</strong> to complete the wizard. <p align="center"><img
+                        src="//www.oracle.com/technetwork/articles/dsl/odb-browser-apps-f6-3844853.gif"
+                        alt="ODB-apps-Figure6"> </p><strong>Figure 6: Completing the RESTful Services
+                    wizard.</strong><br>&nbsp;</li>
+        </ol>
+        <p>That's it! REST services are now enabled for your schema, and we can begin creating the required web
+            services.</p>
+        <p>The first web service will generate a JSON document based on all rows of data in the EMP table. But before we
+            can create a web service, we need to create a module. Think of a module as a package: a place where multiple
+            programs can be stored. All of the required web services will be added to a single module, making them
+            easier to manage over time.</p>
+        <ol class="decimal">
+            <li>In the hierarchy on the left side of the page, locate and expand the node for <strong>REST Data
+                    Services</strong>. It should be about half-way down.</li>
+            <li>Right click <strong>Modules</strong> and select <strong>New Module</strong>. A new wizard should pop up.
+                When it does, enter <code class="ocode">demo</code> in the <strong>Module Name</strong> and <strong>URI
+                    Prefix</strong> fields, select the <strong>Publish – Make this RESTful Service available for
+                    use</strong> checkbox, and click <strong>Next</strong>. <p align="center"><img
+                        src="//www.oracle.com/technetwork/articles/dsl/odb-browser-apps-f7-3844854.gif"
+                        alt="ODB-apps-Figure7"> </p><strong>Figure 7: Specify Module screen.</strong><br>&nbsp;</li>
+            <li>On the next page, enter <code class="ocode">emp</code> in the <strong>URI Pattern</strong> field and
+                click <strong>Next</strong>. <p align="center"><img
+                        src="//www.oracle.com/technetwork/articles/dsl/odb-browser-apps-f8-3844855.gif"
+                        alt="ODB-apps-Figure8"> </p><strong>Figure 8: Specify template screen.</strong><br>&nbsp;</li>
+            <li>On the next screen, glance at the confirmation details, and then click <strong>Finish</strong>. A new
+                module—demo—was created with an associated resource template—emp. As a final step, a resource handler
+                needs to be associated with the resource template. A resource handler associates a resource template
+                with some sort of data source and action. <br>&nbsp;</li>
+            <li>Expand the <strong>Modules</strong> node in the tree by clicking the small triangle icon.</li>
+            <li>Expand the <strong>demo</strong> node in the tree by doing the same.</li>
+            <li>Right-click the <strong>emp</strong> node in the tree and select <strong>Add Handler &gt; GET</strong>.
+            </li>
+            <li>Set <strong>Source Type</strong> to <strong>Query</strong>, ensure that <strong>Data Format</strong> is
+                set to <strong>JSON</strong>, and click <strong>Apply</strong>. <p align="center"><img
+                        src="//www.oracle.com/technetwork/articles/dsl/odb-browser-apps-f9-3844856.gif"
+                        alt="ODB-apps-Figure9"> </p><strong>Figure 9: Create Resource Handler screen.</strong> For the
+                next and final step, enter the SQL statement for the handler. This simple query will return a list of
+                employees based on their salary, from highest to lowest.<br>&nbsp;</li>
+            <li>In the <strong>Worksheet</strong> tab, enter the following SQL commands: <div class="ocode">
+                    <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                        <div><a href="#copy">Copy</a></div>
+                    </div>
+                    <pre>
+  <code> SELECT  empno,
+   dname,
+   ename, 
+   sal, 
+   job, 
+   sal_diff,
+   comm, 
+   rownum rank
+   FROM  
+   (
+   SELECT   e.empno,
+   d.dname,
+   e.ename, 
+   e.sal, 
+   e.job, 
+   0 sal_diff,  
+   NVL(e.comm, 0) commFROM emp e,
+   dept dWHERE e.deptno = d.deptnoORDER BY e.sal DESC )</code></pre>
+                </div>
+            </li>
+            <li>Click the floppy disk icon to save your changes. Be sure to click the single floppy disk icon in the SQL
+                Worksheet tab, not the double floppy disk icon in the top of the main window.</li>
+        </ol>
+        <p>At this point, the first RESTful module and web service have been created and are ready for use.</p>
+        <h3>Testing Web Services</h3>
+        <p>Testing web services can be very simple or somewhat involved, depending on the type of web service that is
+            being tested. Typically, GETs are fairly simple to test, and testing can be done with nothing more than a
+            browser. The others—specifically POST, PUT, and DELETE—require a tool designed to help test web services.
+            While there are several tools that can be used to do this, one that is easy to use, is free, and works on
+            all major platforms is called <a href="https://www.getpostman.com/">Postman</a>. Postman makes it simple to
+            test almost any web service, even those that require authentication or header variables. We'll use Postman
+            in this article to verify that our web services are working properly, but any similar tool would also work.
+        </p>
+        <p>To test our first web service, simply start Postman and enter the following into the <strong>Enter request
+                URL</strong> field:</p> <code class="ocode"> http://<em>servername</em>/ords/db/demo/emp</code>
+        <p><strong>Note</strong>: Be sure to replace <em><code class="ocode">servername</code></em> with the name of
+            your server.</p>
+        <p>If Postman successfully runs the web service, it will display the JSON document from our first web service,
+            as shown in Figure 10. Postman will also let us toggle between Pretty, Raw, and Preview mode to see the
+            document formatted in various modes.</p>
+        <p align="center"><img src="//www.oracle.com/technetwork/articles/dsl/odb-browser-apps-f10-3844857.gif"
+                alt="ODB-apps-Figure10"><br>
+        <p></p><strong>Figure 10: The results of testing our first web service in Postman.</strong></p>
+        <p><strong>Note</strong>: The first parameter of the URL might vary. Check with your DBA for the specifics.</p>
+        <h3>Creating the Remaining Web Services</h3>
+        <p>We need to create four more web services: one for the DEPT table, one for a specific record from the EMP
+            table, one for the source of the chart, and one to facilitate updates to the EMP table.</p>
+        <h4>dept Web Service</h4>
+        <p>Let's start with the dept web service, because it is nearly identical to the one we just created. This web
+            service will be used to populate the select list on the edit form.</p>
+        <ol class="decimal">
+            <li>Locate and right-click the <strong>demo</strong> node in the tree. Select <strong>Add Template</strong>.
+            </li>
+            <li>Enter <code class="ocode">dept</code> in the <strong>URI Pattern</strong> field and click
+                <strong>Next</strong>.
+            </li>
+            <li>Click <strong>Finish</strong>.</li>
+            <li>Next, locate the <strong>dept</strong> node in the tree and right-click it. Select <strong>Add
+                    Handler</strong>, and when that expands, select <strong>GET</strong>.</li>
+            <li>Set <strong>Source Type</strong> to <strong>Query</strong>, ensure that <strong>Data Format</strong> is
+                set to <strong>JSON</strong>, and click <strong>Apply</strong>.</li>
+            <li>In the resulting worksheet, enter the following SQL statement: <div class="ocode">
+                    <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                        <div><a href="#copy">Copy</a></div>
+                    </div>
+                    <pre>
+  <code>SELECT 
+   dname,
+   deptno
+   FROM 
+   dept
+   ORDER BY 
+   dname</code></pre>
+                </div>
+            </li>
+            <li>Click the single floppy disk icon to save your changes.</li>
+        </ol>
+        <p>To test out the dept web service, enter the following URL into either your browser or Postman:</p>
+        http://<em>servername</em>/ords/db/demo/dept</pre>
+        <p><strong>Note</strong>: Be sure to replace <em><code class="ocode">servername</code></em> with the name of
+            your server.</p>
+        <p>The results should contain a JSON document with four records, one for each of the departments in the table.
+        </p>
+        <h4>emp Web Service: GET</h4>
+        <p>Next, we'll create the web service that brings back a single row from the EMP table. This will be used when
+            selecting an employee to edit. This web service will make use of a parameter that will be passed in as part
+            of the requesting URI.</p>
+        <ol class="decimal">
+            <li>Locate and right-click the <strong>demo</strong> node in the tree. Select <strong>Add Template</strong>.
+            </li>
+            <li>Enter <code class="ocode">emp/{empno}</code> in the <strong>URI Pattern</strong> field and click
+                <strong>Next</strong>.
+            </li>
+            <li>Click <strong>Finish</strong>.</li>
+            <li>Next, locate the <strong>emp/{empno}</strong> node in the tree and right-click it. Select <strong>Add
+                    Handler</strong>, and when that expands, select <strong>GET</strong>.</li>
+            <li>Set the <strong>Source Type</strong> field to <strong>Query One Row</strong> and click
+                <strong>Apply</strong>.
+            </li>
+            <li>In the resulting worksheet, enter the following SQL statement: <div class="ocode">
+                    <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                        <div><a href="#copy">Copy</a></div>
+                    </div>
+                    <pre>
+  <code> SELECT empno,
+   deptno, 
+   ename,
+   sal, 
+   job,
+   NVL(comm, 0) commFROM empWHERE empno = :empno</code></pre>
+                </div>
+            </li>
+            <li>Click the <strong>Parameters</strong> tab.</li>
+            <li>Next, click the green plus icon.</li>
+            <li>A new row will be added, with the <strong>Name</strong> and <strong>Bind Parameter</strong> columns
+                blank. Click the <strong>Name</strong> column and enter <code class="ocode">empno</code>. Repeat this
+                for the <strong>Bind Parameter</strong> column. Set <strong>Data Type</strong> to
+                <strong>INTEGER</strong>. The end result should resemble the following: <p align="center"><img
+                        src="//www.oracle.com/technetwork/articles/dsl/odb-browser-apps-f11-3844858.gif"
+                        alt="ODB-apps-Figure11"> </p><strong>Figure 11: Adding a new row.</strong><br>&nbsp;
+            </li>
+            <li>Click the <strong>SQL Worksheet</strong> tab and then click the single floppy disk icon to save your
+                changes.</li>
+        </ol>
+        <p>Testing this web service is a bit more involved, because we have to manually substitute the value of <code
+                class="ocode">empno</code> when we test. Thus, a sample URL that we can try looks like this:</p><code
+            class="ocode"> http://servername/ords/db/demo/emp/7839</code>
+        <p><strong>Note</strong>: Be sure to replace <em><code class="ocode">servername</code></em> with the name of
+            your server.</p>
+        <p>This should bring back a JSON document with a single record for the employee KING.</p>
+        <h4>salByJob Web Service</h4>
+        <p>We also need a simple web service that will produce the data for an Oracle JET chart. This web service will
+            simply return a job title and the total amount of the salaries associated with each job.</p>
+        <p><a href="http://www.oracle.com/webfolder//www.oracle.com/technetwork/jet/index.html">Oracle JavaScript
+                Extension Toolkit</a> (Oracle JET) is a free, open source JavaScript library that is maintained by
+            Oracle. Here's a description of it from the Oracle JET home page: "<em>Oracle JET is targeted at
+                intermediate to advanced JavaScript developers working on client-side applications. It's a collection of
+                open source JavaScript libraries along with a set of Oracle contributed JavaScript libraries that make
+                it as simple and efficient as possible to build applications that consume and interact with Oracle
+                products and services, especially Oracle Cloud services.</em>"</p>
+        <p>One of the Oracle JET libraries that we can easily incorporate into our demonstration is the visualizations
+            library. Oracle JET contains a wide range of visualizations—charts, gauges, and other popular
+            components—that can be used either with the rest of the Oracle JET components or on their own. In this case,
+            we're going to use a simple pie chart visualization on the same page as our report.</p>
+        <p>For the pie chart to work, it needs a data source. Do the following to create a new web service that will act
+            as the source of the pie chart; it will return the aggregate amount for each job role.</p>
+        <ol class="decimal">
+            <li>Locate and right-click the <strong>demo</strong> node in the tree. Select <strong>Add Template</strong>.
+            </li>
+            <li>Enter <code class="ocode">salByJob</code> for the <strong>URI Pattern</strong> field and click
+                <strong>Next</strong>.
+            </li>
+            <li>Click <strong>Finish</strong>.</li>
+            <li>Next, locate the <strong>salByJob</strong> node in the tree and right-click it. Select <strong>Add
+                    Handler</strong>, and when that expands, select <strong>GET</strong>.</li>
+            <li>Set the <strong>Source Type</strong> field to <strong>Query</strong>, ensure that <strong>Data
+                    Format</strong> is set to <strong>JSON</strong>, and click <strong>Apply</strong>.</li>
+            <li>In the resulting worksheet, enter the following SQL commands: SELECT job, SUM(sal) salFROM empGROUP BY
+                jobORDER BY 2 DESC</pre>
+            </li>
+            <li>Click the single floppy disk icon to save your changes.</li>
+        </ol>
+        <p>Testing this web service is just as straightforward as the last few tests we did. Navigate to the following
+            URL:</p> http://<em>servername</em>/ords/db/demo/salByJob</pre>
+        <p><strong>Note</strong>: Be sure to replace <em><code class="ocode">servername</code></em> with the name of
+            your server.</p>
+        <p>This should bring back a JSON document that shows the total salary for each distinct job.</p>
+        <h4>emp Web Service: POST</h4>
+        <p>Last, we need to create the web service that will be called when we're updating a record. This one will be
+            the most involved, because multiple parameters need to be mapped.</p>
+        <ol class="decimal">
+            <li>Locate the <strong>emp</strong> node in the tree and right-click it. Select <strong>Add
+                    Handler</strong>, and when that expands, select <strong>POST</strong>.</li>
+            <li>Click the green plus icon, and then click the white area just below <strong>MIME Types</strong>. Enter
+                <code class="ocode">application/json</code> and press the tab key. The results should look like this: <p
+                    align="center"><img src="//www.oracle.com/technetwork/articles/dsl/odb-browser-apps-f12-3844859.gif"
+                        alt="ODB-apps-Figure12"> </p><strong>Figure 12. Create Resource Handler
+                    screen.</strong><br>&nbsp;
+            </li>
+            <li>Click <strong>Apply</strong>.</li>
+            <li>In the resulting worksheet, enter the following SQL statement: <div class="ocode">
+                    <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                        <div><a href="#copy">Copy</a></div>
+                    </div>
+                    <pre>
+  <code> BEGIN
+   UPDATE emp SET 
+   sal = :sal,
+   deptno = :deptno,
+   ename = :ename,
+   comm = :comm,
+   job = :jobWHERE empno = :empno;END;</code></pre>
+                </div>
+            </li>
+            <li>Click the <strong>Parameters</strong> tab.</li>
+            <li>Next, click the green plus icon six times to create six rows. Add the parameters shown in the Table 1:
+                <strong>Table 1. Parameters to add</strong>
+            </li>
+            <section class="cc02 cc02v3 cpad" data-trackas="cc02" data-ocomid="cc02">
+                <div class="cc02w1 cwidth">
+                    <div class="otable otable-scrolling otable-bordered">
+                        <div class="otable-w1">
+                            <table class="otable-w2">
+                                <thead>
+                                    <tr>
+                                        <th class="otable-col-head">Name </th>
+                                        <th class="otable-col-head">Bind Parameter </th>
+                                        <th class="otable-col-head">Access Methods </th>
+                                        <th class="otable-col-head">Source Type </th>
+                                        <th class="otable-col-head">Data Type</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>empno</td>
+                                        <td>empno</td>
+                                        <td>IN</td>
+                                        <td>HTTP HEADER</td>
+                                        <td>INTEGER</td>
+                                    </tr>
+                                    <tr>
+                                        <td>ename</td>
+                                        <td>ename</td>
+                                        <td>IN</td>
+                                        <td>HTTP HEADER</td>
+                                        <td>STING</td>
+                                    </tr>
+                                    <tr>
+                                        <td>deptno</td>
+                                        <td>deptno</td>
+                                        <td>IN</td>
+                                        <td>HTTP HEADER</td>
+                                        <td>INTEGER</td>
+                                    </tr>
+                                    <tr>
+                                        <td>sal</td>
+                                        <td>sal</td>
+                                        <td>IN</td>
+                                        <td>HTTP HEADER</td>
+                                        <td>INTEGER</td>
+                                    </tr>
+                                    <tr>
+                                        <td>comm</td>
+                                        <td>comm</td>
+                                        <td>IN</td>
+                                        <td>HTTP HEADER</td>
+                                        <td>INTEGER</td>
+                                    </tr>
+                                    <tr>
+                                        <td>job</td>
+                                        <td>job</td>
+                                        <td>IN</td>
+                                        <td>HTTP HEADER</td>
+                                        <td>STRING</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <li>Click the <strong>SQL Worksheet</strong> tab and then click the single floppy disk icon to save your
+                changes.</li>
+        </ol>
+        <p>Because this web service involves a POST, we will need to use Postman to help test it. The following steps
+            outline how to do this.</p>
+        <ol class="decimal">
+            <li>Change the transaction type from <strong>GET</strong> to <strong>POST</strong>. <p align="center"><img
+                        src="//www.oracle.com/technetwork/articles/dsl/odb-browser-apps-f13-3844860.gif"
+                        alt="ODB-apps-Figure13"> </p><strong>Figure 13. Changing the transaction
+                    type.</strong><br>&nbsp;</li>
+            <li>Enter the following URL into the <strong>Enter Request URL</strong> field in Postman:
+                http://<em>servername</em>/ords/db/demo/emp</pre> <strong>Note</strong>: Be sure to replace <em><code
+                        class="ocode">servername</code></em> with the name of your server.<br>&nbsp;</li>
+            <li>Click the <strong>Headers</strong> tab and then enter the six rows of data shown in Table 2:
+                <strong>Table 2. Data to add</strong>
+            </li>
+            <li>Click <strong>Send</strong>.</li>
+        </ol>
+        <section class="cc02 cc02v3 cpad" data-trackas="cc02" data-ocomid="cc02">
+            <div class="cc02w1 cwidth">
+                <div class="otable otable-scrolling otable-bordered">
+                    <div class="otable-w1">
+                        <table class="otable-w2">
+                            <thead>
+                                <tr>
+                                    <th class="otable-col-head">Key </th>
+                                    <th class="otable-col-head">Value </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>empno</td>
+                                    <td>7839</td>
+                                </tr>
+                                <tr>
+                                    <td>ename</td>
+                                    <td>KING</td>
+                                </tr>
+                                <tr>
+                                    <td>deptno</td>
+                                    <td>5000</td>
+                                </tr>
+                                <tr>
+                                    <td>sal</td>
+                                    <td>10</td>
+                                </tr>
+                                <tr>
+                                    <td>comm</td>
+                                    <td>1000</td>
+                                </tr>
+                                <tr>
+                                    <td>job</td>
+                                    <td>PRESIDENT</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <p>There will be no feedback, but this request should change the COMM value of the employee KING to 1000. To
+            verify that it worked, you can simply view the data in the table via Oracle SQL Developer, or you can rerun
+            the web service that is built on emp.</p>  <h3>Creating the Front End</h3>
+        <p>Now that we have all the web services up and running, the next step is to create the front end. In this
+            example, we're going to use jQuery. There are other more-modern frameworks available, but most people have
+            used jQuery at some point in their career, and the provided code can be translated for a different
+            framework.</p>
+        <p>The functionality of the front end will be extremely simple: produce a report and a form based on the results
+            of the web services. For this example, we'll use two HTML pages to do this. The report page contains some
+            jQuery code that will call the web service, parse it into a JSON document, and then loop through the
+            results. The result will be a simple HTML table that contains the results of the SQL commands in the web
+            service. There will also be an Oracle JET chart on this page, which is fed by a separate web service.</p>
+        <p>The code snippet in Listing 1 illustrates the function used to parse and display the data in the report.
+            Using the <code class="ocode">getJSON</code> function, jQuery will make an asynchronous call to the web
+            service, which will in turn return a JSON document. That document will then be parsed and each record will
+            be examined. For each record in the document, the values will be extracted and appended to a table tag with
+            an ID of <code class="ocode">rpt</code>.</p>
+        <p>Any JavaScript framework can be used to do this; the only requirement is to use the same URI for the web
+            service. Formatting and displaying the data can be done any way you choose.</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+            <pre>
+  <code>&lt;script type="text/javascript" language="javascript"&gt; $(document).ready(function() {   $.getJSON("http://servername/ords/db/demo/emp", function(data) {     $(data.items).each(function (index, value) {         $("#rpt").append(         '&lt;tr&gt;'         + '&lt;td class="text-center"&gt;&lt;a href="form.html#'         + value.empno + '"&gt;Edit&lt;/a&gt;&lt;/td&gt;'         + '&lt;td class="text-right"&gt;'  + value.empno    + '&lt;/td&gt;'         + '&lt;td class="text-center"&gt;' + value.dname    + '&lt;/td&gt;'         + '&lt;td class="text-left"&gt;'   + value.ename    + '&lt;/td&gt;'         + '&lt;td class="text-left"&gt;'   + value.job      + '&lt;/td&gt;'         + '&lt;td class="text-right"&gt;'  + value.sal      + '&lt;/td&gt;'         + '&lt;td class="text-right"&gt;'  + value.sal_diff + '&lt;/td&gt;'         + '&lt;td class="text-right"&gt;'  + value.comm     + '&lt;/td&gt;         + '&lt;td class="text-center"&gt;' + value.rank     + '&lt;/td&gt;'         + '&lt;/tr&gt;');     });   }); });&lt;/script&gt;</code></pre>
+        </div>
+        <p><strong>Listing 1: The jQuery function that calls the web service and parses and prints the data to the
+                page.</strong></p>
+        <p>This all happens as soon as the page is loaded and, thus, the data is displayed on the page as if it were a
+            static page. A couple of CSS lines from Bootstrap and the Oracle JET chart add some polish to an otherwise
+            drab looking report, as shown in Figure 14. Bootstrap is a free, open source library that's a combination of
+            JavaScript, CSS, and HTML templates designed to provide a solid, responsive, and compatible user interface
+            framework.<a name="fig14"></a></p>
+        <p align="center"><img src="//www.oracle.com/technetwork/articles/dsl/odb-browser-apps-f14-3844861.gif"
+                alt="ODB-apps-Figure14">
+        <p></p><strong>Figure 14: The results of the HTML page that calls the web service via jQuery.</strong></p>
+        <p>When a user clicks an <strong>Edit</strong> link, the form page will be called. This page will call the web
+            service for the corresponding row that was clicked and populate the form elements. The results are also
+            spruced up a bit with Bootstrap, as seen in Figure 15.</p>
+        <p align="center"><img src="//www.oracle.com/technetwork/articles/dsl/odb-browser-apps-f15-3844862.gif"
+                alt="ODB-apps-Figure15">
+        <p></p><strong>Figure 15: The form used to update data via web services.</strong></p>
+        <p>When the form page is loaded, two separate web service calls are made, as shown in Listing 2.</p>
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+            <pre>
+  <code>&lt;script type="text/javascript" language="javascript"&gt; $(document).ready(function() {   $.getJSON("http://servername/ords/db/demo/dept", function(data) {     $(data.items).each(function( i ) {     $('#deptno').append($('&lt;option&gt;',         {value:data.items[i].deptno, text:data.items[i].dname}));     });   });   setTimeout(function(){     $.getJSON("http://servername/ords/db/demo/emp/"        + window.location.hash.substring(1), function(data) {       $(data).each(function (index, value) {         $("#empno").val(value.empno);           $("#ename").val(value.ename);           $("#job").val(value.job);           $("#sal").val(value.sal);         $("#deptno").val(value.deptno);         $("#comm").val(value.comm);       });     });   }, 100); });&lt;/script&gt;</code></pre>
+        </div>
+        <p><strong>Listing 2: The jQuery on the form will call two web services: one for the select list and one for the
+                data.</strong></p>
+        <p>The first web service call—<code class="ocode">dept</code>—will be used to populate the Department select
+            list. The name of the department will be displayed while the department ID will be stored in the database.
+            The second web service—<code class="ocode">emp</code>—will fetch a single row from EMP and populate the
+            corresponding fields on the form.</p>
+        <p>When the user clicks <strong>Save</strong>, the page is posted to the web service, sending the updated data
+            back to the server where it will be processed and update the corresponding record. The user will then be
+            returned to the report page, where the updated values can be seen.</p>
+        <p>Now that you have a basic understanding as to how things will work, the only thing left to do is to create
+            three files based on Listing 4, Listing 5, and Listing 6 (all are in <a href="#appa">Appendix A</a>). Simply
+            copy the source code from each listing and paste it into a new text file. Save <a href="#listing4">Listing
+                4</a> as <code class="ocode">rpt.html</code>, save <a href="#listing5">Listing 5</a> as <code
+                class="ocode">form.htm</code>l, and save <a href="#listing6">Listing 6</a> as <code
+                class="ocode">chart.js</code>. Be sure that all files are in the same directory on your computer and
+            that you change any occurrences of servername to your server's name.</p>
+        <p>Once the three files are created, simply open <code class="ocode">rpt.html</code> in any modern browser. You
+            should see a report with 14 rows of data and a pie chart summarizing salaries by job, similar to <a
+                href="#fig14">Figure 14</a>.</p>
+        <h3>Conclusion</h3>
+        <p>Now that you've prepared the environment, created the web services, and created the front end, in <a
+                href="">Part 2 of this series</a>, all you'll have to do is simply reload the HTML pages to see changes,
+            because they will all be made on the server side in the database. Keep in mind that this example is
+            intentionally simple so that you can focus more on understanding how the server-side components work. The
+            front end can capture and parse JSON from the web service any number of ways and for any number of purposes,
+            once you understand the basics.</p>
+        <h3>About the Author</h3>
+        <p>Scott Spendolini is president and founder of Sumner Technologies, a world-class Oracle services, education,
+            and solutions firm. Throughout his career, he has assisted clients with their Oracle Application Express
+            development and training needs. Spendolini is a long-time, regular presenter at many Oracle-related
+            conferences, including Oracle OpenWorld, Kscope, and Rocky Mountain Oracle Users Group (RMOUG). He is an
+            Oracle Ace Director, the author of <em>Expert Oracle Application Express Security</em>, and a coauthor of
+            <em>Pro Oracle Application Express</em>. Spendolini is also an Oracle Certified Oracle Application Express
+            developer.
+        </p>
+        <p>Spendolini started his career at Oracle Corporation, where he worked with Oracle E-Business Suite for almost
+            seven years and was a senior product manager for Oracle Application Express for over three years. He holds a
+            dual bachelor's degree from Syracuse University in management information systems and telecommunications
+            management.</p>
+        <h3><a name="appa"></a>Appendix A</h3>
+        <h3><a name="listing3"></a>Listing 3: Scripts to Create the EMP and DEPT Tables</h3>
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+            <pre>
+  <code>DROP TABLE EMP/DROP TABLE DEPT/CREATE TABLE DEPT ( DEPTNO NUMBER(2), DNAME VARCHAR2(14), LOC VARCHAR2(13), CONSTRAINT dept_pk PRIMARY KEY (deptno) )/CREATE TABLE EMP ( EMPNO NUMBER(4) NOT NULL, ENAME VARCHAR2(10), JOB VARCHAR2(9), MGR NUMBER(4), HIREDATE DATE, SAL NUMBER(7, 2), COMM NUMBER(7, 2), DEPTNO NUMBER(2), CONSTRAINT EMP_PK PRIMARY KEY (empno), CONSTRAINT deptno_fk FOREIGN KEY (deptno) REFERENCES dept (deptno) )/INSERT INTO DEPT VALUES (10, 'ACCOUNTING', 'NEW YORK');INSERT INTO DEPT VALUES (20, 'RESEARCH', 'DALLAS');INSERT INTO DEPT VALUES (30, 'SALES', 'CHICAGO');INSERT INTO DEPT VALUES (40, 'OPERATIONS', 'BOSTON');INSERT INTO EMP VALUES (7369, 'SMITH', 'CLERK', 7902, TO_DATE('17-DEC-1980', 'DD-MON-YYYY'), 800, NULL, 20);INSERT INTO EMP VALUES (7499, 'ALLEN', 'SALESMAN', 7698, TO_DATE('20-FEB-1981', 'DD-MON-YYYY'), 1600, 300, 30);INSERT INTO EMP VALUES (7521, 'WARD', 'SALESMAN', 7698, TO_DATE('22-FEB-1981', 'DD-MON-YYYY'), 1250, 500, 30);INSERT INTO EMP VALUES (7566, 'JONES', 'MANAGER', 7839, TO_DATE('2-APR-1981', 'DD-MON-YYYY'), 2975, NULL, 20);INSERT INTO EMP VALUES (7654, 'MARTIN', 'SALESMAN', 7698, TO_DATE('28-SEP-1981', 'DD-MON-YYYY'), 1250, 1400, 30);INSERT INTO EMP VALUES (7698, 'BLAKE', 'MANAGER', 7839, TO_DATE('1-MAY-1981', 'DD-MON-YYYY'), 2850, NULL, 30);INSERT INTO EMP VALUES (7782, 'CLARK', 'MANAGER', 7839, TO_DATE('9-JUN-1981', 'DD-MON-YYYY'), 2450, NULL, 10);INSERT INTO EMP VALUES (7788, 'SCOTT', 'ANALYST', 7566, TO_DATE('09-DEC-1982', 'DD-MON-YYYY'), 3000, NULL, 20);INSERT INTO EMP VALUES (7839, 'KING', 'PRESIDENT', NULL, TO_DATE('17-NOV-1981', 'DD-MON-YYYY'), 5000, NULL, 10);INSERT INTO EMP VALUES (7844, 'TURNER', 'SALESMAN', 7698, TO_DATE('8-SEP-1981', 'DD-MON-YYYY'), 1500, 0, 30);INSERT INTO EMP VALUES (7876, 'ADAMS', 'CLERK', 7788, TO_DATE('12-JAN-1983', 'DD-MON-YYYY'), 1100, NULL, 20);INSERT INTO EMP VALUES (7900, 'JAMES', 'CLERK', 7698, TO_DATE('3-DEC-1981', 'DD-MON-YYYY'), 950, NULL, 30);INSERT INTO EMP VALUES (7902, 'FORD', 'ANALYST', 7566, TO_DATE('3-DEC-1981', 'DD-MON-YYYY'), 3000, NULL, 20);INSERT INTO EMP VALUES (7934, 'MILLER', 'CLERK', 7782, TO_DATE('23-JAN-1982', 'DD-MON-YYYY'), 1300, NULL, 10);COMMIT/</code></pre>
+        </div>   <h3><a name="listing4"></a>Listing 4: Sample Report HTML File</h3>
+        <p>Save this file as <code class="ocode">rpt.html</code>.</p>
+        <p><strong>Note</strong>: Be sure to change the value of <em><code class="ocode">servername</code></em> to your
+            server's name. There is one instance in this file.</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+            <pre>
+  <code>&lt;!DOCTYPE html&gt;&lt;meta content="text/html;charset=utf-8" http-equiv="Content-Type"&gt;&lt;meta content="utf-8" http-equiv="encoding"&gt;&lt;head&gt;&lt;script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"&gt;&lt;/script&gt;&lt;script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.2.0/require.min.js"&gt;&lt;/script&gt;&lt;link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"&gt;&lt;link rel="stylesheet" href="http://rawgit.com/oracle/oraclejet/2.1.0/dist/css/alta/oj-alta-min.css"&gt;&lt;script type="text/javascript" src="chart.js"&gt;&lt;/script&gt;&lt;style type="text/css"&gt;th { text-align: center !important }&lt;/style&gt;&lt;title&gt;Employees&lt;/title&gt;&lt;script type="text/javascript" language="javascript"&gt; $(document).ready(function() {   $.getJSON("http://<em>servername</em>/ords/db/demo/emp", function(data) {     $(data.items).each(function (index, value) {         $("#rpt").append(         '&lt;tr&gt;'         + '&lt;td class="text-center"&gt;&lt;a href="form.html#' + value.empno    + '"&gt;Edit&lt;/a&gt;&lt;/td&gt;'         + '&lt;td class="text-right"&gt;'  + value.empno    + '&lt;/td&gt;'         + '&lt;td class="text-center"&gt;' + value.dname    + '&lt;/td&gt;'         + '&lt;td class="text-left"&gt;'   + value.ename    + '&lt;/td&gt;'         + '&lt;td class="text-left"&gt;'   + value.job    + '&lt;/td&gt;'         + '&lt;td class="text-right"&gt;$'  + value.sal      + '&lt;/td&gt;'         + '&lt;td class="text-right"&gt;$'  + value.sal_diff + '&lt;/td&gt;'         + '&lt;td class="text-right"&gt;$'  + value.comm     + '&lt;/td&gt;'         + '&lt;td class="text-center"&gt;' + value.rank     + '&lt;/td&gt;'         + '&lt;/tr&gt;');     });   }); });&lt;/script&gt;&lt;/head&gt;&lt;body&gt;&lt;div class="container"&gt; &lt;div class="row"&gt;   &lt;div class="col-sm-8"&gt;     &lt;h2&gt;Employees&lt;/h2&gt;     &lt;table id="rpt" class="table table-striped table-hover"&gt;     &lt;tr&gt;       &lt;th&gt;EDIT&lt;/th&gt;       &lt;th&gt;EMPNO&lt;/th&gt;       &lt;th&gt;DEPT&lt;/th&gt;       &lt;th&gt;ENAME&lt;/th&gt;       &lt;th&gt;JOB&lt;/th&gt;       &lt;th&gt;SAL&lt;/th&gt;       &lt;th&gt;SAL_DIFF&lt;/th&gt;       &lt;th&gt;COMM&lt;/th&gt;       &lt;th&gt;RANK&lt;/th&gt;     &lt;/tr&gt;     &lt;/table&gt;   &lt;/div&gt;   &lt;div class="col-sm-4" id='chart-container'&gt;     &lt;h2&gt;Salaries by Job&lt;/h2&gt;     &lt;div id="pieChart" data-bind="ojComponent: {               component: 'ojChart',               type: 'pie',               series: pieSeriesValue,               animationOnDisplay: 'false',               animationOnDataChange: 'auto',               hoverBehavior: 'dim'               }"               style="max-width:500px;width:100%;height:350px;"&gt;     &lt;/div&gt;   &lt;/div&gt; &lt;/div&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt; </code></pre>
+        </div>
+        <h3><a name="listing5"></a>Listing 5: Sample Form HTML File</h3>
+        <p>Save this file as <code class="ocode">form.html</code>. Be sure to save it in the same directory as <code
+                class="ocode">rpt.html</code>.</p>
+        <p><strong>Note</strong>: Be sure to change the value of <em><code class="ocode">servername</code></em> to your
+            server's name. There are three instances in this file.</p>
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+            <pre>
+  <code>&lt;!DOCTYPE html&gt;&lt;meta content="text/html;charset=utf-8" http-equiv="Content-Type"&gt;&lt;meta content="utf-8" http-equiv="encoding"&gt;&lt;head&gt;&lt;script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"&gt;&lt;/script&gt;&lt;link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"&gt;&lt;style type="text/css"&gt;label { padding: 10px; width:150px; text-align: right;}button { margin: 10px;}&lt;/style&gt;&lt;title&gt;Employee Details&lt;/title&gt;&lt;script type="text/javascript" language="javascript"&gt; $(document).ready(function() {   $.getJSON("http://<em>servername</em>/ords/db/demo/dept", function(data) {     $(data.items).each(function( i ) {     $('#deptno').append($('&lt;option&gt;', {value:data.items[i].deptno, text:data.items[i].dname}));     });   });   setTimeout(function(){     $.getJSON("http://<em>servername</em>/ords/db/demo/emp/" + window.location.hash.substring(1), function(data) {       $(data).each(function (index, value) {         $("#empno").val(value.empno);           $("#ename").val(value.ename);           $("#job").val(value.job);         $("#sal").val(value.sal);         $("#deptno").val(value.deptno);         $("#comm").val(value.comm);       });     });   }, 100); });&lt;/script&gt;&lt;/head&gt;&lt;body&gt;&lt;form action="rpt.html" method="post" name="registration" id="form"&gt; &lt;div class="container" style="outline: 1px solid black;background-color:#eee;margin-top:20px;"&gt;   &lt;h2&gt;Employee Details&lt;/h2&gt;   &lt;input type="hidden" name="empno" id="empno" /&gt;   &lt;label for="ename"&gt;Employee Name&lt;/label&gt;   &lt;input type="text" name="ename" id="ename" /&gt;   &lt;label for="deptno"&gt;Department&lt;/label&gt;   &lt;select name="deptno" id="deptno"&gt;&lt;/select&gt;   &lt;label for="job"&gt;Job&lt;/label&gt;   &lt;input type="text" name="job" id="job" /&gt;   &lt;br /&gt;   &lt;label for="sal"&gt;Salary&lt;/label&gt;   &lt;input type="text" name="sal" id="sal" /&gt;   &lt;label for="comm"&gt;Commission&lt;/label&gt;   &lt;input type="text" name="comm" id="comm" /&gt;   &lt;/br &gt;   &lt;span class="pull-right"&gt;     &lt;a href="rpt.html" style="color:black;"&gt;&lt;input type="button" value="Cancel" /&gt;&lt;/a&gt;     &lt;button type="submit"&gt;Save&lt;/button&gt;   &lt;/span&gt; &lt;/div&gt;&lt;/form&gt;&lt;script&gt;$( "form" ).submit(function( event ) { $.post( "http://<em>servername</em>/ords/db/demo/emp", $( "#form" ).serialize() );});&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;</code></pre>
+        </div>
+        <h3><a name="listing6"></a>Listing 6: <code class="ocode">chart.js</code> File</h3>
+        <p>Save this file as <code class="ocode">chart.js</code>. Be sure to save it in the same directory as <code
+                class="ocode">rpt.html</code>.</p>
+        <p><strong>Note</strong>: Be sure to change the value of <em><code class="ocode">servername</code></em> to your
+            server's name. There is one instance in this file.</p>
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+            <pre>
+  <code>  
+  
+      window.onload=function(){       require(['knockout',       'ojs/ojcore',       'jquery',       'ojs/ojknockout',       'ojs/ojcore',       'ojs/ojbutton',       'ojs/ojchart'       ], function(ko, oj, $) {       'use strict';       function ChartModel(pieSeries) {       var self = this;       self.threeDValue = ko.observable('off');       self.sortingValue = ko.observable('descending');       self.pieSeriesValue = ko.observableArray(pieSeries);       /* toggle buttons*/       self.threeDOptions = [       {id: '2D', label: '2D', value: 'off', icon: 'oj-icon demo-2d'},       {id: '3D', label: '3D', value: 'on', icon: 'oj-icon demo-3d'}       ];       self.threeDValueChange = function(event, data) {       self.threeDValue(data.value);       return true;       }       }              $(document).ready(function(){       $.getJSON("http://<em>servername</em>/ords/db/demo/salByJob").       then(function(ret) {       var pieSeries=[];       $.each(ret.items, function(idx,emp) {       var nextEl= {"name" :emp.job,"items": [emp.sal]};       pieSeries.push(nextEl);       });       console.log(pieSeries)       ko.applyBindings(new ChartModel(pieSeries), document.getElementById('chart-container'));       });       });       });       //RequireJS configs (usually these come first in main.js, but they don't have to)       requirejs.config({       // Path mappings for the logical module names       paths: {       'knockout': 'http://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.0/knockout-min',       'jquery': 'http://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min',       "jqueryui-amd": "http://rawgit.com/jquery/jquery-ui/1.12.0/ui",       "promise": "http://cdnjs.cloudflare.com/ajax/libs/es6-promise/3.2.1/es6-promise.min",       "hammerjs": "http://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min",       "ojdnd": "http://rawgit.com/oracle/oraclejet/2.1.0/dist/js/libs/dnd-polyfill/dnd-polyfill-1.0.0.min",       "ojs": "http://rawgit.com/oracle/oraclejet/2.1.0/dist/js/libs/oj/debug",       "ojL10n": "http://rawgit.com/oracle/oraclejet/2.1.0/dist/js/libs/oj/ojL10n",       "ojtranslations": "http://rawgit.com/oracle/oraclejet/2.1.0/dist/js/libs/oj/resources",       "text": "http://cdnjs.cloudflare.com/ajax/libs/require-text/2.0.12/text.min",       "signals": "http://cdnjs.cloudflare.com/ajax/libs/js-signals/1.0.0/js-signals.min",       },       // Shim configurations for modules that do not expose AMD       shim: {       'jquery': {       exports: ['jQuery', '$']       }       }       });       }//]]&gt;</code></pre>
+        </div>
+
+    </div>
+</section>
+
+<!--</article>-->
+<!-- / _Raw-Text -->

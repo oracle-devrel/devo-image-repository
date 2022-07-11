@@ -1,0 +1,726 @@
+<!-- _Raw-Text -->
+<section class="cc01 cc01v0 cpad crule">
+    <div class="cc01w1 cwidth">
+        <p>Java 10 introduced a new shiny language feature called local variable type inference. Sounds fancy! What is
+            it? Let’s work through two situations where Java makes things a little difficult for us as a Java developer.
+        </p>
+
+        <h3>Context: Boilerplate and code readability</h3>
+
+        <p>Perhaps on a more day to day, you wish there were things you wouldn’t need to repeat. For example in the code
+            below (using Java 9’s collection factories), the types on the left hand-side may feel redundant and obvious:
+        </p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+
+     
+    import static java.util.Map.entry;
+List&lt;String&gt; cities = List.of("Brussels", "Cardiff", "Cambridge")
+Map&lt;String, Integer&gt; citiesPopulation
+       = Map.ofEntries(entry("Brussels", 1_139_000),
+                     entry("Cardiff", 341_000));
+</code></pre>
+        </div>
+
+
+        <p>This is is a fairly simple example but it exemplifies the traditional Java philosophy: you need to declare
+            static types for everything including simple expressions. Let’s take a look at an example that is a bit more
+            complex. For instance, the code below builds up a histogram of words from a string. It makes use of the
+            <code>groupingBy</code> collector which lets you aggregate a stream into a Map. The <code>groupingBy</code>
+            collector takes a classification function as first argument to build the keys of the map and a second
+            collector (counting()) to count the number of values associated with that key. here is the word.</p>
+
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+
+ String sentence = "A simple Java example that explores what Java
+10 has to offer";
+Collector&lt;String, ?, Map&lt;String, Long&gt;&gt; byOccurrence
+     = groupingBy(Function.identity(), counting());
+Map&lt;String, Long&gt; wordFrequency
+     = Arrays.stream(sentence.split(" "))
+     .collect(byOccurrence);
+
+</code></pre>
+        </div>
+
+        <p>It often makes sense to extract complicated expression into a variable or method to help code readability and
+            re-use. In this case, the logic for building a histogram makes use of collectors. Unfortunately, the type of
+            the result from <code>groupingBy</code> is hardly readable! There’s no chance that you’d figure it out just
+            by looking at it.</p>
+        <p>The bottom line is that as new library enhancements have made their way in Java, they exploit generics more
+            and more. This puts additional pressure on the developer with the introduction of more boilerplate code. The
+            example above doesn’t mean that it is bad that you have to write types. Clearly, defining types for fields
+            and method signatures enforces a contract that needs to be respected and this helps with maintenance as well
+            as understanding. However, declaring types for intermediate expressions may feel less useful and cumbersome.
+        </p>
+
+        <h3>Type inference history</h3>
+
+        <p>We’ve seen several occasions throughout Java’s history where language designers added “type inference” to
+            help us write more concise code. Type inference is the idea that the compiler can figure out the static
+            types for you so you don’t have to type them.</p>
+
+        <p>First, since Java 5 you have generics methods and the type parameter of that method can be inferred based on
+            the context. For example, instead of:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+
+List&lt;String&gt; cs = Collections.&lt;String&gt;emptyList();
+
+</code></pre>
+        </div>
+
+        <p>You can say:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+List&lt;String&gt; cs = Collections.emptyList();
+
+</code></pre>
+        </div>
+        <p>Next, since Java 7, you may omit type parameters of generics in an expression when the context determines
+            them. For example,</p>
+
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+Map&lt;String, List&lt;String&gt;&gt; myMap = new HashMap&lt;String,List&lt;String&gt;&gt;();
+
+
+</code></pre>
+        </div>
+        <p>can be abbreviated to the following by making use of the diamond &lt;&gt; operator:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+Map&lt;User, List&lt;String&gt;&gt; userChannels = new HashMap&lt;&gt;();
+
+
+</code></pre>
+        </div>
+        <p>The general idea is that the compiler can infer the type based on surrounding context. In this case the
+            HashMap contains a list of strings as indicated on the left-hand side.</p>
+        <p>Since Java 8, lambda expressions such as:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+Predicate&lt;String&gt; nameValidation = (String x) -&gt; x.length() &gt; 0;
+
+
+</code></pre>
+        </div>
+        <p>can be shortened by omitting types</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+Predicate&lt;String&gt; nameValidation = x -&gt; x.length() &gt; 0;
+
+
+</code></pre>
+        </div>
+
+        <h3>Local variable Type inference</h3>
+
+        <p>As types grow in size, generics parameterized by further generic types, then type inference can aid
+            readability. The Scala and C# languages allow to replace the type in a local-variable declaration with the
+            keyword var, and the compiler fills in the appropriate type from the variable initializer. For example, the
+            declaration of <code>userChannels</code> shown previously could be written like this:</p>
+
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+var userChannels = new HashMap&lt;User, List&lt;String&gt;&gt;();
+
+
+</code></pre>
+        </div>
+
+        <p>or returned from a method which returns a list:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+var channels = lookupUserChannels("Tom");
+channels.forEach(System.out::println);
+
+
+</code></pre>
+        </div>
+
+        <p>This idea is called local variable type inference and it is included in Java 10!</p>
+        <p>For example the code below:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+Path path = Paths.get("src/web.log");
+try (Stream&lt;String&gt; lines = Files.lines(path)){
+    long warningCount
+            = lines
+                .filter(line -&gt; line.contains("WARNING"))
+                .count();
+    System.out.println("Found " + warningCount + " warnings in the
+log file");
+} catch (IOException e) {
+    e.printStackTrace();
+}
+
+
+
+</code></pre>
+        </div>
+
+        <p>Can be refactored as follows in Java 10:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+var path = Paths.get("src/web.log");
+try (var lines = Files.lines(path)){
+    var warningCount
+            = lines
+                .filter(line -&gt; line.contains("WARNING"))
+                .count();
+    System.out.println("Found " + warningCount + " warnings in the
+log file");
+} catch (IOException e) {
+    e.printStackTrace();
+}
+
+
+
+</code></pre>
+        </div>
+        <p>Each of the expressions in the code above still has a static type (i.e. the declared type of a value):</p>
+        <ul class="obullets">
+            <li>The local variable <code>path</code> is of type <code>Path</code></li>
+            <li>The variable <code>lines</code> is of Stream&lt;String&gt;</li>
+            <li>The variable ​<code>warningCount</code> is of type <code>long</code></li>
+        </ul>
+        <p>This means that assigning a different value will fail. For example the re-assignment below will produce a
+            compilation error:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+var warningCount = 5;
+warningCount = "6";
+
+|  Error:
+|  incompatible types: java.lang.String cannot be converted to int
+|  warningCount = "6"
+
+
+
+
+</code></pre>
+        </div>
+        <p>There's some small cause for concern with type inference, however; given classes <code>Car</code> and
+            <code>Bike</code> that subclass a class <code>Vehicle</code> and the declaration</p>
+
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+var v = new Car();
+
+
+
+
+</code></pre>
+        </div>
+
+        <p>Do you declare v to have type <code>Car</code> or <code>Vehicle</code> ? In this case a simple explanation
+            that the missing type is the type of the initializer (here Car) is perfectly clear, and it can be backed up
+            with a statement that var may not be used when there's no initializer. This means however that a later
+            assignment of</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+v = new Bike();
+
+
+
+</code></pre>
+        </div>
+        <p>stops working. In other words, polymorphic code doesn’t play nice with var.</p>
+        <h3>Where can’t you use local variable type inference?</h3>
+        <p>Where does local type inference not work? For starter, you cannot use it with fields and in method
+            signatures. It’s only for local variables. E.g. the following is not possible:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+public long process(var list) { }
+
+
+
+</code></pre>
+        </div>
+        <p>You cannot use local variable declarations without an explicit initialisation. This means, you cannot just
+            use the <code>var</code> syntax to declare a variable without a value. The following:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+var x;
+
+
+
+</code></pre>
+        </div>
+        <p>will return a compile error:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+|  Error:
+|  cannot infer type for local variable x
+|    (cannot use 'var' on variable without initializer)
+|  var x;
+|  ^----^
+
+
+
+
+</code></pre>
+        </div>
+        <p>You cannot initialize a var variable to null either. Indeed it is not clear what the type should be as it’s
+            probably intended for late initialization.</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+
+|  Error:
+|  cannot infer type for local variable x
+|    (variable initializer is 'null')
+|  var x = null;
+|  ^-----------^
+
+
+
+
+</code></pre>
+        </div>
+        <p>You cannot also use var with lambda expressions because they require an explicit target-type. The following
+            assignment will fail:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+
+var x = () -&gt; {}
+|  Error:
+|  cannot infer type for local variable x
+|    (lambda expression needs an explicit target-type)
+|  var x = () -&gt; {};
+|  ^---------------^
+
+
+
+
+</code></pre>
+        </div>
+        <p>Weirdly the following assignment is valid though because there is an explicit initializer on the right-hand
+            side!</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+var list = new ArrayList&lt;&gt;();
+
+
+
+</code></pre>
+        </div>
+        <p>What is the static type of list? The type of the variable inferred is ArrayList&lt;Object&gt; which is not
+            particularly useful as you don’t benefit from generics so you may want to avoid this.</p>
+
+        <h3>Type Inference with Non-Denotable Types</h3>
+        <p>Java has a number of non-denotable types - that is to say types that can exist within your program, but for
+            which there’s no way to explicitly write out the name for that type. A good example of a non-denotable type
+            is an anonymous class - you can add fields and methods to it, but you won’t be able to write the name of the
+            anonymous class in your Java code. The diamond operator can’t be used with anonymous classes. Var is less
+            restricted and can be used to support some non-denotable types - specifically anonymous classes and
+            intersection types.</p>
+        <p>The var keyword also enables us to use anonymous classes more effectively and refer to types that would
+            otherwise be impossible to describe. Normally if you create an anonymous class you can add fields to it, but
+            you can’t refer to those fields elsewhere because it needs to be assigned back to a named type. For example
+            the following code snippet won’t compile because the type of productInfo is Object and you can't access
+            fields name and total from an Object.</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+Object productInfo = new Object() {
+        String name = "Apple";
+        int total = 30;
+};
+System.out.println("name = " + productInfo.name + ", total = " +
+productInfo.total);
+
+
+
+</code></pre>
+        </div>
+        <p>With var we can overcome this limitations. When you assign an anonymous class to a var typed local variable
+            it infers the type of the anonymous class, rather than its parent. This means that you can refer to fields
+            declared on the anonymous class.</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+var productInfo = new Object() {
+    String name = "Apple";
+    int total = 30;
+};
+System.out.println("name = " + productInfo.name + ", total = " +
+productInfo.total);
+
+
+
+</code></pre>
+        </div>
+        <p>This may initially seem like an interesting piece of language trivia that has very little use, but it can be
+            useful in some circumstances. For example sometimes you want to return a few values as an intermediate
+            result inside some method. Normally you would have to create and maintain a new class just for this purpose,
+            only to use it inside a single method. Inside the Collectors.averagingDouble() implementation a small array
+            of double values is used for this purpose.</p>
+        <p>There’s a better approach that we can take with var - using an anonymous class as a store for intermediate
+            values. Let’s consider a case where we have some products, each of which has a name, stock count and a per
+            item monetary worth, or value, associated with it. We want to calculate the total cost for each item, ie
+            count * value. Now if that was the only piece of information we could just map each Product into its cost,
+            but in order to do something useful with the result we also want the product’s name. Here’s an example of
+            how we can do this with var in Java 10:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+var products = List.of(
+    new Product(10, 3, "Apple"),
+    new Product(5, 2, "Banana"),
+    new Product(17, 5, "Pear"));
+var productInfos = products
+    .stream()
+    .map(product -&gt; new Object() {
+        String name = product.getName();
+        int total = product.getStock() * product.getValue();
+    })
+    .collect(toList());
+productInfos.forEach(prod -&gt;
+    System.out.println("name = " + prod.name + ", total = " +
+prod.total));
+This outputs:
+name = Apple, total = 30
+name = Banana, total = 10
+name = Pear, total = 85
+
+
+
+</code></pre>
+        </div>
+        <p>Not all non-denotable types can be used with var - anonymous classes and intersection types are supported.
+            Wildcard captured types are not inferred so as to avoid even more cryptic wildcard related error messages
+            being exposed to Java programmers. The goal of supporting non-denotable types was to retain as much
+            information as possible in the inferred type and allow people to insert local variables and refactor more
+            code. The original intent of this feature wasn’t to write code like the example you’ve seen above but simply
+            to solve the problem of how var should deal with non-denotable types. Whether usage of var with
+            non-denotable types becomes niche trivia or commonplace is still an unknown.</p>
+
+        <h3> Type Inference Recommendations</h3>
+        <p>Type inference definitely reduces the amount of time taken to write Java code but what about readability?
+            Developers spend about 10x as much time reading source code as they do writing it, so you should definitely
+            be optimising for ease of reading over ease of writing. The extent to which var improves this will always be
+            subjective, it’s inevitable that some people will hate var and some love it. You should always be focussing
+            on what helps your team-mates read your code so if they are happy reading code with var in then you should
+            use it, otherwise not.</p>
+        <p>Sometimes including explicit types can impede readability. For example when looping over the entryset of a
+            Map, you need to regurgitate the type parameters on the Map.Entry object. Here’s an example of looping over
+            a Map from a country name, to the names of the cities within the country:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+Map&lt;String, List&lt;String&gt;&gt; countryToCity = new HashMap&lt;&gt;();
+// ...
+for (Map.Entry&lt;String, List&lt;String&gt;&gt; citiesInCountry : countryToCity.entrySet()) {
+  List&lt;String&gt; cities = citiesInCountry.getValue();
+  // ...
+}
+
+
+
+
+</code></pre>
+        </div>
+        <p>We could rewrite this with var and reduce the repetition and boilerplate, like this:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+var countryToCity = new HashMap&lt;String, List&lt;String&gt;&gt;();
+// ...
+for (var citiesInCountry : countryToCity.entrySet()) {
+  var cities = citiesInCountry.getValue();
+  // ...
+}
+
+
+
+
+</code></pre>
+        </div>
+        <p>There isn’t just a readability advantage here, though there’s also an advantage in terms of evolving and
+            maintaining code. So for example if we take that same code with explicit types in and replace the String
+            representing the name of the city with a City domain class that could contain additional information about
+            the city then we need to rewrite all the code that is relying on that specific type being exposed, for
+            example:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+Map&lt;String, List&lt;City&gt;&gt; countryToCity = new HashMap&lt;&gt;();
+// ...
+for (Map.Entry&lt;String, List&lt;City&gt;&gt; citiesInCountry : countryToCity.entrySet()) {
+  List&lt;City&gt; cities = citiesInCountry.getValue();
+  // ...
+}
+
+
+
+
+</code></pre>
+        </div>
+        <p>If we had used the var keyword and type inference then we would need to alter the first line of code, not the
+            others, for example:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+var countryToCity = new HashMap&lt;String, List&lt;City&gt;&gt;();
+// ...
+for (var citiesInCountry : countryToCity.entrySet()) {
+  var cities = citiesInCountry.getValue();
+  // ...
+}
+
+
+
+
+</code></pre>
+        </div>
+        <p>And this illustrates a key principle with the use of var: don’t optimise for ease-of-writing, or
+            ease-of-reading - optimise for ease-of-maintenance. This should balance readability with also the amount of
+            code that needs to be changed as your program evolves over time. Of course it would be foolhardy to claim
+            that adding type inference is always a positive for your code - sometimes having explicit types in code can
+            help readability. This is particularly the case when the type isn’t obvious from the expression that
+            generates it. In the following two snippets I would take the explicit over the implicit as I don’t know from
+            just reading the getCities() method call what it is returning.</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+Map&lt;String, List&lt;City&gt;&gt; countryToCity = getCities();
+var countryToCity = getCities();
+
+
+</code></pre>
+        </div>
+        <p>This does bring us onto one final recommendation when it comes to readability and var: variable names matter!
+            Because var removes the ability for the reader of your code to guess at its intent simply from the type of
+            the variable it puts more of a burden on providing good names for local variables. In theory that’s
+            something that we Java developers should already be putting effort into. In practice a lot of readability
+            problems in Java code don’t relate to new language features but existing practices such variable naming that
+            we don’t get right.</p>
+        <h3>Type Inference and IDEs</h3>
+        <p>One commonly used feature that many IDEs provide is the ability to extract a local variable, and in doing so
+            they will infer the correct type of that variable and write it out for you. That is a feature that has some
+            overlap with the var keyword in Java 10. Both the IDE feature and var remove the need to write out the type
+            explicitly, but they otherwise have different trade offs.</p>
+        <p>Extract-local generates a local variable with the full, explicit, type written out in your code. Whilst var
+            removes the need to have the explicit type written out in your code. So whilst they both have a similar
+            value in terms of simplifying the writing of code, var alters readability in a way that extract local
+            doesn’t. As we’ve mentioned before, this is mostly a readability benefit, but sometimes a hindrance.</p>
+        <h3>Compared to other Programming Languages</h3>
+        <p>Java isn’t the only or even first language to include type inference for variables. It’s been used in a whole
+            host of other languages for several decades. In fact the type inference that is being introduced in Java 10
+            with var is a very limited and restricted form of type inference. This keeps the approach very simple and
+            also ensures that compile errors related to var declarations are restricted to a single statement, because
+            the var inference algorithm only looks at the expression being assigned to the variable in order to deduce
+            the type. Furthermore the Hindley-Milner type inference algorithm used in most programming languages takes
+            exponential time in the worst case, potentially slowing javac down.</p>
+        <h3>Conclusions</h3>
+        <p>var is a pretty nice little addition to the Java language in terms of productivity and readability, but the
+            fun doesn’t stop there. Future versions of Java will continue the steady evolution and modernisation of the
+            language. For example in Java 11, to be released a mere 6 months after Java 10 and with long term support,
+            the use of the var keyword will be allowed within the parameters of a lambda expression. This is useful
+            because it allows you to have a formal parameter whose type is inferred, but which you can still add Java
+            annotations on, for example:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+(@Nonnull var x, var y) -&gt; x.process(y)
+
+</code></pre>
+        </div>
+        <p>Other ideas that have been implemented within functional programming languages and are ready for the
+            mainstream will be working their way into future Java versions, for example, pattern matching and value
+            types. This doesn’t mean that these improvements will stop the Java we all know and love from being Java.
+            It’ll just be a more flexible, readable and concise Java than ever before.</p>
+
+        <h3>About the Authors</h3>
+
+        <p><strong>Raoul-Gabriel Urma </strong> is CEO and co-founder of Cambridge Spark, a leading learning community
+            for data scientists and developers in UK. In addition, he is also Chairman and co-founder of Cambridge
+            Coding Academy, a growing community of young coders and pre-university students. Raoul is author of the
+            bestselling programming book “Java 8 in Action” which sold over 20,000 copies globally. He was nominated a
+            Java Champion in 2017. Raoul completed a PhD in Computer Science at the University of Cambridge. Raoul has
+            delivered over 100 technical talks at international conferences. He has worked for Google, eBay, Oracle, and
+            Goldman Sachs. He is also a Fellow of the Royal Society.</p>
+        <p><strong>Richard Warburton</strong> is an empirical technologist and solver of deep-dive technical problems.
+            Recently he has written a book on Java 8 Lambdas for O’Reilly. He’s worked as a developer in many areas
+            including Statistical Analytics, Static Analysis, Compilers and Networking. He is a leader in the London
+            Java Community and runs OpenJDK Hackdays. Richard is also a known conference speaker, having talked at
+            JavaOne, Devoxx, JFokus, DevoxxUK, Geecon, JAX London and Codemotion. He has obtained a PhD in Computer
+            Science from The University of Warwick.</p>
+    </div>
+</section>
+<!-- /CC01v0 -->
+
+<!-- / _Raw-Text -->

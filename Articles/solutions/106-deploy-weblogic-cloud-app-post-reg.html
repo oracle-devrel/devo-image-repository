@@ -1,0 +1,1029 @@
+<section class="cc01 cc01v0 cpad" id="link1">
+        <div class="cc01w1 cwidth">
+                <hr />
+
+                <h3>Thank you! Follow the steps below to start the hands-on lab.</h3>
+                <section class="cb27 cb27v5 rw-neutral-80bg" data-trackas="cb27">
+
+                        <div class="cb27w1 cwidth">
+                                <div class="cb27w2">If you do not already have an Oracle Cloud account. <br><br></div>
+                                <div class="cb27w3">
+                                        <div class="obttns">
+                                                <div class="bttn-blue obttn6">
+                                                        <a href="https://signup.cloud.oracle.com/?sourceType=:ow:de:te::::RC_WWMK210301P00157:DeployWebLogicLP&intcmp=:ow:de:te::::RC_WWMK210301P00157:DeployWebLogicLP"
+                                                                target="_blank">Sign up for Oracle Cloud Free Tier</a>
+                                                </div>
+
+                                        </div>
+                                </div>
+                        </div>
+
+                </section>
+                <p><strong><br>Once you open the link you will be taken to the sign-up page. After you create your
+                                account,
+                                come
+                                back to this page to start this hands-on lab.</strong></p>
+
+                <hr />
+
+
+                <h2>Lab 1: Prepare your tenancy for the lab</h2>
+        </div>
+</section>
+
+<section class="cc01 cc01v0 cpad" id="link1s1">
+        <div class="cc01w1 cwidth">
+
+                <h3> Step 1: Create an OCI Compartment for the lab</h3>
+                <p>When provisioning WebLogic for OCI through Marketplace, you need to specify an OCI Compartment where
+                        all
+                        resources will be created.</p>
+
+                <p>Make sure you have a Compartment that you can use or create a new one.</p>
+
+                <p>Take note of the compartment <strong>OCID:</strong></p>
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-camp-weblogic-lab1-s1.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+                <p>The Compartment name is referred as <strong>CTDOKE</strong> in the Hands on Lab.</p>
+
+        </div>
+</section>
+<!-- /cc01v0 -->
+
+
+
+
+<section class="cc01 cc01v0 cpad" id="link1s2">
+        <div class="cc01w1 cwidth">
+                <h3> Step 2: Provision ATP Database</h3>
+                <p>
+                        When deploying a JRF enabled WebLogic domain, a database repository is required. We will use
+                        Autonomous
+                        Transaction Processing - ATP - Database. As in the next part we'll deploy a sample ADF
+                        application that
+                        requires a database table and some records data, we should create the DB schema in advance.</p>
+
+                <p>(1) Go to Oracle Database > Autonomous Transaction Processing:</p>
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-weblogic-lab1-s2-1.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+                <p>(2) Choose to create a new Autonomous Database:</p>
+
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-camp-weblogic-lab1-s2-2.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+                <p>(3) Give it a meaningful name, for example WLSATPDB; Keep default workload type Transaction
+                        Processing:</p>
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-camp-weblogic-lab1-s2-3.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+
+                <p>(4) Scroll down and keep default setting for:</p>
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-camp-weblogic-lab1-s2-4.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+                <p><strong>Deployment type: </strong>Shared Infrastructure<br />
+                        <strong>Database version:</strong> 19c<br />
+                        <strong>OCPU count:</strong> 1<br />
+                        <strong>Storage (TB):</strong> 1<br />
+                        <strong>Auto scaling: </strong>Enabled
+                </p>
+
+
+
+                <p>(5) Next setup a password for the ADMIN user: must be 12 to 30 characters and contain at least one
+                        uppercase
+                        letter, one lowercase letter, and one number. The password cannot contain the double quote (")
+                        character or
+                        the username "admin.</p>
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-camp-weblogic-lab1-s2-5.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+                <p>Keep default setting to Allow secure access from everywhere; this will provision ATP database with
+                        public
+                        endpoints (access can still be restricted by allowing incoming traffic from trusted IP addresses
+                        or
+                        whitelisted Virtual Cloud Networks):</p>
+
+
+
+
+
+                <p>(6) For the last step choose License included for license type and click on Create Autonomous
+                        Database:</p>
+
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-camp-weblogic-lab1-s2-6.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+                <p>(7) The provisioning process will start:</p>
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-camp-weblogic-lab1-s2-7.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+
+
+                <p>(8) After a few minutes the Database should be available:</p>
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-camp-weblogic-lab1-s2-8.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+
+
+
+        </div>
+</section>
+<!-- /cc01v0 -->
+
+
+
+<!-- cc01v0 -->
+
+<section class="cc01 cc01v0 cpad" id="link1s3">
+        <div class="cc01w1 cwidth">
+
+                <h3>Step 3: Prepare DB Objects</h3>
+
+                <p>Once the ATP database available, we can use the SQL Developer Web tool to created a DB schema and
+                        some
+                        required tables and records needed in the next part.</p>
+
+                <p>(1) Go to Service Console:</p>
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-camp-weblogic-lab1-s3-1.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+                <p>(2) From Development submenu open SQL Developer Web:</p>
+
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-camp-weblogic-lab1-s3-2.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+
+                <p>(3) This will open in a new tab the SQL Developer Web Login screen. Use ADMIN and the password setup
+                        when
+                        provisioning the ATP Database:</p>
+
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-camp-weblogic-lab1-s3-3.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+                <p>(4) Once logged in, you can follow a waking tour to discover the main user interface feature:</p>
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-camp-weblogic-lab1-s3-4.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+
+                <p>(5) Once ready, copy and paste the contents of this <a
+                                href="https://objectstorage.eu-frankfurt-1.oraclecloud.com/n/oractdemeabdmnative/b/ll-wls-bucket/o/adf_app_db_script.sql"
+                                target="_blank">sql file</a> into Worksheet window:</p>
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-camp-weblogic-lab1-s3-5.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+
+                <p>(6) Execute the script by clicking the Run script play button. All statements should execute with
+                        success:
+                </p>
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-camp-weblogic-lab1-s3-6.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+        </div>
+</section>
+
+<!-- /cc01v0 -->
+
+<section class="cc01 cc01v0 cpad" id="link1s4">
+        <div class="cc01w1 cwidth">
+
+                <h3>Step 4: Create OCI Secrets</h3>
+                <p>When you provision a WebLogic instance you need to specify the WebLogic Admin password and the
+                        Database Admin
+                        Password. For security reasons, passing these passwords in a readable format into the instance
+                        creation
+                        script is a bad idea. Oracle Cloud provides a solution for this problem via the OCI Vault.</P>
+
+                <p>A vault will contain encryption keys that are used to encrypt and decrypt secret content, and also
+                        the
+                        secrets that contain the actual content you want to secure - in this case the admin passwords of
+                        the
+                        database and the WebLogic instance.
+                </P>
+                <p><strong>1. Create a Vault</strong></P>
+                <p>(1) Go to Governance and Administration > Security > Vault</P>
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-camp-weblogic-lab1-s4-1-1.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+                <p>(2) Create a new Shared Vault (leave the Make it a Virtual Private Vault option unchecked):</P>
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-camp-weblogic-lab1-s4-1-2.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+
+
+                <p>(3) The new Vault should be listed as Active:</P>
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-camp-weblogic-lab1-s4-1-3.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+
+
+                <p>(4) Take a look at the Vault Information:</P>
+
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-camp-weblogic-lab1-s4-1-4.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+                <p><strong>2. Create an Encryption Key</strong></P>
+                <p>(1) Go to Master Encryption Keys submenu of the Vault Information page and create an new Key:</P>
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-camp-weblogic-lab1-s4-2-1.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+
+                <p>(2) Give the key a Name and leave the other settings as default:</P>
+
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-camp-weblogic-lab1-s4-2-2.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+                <p>(3) The new key should be listed as Enabled:</P>
+
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-camp-weblogic-lab1-s4-2-3.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+                <p><strong>3. Create an OCI Secret for the WebLogic Admin password</strong></P>
+                <p>(1) Go to Secrets submenu of the Vault Information page and create a new Secret:</P>
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-camp-weblogic-lab1-s4-3-1.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+
+                <p>(2) Setup a name for the OCI Secret; choose previously created Encryption Key (WLSKey) in the
+                        Encryption Key
+                        dropdown. If you leave default value for Secret Type Template (Plain-Text), you have to enter
+                        the plain
+                        WebLogic Admin password in the Secret Contents aria. If you switch to Base64 template, you need
+                        to provide
+                        the password pre-encoded in base64.</P>
+
+                <p>The password must start with a letter, should be between 8 and 30 characters long, should contain at
+                        least
+                        one number, and, optionally, any number of the special characters ($ # _).</P>
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-camp-weblogic-lab1-s4-3-2.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+
+                <p>(3) Shortly, the Secret should be listed as Active:</P>
+
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-camp-weblogic-lab1-s4-3-3.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+                <p>(4) Click on the Secret name and take note of its OCID. We need to provide this value in the WebLogic
+                        for OCI
+                        Stack configuration form:</P>
+
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-camp-weblogic-lab1-s4-3-4.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+                <p><strong>4. Create an OCI Secret for the Database Admin password</strong></p>
+                <p>In the same way as in previous step, create a new OCI secret for your ATP Admin user Password.
+                        Instead of the
+                        WebLogic Admin password, pass the ADMIN password created during ATP Instance provisioning. Give
+                        the Secret a
+                        name, for example ATPDBSecret.</P>
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-camp-weblogic-lab1-s4-4-1.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+                <p>Click on the new Secret name (ATPDBSecret) and take note of its OCID. We need to provide this value
+                        in the
+                        WebLogic for OCI Stack configuration form.</P>
+
+                <p><strong>5. Create an OCI Secret for the Sample Application Schema password</strong></p>
+                <p>We need to create one more OCI secret, for the Sample Application Schema password. As we'll see in
+                        the next
+                        part, when creating the WebLogic Stack, we have an option to create in advance an Application
+                        Datasource on
+                        WebLogic Domain. To securely pass the Schema password, we need to create an OCI secret.</P>
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-camp-weblogic-lab1-s4-5-1.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+                <p>In the same way as in previous step, create a new OCI secret for the Sample Application Schema
+                        (ADFAPP). Give
+                        the Secret a name, for example ADFAppSecret. Setup the Welcome1234# password (or a custom
+                        password if you
+                        have changed the default password setup in the SQL script executed earlier).</P>
+
+
+
+
+
+
+                <p>Click on the new Secret name (ADFAppSecret) and take note of its OCID. We need to provide this value
+                        in the
+                        WebLogic for OCI Stack configuration form.</p>
+
+
+
+        </div>
+</section>
+
+<section class="cc01 cc01v0 cpad" id="link1s5">
+        <div class="cc01w1 cwidth">
+
+                <h3>Step 5: Create ssh keys</h3>
+
+                <p>You need to generate a public and private ssh key pair. During provisioning using Marketplace, you
+                        have to
+                        specify the ssh public key that will be associated with each of the WebLogic VM nodes.</p>
+
+                <p>We will be using the <strong>Cloud Shell</strong> to generate the keys in this tutorial.</p>
+
+
+                <p>(1) Open your Cloud Console by clicking on the > icon</p>
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-weblogic-lab1-s5-1.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+                <p>(2) Create a directory to contain your keys</p>
+
+                <p>mkdir keys<br />
+                        cd keys</p>
+
+
+                <p>(3) Now create your key set:</p>
+
+                <p> ssh-keygen -t rsa -b 4096 -f weblogic_ssh_key</p>
+
+
+                <p>This will create the weblogicsshkey containing the private key. The public key will be saved at the
+                        same
+                        location, with the .pub extension added to the filename: weblogicsshkey.pub.</p>
+
+                <div class="ocode">
+                        <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                                <div><a href="#copy">Copy</a></div>
+                        </div>
+
+                        <pre>
+    <code>
+    Generating public/private rsa key pair.
+    Enter passphrase (empty for no passphrase): 
+    Enter same passphrase again: 
+    Your identification has been saved in weblogic_ssh_key.
+    Your public key has been saved in weblogic_ssh_key.pub.
+    The key fingerprint is:
+    SHA256:jnmUBEH3HnwxcibOvcpPLi5/c1p55PoE7LNLHRmijRI jan_leeman@5e83aaf6d012
+    The key's randomart image is:
+    
+    +---[RSA 4096]----+
+    |     .+.. o =    |
+    |       o = * o   |
+    |        .E* o. . |
+    |       . o.o+o. o|
+    |        S..o..oo.|
+    |       = ... . *.|
+    |      o o o . * =|
+    |       .. .+oo.* |
+    |         +oo+++o.|
+    +----[SHA256]-----+
+    
+    </code></pre>
+                </div>
+
+
+                <p>You should be prepared now to run the Hands on Lab on your own cloud environment.</p>
+
+
+
+
+        </div>
+</section>
+
+<!-- cc01v0 -->
+
+<section class="cc01 cc01v0 cpad" id="link2">
+        <div class="cc01w1 cwidth">
+                <h2>Lab 2: Create WebLogic for OCI Stack</h2>
+
+                <p>1. After logging in, go to Main Menu, Solutions and Platform -> Marketplace:</p>
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-camp-weblogic-lab2-s1.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+                <p>2. You can choose to browser-search for WebLogic Server, or you can apply the filters:</p>
+
+                <p><strong>Type:</strong> Stack<br />
+                        <strong>Publisher:</strong> Oracle<br />
+                        <strong>Category:</strong> Application Development
+                </p>
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-camp-weblogic-lab2-s2.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+                <p>3. Choose WebLogic Server Enterprise Edition UCM; This brings you to the Stack Overview page:</p>
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-camp-weblogic-lab2-s3.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+
+                <p>4. Make sure the CTDOKE compartment is selected and to accept Oracle Terms of Use:</p>
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-camp-weblogic-lab2-s4.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+                <p>5. Fill in stack information</p>
+
+                <p><strong>Name:</strong> WLSNN<br />
+                        <strong>Description:</strong> Something you'll remember
+                </p>
+
+                <p><strong>Click Next</strong></p>
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-camp-weblogic-lab2-s5.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+                <p>6. Start to fill in details:</p>
+
+                <p><strong>Resource Name Prefix:</strong> WLSNN - where NN your unique suffix<br />
+
+                        <strong>WebLogic Server Shape:</strong> VM.Standard2.1<br />
+
+                        <strong>SSH Public Key:</strong> copy and paste the content from the provided weblogicsshkey.pub
+                        file; it
+                        contains the public key in RSA format; be sure to include the whole content in one line,
+                        including ssh-rsa
+                        part at the beginning.
+                </p>
+
+                <p>Note: if you have used the Cloud Shell to generate the weblogic ssh key, you can use the cat command
+                        to
+                        display its contents:</p>
+
+                <p>cat weblogic_ssh_key.pub</p>
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-camp-weblogic-lab2-s6.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+
+                <p>7. On Windows, use Ctrl+INSERT to copy the highlighted aria as in the above example:</p>
+
+                <p>On Mac, you can simply use command+c</p>
+
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-camp-weblogic-lab2-s7.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+                <p>8. Continue setting up:</p>
+
+                <p>WebLogic Server Node count: 2 (we will create a WebLogic cluster with two nodes / managed servers)
+                </p>
+
+                <p>Admin user name: weblogic</p>
+
+                <p>Secrets OCID for WebLogic Server Admin Password Enter the OCID of the WebLogic Admin Secret that was
+                        set up
+                        earlier for this. If you if you are using the CTD (Cloud Test Drive) environment, this OCID
+                        might be in a
+                        document provided by your instructor.</p>
+
+                <p>A bit of context: the WebLogic Server Admin Password is stored in an OCI Vault as an OCI Secret
+                        (encrypted
+                        with an OCI Encryption Key); during WebLogic Domain creation, the provisioning scripts will
+                        setup the admin
+                        password by getting it from the OCI Secret instead of having it as a Terraform variable; in a
+                        similar way -
+                        for JRF enabled domains - the database admin password will be referred from an OCI Secret.</p>
+
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-camp-weblogic-lab2-s8.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+                <p>9. Don't change WebLogic Server Advanced Configuration:</p>
+
+                <p>WebLogic Server Network parameters:</p>
+
+                <p>* Choose Create New VCN<br />
+
+                        * Choose the same CTDOKE Compartment<br />
+
+                        * Give a name to the Virtual Cloud Network</p>
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-camp-weblogic-lab2-s9.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+
+                <p>10. For the Subnet Strategy:</p>
+
+                <p>* Create New Subnet<br />
+                        * Use Public Subnet<br />
+                        * Regional Subnet</p>
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-camp-weblogic-lab2-s10.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+                <p>Note: It is not recommended to use public subnets strategy in production environments. In this
+                        tutorial we
+                        are instructing you to use public subnets for simplicity reasons. </p>
+
+                <p>11. Tick to Enable Access to Administration Console:</p>
+
+
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-camp-weblogic-lab2-s11.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+                <p>12. Tick to Provision Load Balancer:</p>
+
+                <p>Load Balancer Minimum and Maximum Bandwidth: keep defaults</p>
+
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-camp-weblogic-lab2-s12.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+
+                <p>13. Leave Identity Cloud Service Integration unchecked as default (no integration):</p>
+
+                <p>Leave OCI Policies checked, as a Dynamic Group containing the WebLogic Compute nodes will be created
+                        automatically alongside policies for letting them read Secrets from OCI Vault</p>
+
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-camp-weblogic-lab2-s13.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+                <p>14. Check Provision with JRF. In the Database section choose:</p>
+
+                <p><strong>Database Strategy:</strong> Autonomous Transaction Processing Database<br />
+
+                        <strong>Autonomous DB System Compartment:</strong> CTDOKE (or the compartment name where the ATP
+                        database
+                        was <strong>provisioned)<br />
+                                Autonomous Database name:</strong> WLSATPBDB<br />
+                        <strong>Secrets OCID for Autonomous Database Admin Password:</strong> Enter the OCID of the DB
+                        Admin Secret
+                        that was set up earlier for this. If you if you are using the CTD (Cloud Test Drive)
+                        environment, this OCID
+                        might be in a document provided by your instructor<br />
+                        <strong>Autonomous Database Service level:</strong> low (default option)
+                </p>
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-camp-weblogic-lab2-s14.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+
+                <p>15. Check Configure Application Datasource. We have a quick option to pre-configure the WebLogic
+                        Domain with
+                        a ready to use Application Datasource.</p>
+
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-camp-weblogic-lab2-s15.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+                <p>16. Set:</p>
+
+                <p><strong>Application Database Strategy:</strong> Autonomous Transaction Processing Database<br />
+                        <strong>Compartment:</strong> CTDOKE (or the compartment name where the ATP database was
+                        provisioned)<br />
+                        <strong>Autonomous Database name:</strong> WLSATPBDB<br />
+                        <strong>Autonomous Application Database User Name:</strong> ADFAPP<br />
+                        <strong>Secrets OCID for Autonomous Application Database User Password:</strong> Enter the OCID
+                        of the
+                        Sample Application Schema Secret that was set up earlier for this. If you if you are using the
+                        CTD (Cloud
+                        Test Drive) environment, this OCID might be in a document provided by your instructor<br />
+                        <strong>Autonomous Database Service level:</strong> tp
+                </p>
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-camp-weblogic-lab2-s16.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+
+
+                <p>17. Review the Stack configuration and click Create:</p>
+
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-camp-weblogic-lab2-s17.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+                <p>18. A Stack Job is being kicked off and the WebLogic Domain starts to be provisioned. The Console
+                        context
+                        moves to the Stack Details page (Solutions and Platform > Resource Manager > Stacks):</p>
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-camp-weblogic-lab2-s18.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+
+                <p>19. While all resources being created we can check the Job Logs; it helps fixing potentially
+                        configuration
+                        errors if the provisioning fails:</p>
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-camp-weblogic-lab2-s19.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+
+                <p>20. After approx. 15 minutes, the Job should complete with success:</p>
+
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-camp-weblogic-lab2-s20.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+                <p>21. We can check the Outputs section of Job Resources and see two important values:</p>
+
+                <p>Sample Application URL (we can can try it at this moment, but the out of the box sample application
+                        won't
+                        load as we need to finish the SSL configuration of the Load Balancer)
+                        WebLogic Server Administration Console</p>
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-camp-weblogic-lab2-s21.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+                <p>22. Let's check the WLS admin console of the newly created WebLogic Server; as we have chosen a
+                        Public Subnet
+                        for the WLS network, both Compute instances that have been created have public IPs associated.
+                        Use the
+                        Console URL provided in the Outputs section as shown above</p>
+
+                <p>Login with weblogic username and the provided password:</p>
+
+
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-camp-weblogic-lab2-s22.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+
+                <p>23. We can see that our domain has one admin server and two managed servers:</p>
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-camp-weblogic-lab2-s23.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+
+                <p>24. We can check the Compute Instances to see what has been provisioned; From OCI menu choose Core
+                        Infrastructure -> Compute -> Instances:</p>
+
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-camp-weblogic-lab2-s24.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+                <p>25. We can see two instances having our prefix setup during Stack configuration; one of them runs the
+                        WebLogic Admin server and a Managed Server and the other runs the second Managed Server:</p>
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-camp-weblogic-lab2-s25.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+
+                <p>We can check now if the out of the box deployed application is loading; From the Stack Job Outputs,
+                        open the
+                        Sample Application URL; it's loading, but we have to bypass the browser warning as the Public
+                        Load Balancer
+                        is configured with a Self Signed Certificate;</p>
+
+                <p>26. Click Advanced button and Proceed to … to continue:</p>
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-camp-weblogic-lab2-s26.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+
+                <p>27. The out of the box deployed sample application is being served through a secured SSL Load
+                        Balancer
+                        Listener:</p>
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-camp-weblogic-lab2-s27.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+
+                <p>congratulations! Your WebLogic domain is up and running!"</p>
+
+        </div>
+</section>
+<!-- /cc01v0 -->
+
+
+
+
+
+
+<section class="cc01 cc01v0 cpad" id="link3">
+
+        <div class="cc01w1 cwidth">
+                <h2>Lab 3: Change Load Balancer Cookie persistence type</h2>
+                <p>Before deploying the sample ADF Application, we need to change the way Session Persistence is handled
+                        by the
+                        Public Load Balancer. By default, the Public Load Balancer comes pre-configured to use Load
+                        Balancer cooking
+                        persistence. But in our case - or in any ADF application case actually - as the sample ADF
+                        application
+                        generates its own cookie <strong>(JSESSIONID)</strong>, we need to instruct the Load Balancer to
+                        use
+                        Application cookie persistence.
+
+
+                <p>
+                        1. In the OCI Console navigate to Core Infrastructure -> Networking -> Load Balancers:</p>
+
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-camp-weblogic-lab1-s2-1.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+                <p>2. Identify the Load Balancer created by the WebLogic Stack and click on it (contains the Stack
+                        resource name
+                        prefix setup during WebLogic Stack configuration):</p>
+
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-weblogic-lab3-s2.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;">
+                </p>
+
+
+                <p>3. In the Resources section, click on Backend Sets; click on the backend set:</p>
+
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-weblogic-lab3-s3.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;">
+                </p>
+
+
+                <p>4. Click on Edit:</p>
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-weblogic-lab3-s4.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;">
+                </p>
+
+
+
+
+                <p>5. We see that, by default, the Backend Set has Session Persistence enabled using load balancer
+                        cookie
+                        persistence:</p>
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-weblogic-lab3-s5.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;">
+                </p>
+
+
+
+                <p>6. Change to Enable application cookie persistence; Set Cookie Name to JSESSIONID; Click on Update
+                        Backend
+                        Set:</p>
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-weblogic-lab3-s6.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;">
+                </p>
+
+
+
+                <p>7. A Work Request has been created and shortly the Backend Set configuration shall be updated:</p>
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-weblogic-lab3-s7.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;">
+                </p>
+
+
+
+        </div>
+</section>
+
+
+
+
+
+<section class="cc01 cc01v0 cpad" id="link4">
+
+        <div class="cc01w1 cwidth">
+                <h2>Lab 4: Deploy sample ADF application</h2>
+                <p>1. Let's go back to the WebLogic Server admin console:</p>
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-camp-weblogic-lab4-s1.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+                <p>2. Before we deploy the ADF application, let's have a look at the Application Data Source that has
+                        been
+                        created with WebLogic Server; From Domain Structure go to Services -> Data Sources:</p>
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-camp-weblogic-lab4-s2.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+
+                <p>3. The Data Source it's named APPDBDataSource. We need to change the JNDI Name as our sample ADF
+                        application
+                        requires jdbc/adfappds to lookup for data source and get database connections. Click on the data
+                        source:</p>
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-camp-weblogic-lab4-s3.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+
+                <p>4. To change the JNDI Name we need to Lock the WebLogic Console Session. Click on Lock & Edit in the
+                        upper
+                        left corner:</p>
+
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-camp-weblogic-lab4-s4.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+                <p>5. Change JNDI Name to jdbc/adfappds and click Save:</p>
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-camp-weblogic-lab4-s5.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+
+                <p>6. Click on Activate Changes to save and close the WebLogic Console Editing Session:</p>
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-camp-weblogic-lab4-s6.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+
+                <p>7. The change has been recorded, but we need also to restart the Datasource. Click on View changes
+                        and
+                        restarts (upper left corner):</p>
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-camp-weblogic-lab4-s7.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+                <p>8. Switch to Restart Checklist:</p>
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-camp-weblogic-lab4-s8.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+
+                <p>9. Select the AppDBDataSource and click on Restart:</p>
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-camp-weblogic-lab4-s9.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+
+                <p>10. Click Yes:</p>
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-camp-weblogic-lab4-s10.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+
+                <p>11. The Datasource will be restarted shortly:</p>
+
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-camp-weblogic-lab4-s11.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+                <p>12. Now, to deploy the ADF application, go to Domain Structure menu, Deployments; Lock & Edit to
+                        switch to
+                        edit mode; Click Install:</p>
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-camp-weblogic-lab4-s12.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+                <p>13. Follow Upload your files link and upload provided SampleADFApplication.ear enterprise archive
+                        file:</p>
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-camp-weblogic-lab4-s13.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+
+                <p>14. Click Next, Next, leave Install de deployment as an application default option; click Next:</p>
+
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-camp-weblogic-lab4-s14.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+                <p>15. Choose deploying the application on WebLogic Cluster; click Next:</p>
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-camp-weblogic-lab4-s15.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+
+                <p>16. Leave default settings and click Next:</p>
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-camp-weblogic-lab4-s16.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+
+                <p>17. Choose No, I will review the configuration later and click Finish</p>
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-camp-weblogic-lab4-s17.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+
+                <p>18. Activate Changes:</p>
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-camp-weblogic-lab4-s18.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+
+                <p>19. The application is now in Prepared state; switch to Control tab:</p>
+
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-camp-weblogic-lab4-s19.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+                <p>20. Select the SampleADFApplication enterprise application and click Start -> Serving all requests;
+                        Click Yes
+                        in the following screen:</p>
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-camp-weblogic-lab4-s20.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+
+                <p>21. The SampleADFApplication application is in the Active State now:</p>
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-camp-weblogic-lab4-s21.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+
+                <p>22. Now, test this application at https://&lt; public load balancer IP &gt;/sampleADFApplication/</p>
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-camp-weblogic-lab4-s22.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+
+                <p>23. As we can see, calendar entries are coming from the ATP database. Play with the ADF Calendar
+                        Component,
+                        for example switch to List view:</p>
+
+
+                <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/devo-camp-weblogic-lab4-s23.jpg"
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+                <p>This is just a sample ADF application, but you can deploy any other applications; congratulations!
+                </p>
+        </div>
+</section>

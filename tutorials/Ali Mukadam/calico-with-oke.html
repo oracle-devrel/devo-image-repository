@@ -1,0 +1,251 @@
+<article class="page has-sidebar" itemscope itemtype="https://schema.org/CreativeWork">
+    <div class="page__inner-wrap">
+
+        <section class="page__content" itemprop="text">
+
+
+            <h2 id="introduction">Introduction</h2>
+
+            <p>There are many <a
+                    href="https://kubernetes.io/docs/concepts/cluster-administration/networking/#how-to-implement-the-kubernetes-networking-model">cluster
+                    networking</a> options for Kubernetes. Two of the most popular are: <a
+                    href="https://github.com/flannel-io/flannel">Flannel</a> and <a
+                    href="https://www.tigera.io/project-calico/">Calico</a>.</p>
+
+            <p>Flannel is a simple and easy way to configure a layer 3 network fabric designed for Kubernetes. It is
+                also used by default by <a
+                    href="https://docs.oracle.com/en/operating-systems/oracle-linux/kubernetes/?source=:ex:tb:::::WWMK211125P00010:WW_FY22_DevRel_DotBuild&SC=:ex:tb:::::WWMK211125P00010:WW_FY22_DevRel_DotBuild&pcode=WWMK211125P00010">Oracle
+                    Container Services for use with Kubernetes</a> (aka Kubernetes on Oracle Linux) and by Oracle
+                Container Engine (OKE).</p>
+
+            <p>Calico provides both a layer 3 networking and a network policy engine. Its policy engine can also be used
+                together with Flannel.</p>
+
+            <h2 id="what-well-cover">What we’ll cover</h2>
+
+            <p>This tutorial will focus on Calico. In this tutorial, you’ll install Calico for network pod policy on
+                your OKE Cluster. You will then test your new installation.</p>
+
+            <p>For additional information, see:</p>
+
+            <ul>
+                <li>
+                    <a
+                        href="https://docs.oracle.com/en-us/iaas/developer-tutorials/tutorials/tf-cluster/01-summary.htm?source=:ex:tb:::::WWMK211125P00010:WW_FY22_DevRel_DotBuild&SC=:ex:tb:::::WWMK211125P00010:WW_FY22_DevRel_DotBuild&pcode=WWMK211125P00010">Creating
+                        a Kubernetes Cluster using Terraform</a>
+                </li>
+                <li>
+                    <a
+                        href="https://docs.oracle.com/en/solutions/multi-tenant-topology-using-terraform/configure-terraform-execution-environment1.html#GUID-17AE60F0-FB45-4028-8BF5-71E149AA6C21?source=:ex:tb:::::WWMK211125P00010:WW_FY22_DevRel_DotBuild&SC=:ex:tb:::::WWMK211125P00010:WW_FY22_DevRel_DotBuild&pcode=WWMK211125P00010">Terraform
+                        execution environment</a>
+                </li>
+                <li>
+                    <a href="https://projectcalico.docs.tigera.io/getting-started/kubernetes/">Additional resources
+                        for getting started with Kubernetes</a>
+                </li>
+            </ul>
+
+            <h2 id="before-you-begin">Before You Begin</h2>
+
+            <p>To successfully complete this tutorial, you must have the following:</p>
+
+            <h3 id="requirements">Requirements</h3>
+
+            <ul>
+                <li>
+                    An Oracle Cloud Infrastructure account (required for use with Terraform).
+                    See <a
+                        href="https://docs.oracle.com/iaas/Content/GSG/Tasks/signingup.htm?source=:ex:tb:::::WWMK211125P00010:WW_FY22_DevRel_DotBuild&SC=:ex:tb:::::WWMK211125P00010:WW_FY22_DevRel_DotBuild&pcode=WWMK211125P00010">Signing
+                        Up for Oracle Cloud Infrastructure</a>.
+                </li>
+                <li>
+                    A MacOS, Linux, or Windows computer with <code
+                        class="language-plaintext highlighter-rouge">ssh</code> support installed.
+                </li>
+            </ul>
+
+            <h2 id="installing-calico">Installing Calico</h2>
+
+            <p>There are two routes available to you depending on how you’ve created your OKE cluster. If you’ve used
+                Terraform in the past, you can follow the section on <a
+                    href="#installing-calico-when-provisioning-with-terraform">installing with Terraform</a> below. Or,
+                if you’ve previously used the cli or the Oracle Cloud Infrastructure (OCI) console, you can continue
+                with the section on <a href="#manually-installing-calico">manual installation</a>.</p>
+
+            <h3 id="installing-calico-when-provisioning-with-terraform">Installing Calico when provisioning with
+                Terraform</h3>
+
+            <p>If you’re provisioning your cluster with the terraform-oci-oke module, there is an option to automate its
+                installation.</p>
+
+            <p>The Calico installation script in terraform-oci-oke also handles the cases when you have more than 50
+                nodes in your cluster and and the number of replicas needed are calculated and scaled to accordingly.
+            </p>
+
+            <p>To install Calico using Terraform:</p>
+
+            <ol>
+                <li>
+                    <p>Set the following variables in your <code
+                            class="language-plaintext highlighter-rouge">terraform.tfvars</code> file:</p>
+
+                    <div class="language-console highlighter-rouge">
+                        <div class="highlight">
+                            <pre class="highlight"><code><span class="go">create_bastion = "true"
+install_calico = "true"
+</span></code></pre>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <p>Run <code class="language-plaintext highlighter-rouge">terraform apply</code>:</p>
+
+                    <div class="language-console highlighter-rouge">
+                        <div class="highlight">
+                            <pre class="highlight"><code><span class="go">terraform apply -auto-approve
+</span></code></pre>
+                        </div>
+                    </div>
+                </li>
+            </ol>
+
+            <p>Calico is now installed. Next, <a href="#testing-calico">test your Calico installation</a>.</p>
+
+            <h3 id="manually-installing-calico">Manually installing Calico</h3>
+
+            <p>If you’ve manually created the OKE Cluster using the cli or the Oracle Cloud Infrastructure (OCI)
+                console, you can use the following procedure:</p>
+
+            <ol>
+                <li>
+                    <p><a
+                            href="https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengdownloadkubeconfigfile.htm?source=:ex:tb:::::WWMK211125P00010:WW_FY22_DevRel_DotBuild&SC=:ex:tb:::::WWMK211125P00010:WW_FY22_DevRel_DotBuild&pcode=WWMK211125P00010">Obtain
+                            the kubeconfig file</a>.</p>
+                </li>
+                <li>
+                    <p>Set up your <code class="language-plaintext highlighter-rouge">KUBECONFIG</code> environment
+                        variable:</p>
+
+                    <div class="language-console highlighter-rouge">
+                        <div class="highlight">
+                            <pre class="highlight"><code><span class="go">export KUBECONFIG=/path/to/kubeconfig
+</span></code></pre>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <p>Download the Calico policy-only manifest for the Kubernetes API datastore:</p>
+
+                    <div class="language-console highlighter-rouge">
+                        <div class="highlight">
+                            <pre class="highlight"><code><span class="go">curl \
+https://docs.projectcalico.org/v3.6/getting-started/kubernetes/installation/hosted/kubernetes-datastore/policy-only/1.7/calico.yaml \
+-O
+</span></code></pre>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <p>Set a POD_CID environment varible. By default, the pod CIDR block on OKE is <code
+                            class="language-plaintext highlighter-rouge">10.244.0.0/16</code>. To set this as an
+                        environment variable, use:</p>
+
+                    <div class="language-console highlighter-rouge">
+                        <div class="highlight">
+                            <pre class="highlight"><code><span class="go">export POD_CID="10.244.0.0/16"
+</span></code></pre>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <p>Replace the default pod CIDR block value (<code
+                            class="language-plaintext highlighter-rouge">192.168.0.0/16</code>) in the <code
+                            class="language-plaintext highlighter-rouge">calico.yaml</code> file.<br />
+                        You can skip this step if your pod CIDR block is already set to <code
+                            class="language-plaintext highlighter-rouge">192.168.0.0/16</code>.</p>
+
+                    <div class="language-console highlighter-rouge">
+                        <div class="highlight">
+                            <pre class="highlight"><code><span class="gp">sed -i -e "s?192.168.0.0/16?$</span>POD_CIDR?g<span class="s2">" calico.yaml
+</span></code></pre>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <p><strong>[ OKE cluster with more than 50 worker nodes only ]</strong> If your cluster consists of
+                        more than 50 worker nodes, then you need to do one additional step:</p>
+
+                    <div class="language-console highlighter-rouge">
+                        <div class="highlight">
+                            <pre class="highlight"><code><span class="go">sed -i -e 's/typha_service_name:\s"none"/typha_service_name: calico-typha/g' calico.yaml
+</span></code></pre>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <p>Apply the manifest:</p>
+
+                    <div class="language-console highlighter-rouge">
+                        <div class="highlight">
+                            <pre class="highlight"><code><span class="go">kubectl apply -f calico.yaml
+</span></code></pre>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <p><strong>[ Recommended ]</strong> Calico also recommends a minimum of 3 replicas in production
+                        environment and 1 replica per every 200 nodes:</p>
+
+                    <div class="language-console highlighter-rouge">
+                        <div class="highlight">
+                            <pre class="highlight"><code><span class="go">kubectl -n kube-system scale --current-replicas=1 --replicas=3 deployment/calico-typha
+</span></code></pre>
+                        </div>
+                    </div>
+
+                    <p>The installation steps and other recommendations can be viewed on the <a
+                            href="https://docs.projectcalico.org/getting-started/kubernetes/">Calico website</a>.</p>
+                </li>
+            </ol>
+
+            <h2 id="testing-calico">Testing Calico</h2>
+
+            <p>If you want to dive right in and test Calico as a network pod policy engine, there are some <a
+                    href="https://github.com/ahmetb/kubernetes-network-policy-recipes">excellent recipes</a> ready and
+                available for you. You should be able to take any of these for a spin.</p>
+
+            <p>Alternatively, if you’d prefer a more directed approach, you can always try the <a
+                    href="https://docs.projectcalico.org/security/">security tutorials</a> on the Calico website.</p>
+
+            <h2 id="whats-next">What’s next</h2>
+
+            <p>Congratulations! You’ve successfully installed Calico on your OKE Cluster.</p>
+
+            <p>To explore more information about development with Oracle products:</p>
+
+            <ul>
+                <li>
+                    <a
+                        href="https://developer.oracle.com/?source=:ex:tb:::::WWMK211125P00010:WW_FY22_DevRel_DotBuild&SC=:ex:tb:::::WWMK211125P00010:WW_FY22_DevRel_DotBuild&pcode=WWMK211125P00010">Oracle
+                        Developers Portal</a>
+                </li>
+                <li>
+                    <a
+                        href="https://www.oracle.com/cloud/?source=:ex:tb:::::WWMK211125P00010:WW_FY22_DevRel_DotBuild&SC=:ex:tb:::::WWMK211125P00010:WW_FY22_DevRel_DotBuild&pcode=WWMK211125P00010">Oracle
+                        Cloud Infrastructure</a>
+                </li>
+            </ul>
+
+
+
+        </section>
+
+
+
+
+
+
+    </div>
+
+
+</article>

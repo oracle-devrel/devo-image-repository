@@ -1,0 +1,1516 @@
+<section class="cc01 cc01v0 cpad" id="link0">
+        <div class="cc01w1 cwidth">
+                <h2>Setup: Creating your microservices environment</h2>
+                <p>This lab will show you how to set up the Oracle Cloud Infrastructure (OCI) Container Engine
+                        for Kubernetes
+                        (OKE) for creating and deploying a front-end Helidon application which accesses the
+                        backend Oracle
+                        Autonomous Database (ATP).</p>
+
+
+                <h3>Step 1: Launch the Cloud Shell</h3>
+                <p>Cloud Shell is a small virtual machine running a Bash shell which you access through the OCI
+                        Console. Cloud
+                        Shell comes with a pre-authenticated CLI which is set to the OCI Console tenancy home
+                        page region. It also
+                        provides up-to-date tools and utilities.</p>
+
+                <p>Login to the OCI Cloud console and click the Cloud Shell icon in the top-right corner of the
+                        Console.</p>
+
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-microservices-setup-s1.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+                <h3>Step 2: Download workshop source code</h3>
+
+                <p>1. To work with application code, you need to download a GitHub repository using the
+                        following curl and unzip
+                        command. The workshop assumes this is done from your root directory.</p>
+
+                <p>cd ~ ; git clone <a
+                                href="https://github.com/oracle/microservices-datadriven.git">https://github.com/oracle/microservices-datadriven.git</a>--branch
+                        1.0</p>
+
+                <p>You should now see <code class="ocode">microservices-datadriven</code> in your root directory
+                </p>
+                <p>2. Change directory into the <code class="ocode">microservices-datadriven/grabdish</code>
+                        directory:</p>
+
+                <code class="ocode">cd microservices-datadriven/grabdish</code>
+
+                <h3>Step 3: Create an OCI compartment and a Kubernetes Cluster in that compartment</h3>
+                <h4>Creating OCI compartment</h4>
+                <p>1. Open up the main menu in the top-left corner of the Console and select <strong>Identity
+                                &gt;
+                                Compartments</strong>.</p>
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-microservices-setup-s3-1.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+                <p>2. Click <strong>Create Compartment</strong> with the following parameters and click
+                        <strong>Create
+                                Compartment</strong>:
+                </p>
+
+                <ul>
+                        <li>Compartment name: <code class="ocode">msdataworkshop</code></li>
+                        <li>Description: <code class="ocode">MS workshop compartment</code></li>
+                </ul>
+
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-microservices-setup-s3-2-1.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-microservices-setup-s3-2-2.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+                <p>3. Once the compartment is created, click the name of the compartment and then click
+                        <strong>Copy</strong> to
+                        copy the OCID.
+                </p>
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-microservices-setup-s3-3-1.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+                <p><img src=" https://developer.oracle.com/a/devo/images/devo-microservices-setup-s3-3-2.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+                <p>4. Go back into your cloud shell and verify you are in the <code
+                                class="ocode">~/microservices-datadriven/grabdish</code> directory.</p>
+
+                <p>5. Run<code class="ocode">./setCompartmentId.sh &lt;COMPARTMENT_OCID&gt; &lt;REGION_ID&gt;</code>
+                        where your
+                        <code class="ocode">&lt;COMPARTMENT_OCID&gt;</code> and <code
+                                class="ocode">&lt;REGION_ID&gt;</code> values
+                        are set as arguments.
+                </p>
+
+                <p>For example:</p>
+
+                <p><code class="ocode">./setCompartmentId.sh ocid1.compartment.oc1..aaaaaaaaxbvaatfz6yourcomparmentidhere5dnzgcbivfwvsho77myfnqq us-ashburn-1</code>
+                </p>
+
+                <h4>Step 4: Create Kubernetes Cluster</h4>
+
+
+                <p>1) Click <a href="https://docs.oracle.com/pls/topic/lookup?ctx=en/solutions/deploy-oke-with-atp-in-oci&id=oci-arch-oke-atp-zip"
+                                target="_blank"><img
+                                        src="https://developer.oracle.com/a/devo/images/deploy-to-cloud-button.jpg"
+                                        alt="Delpoy to Oracle Cloud"></a>
+                </p>
+
+                <p>If you aren't already signed in, when prompted, enter the tenancy and user credentials.</p>
+
+                <p>2) Review and accept the terms and conditions.</p>
+
+                <p>3) Select the region where you want to deploy the stack.</p>
+
+                <p>Select the <strong>msdataworkshop</strong> compartment for your stack and Kubernetes cluster.
+                </p>
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-microservices-setup-s4-3.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+                <p>4) Follow the on-screen prompts and instructions to create the stack. Select availability
+                        domain for the
+                        Kubernetes cluster.</p>
+
+                <p>Do not create the Autonomous Transaction Processing database during this process.</p>
+
+                <p>We will create it a couple of steps later (Step 4). Go with the default cluster name of
+                        msdataworkshopcluster.</p>
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-microservices-setup-s4-4.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+                <p>5) Click Create </p>
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-microservices-setup-s4-5.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+                <p>6) After creating the stack, click <strong>Terraform Actions</strong>, and select
+                        <strong>Plan</strong>.
+                </p>
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-microservices-setup-s4-6.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+                <p>Wait for the job to be completed, and review the plan.</p>
+
+                <p>To make any changes, return to the Stack Details page, click <strong>Edit Stack</strong>, and
+                        make the
+                        required changes. Then, run the <strong>Plan</strong> action again.</p>
+
+                <p>7) If no further changes are necessary, return to the Stack Details page, click
+                        <strong>Terraform
+                                Actions</strong>, and select <strong>Apply</strong>.
+                </p>
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-microservices-setup-s4-7.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+                <p>8) The Terraform job will take a few minutes to provision the cluster.</p>
+
+                <p>9) Navigate to Kubernetes Clusters on the Cloud Console.</p>
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-microservices-setup-s4-9.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+                <p>10) After the provisioning process of the cluster completes, the Cluster Status for the
+                        msdataworkshopcluster
+                        should show Active.</p>
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-microservices-setup-s4-10.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+                <p>11) Click the link for the cluster you've just created to see the detail page.</p>
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-microservices-setup-s4-11.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+                <p>12) Click the <strong>Access Cluster</strong> button.</p>
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-microservices-setup-s4-12.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+                <p>13) Click on the link to copy the oci CLI command.</p>
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-microservices-setup-s4-13.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+                <p>14) Return the Cloud Shell, paste and run the command to add the ~/.kube/config needed to
+                        access the
+                        kubernetes cluster.</p>
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-microservices-setup-s4-14.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+                <h3>Step 5: <strong>Create OCI Vault Secrets for the ATP PDB users and FrontEnd microservice
+                                authentication</strong></h3>
+
+
+                <p>1. Open up the main menu in the top-left corner of the Console and select <strong>Security
+                                &gt;
+                                Vault</strong>.</p>
+
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-microservices-setup-s5-1.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+                <p>2. Click <strong>Create Vault</strong>, specify a name and click <strong>Create</strong>.</p>
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-microservices-setup-s5-2.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+                <p>Click the link for the vault you just created.</p>
+
+                <p>COPY THE OCID FOR THE VAULT AND NOTE IT FOR LATER USE.</p>
+
+                <p>3. Click <strong>Master Encryption Key</strong>, click <strong>Create Key</strong>, enter a
+                        name, and click
+                        <strong>Create Key</strong>.
+                </p>
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-microservices-setup-s5-3.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+                <p>4. Click <strong>Secrets</strong> , click <strong>Create Secret</strong>, enter a name,
+                        description,
+                        encryption key (created in previous step), leave the default <strong>Plain-Text</strong>
+                        Secret Type
+                        Template, and provide a DB password (in the <strong>Secret Contents</strong> field) for
+                        the database users
+                        you will create later and click <strong>Create Secret</strong>.</p>
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-microservices-setup-s5-4.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+                <p>COPY THE OCID OF THIS DB PASSWORD SECRET AND NOTE IT FOR LATER USE.</p>
+
+                <p>5. Repeat the process to create a secret for the FrontEnd microservice authentication.</p>
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-microservices-setup-s5-5.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+                <p>COPY THE OCID OF THIS FRONTEND MICROSERVICE AUTH PASSWORD SECRET AND NOTE IT FOR LATER USE.
+                </p>
+
+                <p>6. Open up the main menu in the top-left corner of the Console and select <strong>Identity
+                                &gt; Dynamic
+                                Groups</strong>.</p>
+
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-microservices-setup-s5-6.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+                <p>7. Click <strong>Create Dynamic Group</strong>, specify a name, add the following matching
+                        rule providing
+                        your compartment ocid</p>
+
+                <p><code class="ocode">All {<a href="http://instance.compartment.id" class="external-link" rel="nofollow">instance.compartment.id</a> = 'ocid1.compartment.oc1..aaaaaaaaaaaputyourcompartmentidhere'}</code>
+                </p>
+
+                <p>and click <strong>Create</strong>.</p>
+
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-microservices-setup-s5-7.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+                <p>8. Open up the main menu in the top-left corner of the Console and select <strong>Identity
+                                &gt;
+                                Policies</strong>:</p>
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-microservices-setup-s5-8.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+                <p>9. Click <strong>Create Policy</strong> specify a name and the following matching rule
+                        providing your
+                        compartment and vault ocids.</p>
+
+                <p><code class="ocode">Allow dynamic-group yourdynamicgroupname to manage 
+            secret-family in compartment id ocid1.compartment.oc1..yourcompartmentid
+             where <a href="http://target.vault.id">target.vault.id</a> = 'ocid1.vault.oc1.phx.yourvaultid'</code></p>
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-microservices-setup-s5-9.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+                <p>and click <strong>Create</strong>.</p>
+
+
+                <h3>Step 6: Create ATP databases</h3>
+
+
+                <p>Run the <code class="ocode">createATPPDBs.sh</code> script providing the Vault Secret ocids
+                        (created and
+                        noted in <strong>Step 4</strong>) for the DB users followed by the ocid for the FrontEnd
+                        microservice user
+                </p>
+
+
+                <p><code class="ocode">./createATPPDBs.sh &lt;REPLACE WITH VAULT SECRET OCID FOR DB USER&gt; 
+                &lt;REPLACE WITH VAULT SECRET OCID FOR FRONTEND USER AUTH&gt;</code></p>
+
+                <p>Notice creation of the ORDERDB and INVENTORYDB PDBs and Frontend Auth secret.</p>
+
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-camp-ms-setup-s6-1-1.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-camp-ms-setup-s6-1-2.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+
+                <p><em>OCIDs for the PDBs are stored and will be used later to create kubernetes secrets that
+                                microservices will
+                                use to access them.</em>
+                </p>
+
+                <h3>Step 7: Create an OCI Registry and Auth key and login to it from Cloud Shell</h3>
+
+                <p>You are now going to create an Oracle Cloud Infrastructure Registry and an Auth key. Oracle
+                        Cloud
+                        Infrastructure Registry is an Oracle-managed registry that enables you to simplify your
+                        development-to-production workflow by storing, sharing, and managing development
+                        artifacts such as Docker
+                        images.</p>
+
+                <p>1. Open up the main menu in the top-left corner of the console and go to <strong>Developer
+                                Services &gt;
+                                Container Registry</strong>.</p>
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-ms-setup7-1.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+                <p>2. Take note of the namespace (for example, <code class="ocode">axkcsk2aiatb</code> shown in
+                        the image
+                        below). Click <strong>Create Repository</strong>, specify the following details for your
+                        new repository, and
+                        click <strong>Create Repository</strong>.</p>
+
+                <ul>
+                        <li>Repository Name: <code class="ocode"> &lt;firstname.lastname&gt;/msdataworkshop</code></li>
+                        <li>Access: <code class="ocode"> Public</code></li>
+
+                </ul>
+
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-ms-setup7-2.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 20px;"></p>
+
+                <p><img src=" https://developer.oracle.com/a/devo/images/devo-ms-setup7-2-2.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+                <p><strong>Make sure that access is marked as <code class="ocode">Public</code></strong>.</p>
+
+
+                <p>Go to Cloud Shell and run <code class="ocode">./addOCIRInfo.sh</code> with the namespace and
+                        repository name
+                        as arguments</p>
+
+                <p><code class="ocode">./addOCIRInfo.sh &lt;namespace&gt; &lt;repository_name&gt;</code></p>
+
+                <p>For example <code
+                                class="ocode">./addOCIRInfo.sh axkcsk2aiatb msdataworkshop.user1/msdataworkshop</code>
+                </p>
+
+                <p>3. You will now create the Auth token by going back to the User Settings page. Click the
+                        Profile icon in the
+                        top-right corner of the Console and select <strong>User Settings</strong>.</p>
+
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-microservices-setup-s5c.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+                <p>4. Click on <strong>Auth Tokens</strong> and select <strong>Generate Token</strong>.</p>
+
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-microservices-setup-s5d.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+                <p>5. In the description type <code class="ocode">msdataworkshoptoken</code> and click
+                        <strong>Generate
+                                Token</strong>.
+                </p>
+
+
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-microservices-setup-s5e.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+                <p>6. Copy the token value.</p>
+
+
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-microservices-setup-s5f.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+                <p>7. Go to Cloud Shell and run <code
+                                class="ocode">./dockerLogin.sh &lt;USERNAME&gt; &quot;&lt;AUTH_TOKEN&gt;&quot;</code>
+                        where <code class="ocode">&lt;USERNAME&gt;</code> and <code
+                                class="ocode"> &quot;&lt;AUTH_TOKEN&gt;&quot;</code>
+                        values are set as arguments.</p>
+
+                <p><code class="ocode">&lt;USERNAME&gt;</code> - is the username used to log in (typically your
+                        email address).
+                        If your username is federated from Oracle Identity Cloud Service, you need to add the
+                        <code class="ocode">oracleidentitycloudservice/</code> prefix to your username, for
+                        example <code
+                                class="ocode">oracleidentitycloudservice/firstname.lastname@href="http://something.com">something.com </code>
+                </p>
+
+                <p><code class="ocode">&quot;&lt;AUTH_TOKEN&gt;&quot;</code> - paste the generated token value
+                        and enclose the
+                        value in quotes.</p>
+
+                <p>For example <code
+                                class="ocode">./dockerLogin.sh <a href="mailto:user.foo@bar.com">user.foo@bar.com</a> &quot;8nO[BKNU5iwasdf2xeefU;yl&quot;</code>
+                </p>
+
+                <p>8. Once successfully logged into Container Registry, we can list the existing docker images.
+                        Since this is
+                        the first time logging into Registry, no images will be shown.</p>
+
+
+                <p><code class="ocode">docker images</code></p>
+
+                <h3>Step 8: Install GraalVM, Jaeger, and Frontend Loadbalancer</h3>
+
+                <p>Go back into your cloud shell and verify you are in the <code
+                                class="ocode">~/microservices-datadriven/grabdish</code> directory</p>
+
+                <p>Run the <code class="ocode">installGraalVMJaegerAndFrontendLB.sh</code> script to install
+                        both GraalVM and
+                        Jaeger.</p>
+
+
+                <p><code class="ocode">./installGraalVMJaegerAndFrontendLB.sh</code> </p>
+                <p>You may now proceed to the next lab.</p>
+
+
+        </div>
+</section>
+<!-- /cc01v0 -->
+<!-- SET UP -->
+
+<!-- cc01v0 -->
+
+<section class="cc01 cc01v0 cpad" id="link1">
+        <div class="cc01w1 cwidth">
+                <h2>Lab 1: Deploying and testing an application</h2>
+
+                <p>This lab will show you how to build images, push them to Oracle Cloud Infrastructure Registry
+                        and deploy the
+                        microservices on our Kubernetes cluster. You will also clone a GitHub repository.</p>
+
+                <p>These steps need to be executed from the Cloud Shell</p>
+        </div>
+</section>
+
+
+
+<section class="cc01 cc01v0 cpad" id="link1s1">
+        <div class="cc01w1 cwidth">
+                <h3>Step 1: Set values for workshop in the environment</h3>
+
+                <p>1. Go back into your cloud shell and verify you are in the <code
+                                class="ocode">~/microservices-datadriven/grabdish</code> directory</p>
+
+                <p>2. Run <code
+                                class="ocode">./addAndSourcePropertiesInBashrc.sh to add the lab specific environment variables to the ~/.bashrc file:</code>
+                </p>
+
+
+                <p><code class="ocode">./addAndSourcePropertiesInBashrc.sh</code></p>
+
+        </div>
+</section>
+
+
+<section class="cc01 cc01v0 cpad" id="link1s2">
+        <div class="cc01w1 cwidth">
+
+
+                <h3>Step 2: Build and push the Docker images</h3>
+
+                <p>Run the <code class="ocode">build.sh</code> script to build and push the microservices images
+                        into the
+                        repository</p>
+
+                <p><code class="ocode">1. cd $MSDATAWORKSHOP_LOCATION ; ./build.sh</code></p>
+
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-microservices-lab1-s2-1-1.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+                <p>In a few minutes, you should have successfully built and pushed all the images into the OCIR
+                        repository.</p>
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-microservices-lab1-s2-1-2.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+                <p>2. Go to the Console, click the main menu in the top-left corner and open <strong>Developer
+                                Services &gt;
+                                Container Registry</strong>.</p>
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-microservices-lab1-s2-2.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+                <p>3. Mark all the images as public (<strong>Actions</strong> &gt; <strong>Change to
+                                Public</strong>):</p>
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-microservices-lab1-s2-3.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+        </div>
+</section>
+
+
+
+<!-- cc01v0 -->
+
+<section class="cc01 cc01v0 cpad" id="link1s3">
+        <div class="cc01w1 cwidth">
+
+                <h3>Step 3: Build deploy and access FrontEnd UI microservice</h3>
+
+
+                <p>1. Run <code class="ocode">./setJaegerAddress.sh</code> and verify successful outcome.</p>
+
+                <p>It may be necessary to run this script multiple times if the Jaeger load balancer has not
+                        been provisioned
+                        yet.</p>
+
+
+                <p><code class="ocode">./setJaegerAddress.sh</code></p>
+
+
+                <p>2. Source the <code class="ocode">.bashrc</code> file with the following command.</p>
+
+
+                <p><code class="ocode">source ~/.bashrc</code>
+                <p>&nbsp;</p>
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-microservices-lab1-s3b.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+                <p>3. Change directory into <code class="ocode">/frontend-helidon</code> folder:</p>
+
+
+
+                <p><code class="ocode">cd $MSDATAWORKSHOP_LOCATION /frontend-helidon</code>
+
+                <p>4. Run the build script which will build the frontend-helidon application, store it in a
+                        docker image and
+                        push it to Oracle Registry</p>
+
+                <p> <code class="ocode">./build.sh</code></p>
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-microservices-lab1-s3-5.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+                <p>After a couple of minutes, the image should have been successfully pushed into the
+                        repository.</p>
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-microservices-lab1-s3-4-2.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+                <p>5. Run the deploy script from the same directory as build. This will create the deployment
+                        and pod for this
+                        image in the OKE cluster <code class="ocode">msdataworkshop</code> namespace:</p>
+
+                <p><code class="ocode">./deploy.sh</code></p>
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-camp-ms-lab1-s3-5.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+                <p>6. Once successfully created, check that the frontend pod is running:</p>
+
+                <p><code class="ocode">kubectl get pods --all-namespaces</code></p>
+
+                <p><img src="
+            https://developer.oracle.com/a/devo/images/devo-microservices-lab1-s3-6-1.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+                <p>Alternatively, you can execute the pods shortcut command:</p>
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-microservices-lab1-s3-6-2.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+                <p>7. Check that the load balancer service is running, and write down the external IP address
+                        and port.</p>
+
+                <p><code class="ocode">kubectl get services --all-namespaces</code></p>
+
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-microservices-lab1-s3-7-1.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+                <p>Alternatively, you can execute the <code class="ocode">services</code> shortcut command.</p>
+
+                <p>&nbsp;</p>
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-microservices-lab1-s3-7-2.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+                <p>8. You are ready to access the frontend page. Open a new browser tab and enter the external
+                        IP and port URL:
+                </p>
+
+                <p><code class="ocode">https://&lt;EXTERNAL-IP&gt;</code></p>
+
+                <p>Note that for convenience a self-signed certificate is used to secure this https address and
+                        so it is likely
+                        you will be prompted by the browser to allow access.</p>
+
+                <p>You will then be prompted to authenticate to access the Front End microservices. The user is
+                        <code class="ocode">grabdish</code> and the password is the one created and stored in a
+                        vault secret in Lab
+                        &quot;Setup: Creating your microservices environment&quot; Step 4.
+                </p>
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-microservices-lab1-s3-8-1.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+                <p>You should then see the Front End home page. You've now deployed and accessed your first
+                        microservice of the
+                        lab!</p>
+
+                <p>Note that links on Front End will not work yet as they access microservices that will be
+                        created and deployed
+                        in subsequent labs.</p>
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-microservices-lab1-s3-8-2.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+                <p>You may now proceed to the next lab.</p>
+
+
+
+
+
+
+
+        </div>
+</section>
+<!-- /cc01v0 -->
+
+
+
+
+
+
+
+<!-- cc01v0 -->
+
+<section class="cc01 cc01v0 cpad" id="link2">
+        <div class="cc01w1 cwidth">
+                <h2>Lab 2: Data-centric microservices walkthrough with Helidon MP</h2>
+
+
+        </div>
+</section>
+<!-- /cc01v0 -->
+
+<section class="cc01 cc01v0 cpad" id="link2s1">
+        <div class="cc01w1 cwidth">
+
+                <h3>Step 1: Download Regional DB wallet, upload to Object Storage, and create authenticated
+                        link.</h3>
+
+                <p>1. Select <strong>Autonomous Transaction Processing</strong> from the side menu in the OCI
+                        Console.</p>
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-microservices-lab2-s1-1.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+                <p>2. Select the correct compartment on the left-hand side (if not already selected) and select
+                        the
+                        <strong>ORDERDB</strong>.
+                </p>
+
+                <p>Click the <strong>DB Connection</strong> button.</p>
+
+
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-microservices-lab2-s1-2.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+                <p>3. Select <strong>Regional Wallet</strong> from the drop-down menu and click the
+                        <strong>Download
+                                Wallet</strong> button.
+                </p>
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-microservices-lab2-s1-3.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+                <p>4. Provide a password and click the <strong>Download</strong> button to save the wallet zip
+                        file to your
+                        computer.</p>
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-microservices-lab2-s1-4.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+                <p>5. Select <strong>Object Storage</strong> from the side menu in the OCI Console.</p>
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-microservices-lab2-s1-5.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+                <p>6. Select the correct compartment on the left-hand side (if not already selected) and click
+                        the
+                        <strong>Create Bucket</strong> button.
+                </p>
+
+                <p>Provide a name and click the <strong>Create</strong> button.</p>
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-microservices-lab2-s1-6.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+                <p>7. Select the bucket you've just created and in the bucket screen click the
+                        <strong>Upload</strong> button
+                        under <strong>Objects</strong>.
+                </p>
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-microservices-lab2-s1-7.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+                <p>8. Provide the wallet zip you saved to your computer earlier and click the
+                        <strong>Upload</strong> button.
+                </p>
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-microservices-lab2-s1-8.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+                <p>9. You should now see the wallet zip object you just uploaded in the list of Objects. Click
+                        the &quot;…&quot;
+                        menu to the far right of the object and select <strong>Create Pre-Authenticated
+                                Request</strong>.</p>
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-microservices-lab2-s1-9.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+
+
+                <p>10. Click the <strong>Create Pre-Authenticated Request</strong> button (default values are
+                        sufficient).</p>
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-microservices-lab2-s1-10.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+
+                <p>11. Copy the value of the <strong>Pre-Authenticated Request URL</strong> as it will be used
+                        in the next step.
+                </p>
+
+
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-microservices-lab2-s1-11.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+        </div>
+</section>
+
+
+
+<section class="cc01 cc01v0 cpad" id="link2s2">
+        <div class="cc01w1 cwidth">
+
+                <h3>Step 2: Create Secrets to Connect to ATP Pluggable-databases (PDB)s</h3>
+
+                <p>You will run a script that will download the connection information (wallet, tnsnames.ora,
+                        etc.) and then
+                        create kubernetes secrets from the information that will be used to connect to the ATP
+                        instances provisioned
+                        earlier.</p>
+
+                <p>1. Go to Cloud Shell and Change directory into atp-secrets-setup.</p>
+
+                <p><code class="ocode">
+            cd $MSDATAWORKSHOP_LOCATION/atp-secrets-setup
+            
+            </code></p>
+
+                <p>2. Run <code class="ocode">createAll.sh</code> and notice output creating secrets.</p>
+
+                <p><code class="ocode">./createAll.sh</code>
+                        https://objectstorage.us-phoenix-1.oraclecloud.com/REPLACE_WITH_YOUR_PREAUTH_LINK/Wallet_ORDERDB.zip
+                </p>
+
+
+                <p><img src=" https://developer.oracle.com/a/devo/images/devo-microservices-lab2-s1a.jpg"
+                                alt="msdataworkshop" style="border: 1px solid #999999; margin-bottom: 50px;">
+                </p>
+
+
+                <p>3. Execute <code class="ocode">msdataworkshop</code> and notice secrets for order and
+                        inventory database and
+                        users.</p>
+
+                <p><code class="ocode">msdataworkshop</code></p>
+
+        </div>
+</section>
+
+<section class="cc01 cc01v0 cpad" id="link2s3">
+        <div class="cc01w1 cwidth">
+
+                <h3>STEP 3: Verify and understand ATP connectivity via Helidon microservice deployment in OKE
+                </h3>
+                <p>You will verify the connectivity from the frontend Helidon microservice to the atp admin
+                        microservice
+                        connecting to the ATP PDBs.</p>
+
+                <p>1. First, let’s analyze the Kubernetes deployment YAML file: <code
+                                class="ocode">atpaqadmin-deployment.yaml</code>.</p>
+
+
+                <p><code class="ocode">cat $MSDATAWORKSHOP_LOCATION/atpaqadmin/atpaqadmin-deployment.yaml</code>
+                </p>
+
+
+                <p>The volumes are set up and credentials are brought from each of the bindings (inventory and
+                        order). The
+                        credential files in the secret are base64 encoded twice and hence they need to be
+                        decoded for the program to
+                        use them, which is what the <code class="ocode">initContainer</code> takes care. Once
+                        done, they will be
+                        mounted for access from the container
+                        <code class="ocode">helidonatp</code>. The container also has the DB connection
+                        information such as the JDBC
+                        URL, DB credentials and Wallet, created in the previous step.
+                </p>
+
+                <p>2. Let’s analyze the <code class="ocode">microprofile-config.properties</code> file.</p>
+
+                <p><code class="ocode">cat $MSDATAWORKSHOP_LOCATION/atpaqadmin/src/main/resources/META-INF/microprofile-config.properties</code>
+                </p>
+
+
+                <p>This file defines the <code class="ocode">microprofile</code> standard. It also has the
+                        definition of the
+                        data sources that will be injected. You will be using the universal connection pool
+                        which takes the JDBC URL
+                        and DB credentials to connect and inject the datasource. The file has default values
+                        which will be
+                        overwritten with the values specific for our Kubernetes deployment.</p>
+
+                <p>3. Let’s also look at the microservice source file <code
+                                class="ocode">ATPAQAdminResource.java</code>.</p>
+
+                <p><code class="ocode">cat $MSDATAWORKSHOP_LOCATION/atpaqadmin/src/main/java/oracle/db/microservices/ATPAQAdminResource.java</code>
+                </p>
+
+
+                <p>Look for the inject portion. The <code class="ocode">@Inject</code> will have the two data
+                        sources under
+                        <code class="ocode">@Named</code> as “orderpdb” and “inventorypdb” which were mentioned
+                        in the <code class="ocode">microprofile-config.properties</code> file.
+                </p>
+
+                <p>4. Go into the ATP admin folder .$MSDATAWORKSHOP_LOCATION /atpaqadmin</p>
+
+                <p>5. Setup information necessary for ATP DB links and AQ propagation and create the <code
+                                class="ocode">atpaqadmin</code> deployment and service using the following
+                        command.</p>
+
+                <p><code class="ocode">./deploy.sh </code></p>
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-camp-ms-lab2-s3-5.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+                <p>6) Once successfully deployed, verify the existence of the deployment and service using the
+                        following
+                        command. You should notice that we now have the <code class="ocode">atpaqadmin</code>
+                        pod up and running.
+                </p>
+
+
+                <p><code class="ocode">pods</code></p>
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-camp-ms-lab2-s3-6.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+                <p>7. Use the frontend LoadBalancer URL <code class="ocode">http://&lt;external-IP&gt;:8080</code> to
+                        open the
+                        frontend webpage. If you need the URL, execute the <code class="ocode">services</code>
+                        shortcut command and
+                        note the External-IP of the msdataworkshop/frontend/LoadBalancer.</p>
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-microservices-lab2-s3-7.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+                <p>8. Click <strong>Datasources</strong> tab and then <strong>Test Data Sources</strong> button.
+                </p>
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-camp-ms-lab2-s3-8.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+                <p>The frontend is calling the <code class="ocode">atpaqadmin</code> service and has
+                        successfully established
+                        connections to both databases <code class="ocode">orderpdb</code> and <code
+                                class="ocode">inventorypdb</code>.</p>
+
+                <p>9. Open the frontend microservice home page and click <strong>Setup (and Tear Down) Data and
+                                Messaging</strong> from the Labs pane.</p>
+
+                <p>Click the following buttons in order: <strong>Create Users</strong>, <strong>Create Inventory
+                                Table</strong>,
+                        <strong>Create Database Links</strong>, <strong>Setup Tables Queues and
+                                Propagation</strong>.
+                </p>
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-microservices-lab2-s3-9.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+
+                <p>The results of <code class="ocode">Setup Tables Queues and Propagation</code> should take a
+                        couple of minutes
+                        to complete, therefore we could open the Cloud Shell and check the logs, as we are
+                        waiting until all the
+                        messages have been received and confirmed.</p>
+
+                <p>10. (Optional) While waiting for <code class="ocode">Setup Tables Queues and Propagation</code> to
+                        complete,
+                        open the Cloud Shell and check the logs using the following command:</p>
+
+                <p><code class="ocode">logpod  admin </code></p>
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-camp-ms-lab2-s3-10.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+                <p>We will see testing messages going in both directions between the two ATP instances across
+                        the DB link.</p>
+
+                <p><em>If the process gets stuck, use <code class="ocode">Ctrl-C</code> to exit.</em></p>
+
+                <!--<p><img src="https://developer.oracle.com/a/devo/images/" alt="" style="border: 1px solid #999999; margin-bottom: 50px;"></p>  -->
+                <p>11) (Optional) If it is necessary to restart, rerun the process or clean up the database:</p>
+
+                <p>If <strong>Setup Tables Queues and Propagation</strong> was executed, you need to run
+                        <strong>Unschedule
+                                Propagation</strong> first.
+                </p>
+
+                <p>Afterwards, click <strong>Delete Users</strong>.</p>
+
+                <p>&nbsp;</p>
+
+                <p>The next lab will show you how to deploy and run data-centric microservices highlighting use
+                        of different
+                        data types, data and transaction patterns, and various Helidon MP features. The lab will
+                        then show you
+                        metrics, health checks and probes, and tracing that have been enabled via Helidon
+                        annotations and
+                        configuration.</p>
+
+                <p><strong>This lab assumes that you have already deployed the OKE cluster, ATP databases and
+                                the microservices
+                                from the setup lab and lab 1.</strong></p>
+        </div>
+</section>
+
+
+<section class="cc01 cc01v0 cpad" id="link2s4">
+        <div class="cc01w1 cwidth">
+
+
+
+                <h3>Step 4: Deploy GrabDish store services</h3>
+
+                <p>1. After you have successfully set up the databases, you can now test the “GrabDish” Food
+                        Order application.
+                        You will interact with several different data types, check the event-driven
+                        communication, saga,
+                        event-sourcing and Command Query Responsibility Segregation via order and inventory
+                        services. Go ahead and
+                        deploy the related order, inventory and supplier Helidon services. The Food Order
+                        application consists of
+                        the following tables shown in the ER diagram:</p>
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-microservices-lab2-s3-1-1.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+                <p>The Food Order application consists of a mock Mobile App (Frontend Helidon microservice) that
+                        places and
+                        shows orders via REST calls to the order-helidon microservice. Managing inventory is
+                        done with calls to the
+                        supplier-helidon microservice.<br />When an order is placed, the order service inserts
+                        the order in JSON
+                        format and in the same local transaction sends an <code class="ocode">orderplaced</code>
+                        message using AQ
+                        JMS. The inventory service dequeues this message, validates and adjusts inventory, and
+                        enqueues a message
+                        stating the inventory location for the item ordered or an <code
+                                class="ocode">inventorydoesnotexist</code>
+                        status if there is insufficient inventory. This dequeue, database operation, and enqueue
+                        are done within the
+                        same local transaction. Finally, the order service dequeues the inventory status message
+                        for the order and
+                        returns the resultant order success or failure to the frontend service.</p>
+
+                <p>This is shown in the below architecture diagram.</p>
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-microservices-lab2-s3-1-2.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+                <p>2. Open the Cloud Shell and go to the order folder, using the following command.</p>
+                <p><code class="ocode">cd $MSDATAWORKSHOP_LOCATION/order-helidon</code></p>
+
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-camp-microservices-lab2-s3-2.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+                <p>3. Deploy it.</p>
+
+                <p><code class="ocode">./deploy.sh</code></p>
+
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-camp-ms-lab2-s4-3.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+                <p>4. Go ahead and execute the same steps for deploying the inventory Helidon service, using the
+                        following
+                        command.</p>
+
+                <p><code class="ocode">cd $MSDATAWORKSHOP_LOCATION/inventory-helidon  ; ./deploy.sh</code></p>
+
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-camp-microservices-lab2-s3-4-1.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+                <p>Once the image has been deployed in a pod, you should see the following message.</p>
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-camp-microservices-lab2-s3-4-2.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+                <p>5. Use the same method to deploy the supplier Helidon service. Use the following command.</p>
+
+                <p><code class="ocode">cd $MSDATAWORKSHOP_LOCATION/supplier-helidon-se ; ./deploy.sh</code></p>
+
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-microservices-lab2-s4-5.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+                <p>6. You can check that all images have been successfully deployed in pods by executing the
+                        following command.
+                </p>
+
+                <p><code class="ocode">pods</code></p>
+
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-camp-microservices-lab2-s3-6.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+                <p>7. The services are ready, and you can proceed to test the application mechanisms.</p>
+
+
+        </div>
+</section>
+
+
+<section class="cc01 cc01v0 cpad" id="link2s5">
+        <div class="cc01w1 cwidth">
+
+
+                <h3>Step 5: Verify order and inventory activity of GrabDish store</h3>
+
+                <p>1. Open the frontend microservices home page. If you need the URL, execute the <code
+                                class="ocode">services</code> shortcut command and note the External-IP:PORT of
+                        the
+                        msdataworkshop/frontend/LoadBalancer.</p>
+
+                <p><code class="ocode">services</code></p>
+
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-ms-lab2-s5-1.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+                <p>2. Click <strong>Transactional</strong> under <strong>Labs</strong>.</p>
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-ms-lab2-s5-2.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+                <p>3. Check the inventory of a given item such as sushi, by typing <code class="ocode">sushi</code> in
+                        the <code class="ocode">food</code> field and
+                        clicking <strong>Get Inventory</strong>. You should see the
+                        inventory count result 0.</p>
+
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-ms-lab2-s5-3.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+                <p>4. (Optional) If for any reason you see a different count, click <strong>Remove
+                                Inventory</strong> to bring
+                        back the count to 0.</p>
+
+                <!--<p><img src="https://developer.oracle.com/a/devo/images/devo-ms-lab2-s5-4.jpg" alt="" style="border: 1px solid #999999; margin-bottom: 50px;"></p> -->
+
+
+                <p>5. Let’s try to place an order for sushi by clicking <strong>Place Order</strong>.</p>
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-ms-lab2-s5-5.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+                <p>6. To check the status of the order, click <strong>Show Order</strong>. You should see a
+                        failed order status.
+                </p>
+
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-ms-lab2-s5-6.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+                <p>This is expected, because the inventory count for sushi was 0.</p>
+
+                <p>7. Click <strong>Add Inventory</strong> to add the sushi in the inventory. You should see the
+                        outcome being
+                        an incremental increase by 1.</p>
+
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-ms-lab2-s5-7.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+                <p>8. Go ahead and place another order by increasing the order ID by 1 (67) and then clicking
+                        <strong>Place
+                                Order</strong>. Next click <strong>Show Order</strong> to check the order
+                        status.
+                </p>
+
+
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-ms-lab2-s5-8-1.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-ms-lab2-s5-8-2.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+                <p>The order should have been successfully placed, which is demonstrated with the order status
+                        showing success.
+                </p>
+                <p>You have successfully configured the databases with the necessary users, tables and message
+                        propagation
+                        across the two ATP instances. You may proceed to the next step.</p>
+
+
+        </div>
+</section>
+
+
+<section class="cc01 cc01v0 cpad" id="link2s6">
+        <div class="cc01w1 cwidth">
+
+                <h3>Step 6: Verify metrics</h3>
+                <p>1. Notice @Timed and @Counted annotations on placeOrder method of
+                        $MSDATAWORKSHOP_LOCATION/order-helidon/src/main/java/io/helidon/data/examples/OrderResource.java
+                </p>
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-ms-lab2-s6-1.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+                <p>2. Click <strong>Tracing, Metrics, and Health</strong>.</p>
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-ms-lab2-s6-2.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+                <p>3. Click <strong>Show Metrics</strong> and notice the long string of metrics (including those
+                        from placeOrder
+                        timed and counted) in prometheus format.</p>
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-ms-lab2-s6-3.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+        </div>
+</section>
+
+
+<section class="cc01 cc01v0 cpad" id="link2s7">
+        <div class="cc01w1 cwidth">
+
+                <h3>Step 7: Verify Health</h3>
+                <p>1. Oracle Cloud Infrastructure Container Engine for Kubernetes (OKE) provides health probes
+                        which check a
+                        given container for its liveness (checking if the pod is up or down) and readiness
+                        (checking if the pod is
+                        ready to take requests or not). In this STEP you will see how the probes pick up the
+                        health that the Helidon
+                        microservice advertises. Click <strong>Tracing, Metrics, and Health</strong> and click
+                        <strong>Show Health:
+                                Liveness</strong>.
+                </p>
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-ms-lab2-s7-1.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+                <p>2. Notice health check class at <code
+                                class="ocode">$MSDATAWORKSHOP_LOCATION/order-helidon/src/main/java/io/helidon/data/examples/OrderServiceLivenessHealthCheck.java</code>
+                        and how the liveness method is being calculated.</p>
+
+
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-ms-lab2-s7-2.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+                <p>3. Notice liveness probe specified in <code
+                                class="ocode">$MSDATAWORKSHOP_LOCATION/order-helidon/order-helidon-deployment.yaml</code>
+                        The <code class="ocode">livenessProbe</code> can be set up with different criteria, such
+                        as reading from a file or
+                        an HTTP GET request. In this example the OKE health probe will use HTTP GET to check the
+                        /health/live and
+                        /health/ready addresses every 3 seconds, to see the liveness and readiness of the
+                        service.</p>
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-ms-lab2-s7-3.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+                <p>4. In order to observe how OKE will manage the pods, the microservice has been created with
+                        the possibility
+                        to set up the liveliness to “false”. Click <strong>Get Last Container Start
+                                Time</strong> and note the time
+                        the container started.</p>
+
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-ms-lab2-s7-4.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+                <p>5. Click <strong>Set Liveness to False</strong>. This will cause the Helidon Health Check to
+                        report false for
+                        liveness which will result in OKE restarting the pod/microservice</p>
+
+
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-ms-lab2-s7-5-1.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+                <p>Click <strong>Get Last Container Start Time</strong>. It will take a minute or two for the
+                        probe to notice
+                        the failed state and conduct the restart and as it does you may see a connection refused
+                        exception.</p>
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-ms-lab2-s7-5-2.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+                <p>Eventually you will see the container restart and note the new/later container startup time
+                        reflecting that
+                        the pod was restarted.</p>
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-ms-lab2-s7-5-3.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+        </div>
+</section>
+
+
+
+
+<section class="cc01 cc01v0 cpad" id="link2s8">
+        <div class="cc01w1 cwidth">
+
+                <h3>Step 8: Verify tracing</h3>
+                <p>1. Notice @Traced annotations on placeOrder method of
+                        $MSDATAWORKSHOP_LOCATION/frontend-helidon/src/main/java/io/helidon/data/examples/FrontEndResource.java
+                        and
+                        placeOrder method of
+                        $MSDATAWORKSHOP_LOCATION/order-helidon/src/main/java/io/helidon/data/examples/OrderResource.java
+                        Also notice
+                        the additional calls to set tags, baggage, etc. in this OrderResource.placeOrder method.
+                </p>
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-ms-lab2-s8-1.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+
+
+                <p>2. Place an order if one was not already created successfully in Step 4 of this Lab.</p>
+
+                <p>3. Click Show Tracing to open the Jaeger UI. If the Jaeger UI doesn't open up for some
+                        reason, go to Cloud
+                        Shell, type "services" in the Cloud Shell window and grab the external-IP associated
+                        with the jaeger-query
+                        service, type http://<external-IP of jaeger-query service> (make sure you put the IP
+                                address here) on your
+                                web browser. Select frontend.msdataworkshop from the Service dropdown menu and
+                                click Find Traces.</p>
+
+
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-ms-lab2-s8-3-1.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+
+
+                <p>Select a trace with a large number of spans and drill down on the various spans of the trace
+                        and associated
+                        information. In this case we see placeOrder order, saga, etc. information in logs, tags,
+                        and baggage.</p>
+
+                <p>If it has been more than an hour since the trace you are looking for, select a an appropriate
+                        value for
+                        Lookback and click Find Traces.</p>
+
+                <p><img src="https://developer.oracle.com/a/devo/images/devo-ms-lab2-s8-3-2.jpg" alt=""
+                                style="border: 1px solid #999999; margin-bottom: 50px;"></p>
+
+        </div>
+</section>
+
+
+
+
+
+<section class="cc01 cc01v0 cpad" id="link3">
+
+        <div class="cc01w1 cwidth">
+                <h2>Lab 3 </h2>
+                <p><strong>Pre-requisite Step: Terminal setup on your laptop/desktop computer</strong></p>
+                <p>If you are using a Windows operating system based laptop/desktop computer, you will need to
+                        install gitbash
+                        (a terminal application) and use it to run the commands below.</p>
+
+                <p>Instructions for downloading and installing gitbash are available here.</p>
+
+                <p>Mac users can use the native Terminal application to run the commands below.</p>
+        </div>
+</section>
+
+<section class="cc01 cc01v0 cpad" id="link3s1">
+        <div class="cc01w1 cwidth">
+
+                <h3>STEP 1: Configure OCI-CLI</h3>
+
+                <p>On your local machine terminal, make sure oci-cli is installed using:</p>
+
+                <p><code class="ocode">oci -v</code></p>
+
+
+
+                <p>If not, follow the below link to install and setup OCI-CLI.</p>
+
+                <p><a href="https://docs.cloud.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm">https://docs.cloud.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm</a>
+                </p>
+
+        </div>
+</section>
+
+<section class="cc01 cc01v0 cpad" id="link3s2">
+        <div class="cc01w1 cwidth">
+
+                <h3>STEP 2 Generate OCIR token</h3>
+                <p>Login to OCI console.</p>
+
+                <p>Click on your Profile -> User Settings. On the bottom left, click on Auth Tokens. Click on
+                        Generate Token.
+
+                <p>Provide a description and then hit Generate Token. This will generate a token. Make sure to
+                        copy the token
+                        and save it for future steps.</p>
+
+        </div>
+</section>
+
+<section class="cc01 cc01v0 cpad" id="link3s3">
+        <div class="cc01w1 cwidth">
+
+                <h3>STEP 3: Install kubectl and configure kube-config</h3>
+                <p>Install kubectl using below command:</p>
+
+                <p><code class="ocode">curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl;chmod +x ./kubectl;sudo mv ./kubectl /usr/local/bin/kubectl;kubectl version –client</code>
+                </p>
+
+
+
+                <p>Now, to setup kubeconfig, go to your OCI tenancy. On the left hand side click on Developer
+                        Services. Select
+                        Container Clusters (OKE).</p>
+
+                <p>Click on the cluster created by terraform earlier.</p>
+
+                <p>On the top, click on Access Kubeconfig and run the commands specified.</p>
+
+                <p>Once done, verify you can access the OKE nodes, by typing:</p>
+
+                <p><code class="ocode">kubectl get nodes</code></p>
+
+                <p>You will see the details of the nodes running on the cluster.</p>
+
+        </div>
+</section>
+
+
+<section class="cc01 cc01v0 cpad" id="link3s4">
+        <div class="cc01w1 cwidth">
+
+                <h3>Step 4: Push the images to OCIR</h3>
+                <p>Install kubectl using below command:</p>
+
+                <p>curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s
+                        https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl;chmod
+                        +x
+                        ./kubectl;sudo mv ./kubectl /usr/local/bin/kubectl;kubectl version –client</p>
+
+
+
+                <p>Now, to setup kubeconfig, go to your OCI tenancy. On the left hand side click on Developer
+                        Services. Select
+                        Container Clusters (OKE).</p>
+
+                <p>Click on the cluster created by terraform earlier.</p>
+
+                <p>On the top, click on Access Kubeconfig and run the commands specified.</p>
+
+                <p>Once done, verify you can access the OKE nodes, by typing:</p>
+
+                <p>kubectl get nodes</p>
+
+                <p>You will see the details of the nodes running on the cluster.</p>
+
+        </div>
+</section>
+
+
+<section class="cc01 cc01v0 cpad" id="link3s5">
+        <div class="cc01w1 cwidth">
+
+                <h3>Step 5: Update kubernetes deployment files</h3>
+                <p>Clone the github repo for kubernetes deployment files as below:</p>
+
+                <p><code class="ocode">
+            $ git clone https://github.com/KartikShrikantHegde/k8s.git
+            
+            $cd k8s
+            
+            </code>
+                </p>
+
+
+                <p>You should see 4 files. Update the server-deployment.yaml.</p>
+
+                <p>In file server-deployment.yaml, go to line 17 and update the image label:</p>
+
+                <p>&lt;region-prefix-name&gt; - eg: iad.ocir.io (for ashburn region)</p>
+
+                <p>&lt;your-tenancy-namespace&gt; -> (look for namespace in tenancy details on your OCI console
+                        for
+                        <your-tenancy-namespace>)
+                </p>
+
+                <p>Now, let’s create a secret for the cluster.</p>
+
+
+                <p><code class="ocode">kubectl create secret docker-registry secret --docker-server=<region-prefix-name> --docker-username='<username>' --docker-password='<ocir-token>' --docker-email='a@b.com' </code>
+                </p>
+
+                <p><code class="ocode"><region-prefix-name> - eg: iad.ocir.io (for ashburn region)</code></p>
+
+                <p><code class="ocode"><username> -> <your-tenancy-namespace>/oracleidentitycloudservice/<your-oci-user-email-here> (look for namespace in tenancy details on your OCI console for <your-tenancy-namespace>)</code>
+                </p>
+
+
+
+                <p>&lt;ocir-token&gt; -> OCIR token we had created in Step 2</p>
+
+                <p>Finally, run below commands one after another to apply the configuration to the cluster.</p>
+
+                <p><code class="ocode">kubectl apply -f redis-deployment.yaml</code><br />
+                        <code class="ocode">kubectl apply -f redis-cluster-ip-service.yaml</code><br />
+                        <code class="ocode">kubectl apply -f server-deployment.yaml</code><br />
+                        <code class="ocode">kubectl apply -f server-lb-service.yaml</code>
+                </p>
+
+
+
+                <p>Once applied, wait for 5 mins and then run:</p>
+
+                <p><code class="ocode">$ kubectl get services</code></p>
+
+
+
+                <p>Copy the EXTERNAL-IP for the server-lb-service.</p>
+
+
+                <p>Run the below command replacing the EXTERNAL-IP to issue a PUT request:</p>
+
+                <p><code class="ocode">curl -H "Content-Type: application/json" -X PUT -d '{"hello":999}' http://&lt;EXTERNAL-IP&gt;:5000/testurl</code>
+                </p>
+
+
+                <p>You should receive an output similar to this:</p>
+
+                <p><code class="ocode">{ "hello": 999, "last_updated": 1583375217 }</code></p>
+
+
+
+                <p>On making a GET request:</p>
+
+                <p><code class="ocode">curl http://&lt;EXTERNAL_IP&gt;:5000/testurl</code></p>
+
+
+                <p>You receive a successful response:</p>
+
+                <p><code class="ocode">{ "hello": "999", "last_updated": 1583375217 }</code></p>
+
+
+
+        </div>
+</section>

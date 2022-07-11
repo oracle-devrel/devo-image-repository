@@ -1,0 +1,596 @@
+<!-- _Raw-HTML -->
+<section class="cc01 cc01v0 cpad crule">
+    <div class="cc01w1 cwidth">
+        <p><a href="/databases/oracle-rest-data-services-for-python-developers.html">Part 1</a> | Part 2 | of this of a
+            two-part series that explains, by example, how Python developers can take advantage of Oracle REST Data
+            Services when developing REST-based applications that interact with Oracle Database.</p>
+
+        <p>This article describes how to consume REST endpoints created with Oracle REST Data Services, which expose
+            database resources to HTTP operations. It shows how Python users can make use of these REST endpoints
+            defined along with create, read, update, and delete (CRUD) operations, accessing and manipulating the
+            underlying database data. Here are the main topics covered in this article:</p>
+
+        <ul class="obullets">
+            <li>Getting database data using Python&#39;s Requests HTTP library</li>
+            <li>Parsing the JSON object returned by a REST call into a Python dictionary</li>
+            <li>Drilling down into a REST GET <code>Response</code> object</li>
+            <li>Making REST calls to manipulate database data</li>
+            <li>Determining if a REST call is successful</li>
+            <li>Examining the headers of a response</li>
+            <li>Setting the headers of a request</li>
+        </ul>
+
+        <p>This article assumes that you have already set up a working Oracle REST Data Services/Python environment and
+            have created a RESTful service on an Oracle Database table. Detailed steps for these tasks were provided in
+            the <a class="textLinks" href="" target="_blank">first article of this series</a>.</p>
+
+        <h3>Working with a REST GET Response in Python</h3>
+
+        <p>In the first article of this series, you saw how easy it is to make REST GET requests from Python to an
+            Oracle REST Data Services RESTful service. As you will see in the &quot;<a href="#db-data">Using the Python
+                Requests Library&#39;s REST Calls to Manipulate Database Data</a>&quot; section later in this article,
+            the other REST operations are not much more complicated to implement.</p>
+
+        <p>Before moving on to data manipulation operations, however, let&#39;s explore some more examples of getting
+            data through an Oracle REST Data Services RESTful service. First, it would be interesting to look at a GET
+            <code>Response</code> object that you get in your Python script after a Requests GET call is complete.
+        </p>
+
+        <p><strong>Note</strong>: Before proceeding to the examples in this article, make sure that Oracle REST Data
+            Services is running in your system. Oracle REST Data Services is not restarted by default upon a reboot of
+            the system. For details on how to run Oracle REST Data Services in standalone mode, check the &quot;<a
+                class="textLinks"
+                href="https://docs.oracle.com/cd/E56351_01/doc.30/e87809/installing-REST-data-services.htm#AELIG7022"
+                target="_blank">Running in Standalone Mode</a>&quot; section in the <a class="textLinks"
+                href="https://docs.oracle.com/cd/E56351_01/doc.30/e87809/toc.htm" target="_blank"><em>REST Data Services
+                    Installation, Configuration, and Development Guide</em></a>. Or you can start it from Oracle SQL
+            Developer by using the Run Wizard that can be launched by selecting the <strong>Tools &gt; REST Data
+                Services &gt; Run</strong> menu item.</p>
+
+        <p>So, make a GET call to the RESTful service that was defined in the &quot;Building a RESTful Service with
+            Oracle REST Data Services&quot; section of the <a class="textLinks" href="" target="_blank">first article in
+                this series</a>.</p>
+
+        <p><strong>Note</strong>: To follow this article&#39;s examples, you&#39;ll need a running Python prompt. For
+            details, refer to the &quot;Installing Python on Oracle Linux&quot; section of the first article in this
+            series.</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+      	<code>
+&gt;&gt;&gt; import requests
+&gt;&gt;&gt; resp = requests.get(&#39;http://yourdbhost:9090/ords/hr/departments/&#39;)
+      	</code>
+  </pre>
+        </div>
+
+        <p>Now that you have a <code>Response</code> object, you can look into it. For example, you might wonder what
+            methods the object provides. The following code lists all the methods of the above <code>Response</code>
+            object, excluding &quot;dunder&quot; (double underscore) methods:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+      	<code>
+&gt;&gt;&gt;[meth for meth in dir(resp) if callable(getattr(resp, meth)) and not meth.startswith(&quot;__&quot;)]
+[&#39;close&#39;, &#39;iter_content&#39;, &#39;iter_lines&#39;, &#39;json&#39;, &#39;raise_for_status&#39;]
+&gt;&gt;&gt; 
+      	</code>
+  </pre>
+        </div>
+
+        <p>To start with, it would be interesting to look at the payload structure:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+      	<code>
+&gt;&gt;&gt; for item in resp.json():
+...  print(item)
+... 
+items
+hasMore
+limit
+offset
+count
+links
+      	</code>
+  </pre>
+        </div>
+
+        <p>You can drill down further into the payload to see its structure in detail:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+      	<code>
+&gt;&gt;&gt; type(resp.json()[&quot;items&quot;])
+&lt;class &#39;list&#39;&gt;
+&gt;&gt;&gt; 
+
+&gt;&gt;&gt; type(resp.json()[&quot;items&quot;][0])
+&lt;class &#39;dict&#39;&gt;
+&gt;&gt;&gt; 
+
+&gt;&gt;&gt; resp.json()[&quot;items&quot;][0].keys()
+dict_keys([&#39;department_id&#39;, &#39;department_name&#39;, &#39;manager_id&#39;, &#39;location_id&#39;, &#39;links&#39;])
+&gt;&gt;&gt;
+      	</code>
+  </pre>
+        </div>
+
+        <p>As you can see, to determine the structure of the hr.departments table that underlies the RESTful service
+            used here, you do not even need to look into the database. This can be easily viewed on the Python side.</p>
+
+        <p>The following loop outputs the department IDs, iterating through all the department entities in the JSON
+            document found in the response payload:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+      	<code>
+&gt;&gt;&gt; for item in resp.json()[&quot;items&quot;]:
+...   print(item[&quot;department_id&quot;])
+... 
+10
+20
+30
+...
+      	</code>
+  </pre>
+        </div>
+
+        <p>You can derive a certain entity from the document, specifying its ID as the filter criteria:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+      	<code>
+&gt;&gt;&gt; for item in resp.json()[&quot;items&quot;]:
+...   if item[&quot;department_id&quot;] == 10:
+...     print(item)
+... 
+{&#39;department_id&#39;: 10, &#39;department_name&#39;: &#39;Administration&#39;, 
+&#39;manager_id&#39;: 200, &#39;location_id&#39;: 1700, &#39;links&#39;: [{&#39;rel&#39;: &#39;self&#39;, 
+&#39;href&#39;: &#39;http://yourdbhost:9090/ords/hr/departments/10&#39;}]}
+&gt;&gt;&gt; 
+      	</code>
+  </pre>
+        </div>
+
+        <p>Looking at the value of the <code>href</code> field in the above object (highlighted in bold), it&#39;s not
+            too hard to guess that it represents the URL through which you can have REST access to this particular
+            department entity individually. In other words, Oracle REST Data Services allows you to make GET requests
+            for a single entity in the underlying record set. In the next section, you will see an example of how you
+            can retrieve an entity representing a row in the underlying table by specifying its identifying key in the
+            URL sent to Oracle REST Data Services.</p>
+
+        <div class="subheaders">Making a GET Request for Selected Entities</div>
+
+        <p>Apart from the ability to retrieve the entire record set from the underlying data source (as in the previous
+            example), Oracle REST Data Services lets you make GET requests for selected entities. For example, you can
+            retrieve a certain entity by appending its identifying key to the request URL, as illustrated in the
+            following example:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+      	<code>
+&gt;&gt;&gt; resp10 = requests.get(&#39;http://yourdbhost:9090/ords/hr/departments/10&#39;)
+&gt;&gt;&gt; type(resp10.json())
+&lt;class &#39;dict&#39;&gt;
+&gt;&gt;&gt; 
+
+&gt;&gt;&gt; resp10.json().keys()
+dict_keys([&#39;department_id&#39;, &#39;department_name&#39;, &#39;manager_id&#39;, &#39;location_id&#39;, &#39;links&#39;])
+&gt;&gt;&gt;
+      	</code>
+  </pre>
+        </div>
+
+        <p>So, you can access a particular field:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+      	<code>
+&gt;&gt;&gt; print(resp10.json()[&quot;department_name&quot;])
+Administration
+&gt;&gt;&gt;
+      	</code>
+  </pre>
+        </div>
+
+        <p>And the entire object should look as follows:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+      	<code>
+&gt;&gt;&gt; print(resp10.json())
+{&#39;department_id&#39;: 10, &#39;department_name&#39;: &#39;Administration&#39;, 
+&#39;manager_id&#39;: 200, &#39;location_id&#39;: 1700, &#39;links&#39;: [{&#39;rel&#39;: &#39;self&#39;, 
+&#39;href&#39;: &#39;http://yourdbhost:9090/ords/hr/departments/10&#39;}, {&#39;rel&#39;: 
+&#39;edit&#39;, &#39;href&#39;: &#39;http://yourdbhost:9090/ords/hr/departments/10&#39;}, 
+{&#39;rel&#39;: &#39;describedby&#39;, &#39;href&#39;: 
+&#39;http://yourdbhost:9090/ords/hr/metadata-catalog/departments/item&#39;}, 
+{&#39;rel&#39;: &#39;collection&#39;, &#39;href&#39;: &#39;http://yourdbhost:9090/ords/hr/departments/&#39;}]}
+      	</code>
+  </pre>
+        </div>
+
+        <p>In the above example, you made a GET request, which Oracle REST Data Services translated into the following
+            SQL query behind the scenes:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+      	<code>
+SELECT * FROM hr.departments WHERE department_id = 10;</code></pre>
+        </div>
+
+        <p>So, the GET request returned an object that represents a single row of the underlying database table.</p>
+
+        <p>However, you can specify other ways of making Oracle REST Data Services issue underlying SQL queries with the
+            WHERE clause. The following example illustrates how you can use the <a class="textLinks"
+                href="https://docs.oracle.com/database/ords-17/AELIG/developing-REST-applications.htm#GUID-091748F8-3D14-402B-9310-25E6A9116B47"
+                target="_blank">filtering in queries</a> feature of Oracle REST Data Services, which enables a
+            per-request dynamic filter definition included in the query URL to retrieve only those rows from the
+            underlying table that satisfy the filter condition.</p>
+
+        <p>In this particular example, the query URL includes a filter that restricts the department_id column of the
+            departments underlying table to the values less than or equal (<code>$lte</code>) to 30:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+      	<code>
+&gt;&gt;&gt; resp10_30 = requests.get(&#39;http://yourdbhost:9090/ords/hr/departments/?q={&quot;department_id&quot;:{&quot;$lte&quot;:30}}&#39;)
+
+
+&gt;&gt;&gt; for item in resp10_30.json()[&quot;items&quot;]:
+...    print(item[&quot;department_id&quot;],item[&quot;department_name&quot;])
+... 
+10 Administration
+20 Marketing
+30 Purchasing
+&gt;&gt;&gt;
+      	</code>
+  </pre>
+        </div>
+
+        <p>As you can see, the URL in the above GET request includes the parameter <code>q</code>, which is set to a
+            JSON object (<code>FilterObject</code>) that specifies the filtering criteria and (optionally) sorting to be
+            applied to the underlying data source. In this particular example, the specified filtering condition is
+            translated into the following WHERE clause (highlighted in bold) in the underlying SQL query:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+      	<code>
+SELECT * FROM hr.departments <strong>WHERE department_id =&lt; 30</strong>;      	</code>
+  </pre>
+        </div>
+
+        <p>Of course, a <code>FilterObject</code> passed in the q parameter can be more complicated than that shown in
+            the above example and it can involve more than one filter condition being applied. Filter conditions are
+            defined in an array preceded by a logical combining clause (logical operator), such as <code>$and</code>,
+            <code>$or</code>, or <code>$nor</code>.
+        </p>
+
+        <p>In the following example, the <code>FilterObject</code> includes two filter conditions within a logical
+            combining clause that uses operator <code>$and</code>. The request is supposed to return only those
+            departments whose ID is less than or equal to 70 and whose name contains substring <code>in</code>.</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+      	<code>
+&gt;&gt;&gt; resp = requests.get(&#39;http://yourdbhost:9090/ords/hr/departments/?q=
+{&quot;$and&quot;:[{&quot;department_id&quot;:{&quot;$lte&quot;:70}},{&quot;department_name&quot;:{&quot;$instr&quot;:&quot;in&quot;}}]}&#39;)
+      	</code>
+  </pre>
+        </div>
+
+        <p>When processing the above request, Oracle REST Data Services will issue the following query against the
+            departments underlying table:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+      	<code>
+SELECT * FROM hr.departments <strong>WHERE (department_id =&lt; 70) AND (INSTR(department_name, &#39;in&#39;, 1, 1)&gt;0);</strong>
+      	</code>
+  </pre>
+        </div>
+
+        <p>Returning to Python, first, however, let&#39;s check if the request was successful:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+      	<code>
+&gt;&gt;&gt;resp
+&lt;Response [200]&gt;
+      	</code>
+  </pre>
+        </div>
+
+        <p>Then, you might want to make sure that the retrieved selection contains only those items that meet the
+            specified filter criteria:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+      	<code>
+&gt;&gt;&gt; for item in resp.json()[&quot;items&quot;]:
+...    print(item[&quot;department_id&quot;],item[&quot;department_name&quot;])
+... 
+10 Administration
+20 Marketing
+30 Purchasing
+50 Shipping
+&gt;&gt;&gt; 
+      	</code>
+  </pre>
+        </div>
+
+        <p>As you might guess, filtering in queries is especially useful when it comes to the traversal of large
+            collections of data. In such cases, it is much more efficient to retrieve only the necessary items of a
+            collection than to request the entire collection and then handle filtering on the client side.</p>
+
+        <h3><a name="db-data"></a>Using the Python Requests Library&#39;s REST Calls to Manipulate Database Data</h3>
+
+        <p>The examples so far in this article have shown how you can access REST-enabled database data through Oracle
+            REST Data Services using Python&#39;s Requests HTTP library. The generalized steps involved are common to
+            all those examples and are listed below:</p>
+
+        <p>1. In Python, you make a GET call with the <code>requests.get</code> method, specifying the service&#39;s URL
+            with a filter query parameter if it is needed.</p>
+
+        <p>2. Oracle REST Data Services processes the request, transforming it into a corresponding SQL query issued
+            against the underlying data source. Then, it sends a JSON-formatted response back to the caller.</p>
+
+        <p>3. In Python, the response is available in a <code>Response</code> object returned by the
+            <code>requests.get</code> method. Using the <code>Response.json</code> method, you perform JSON decoding of
+            the response payload, converting it into a dict.
+        </p>
+
+        <p>However, when it comes to data manipulation operations that can be implemented with a POST or PUT request,
+            the steps to be performed will be different. Below are the steps that describe a POST request (these same
+            steps are applicable for PUT):</p>
+
+        <p>1. In Python, you create a dictionary that contains the payload to be sent with a POST request.</p>
+
+        <p>2. In Python, you make a POST request with the <code>requests.post</code> method, sending the dictionary
+            created in the previous step as a data parameter.</p>
+
+        <p>3. Oracle REST Data Services processes the request, transforming it into a corresponding INSERT or UPDATE
+            statement issued against the underlying data source. Then, it sends a response back to the caller,
+            indicating the success or failure of the operation.</p>
+        4. In Python, the response is available in a <code>Response</code> object returned by the
+        <code>requests.get</code> method, so that you can check to see if the operation succeeded.
+
+        <p>In the following example, you make a POST call, which should result in inserting a new row into the
+            hr.departments underlying table:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+      	<code>
+&gt;&gt;&gt; resp = requests.post(&#39;http://yourdbhost:9090/ords/hr/departments/&#39;,
+ data = {&#39;department_id&#39;:280, &#39;department_name&#39;: &#39;Advertisement&#39;, &#39;manager_id&#39;:201, &#39;location_id&#39;:1700})
+
+&gt;&gt;&gt; resp
+&lt;Response [201]&gt;
+&gt;&gt;&gt;
+      	</code>
+  </pre>
+        </div>
+
+        <p>You can learn more about the server&#39;s response details by viewing its headers:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+      	<code>
+&gt;&gt;&gt; resp.headers
+{&#39;Content-Type&#39;: &#39;application/json&#39;, &#39;Content-Location&#39;: 
+&#39;http://yourdbhost:9090/ords/hr/departments/280&#39;, &#39;ETag&#39;: 
+&#39;&quot;h70cJQxW/AC/7qON+xvPmq5cfDAZOTz2teR8qrbPs7n+y0SDay8gomofE1KPzKg/jqW3t
+vFmauXpIK9s3uA8xA==&quot;&#39;, &#39;Location&#39;: 
+&#39;http://yourdbhost:9090/ords/hr/departments/280&#39;, &#39;Transfer-Encoding&#39;: &#39;chunked&#39;}
+      	</code>
+  </pre>
+        </div>
+
+        <p>Sometimes, however, you may need to look at the headers that are sent with a request:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+      	<code>
+&gt;&gt;&gt; resp.request.headers
+{&#39;User-Agent&#39;: &#39;python-requests/2.18.4&#39;, &#39;Accept-Encoding&#39;: &#39;gzip, 
+deflate&#39;, &#39;Accept&#39;: &#39;*/*&#39;, &#39;Connection&#39;: &#39;keep-alive&#39;, &#39;Content-Length&#39;: &#39;79&#39;, 
+&#39;Content-Type&#39;: &#39;application/x-www-form-urlencoded&#39;}
+&gt;&gt;&gt;
+      	</code>
+  </pre>
+        </div>
+
+        <p>As you will see in the next example, you can change the default values of some of the request headers and/or
+            add additional headers.</p>
+
+        <p><strong>Note</strong>: In this example, you view the request headers after the response has been committed.
+            Often, however, you might want to view a request&#39;s headers before sending the request. To address this
+            problem, the Requests library allows you to create prepared requests.</p>
+
+        <p>Turning back to the Requests methods that implement HTTP operations (GET, POST, and so on), it is interesting
+            to note that, apart from the methods specific to a particular HTTP operation (<code>requests.get</code>,
+            <code>requests.post</code>, and so on), the Requests library provides a single method for all HTTP
+            operations: <code>requests.request</code>. This method takes the operation to be performed as the first
+            parameter. Then, after specifying the URL of the target service, you can define a number of optional
+            parameters, including <code>headers</code>, <code>auth</code>, <code>timeout</code>, and
+            <code>allow_redirects</code>, to name a few.
+        </p>
+
+        <p>The following example illustrates the <code>requests.request</code> method in action. In this particular
+            example, you make a PUT request to update the department entity created with the <code>requests.post</code>
+            method in the preceding example.</p>
+
+        <p>Because the Content-Type entity header of the request in this example will be set to
+            <code>application/json</code>, you first need to convert the dictionary that contains the payload to be sent
+            into a JSON string:
+        </p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+      	<code>
+&gt;&gt;&gt; import json
+&gt;&gt;&gt; obj = json.dumps({&#39;department_id&#39;:280, &#39;department_name&#39;: &#39;Advertisement&#39;, &#39;manager_id&#39;:200, &#39;location_id&#39;:1700})
+      	</code>
+  </pre>
+        </div>
+
+        <p>Then, you can make the request.</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+      	<code>
+&gt;&gt;&gt; resp = requests.request(&#39;PUT&#39;,&#39;http://yourdbhost:9090/ords/hr/departments/280&#39;
+, data = obj, headers = {&#39;content-type&#39;: &#39;application/json&#39;})
+&gt;&gt;&gt; resp
+&lt;Response [200]&gt;
+&gt;&gt;&gt;
+      	</code>
+  </pre>
+        </div>
+
+        <p>As mentioned, the Content-Type entity header defines the format of a request payload. If this header is set
+            to <code>application/json</code>, a request payload represents a JSON string:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+      	<code>
+&gt;&gt;&gt; resp.request.body
+&#39;{&quot;department_id&quot;: 280, &quot;department_name&quot;: &quot;Advertisement&quot;, &quot;manager_id&quot;: 200, &quot;location_id&quot;: 1700}&#39;
+&gt;&gt;&gt; 
+      	</code>
+  </pre>
+        </div>
+
+        <p>The only CRUD operation you haven&#39;t seen yet in this article is DELETE. So, let&#39;s delete the
+            department entity you created and then updated in the above examples:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+      	<code>
+&gt;&gt;&gt; resp = requests.request(&#39;DELETE&#39;,&#39;http://yourdbhost:9090/ords/hr/departments/280&#39;);
+&gt;&gt;&gt; resp
+&lt;Response [200]&gt;
+&gt;&gt;&gt;
+      	</code>
+  </pre>
+        </div>
+
+        <!--<h3>In the Next Part of This Series</h3>
+
+<p>While this article is almost entirely about Python code that interacts with the Oracle REST Data Services RESTful service created as described in the first part of this series, the next article in this series will cover how Oracle REST Data Services users can exploit all the power of Oracle Database technology, defining and mapping complex SQL and PL/SQL operations to REST endpoints and, thus, pushing data processing into the database.</p>-->
+
+        <h3>See Also</h3>
+
+        <ul class="obullets">
+            <li><a href="http://www.oracle.com/technetwork/developer-tools/rest-data-services/overview/index.html"
+                    target="_blank">Oracle REST Data Services OTN website</a></li>
+            <li><a href="http://www.oracle.com/technetwork/database/database-technologies/scripting-languages/python/index.html"
+                    target="_blank">Python Developer Center on OTN</a></li>
+            <li>&quot;<a href="https://community.oracle.com/docs/DOC-1005069" target="_blank">Introduction to Python for
+                    PL/SQL Developers</a>&quot; tutorial series</li>
+        </ul>
+
+        <h3>About the Author</h3>
+
+        <p><strong>Yuli Vasiliev</strong> is a software developer, freelance author, and consultant currently
+            specializing in open source development, databases, business intelligence (BI), machine learning, and
+            virtualization. He is the author of a series of books on Oracle technology, including <em>Oracle Business
+                Intelligence: An introduction to Business Analysis and Reporting</em> (Packt Publishing) and <em>PHP
+                Oracle Web Development: Data processing, Security, Caching, XML, Web Services, and Ajax</em> (Packt
+            Publishing).</p>
+    </div>
+</section>
+<!-- / _Raw-HTML -->

@@ -1,0 +1,231 @@
+<!-- U03v5 -->
+<!-- _Raw-HTML -->
+<!-- _Raw-HTML -->
+<section class="cc01 cc01v0 cpad crule">
+    <div class="cc01w1 cwidth">
+        <p>Deep Learning algorithms are a subclass of general machine learning algorithms. One of the core ideas of deep
+            learning is that it has some similarities with how the human brain works. Similar to how layers of neurons
+            in the brain process information, deep learning software contains allows developers to create a network
+            containing multiple layers of neurons that process information as well.</p>
+
+        <p>Especially when large amounts of data are available, Deep Learning can provide high-quality results. For
+            example, deep learning software can be used to classify images, and detect object on those images. Before a
+            deep learning algorithm can tell what objects are on an image, it has to be trained with lots of data.
+            Sometimes there is a wide amount of high-quality data available for training the network, but in many
+            real-world situations this is not the case. Real-world data is often obtained via consumer devices (e.g.
+            pictures taken on a mobile device) and can not easily be shared or transferred, due to privacy restrictions
+            or regulations.</p>
+
+        <p>In this scenario, where there is a large amount of data but it can&rsquo;t be sent to a server, Federated
+            Deep Learning comes to the rescue.</p>
+
+        <h3>Using Deep Learning software to make predictions</h3>
+
+        <p>We start with the straightforward case where, based on an image, we want the Neural Network (or model) to
+            tell us what is shown in the image. In order to do so, the image is converted into an array of numbers,
+            where each pixel contains a number that corresponds to the grayscale of the picture. Note that more complex
+            models are possible, taking into account colors etc, but we want to start with a simple example. The result
+            of this conversion, the array of numbers, is sent through the Neural Network, and when the network is well
+            trained, it will recognize what is in the image.</p>
+
+        <p>Under the hood, the Neural Network consists of a number of layers: an input layer containing the original
+            data (the array of numbers), an output layer containing the results (in this case the most likely label
+            being a bike) and one or more hidden layers. Data propagates through the network, using network parameters
+            like weights, biases and activation functions, and results in resulting data. The following diagram, taken
+            from <a href="https://deeplearning4j.org">https://deeplearning4j.org</a>, illustrates the process:</p>
+
+        <p>A course in deep learning is out of scope for this article, the interested reader is referred to<br />
+            <a
+                href="https://deeplearning4j.org/docs/latest/deeplearning4j-beginners">https://deeplearning4j.org/docs/latest/deeplearning4j-beginners</a>.
+        </p>
+
+        <p>Before a Neural Network can be used, it should be trained. This is done by applying lots of data to the
+            network, and tell the network when it is wrong. Based on the feedback, the deep learning algorithm modifies
+            the parameters of the network (weights and biases), in such a way that it is more likely that the network
+            will now make a good prediction. In many cases, labeled trainingdata is used to learn the neural network.
+            When an image of a mountain is supplied to the Neural Network, and the network classifies it as a
+            &ldquo;bike&rdquo;, but the associated label was &ldquo;mountain&rdquo;, the deep learning software will use
+            sophisticated techniques to modify the neural network.</p>
+
+        <p>Under the hood, this comes down to a new set of parameters, as shown below:</p>
+
+        <p>Internally, Deep Learning software typically involves high-performance linear algebra. While predictions are
+            relatively easy and straightforward, training is more complex, and requires more computing power. Also,
+            training typically requires lots of high-quality data.</p>
+
+        <p>There are many software libraries providing Deep Learning API&rsquo;s, in different languages. One of the
+            leading Java libraries is deeplearning4j (<a
+                href="https://deeplearning4j.org">https://deeplearning4j.org</a>), created and maintained by SkyMind
+            While the top-level API for deeplearning4j is pure Java, the implementations of the functionality offered by
+            the API&rsquo;s are leveraging native code, including GPU-specific optimisations.</p>
+
+        <h3>Training a neural network on the server</h3>
+
+        <p>In a first setup, we will have a client that sends raw data to a server containing the Neural Network, and
+            ask it for a result. Before this can be done, the server needs a trained network. We can train a neural
+            network using the deeplearning4j apis, for example</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+
+MultiLayerConfiguration conf = new NeuralNetConfiguration.Builder()             .optimizationAlgo(OptimizationAlgorithm.STOCHASTIC_GRADIENT_DESCENT)
+               .updater(new Nesterovs(learningRate, 0.9))
+               .list()
+               .layer(0, new DenseLayer.Builder()
+                       .nIn(numInputs)
+                       .nOut(numHiddenNodes)
+                       .weightInit(WeightInit.XAVIER)
+                       .activation(Activation.RELU)
+                       .build())
+               .layer(1, new OutputLayer.Builder(LossFunctions.LossFunction.NEGATIVELOGLIKELIHOOD)
+                       .nIn(numHiddenNodes)
+                       .nOut(numOutputs)
+                       .weightInit(WeightInit.XAVIER)
+                       .activation(Activation.SOFTMAX)
+                       .build())
+               .backprop(true)
+               .build();
+
+
+ </code></pre>
+        </div>
+
+        <p>In this code snippet, we create the configuration for the neural network. Again, the details about the
+            deeplearning4j library are out of scope for this article, and the reader is referred to <a
+                href="https://deeplearning4j.org">https://deeplearning4j.org</a> for more information. The configuration
+            contains 2 layers (the input data is often not considered to be a layer as it is not configurable). The
+            first layer is a hidden layer, and the second layer is the output layer. The output of the first layer is
+            the input of the second layer.</p>
+
+        <p>When the network is configured, it can be trained. The following code snippet will feed the network with
+            labeled data.</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+
+RecordReader rrTrain = new CSVRecordReader();
+File trainsrc = new File(&quot;linear_data_train.csv&quot;);
+rrTrain.initialize(new FileSplit(trainsrc));
+DataSetIterator iterTrain = new RecordReaderDataSetIterator(rrTrain, batchSize, 0, 2);
+network.fit(iterTrain);
+
+</code></pre>
+        </div>
+
+        <p>In this case, the trained data is in a CSV file, and it contains both input data as well as the expected
+            result. The network.fit(iterTrain) call will cause the network to be trained. A number of iterations will be
+            executed. In each iteration, a forward loop is applied and all input data is used to make a prediction.
+            Based on the predicted result and the actual result (contained in the csv), the network is modified. An
+            error score tells how &ldquo;wrong&rdquo; the network is, and the goal is that with each iteration, the
+            network is less wrong than before.</p>
+
+        <p>Once the network is trained, we can make requests to predict results based on new data. A conventional way of
+            doing is by having the deep learning software with the neural network on a server, and a client sending raw
+            image data via a REST interface to the neural network. This approach is shown in the picture below.</p>
+
+        <p>Typically, the neural network responds with an array containing possible labels, and their probability (e.g.
+            there is 90% chance this image contains a bike, 5% chance it contains a car). Additional processing can be
+            done on this response, before it is sent back to the client. In general, the REST interface might call
+            something like this:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+
+String predicted = doSomeProcessing(network.output(data));
+		
+</code></pre>
+        </div>
+
+        <p>An advantage of this approach is that the Neural Network can be enhanced. In case the network returns a wrong
+            result (e.g. &ldquo;car&rdquo;), the client might send a correction to the server (&ldquo;bike&rdquo;).
+            Based on this information, the neural network can be retrained and become better, as shown in the picture
+            below:</p>
+
+        <p>There are a number of drawbacks to this approach as well. Since client-server communication is needed, there
+            will be no real-time response. If the client needs an immediate response, the time to setup an HTTP call
+            alone will be too much. Also, the client device might not always be connected to the Internet, while the
+            application assumes that the network should always be able to return predictions. And increasingly
+            important, this approach requires sending raw image data to a server. Due to privacy restrictions and
+            regulations, this might not always be allowed.</p>
+
+        <h3>Predictions on the client</h3>
+
+        <p>A number of these drawbacks can be removed by doing predictions on the client. If we run the same code on the
+            client as on the server, the client can use a simple API to query the neural network.</p>
+
+        <p>The Java code for making predictions on the client is exactly the same as the code for making predictions on
+            the server.</p>
+
+        <p>If you want to run deeplearning4j Java code on mobile clients, you can use the Gluon Mobile framework which
+            allows to create Java apps that work on iOS and Android devices. An explanation on how to do this is outside
+            the scope of this article, and the interested reader is referred to
+            http://docs.gluonhq.com/getting-started/.</p>
+
+        <p>The deeplearning4j software contains import and export functionality for neural networks. Hence, it is
+            possible to train the network on a server, export it to a file, send that file to the client, and import the
+            file as a neural network on the client. In general, predictions are not very computation intensive.
+            Moreover, deeplearning4j leverages native implementations available on mobile devices, and the performance
+            can be really great.</p>
+
+        <p>This new approach now allows the client to get a result in real-time, and it also works fine when the device
+            is not connected to the Internet. Also, the data (e.g. a picture taken with a mobile phone) stays at the
+            client, so there are no privacy concerns. In order to get a meaningful result based on the data, there is no
+            need to send this data from the device to a server.</p>
+
+        <p>There is a drawback to this approach though, since the model is not improving anymore. In the previous setup,
+            the client could correct the neural network. This feedback loop is required in order to make neural networks
+            really useful in real-world applications. Deep learning works better if more data is available, and if the
+            neural network is constantly updated.</p>
+
+        <p>Fortunately, we can achieve this goal without giving up the other benefits of local predictions.</p>
+
+        <h3>Training on the client</h3>
+
+        <p>Since the training code on the server is written in Java, it works on the clients as well. When the neural
+            network predicts a wrong result, and the user wants to correct it, the network can be retrained.</p>
+
+        <p>Since training is more resource-intensive than simply making predictions, it is recommended to do this during
+            low-activity time, e.g. at night, and preferable when the device is charged or charging.</p>
+
+        <p>This approach now has a number of benefits, including the learning capability of the neural network. In order
+            to become really useful though, it would be interested to have a large number of clients jointly train a
+            neural network without sending raw data. This is done in the next setup.</p>
+
+        <h3>Federated Learning</h3>
+
+        <p>When a neural network on a specific client device is retrained, that client can send the new parameters of
+            its neural network to a server. The parameters of the neural network do not contain the raw image data that
+            is used to train the neural network. When many devices send the new parameters to a server, this server can
+            combine them and create a new &ldquo;best&rdquo; neural network, that is occasionally sent back to clients.
+            There are a number of algorithms in how to do this, and again, the details are out of scope for this
+            article.</p>
+
+        <p>The general idea though is shown below:</p>
+
+        <p>Each client retrains the Neural Network with its own data, and the modifications in the Neural Network are
+            sent to a server. This approach allows for an enhancement of the Neural Network while respecting users
+            privacy. Moreover, the computing power of a large amount of client devices is used to improve the Neural
+            Network.</p>
+
+
+        <p>Training a neural network is not trivial. Thanks to the deeplearning4j API&rsquo;s, and the availability of
+            Java on client devices, Java provides a great platform for enabling Federated Learning.</p>
+    </div>
+</section>
+<!-- / _Raw-HTML -->
+<!-- U10v0 -->

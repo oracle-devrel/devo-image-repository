@@ -1,0 +1,375 @@
+<section class="cc01 cc01v0 cpad">
+    <div class="cc01w1 cwidth">
+
+        <p>The easiest way to configure PHP to access a remote Oracle Database is to use Oracle Instant
+            Client libraries. This note describes how to install PHP with the OCI8 Extension and Oracle
+            Instant Client on Windows and Linux. The free <a
+                href="http://www.oracle.com/technetwork/topics/php/underground-php-oracle-manual-098250.html">The
+                Underground PHP and Oracle Manual</a> explains other installation options and contains
+            more detail.</p>
+        <p><a href="http://www.php.net/manual/en/ref.oci8.php">OCI8</a> is the PHP extension for
+            connecting to Oracle Database. OCI8 is open source and included with PHP. The name is
+            derived from Oracle's C "call interface" API first introduced in version 8 of Oracle
+            Database. OCI8 links with Oracle client libraries, such as Oracle Instant Client.</p>
+
+
+        <p>Oracle Instant Client is a free set of easily installed libraries that allow programs to connect to local or
+            remote Oracle Database instances. To use Instant Client an existing database is needed - Instant Client does
+            not include one. Typically the database will be on another machine. If the database is local then Instant
+            Client, although convenient and still usable, is generally not needed because OCI8 can directly use the
+            database libraries.</p>
+
+        <p>When using Instant Client 11<em>g</em>, PHP OCI8 connects to all editions of Oracle 9.2, 10.x, and 11.x
+            databases.</p>
+
+        <h3>Software Requirements</h3>
+
+        <div class="otable-w1">
+            <table class="otable-w2">
+                <tbody>
+                    <tr>
+                        <td><strong>Software</strong></td>
+                        <td><strong>Notes</strong></td>
+                    </tr>
+                    <tr>
+                        <td><a href="https://www.oracle.com/database/technologies/instant-client/downloads.html">Oracle
+                                Instant Client</a></td>
+                        <td>Download the "Basic" package. On Linux, also download the "SDK" or "devel" package. If
+                            space is at a premium, the Basic Lite package can be used instead of Basic.</td>
+                    </tr>
+                    <tr>
+                        <td><a href="http://httpd.apache.org/download.cgi">Apache HTTP Server</a></td>
+                        <td>Version 2.2</td>
+                    </tr>
+                    <tr>
+                        <td><a href="http://www.php.net/downloads.php">PHP</a></td>
+                        <td>Version 5.4</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</section>
+
+<section class="cc01 cc01v0 cpad">
+    <div class="cc01w1 cwidth">
+
+        <h3>Enabling the PHP OCI8 Extension on Windows</h3>
+        <p>The Instant Client binaries complement PHP's pre-built binaries for Windows.</p>
+        <ol class="decimal">
+            <li>
+                <b>Install Apache</b> by downloading <code class="ocode">httpd-2.2.22-win32-x86-no_ssl.msi</code> from
+                <a href="http://httpd.apache.org/download.cgi">httpd.apache.org/download.cgi</a>
+            </li>
+            <li>
+                Double click the MSI file to start the installation wizard.</p>
+                <p>Install "for All Users, on Port 80". Do a typical install into the default destination folder: <code
+                        class="ocode">C:\Program Files\Apache Software Foundation\Apache2.2</code>.
+            </li>
+            <li>
+                Download the FastCGI component <code class="ocode">mod_fcgid-2.3.6-win32-x86.zip</code> from <a
+                    href="http://httpd.apache.org/download.cgi#mod_fcgid">httpd.apache.org/download.cgi#mod_fcgid</a>
+            </li>
+            <li>
+                Unzip it to the installed Apache 2.2 directory. The <code
+                    class="ocode">C:\Program Files\Apache Software Foundation\Apache2.2\modules</code> directory should
+                now have <code class="ocode">mod_fcgid.so</code> and <code class="ocode">mod_fcgid.pdb</code> files.
+            </li>
+            <li>
+                Edit <code class="ocode">C:\Program Files\Apache Software Foundation\Apache2.2\conf\httpd.conf</code>
+                and add the line:
+                <pre>LoadModule fcgid_module modules/mod_fcgid.so</pre>
+            </li>
+            <li>In <code class="ocode">httpd.conf</code>, locate the <directory> section for <code
+                        class="ocode">htdocs</code> and add <code class="ocode">ExecCGI</code> to the <code
+                        class="ocode">Options</code>:
+                    <pre>&lt;Directory "C:/Program Files/Apache Software Foundation/Apache2.2/htdocs"&gt;
+...
+Options Indexes FollowSymLinks <b>ExecCGI</b>
+...
+&lt;/Directory&gt;
+  </pre>
+                </directory>
+            </li>
+            <li><b>Install PHP</b> by downloading the PHP 5.4.0 "VC9 x86 Non Thread Safe" ZIP package <code
+                    class="ocode">php-5.4.0-nts-Win32-VC9-x86.zip</code> from <a
+                    href="http://windows.php.net/download/">windows.php.net/download</a>.</li>
+            <li>In Windows Explorer unzip the PHP package to a directory called <code class="ocode">C:\php-5.4.0
+    
+    </code></li>
+            <li>In <code class="ocode">C:\php-5.4.0</code> copy <code class="ocode">php.ini-development</code> to <code
+                    class="ocode">php.ini
+    
+    </code></li>
+            <li>Edit <code class="ocode">php.ini</code> to make the following changes:
+                <ul>
+                    <li>Add a timezone line like:
+                        <code class="ocode">date.timezone = America/Los_Angeles</code>
+
+                        Use your local timezone name.
+                    </li>
+                    <li>
+                        Add the line:
+                        <code class="ocode">extension_dir = C:\php-5.4.0\ext</code>
+                        <p>
+                            This is the directory containing the PHP extensions.</p>
+                    </li>
+                    <li>
+                        Remove the semicolon from the beginning of the line:
+                        <code class="ocode">extension=php_oci8_11g.dll</code>
+
+                    </li>
+                </ul>
+            </li>
+            <li>Edit <code class="ocode">C:\Program Files\Apache Software Foundation\Apache2.2\conf\httpd.conf</code>
+                and add the following lines. Make sure you use forward slashes '<code class="ocode">/</code>' and not
+                back slashes '<code class="ocode">\</code>':
+
+                <div class="ocode">
+                    <pre><code>
+FcgidInitialEnv PHPRC "c:/php-5.4.0"
+AddHandler fcgid-script .php
+FcgidWrapper "c:/php-5.4.0/php-cgi.exe" .php
+</code></pre>
+                </div>
+            </li>
+            <li><b>Download the "Instant Client Package - Basic" for Windows</b> from the OTN Instant Client page.
+                Because PHP is 32 bit, use the 32 bit version of Instant Client.
+
+                <p>Unzip the Instant Client files to <code class="ocode">C:\instantclient_11_2</code></p>
+            </li>
+            <li>
+                Edit the Windows <code class="ocode">PATH</code> environment setting and add <code
+                    class="ocode">C:\instantclient_11_2</code>. For example, on Windows XP, follow <strong>Start -&gt;
+                    Control Panel -&gt; System -&gt; Advanced -&gt; Environment Variables</strong> and edit <code
+                    class="ocode">PATH</code> in the System variables list.
+
+                <p>Commonly you need to reboot Windows so the new environment is correctly set.</p>
+
+                <p>Set desired Oracle globalization language environment variables such as <code
+                        class="ocode">NLS_LANG</code>. If nothing is set, a default local environment will be assumed.
+                    See the Globalization chapter in <a
+                        href="http://www.oracle.com/technetwork/topics/php/underground-php-oracle-manual-098250.html">The
+                        Underground PHP and Oracle Manual</a> for more details.</p>
+                <p>Unset Oracle variables such as <code class="ocode">ORACLE_HOME</code> and <code
+                        class="ocode">ORACLE_SID</code>, which are unnecessary with Instant Client.</p>
+                <p>If you have other Oracle software on the computer then instead of modifying the Windows environment,
+                    write a script that sets these values and starts Apache. Otherwise library symbol clashes are likely
+                    because of version differences.</p>
+            </li>
+            <li>
+                Restart Apache using the system tray Apache Monitor or the <em>Start</em> menu option.
+            </li>
+        </ol>
+        <h3>Enabling the PHP OCI8 Extension on Linux</h3>
+        <p>On Linux, PHP is generally manually compiled because the bundled version nevers seems to be up to date.
+            However, if you don't wish to recompile PHP, more recent, unsupported RPM packages for Oracle Linux are
+            available from <a href="http://oss.oracle.com/projects/php/">oss.oracle.com</a>, or via <a
+                href="http://linux.oracle.com/">Unbreakable Linux Network</a> updates. If a supported PHP environment is
+            desired use <a href="http://www.oracle.com/technetwork/topics/php/zend-server-096314.html">Zend Server</a>.
+            These all have the OCI8 extension pre-built.</p>
+
+        <p>To build PHP and OCI8 from source code:</p>
+
+        <ol class="decimal">
+            <li>
+                <b>Install the Apache HTTP Server</b> and development packages e.g. with <code
+                    class="ocode">yum install httpd httpd-devel</code>.
+            </li>
+            <li>
+                <b>Download the <a href="http://www.php.net/downloads.php">PHP 5.4 source code</a></b> and install PHP
+                following <a href="http://www.php.net/manual/en/install.unix.php">Installation on Unix systems</a> in
+                the PHP manual.
+                <p>At this stage, don't configure the OCI8 extension.</p>
+            </li>
+            <li>
+                <b>Download the Basic and the SDK Instant Client packages</b> from the OTN <a
+                    href="http://www.oracle.com/technetwork/database/features/instant-client/index-100365.html">Instant
+                    Client page</a>. Either the zip file or RPMs can be used.
+                <p>Install the RPMs as the root user, for example:</p>
+                <div class="ocode">
+                    <pre><code>
+  rpm -Uvh oracle-instantclient11.2-basic-11.2.0.3.0-1.x86_64.rpm 
+rpm -Uvh oracle-instantclient11.2-devel-11.2.0.3.0-1.x86_64.rpm 
+</code></pre>
+                </div>
+                <p>The first RPM puts Oracle libraries in <code class="ocode">/usr/lib/oracle/11.2/client64/lib</code>
+                    and the second creates headers in <code class="ocode">/usr/include/oracle/11.2/client64</code>.</p>
+                <p>If you are using the ZIP files, the SDK should unzipped to the same directory as the basic package,
+                    and a symbolic link manually created:</p>
+                <code class="ocode">ln -s libclntsh.so.11.1 libclntsh.so</code>
+            </li>
+            <li>The latest OCI8 extension from <a href="http://pecl.php.net/package/oci8">PECL</a> is always the current
+                version. Although it is generally in sync with the latest PHP 5.4 source code, it can sometimes be more
+                recent. The latest production extension can be automatically downloaded and added to PHP using:
+
+                <code class="ocode">pecl install oci8</code>
+
+                <p>This gives:</p>
+                <div class="ocode">
+                    <pre><code>
+downloading oci8-1.4.7.tgz ...
+Starting to download oci8-1.4.7.tgz (Unknown size)
+.....done: 168,584 bytes
+10 source files, building
+running: phpize
+Configuring for:
+PHP Api Version:         20100412
+Zend Module Api No:      20100525
+Zend Extension Api No:   220100525
+Please provide the path to the ORACLE_HOME directory.
+Use 'instantclient,/path/to/instant/client/lib' if you're compiling
+with Oracle Instant Client [autodetect] : 
+</code></pre>
+                </div>
+                <p>
+                    If you have the Instant Client RPMs, hit <code class="ocode">Enter</code> and PECL will
+                    automatically build and install an <code class="ocode">oci8.so</code> shared library. If you have
+                    the Instant Client zip files, or want a specific version of Instant Client used, then explicitly
+                    give the appropriate path after "<code class="ocode">instantclient,</code>":</p>
+                <code class="ocode">instantclient,/usr/lib/oracle/11.2/client64/lib</code>
+
+                <p>Use an explicit, absolute path since PECL does not expand environment variables.</p>
+                <p>If you don't have the <code class="ocode">pecl</code> program, you can alternatively download the
+                    OCI8 package in a browser and then install it with:</p>
+                <div class="ocode">
+                    <pre><code>
+  tar -xzf oci8-1.4.7.tgz
+cd oci8-1.4.7
+phpize
+./configure --with-oci8=instantclient,/usr/lib/oracle/11.2/client64/lib
+make install
+</code></pre>
+                </div>
+            </li>
+            <li>Edit <code class="ocode">php.ini</code> and enable the OCI8 extension with:
+                <code class="ocode">extension=oci8.so</code>
+                <p>
+                    Also confirm <code class="ocode">extension_dir</code> points to the directory the <code
+                        class="ocode">oci8.so</code> file was installed into.</p>
+            </li>
+            <li>Add the Instant Client directory to <code class="ocode">/etc/ld.so.conf</code>, or manually set <code
+                    class="ocode">LD_LIBRARY_PATH</code> to <code
+                    class="ocode">/usr/lib/oracle/11.2/client64/lib</code>. You might also want to set Oracle
+                globalization language environment variables such as <code class="ocode">TNS_ADMIN</code> and <code
+                    class="ocode">NLS_LANG</code>. If <code class="ocode">NLS_LANG</code> is not set, a default local
+                environment will be assumed. See the Globalization chapter in <a
+                    href="http://www.oracle.com/technetwork/topics/php/underground-php-oracle-manual-098250.html">The
+                    Underground PHP and Oracle Manual</a> for more details.
+                <p>It is important to set <em>all</em> Oracle environment variables before starting Apache so that the
+                    OCI8 process environment is correctly initialized. Setting environment variables in PHP scripts can
+                    lead to obvious or non-obvious problems. On Oracle Linux, export environment variables in <code
+                        class="ocode">/etc/sysconfig/httpd</code>. On Debian-based machines set them in <code
+                        class="ocode">/etc/apache2/envvars</code>.</p>
+
+                <p>Restart Apache, for example:</p>
+                <p><code class="ocode">service httpd restart</code>
+            </li>
+        </ol>
+        <h3>Verifying the PHP OCI8 Extension is Installed</h3>
+        <p>To check OCI8 configuration, create a simple PHP script <code class="ocode">phpinfo.php</code> in the Apache
+            document root:</p>
+        <code class="ocode">&lt;?php
+phpinfo();
+?&gt;
+</code>
+        <p>
+            Load the script into a browser using the appropriate URL, e.g. <code
+                class="ocode">http://localhost/phpinfo.php</code>. The browser page will contain an "oci8" section
+            saying "OCI8 Support enabled" and listing the OCI8 options that can be configured.</p>
+        <h3>Connecting to an Oracle Database</h3>
+        <p>To create a connection, Oracle username and password credentials are passed as two parameters of <a
+                href="http://php.net/function.oci-connect.php"><code class="ocode">oci_connect()</code></a>. An Oracle
+            Database name connection identifier must be used for the third parameter because programs linked with
+            Instant Client are always considered "remote" from any database server and need to be told which database
+            instance to connect to. The connection string is likely to be well known for established Oracle databases.
+            With new systems the information is given by the Oracle installation program when the database is set up.
+            The installer should have configured Oracle Network and created a service name such as <code
+                class="ocode">orcl</code> for you.</p>
+        <p>There are several ways to pass the connection information to PHP. This example uses Oracle's Easy Connect
+            syntax to connect to the <em>HR</em> schema in the <em>orcl</em> database service running on
+            <em>mymachine</em>. No <code class="ocode">tnsnames.ora</code> or other Oracle Network file is needed:
+        </p>
+        <code class="ocode">$conn = oci_connect('hr', 'hr_password', 'mymachine.mydomain/orcl');</code>
+
+        <p>See Oracle's Using the Easy Connect Naming Method documentation for the Easy Connect syntax.</p>
+        <p>In new databases the demonstration schemas such as the HR user will need to be unlocked and given a password.
+            This may be done in SQL*Plus by connecting as the SYSTEM user and executing the statement:</p>
+        <code class="ocode">ALTER USER <em>username</em> IDENTIFIED BY <em>new_password</em> ACCOUNT UNLOCK;
+</code>
+
+        <h3>Using PHP OCI8 and Oracle</h3>
+
+        <p>Try out a simple script, <code class="ocode">testoci.php</code> Modify the connection credentials to suit
+            your database and load it in a browser. This example lists all tables owned by the user HR:</p>
+        <div class="ocode">
+            <pre><code>
+  &lt;?php
+
+$conn = oci_connect('hr', 'hr_password', 'mymachine.mydomain/orcl');
+
+$stid = oci_parse($conn, 'select table_name from user_tables');
+oci_execute($stid);
+
+echo "&lt;table&gt;\n";
+while (($row = oci_fetch_array($stid, OCI_ASSOC+OCI_RETURN_NULLS)) != false) {
+    echo "&lt;tr&gt;\n";
+    foreach ($row as $item) {
+        echo "  &lt;td&gt;".($item !== null ? htmlentities($item, ENT_QUOTES) : "&amp;nbsp;")."&lt;/td&gt;\n";
+    }
+    echo "&lt;/tr&gt;\n";
+}
+echo "&lt;/table&gt;\n";
+
+?&gt;
+</code></pre>
+        </div>
+        <h3>Troubleshooting</h3>
+
+        <p>Check the Apache error log file for startup errors.</p>
+        <p>Temporarily set <code class="ocode">display_error=On</code> in <code class="ocode">php.ini</code> so script
+            errors are displayed. Switch it back off when finished for security reasons.</p>
+        <p>Chapter 9 of <a
+                href="http://www.oracle.com/technetwork/topics/php/underground-php-oracle-manual-098250.html">The
+                Underground PHP and Oracle Manual</a> contains information about common connection errors and discusses
+            alternative ways to set environment variables.</p>
+        <p>Oracle's SQL*Plus command line tool can be downloaded from the Instant Client page to help resolve
+            environment and connection problems. Check SQL*Plus can connect and then ensure the Environment section (not
+            the Apache Environment section) of <code class="ocode">phpinfo.php</code> shows the equivalent environment
+            settings.</p>
+
+        <p><strong>Windows Specific Help</strong></p>
+
+        <p>If the <code class="ocode">phpinfo.php</code> script does not produce an "oci8" section saying "OCI8 Support
+            enabled", verify that <code class="ocode">extension=php_oci8_11g.dll</code> is uncommented in php.ini.</p>
+        <p>If php.ini's <code class="ocode">extension_dir</code> directive does not contain the directory with <code
+                class="ocode">php_oci8_11g.dll</code> then Apache startup will give an alert: "PHP Startup: Unable to
+            load dynamic library php_oci8_11g.dll."</p>
+        <p>If <code class="ocode">PATH</code> is set incorrectly or the Oracle libraries cannot be found at all,
+            starting Apache will give an alert: "The dynamic link library OCI.dll could not be found in the specified
+            path". The Environment section of the <code class="ocode">phpinfo()</code> page will show the values of
+            <code class="ocode">PATH</code> and the Oracle variables actually being used by PHP.
+        </p>
+        <p>If there are multiple versions of Oracle libraries on the machine then version clashes are likely. For some
+            discussion on setting variables refer to <a href="#">Using PHP OCI8 with 32-bit PHP on Windows 64-bit</a>.
+        </p>
+        <p><strong>Linux Specific Help</strong></p>
+        <p>If using Instant Client ZIP files, make sure the two packages are unzipped to the same location. Make sure a
+            symbolic link <code class="ocode">libclntsh.so</code> points to <code
+                class="ocode">libclntsh.so.11.1</code>.</p>
+        <p>Set all required Oracle environment variables in the shell that starts Apache.</p>
+        <h3>Conclusion</h3>
+        <p>Using Oracle Instant Client and installing PHP OCI8 from PECL provide maximum flexibility, allowing
+            components to be easily installed and upgraded.</p>
+        <p>Questions and suggestions can be posted on the OTN <a
+                href="https://community.oracle.com/community/database/developer-tools/php">PHP</a> or <a
+                href="https://community.oracle.com/community/archived_forums/oracle_database_archived_forums/instant_client">Instant
+                Client</a> forums.</p>
+        <p>The <a target="" href="http://www.oracle.com/technetwork/topics/php/index.html">PHP Developer Center</a>
+            contains links to useful background material.</p>
+
+    </div>
+</section>
+<!-- / _Raw-Text -->
+<!-- U10v0 -->

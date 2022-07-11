@@ -1,0 +1,564 @@
+<!-- _Raw-HTML -->
+<section class="cc01 cc01v0 cpad crule">
+  <div class="cc01w1 cwidth">
+    <p>The Nashorn engine has been deprecated in JDK 11 as part of <a href="https://openjdk.java.net/jeps/335"
+        target="_blank">JEP 335</a> and and has been removed from JDK15 as part of <a
+        href="https://openjdk.java.net/jeps/372" target="_blank">JEP 372</a>. To learn more, please read <a
+        href="https://www.graalvm.org/reference-manual/js/NashornMigrationGuide/" target="_blank">Migration Guide from
+        Nashorn to GraalVM JavaScript</a>.</p>
+
+
+    <p>This series of articles introduces Nashorn, a blazing fast JavaScript runtime engine that shipped with Java SE 8
+      to provide a lightweight environment for extending, supplementing, and often even replacing Java code. Full Java
+      Virtual Machine (JVM) capabilities and dynamic typing represent an effective tooling that will appeal to
+      developers and admins alike.</p>
+
+    <ul class="obullets">
+      <li>Part 1: <a href="https://developer.oracle.com/databases/nashorn-javascript-part1.html">Introducing JavaScript,
+          ECMAScript, and Nashorn</a></li>
+      <li>Part 2: <a href="https://developer.oracle.com/databases/nashorn-javascript-part2.html">The Java in
+          JavaScript</a></li>
+      <li>Part 3: Database Scripting</li>
+    </ul>
+
+    <p>Year 2017 marks the 20th anniversary since JDBC was introduced in JDK 1.1. That new JDBC API has proven
+      exceptionally successful and has revolutionized the way applications connect to database&mdash;and continues to
+      thrive in the upcoming JDBC 4.3, which is a part of Java 9. Nashorn proves to be excellent language to remove much
+      of the verbosity from the JDBC API, especially when combined with new features of Java 8.</p>
+
+    <p>Building on the regular driver manager in <code class="ocode">java.sql</code> and the datasource in <code
+        class="ocode">javax.sql</code>, Nashorn can often position itself as a glue language between different database
+      engines, operating systems, and applications. Database context has been made much more relevant with the
+      announcement of Oracle Database 12<em>c</em> Release 2, where Nashorn plays an integral part of the <code
+        class="ocode">dbms_java</code> and <code class="ocode">dbms_javascript</code> subsystems.</p>
+
+    <p>Oracle Universal Connection Pool is a mission-critical pool implementation that allows massive optimization of
+      connection traffic, and it is focused on reducing the database footprint while providing a sufficient number of
+      application endpoints. Nashorn can be a perfect tool for experimenting with and fine-tuning the pools, validating
+      their state, and imitating real application traffic for troubleshooting purposes.</p>
+
+    <p>Oracle SQL Developer Command Line (Oracle SQLcl) is a free command-line interface for Oracle Database and a
+      next-generation SQL*Plus replacement implemented in Java. Besides thorough compatibility with its predecessor, the
+      tool embeds <code class="ocode">ScriptEngine</code> directly so that new extensions can be implemented in any Java
+      Virtual Machine (JVM) language. Nashorn, being part of the JDK, makes an excellent choice for extending Oracle
+      SQLcl by allowing out-of-the box use of <code class="ocode">ScriptEngine</code>.</p>
+    <strong>Nashorn Database Connectivity </strong>
+
+    <p>Oracle Database 12<em>c</em> Release 2 was the first release to ship with a JDBC 4.2&ndash;compatible driver
+      (<code class="ocode">ojdbc8.jar</code>) and it included enhancements to type support, ref cursors, and large
+      datasets. Using Nashorn to interact with a database guarantees the same level of compatibility and functionality
+      as if full-fledged Java code was applied.</p>
+
+    <p>Oracle Database drivers can be downloaded from the Oracle Technology Network <a
+        data-lbl="77 - JDBC/UCP Download Page" data-trackas="devoArticleTechDatabaseNashorn3"
+        href="http://www.oracle.com/technetwork/database/features/jdbc/index-091264.html">JDBC/UCP Download Page</a>
+      (see Figure 1) and the MySQL Connector/J driver can be obtained from the <a data-lbl="78 - MySQL Developer Zone"
+        data-trackas="devoArticleTechDatabaseNashorn3" href="https://dev.mysql.com/downloads/connector/j/">MySQL
+        Developer Zone</a>.</p>
+
+    <p align="center" class="xsml">Figure 1. Oracle Technology Network JDBC/UCP download page.</p>
+
+    <p>Because JDBC is designed for compatibility, Oracle Database drivers and JDBC drivers are all compatible with each
+      other between Oracle Database releases 11.2, 12.1, and 12.2. It is recommended, though, to use a JDBC driver of at
+      least the version of the database to have access to new features. Listing 1 illustrates an easy way to check the
+      exact version of the JDBC driver.</p>
+
+    <div class="ocode">
+      <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+        <div><a href="#copy">Copy</a></div>
+      </div>
+
+      <pre>
+  <code>$ java -jar ojdbc8.jar
+  Oracle 12.2.0.1.0 JDBC 4.2 compiled with javac 1.8.0_91 on Tue_Dec_13_06:08:31_PST_2016
+  #Default Connection Properties Resource
+  #Tue Sep 19 16:58:25 CEST 2017
+  </code></pre>
+    </div>
+
+    <p align="center"><strong>Listing 1. Checking the JDBC driver version.</strong></p>
+
+    <p>JDBC covers all aspects of accessing a database in a generic and unified way, enduring as the primary database
+      API of all major database engines. The consistency and portability of this API can be often used for integrating
+      systems, and Nashorn proves to be a very capable player on this front. Listing 2 demonstrates a sample
+      implementation of a helper JDBC module that allows easy database access, support for named bind parameters, IN/OUT
+      parameters, and JDBC 4.2 large updates. Named binds are tokenized with a private <code class="ocode">parse</code>
+      function, whereas the <code class="ocode">ndbc.run</code> function handles routing of different types of SQL
+      statements. The implementation responsible for handling queries illustrates a straightforward way of implementing
+      streams on top of existing APIs by converting the result set iterator to a stream, using spliterator.</p>
+
+    <div class="ocode">
+      <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+        <div><a href="#copy">Copy</a></div>
+      </div>
+
+      <pre>
+  <code>/* ndbc.js */
+  (function() {
+    this.config = new java.util.HashMap() {
+      setAutoCommit: false,
+      setLoginTimeout: java.time.Duration.ofSeconds(5),
+      setQueryTimeout: java.time.Duration.ofSeconds(30),
+      setFetchSize: 5000
+    };
+  
+    this.connect = function(url, user, password, driver) {
+      driver != null &amp;&amp; java.lang.Class.forName(driver);
+      java.sql.DriverManager.setLoginTimeout(config.setLoginTimeout.getSeconds());
+      var conn = java.sql.DriverManager.getConnection(url, user, password);
+      conn.setAutoCommit(config.setAutoCommit);
+      return conn;
+    };
+  
+    var parse = function(sql, params) {
+      var token = /[:]([A-Za-z_]+)/g;
+      var matches = sql.match(token);
+      var sqla = (matches == null) ? sql : sql.replace(token, &quot;?&quot;);
+      var binds = { in : {}, out: {} };
+      for (var i = 0; matches != null &amp;&amp; i &lt; matches.length; i++)
+        binds[matches[i][1] != &quot;_&quot; ? &quot;in&quot; : &quot;out&quot;][i + 1] = matches[i].substring(1);
+      return {sql: sqla, binds: binds };
+    };
+  
+    var prepare = function(conn, sql, params, isproc) {
+      var parsed = parse(sql, params);
+      var stmt = conn[isproc ? &quot;prepareCall&quot; : &quot;prepareStatement&quot;](parsed.sql);
+      for (var k in parsed.binds.in) {
+        stmt.setObject(parseInt(k), params[parsed.binds.in[k]]);
+      }
+      for (var k in parsed.binds.out) {
+        stmt.registerOutParameter(parseInt(k), params[parsed.binds.out[k]]);
+      }
+      return stmt;
+    };
+  
+    this.run = function(conn, sql, params) {
+      var stmt, keyword = sql.toLowerCase().split(&quot; &quot;).shift();
+      switch (keyword) {
+        case &quot;select&quot;:
+          var stmt = prepare(conn, sql, params);
+          stmt.setFetchSize(config.setFetchSize);
+          stmt.setQueryTimeout(config.setQueryTimeout.getSeconds());
+          return stream(stmt).collect(java.util.stream.Collectors.toList());
+        case &quot;insert&quot;:
+        case &quot;update&quot;:
+        case &quot;delete&quot;:
+          var stmt = prepare(conn, sql, params);
+          var exec = (&quot;executeLargeUpdate&quot; in stmt) ? &quot;executeLargeUpdate&quot; : &quot;executeUpdate&quot;;
+          return stmt[executeUpdate]();
+        default:
+          var stmt = prepare(conn, sql, params, true);
+          var parsed = parse(sql, params);
+          stmt.execute();
+          var ret = new java.util.HashMap();
+          for (var k in parsed.binds.out) {
+            var result = stmt.getObject(parseInt(k));
+            if (result instanceof java.sql.ResultSet) {
+              var rows = stream(null, result).collect(java.util.stream.Collectors.toList());
+              ret[parsed.binds.out[k]] = rows;
+            } else {
+              ret[parsed.binds.out[k]] = result;
+            }
+          }
+          return ret;
+      }
+    };
+  
+    this.stream = function(stmt, rs) {
+      var rs = (rs == null) ? stmt.executeQuery() : rs;
+      var iter = new java.util.Iterator() {
+        hasNext: function() {
+          var next = rs.next();
+          if (!next) {
+            stmt != null &amp;&amp; stmt.close();
+            rs.close();
+          }
+          return next;
+        },
+        next: function() {
+          var cols = new java.util.LinkedHashMap();
+          var meta = rs.getMetaData();
+          for (var i = 1, type = meta.getColumnTypeName(i); i &lt;= meta.getColumnCount(); i++) {
+            if (type.equals(&quot;CLOB&quot;)) {
+              var clob = rs.getClob(i);
+              var value = clob.getSubString(1, parseInt(clob.length()));
+            } else {
+              var value = rs.getObject(i);
+            }
+            cols[meta.getColumnLabel(i)] = value;
+          }
+          return cols;
+        }
+      };
+  
+      var spl = java.util.Spliterators.spliteratorUnknownSize(iter, java.util.Spliterator.ORDERED);
+      return java.util.stream.StreamSupport.stream(spl, false);
+    };
+  
+    return this;
+  })();
+  </code></pre>
+    </div>
+
+    <p align="center"><strong>Listing 2. Generic Nashorn JDBC helper module with JDBC 4.2 extensions and Java 8 streams
+        support.</strong></p>
+
+    <p>Output PL/SQL parameters for the NDBC module must start with an underscore and also define the return JDBC type.
+      In Listing 3, output parameter <code class="ocode">_list</code> is mapped to <code class="ocode">CURSOR</code> so
+      that multiple rows can be returned from the procedure. All queries are fetched as lists of maps so that
+      Nashorn&#39;s attribute access can be used in addition to the standard [] operator. The in Listing 3 runs on
+      Docker image <code class="ocode">store/oracle/enterprise:12.2.0.1</code> and, therefore, Docker machine IP <code
+        class="ocode">192.168.99.100</code> is provided in the Transparent Network Substrate (TNS) address. The <code
+        class="ocode">last</code> variable displays the newest user in a pluggable database with <code
+        class="ocode">CON_ID=3</code>.</p>
+
+    <div class="ocode">
+      <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+        <div><a href="#copy">Copy</a></div>
+      </div>
+
+      <pre>
+  <code>$ jjs -J-Djava.class.path=ojdbc8.jar
+  
+  jjs&gt; var ndbc = load(&#39;ndbc.js&#39;);
+  
+  jjs&gt; var conString = &#39;jdbc:oracle:thin:@192.168.99.100:1521/ORCLCDB.localdomain&#39;;
+  
+  jjs&gt; var c1 = ndbc.connect(connString, &#39;system&#39;, &#39;****&#39;, &#39;oracle.jdbc.pool.OracleDataSource&#39;);
+  
+  jjs&gt; var last = ndbc.run(c1, &#39;select max(created) created from cdb_users where con_id=:pdb&#39;, {pdb: 3});
+  
+  jjs&gt; last
+  [{CREATED=2017-09-16 22:36:39.0}]
+  
+  jjs&gt; var cursor = Packages.oracle.jdbc.OracleTypes.CURSOR;
+  
+  jjs&gt; var pdbs = ndbc.run(c1, &#39;begin open :_list for select pdb_name from cdb_pdbs; end;&#39;, {_list: cursor});
+  
+  jjs&gt; pdbs
+  {_list=[{PDB_NAME=PDB$SEED}, {PDB_NAME=ORCLPDB1}]}
+  </code></pre>
+    </div>
+
+    <p align="center"><strong>Listing 3. Using NDBC with named binds and OUT parameters on Oracle Database 12<em>c</em>
+        Release 2.</strong></p>
+    <strong>Scripting Oracle Universal Connection Pool</strong>
+
+    <p><strong>A connection pool is vital for healthy database connection management, with failing or excessive
+        connections often ranked as the number-one issue on the troubleshooting list. Oracle Universal Connection Pool
+        (Oracle UCP) provides a robust pool implementation that supports all kinds of connections, whether they are
+        JDBC, LDAP, or others that can be load balanced, recycled, and efficiently maintained during their
+        lifetime.</strong></p>
+
+    <p><strong>For diagnosing connection pools, continuous rebuilding of Java programs might simply become insufficient
+        if many multiple features and capabilities are put into use. This in turn offers a perfect opportunity for
+        experimentation with Nashorn to achieve the desired pool behavior and configuration. Listing 4 provides a
+        definition of an Oracle UCP ping program called <code class="ocode">ucp.js</code> with a sample configuration
+        file called <code class="ocode">pool.properties</code> containing a definition of the pool parameters. All
+        requests made to the pool are measured implicitly by the Oracle UCP driver and can be queried during or after
+        program is run. This client uses the <code class="ocode">ExecutorService</code> framework for asynchronous calls
+        on the pool.</strong></p>
+
+    <div class="ocode">
+      <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+        <div><a href="#copy">Copy</a></div>
+      </div>
+
+      <pre>
+  <code>
+  /* pool.properties */
+  # connection
+  URL = jdbc:oracle:thin:@192.168.99.100:1521/ORCLCDB.localdomain
+  user = system
+  password = Oradoc_db1
+  threads = 15
+  connections = 100
+  sleep = 5
+  query = select sys_context(&#39;userenv&#39;, &#39;instance_name&#39;) from dual
+  # ucp
+  connectionFactoryClassName = oracle.jdbc.pool.OracleDataSource
+  connectionWaitTimeout = 10
+  inactiveConnectionTimeout = 10
+  initialPoolSize = 10
+  maxConnectionReuseCount = 1000
+  maxConnectionReuseTime = 0
+  maxPoolSize = 20
+  maxStatements = 5000
+  minPoolSize = 20
+  minPoolSize = 5
+  timeoutCheckInterval = 5
+  timeToLiveConnectionTimeout = 0
+  validateConnectionOnBorrow = false
+  
+  /* ucp.js */
+  var pds = Packages.oracle.ucp.jdbc.PoolDataSourceFactory.getPoolDataSource();
+  var props = new java.util.Properties();
+  props.load(new java.io.FileInputStream(arguments[0]));
+  pds.setConnectionFactoryClassName(props.connectionFactoryClassName);
+  pds.setURL(props.URL);
+  pds.setConnectionProperties(props);
+  var format = java.lang.String.format;
+  print(format(&quot;\nPinging %s using %s:&quot;, props.URL, arguments[0]));
+  
+  var worker = function() {
+    try {
+      var conn = pds.getConnection();
+      var stmt = conn.createStatement();
+      stmt.setQueryTimeout(5);
+      stmt.setFetchSize(500);
+      var before = java.time.Instant.now();
+      var rs = stmt.executeQuery(props.query);
+      while (rs.next()) var inst = rs.getObject(1);
+      var duration = java.time.Duration.between(before, java.time.Instant.now()).toMillis();
+      java.lang.Thread.sleep(parseInt(props.sleep) * Math.random() * 1000);
+      print(format(&quot;Reply from %s time=%sms result=%s&quot;, java.lang.Thread.currentThread(), duration, inst));
+      rs.close();
+      stmt != null &amp;&amp; stmt.close();
+      conn.close();
+    } catch (e) {
+      throw java.lang.RuntimeException(e);
+    }
+  };
+  
+  var exec = java.util.concurrent.Executors.newFixedThreadPool(parseInt(props.threads));
+  for (var t = 0; t &lt; parseInt(props.connections); t++) {
+    exec.submit(new java.lang.Runnable() {
+      run: worker
+    });
+  }
+  exec.shutdown();
+  exec.awaitTermination(60, java.util.concurrent.TimeUnit.SECONDS);
+  
+  var stats = pds.getStatistics();
+  print(format(&quot;\nPing statistics for %s:\n  Connections = %s, Borrowed = %s, Closed = %s&quot;, props.URL, stats.getTotalConnectionsCount(), stats.getBorrowedConnectionsCount(), stats.getConnectionsClosedCount()));
+  print(format(&quot;Connection creation wait times in milli-seconds:\n  Average = %sms, Maximum = %sms&quot;, stats.getAverageConnectionWaitTime(), stats.getPeakConnectionWaitTime()));
+  </code></pre>
+    </div>
+
+    <p align="center"><strong>Listing 4. Oracle UCP &quot;ping&quot; utility for diagnosing correct connection pool
+        behavior.</strong></p>
+
+    <p><strong>Aside from the <code class="ocode">PoolDataSource</code> and <code
+          class="ocode">ExecutorFramework</code>, the code in Listing 4 also introduces a reference to a new Java 8
+        calendar framework introduced under <a data-lbl="79 - JEP 150: Date &amp; Time AP"
+          data-trackas="devoArticleTechDatabaseNashorn3" href="http://openjdk.java.net/jeps/150">JEP 150: Date &amp;
+          Time AP</a>I. This new API has been redesigned from the ground up and brings seamless date/time handling to
+        all JVM languages, Nashorn included.</strong></p>
+
+    <p><strong>The invocation and result of the sample test of the Oracle UCP pool is shown in Listing 5.</strong></p>
+
+    <div class="ocode">
+      <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+        <div><a href="#copy">Copy</a></div>
+      </div>
+
+      <pre>
+  <code>
+  $ jjs &quot;-J-Djava.class.path=lib/ojdbc8.jar:lib/ucp.jar&quot; ucp.js -- pool.properties
+  
+  Pinging jdbc:oracle:thin:@192.168.99.100:1521/ORCLCDB.localdomain using 
+  pool.properties:
+  Reply from Thread[pool-1-thread-3,5,main] time=85ms result=ORCLCDB
+  Reply from Thread[pool-1-thread-5,5,main] time=2ms result=ORCLCDB
+  Reply from Thread[pool-1-thread-6,5,main] time=91ms result=ORCLCDB
+  Reply from Thread[pool-1-thread-7,5,main] time=86ms result=ORCLCDB
+  Reply from Thread[pool-1-thread-8,5,main] time=22ms result=ORCLCDB
+  Reply from Thread[pool-1-thread-1,5,main] time=3ms result=ORCLCDB
+  Reply from Thread[pool-1-thread-10,5,main] time=7ms result=ORCLCDB
+  Reply from Thread[pool-1-thread-2,5,main] time=8ms result=ORCLCDB
+  Reply from Thread[pool-1-thread-9,5,main] time=90ms result=ORCLCDB
+  Reply from Thread[pool-1-thread-4,5,main] time=2ms result=ORCLCDB
+  
+  Ping statistics for jdbc:oracle:thin:@192.168.99.100:1521/ORCLCDB.localdomain:
+      Connections = 10, Borrowed = 0, Closed = 0
+  Connection creation wait times in milli-seconds:
+      Average = 606ms, Maximum = 856ms
+  </code></pre>
+    </div>
+
+    <p align="center"><strong>Listing 5. Testing Oracle UCP with Nashorn.</strong></p>
+    <strong>Scripting Oracle Database</strong>
+
+    <p>When Oracle Database 12<em>c</em> Release 2 came along, Nashorn earned yet another credit of trust by becoming
+      the language of choice for scripting the JVM that runs inside Oracle Database. This functionality was enabled by
+      the introduction of Oracle&#39;s Java 8&ndash;based JVM.</p>
+
+    <p>Before running the code, the JVM release that&#39;s running inside Oracle Database can be confirmed with <code
+        class="ocode">select dbms_java.get_ojvm_property(propstring=&gt;&#39;java.version&#39;) from dual</code>. With
+      the database version 12.2.0.1 used in this article, version <code class="ocode">1.8.0_121</code> is returned.</p>
+
+    <p>Listing 6 shows the deployment of a Java procedure responsible for invoking Nashorn inside Oracle Database with
+      the required privileges on the <code class="ocode">DEMO</code> user. Aside from the comprehensive <code
+        class="ocode">DBJAVASCRIPT</code> role that allows execution of Nashorn code, a <code
+        class="ocode">getClassLoader</code> permission makes the code generic in a way that the script name can be
+      provided at runtime.</p>
+
+    <div class="ocode">
+      <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+        <div><a href="#copy">Copy</a></div>
+      </div>
+
+      <pre>
+  <code>
+  SQL&gt; connect sys/****@orclpdb1 as sysdba
+  
+  SQL&gt; create user demo identified by demo;
+  
+  SQL&gt; grant create session, resource, dbjavascript to demo;
+  
+  SQL&gt; begin
+    2  dbms_java.grant_permission(&#39;DEMO&#39;, &#39;SYS:java.lang.RuntimePermission&#39;,
+    3  &#39;getClassLoader&#39;, &#39;&#39;);
+    4  end;
+    5  /
+  
+  -- runscript.sql
+  create or replace and compile java source named &quot;RunScript&quot; as
+  
+  import javax.script.*;
+  import java.net.*;
+  import java.io.*;
+  
+  public class RunScript {    
+      public static String eval(String script, String code) throws Exception {
+          String output = new String();
+          ClassLoader loader = Thread.currentThread().getContextClassLoader();	
+          try (
+              InputStream is = loader.getResourceAsStream(script);
+              Reader reader = new InputStreamReader(is)
+          ) {
+              ScriptEngineManager factory = new ScriptEngineManager();
+              ScriptEngine engine = factory.getEngineByName(&quot;javascript&quot;);
+              engine.eval(reader);
+              output = engine.eval(code).toString();
+          } catch(Exception e) {
+              output = e.getMessage();
+          }
+          return output;
+      }
+  }
+  /
+  
+  create or replace function runscript(script in varchar2, code in varchar2) 
+  return varchar2 as language java 
+  name &#39;RunScript.eval(java.lang.String, java.lang.String) return java.lang.String&#39;
+  /
+  </code></pre>
+    </div>
+
+    <p align="center"><strong>Listing 6. Helper <code class="ocode">ScriptEngine</code> objects in Java and
+        PL/SQL.</strong></p>
+
+    <p>At this point, Nashorn scripts could be loaded into the database by using the <code class="ocode">loadjava</code>
+      facility, for example, <code class="ocode">loadjava -v -u demo/demo@orclpdb1 runscript.js</code> uploads <code
+        class="ocode">runscript.js</code> into the Nashorn schema on pluggable database <code
+        class="ocode">ORCLPDB1</code>. The newly created <code class="ocode">runscript</code> SQL function takes the
+      name of a loaded script and code to execute as two <code class="ocode">VARCHAR2</code> parameters.</p>
+
+    <p>For procedures without a return value, the even simpler API of <code class="ocode">dbms_javascript.run()</code>
+      can be used to quickly invoke Nashorn scripts without the need for intermediary functions. This method takes the
+      name of a loaded script as the first and only argument. To enable the output of such scripts, both server output
+      and Java output must be enabled (that is, <code class="ocode">set serveroutput on</code> and <code
+        class="ocode">dbms_java.set_ouput()</code> must be invoked prior to executing <code
+        class="ocode">dbms_javascript.run scripts</code>).</p>
+    <strong>Extending Oracle SQL Developer Command Line</strong>
+
+    <p>The task of porting SQL*Plus to Java to modernize the tool and provide new capabilities brought one feature
+      bigger than all the others combined: extensibility via <code class="ocode">ScriptEngine</code>. Nashorn, being a
+      part of Java SE became a natural fit for implementing these extensions and has already received a lot of traction
+      from both vendors and the community.</p>
+
+    <p>Seamless integration of Nashorn into Oracle SQLcl is based on the top-level <code class="ocode">SCRIPT</code>
+      command, which loads the script under the first argument, assuming <code class="ocode">.js</code> if only the base
+      file name is given. Execution of external scripts would make little sense if the current connection context was
+      not accessible, so Oracle SQLcl exposes the command, connection, and terminal to the script. Oracle SQLcl scripts
+      can be executed directly as external processors or they can implement new functionality through one of the <code
+        class="ocode">oracle.dbtools.raptor</code> subtypes.</p>
+
+    <p>Listing 7 exhibits the implementation of a new top-level Oracle SQLcl function called <code
+        class="ocode">JSON</code> that transforms a SQL result set into valid JSON representation using JavaScript&#39;s
+      built-in <code class="ocode">JSON.stringify</code> function. Oracle SQLcl&#39;s <code
+        class="ocode">CommandRegistry</code> and <code class="ocode">CommandListener</code> are used to bind the <code
+        class="ocode">jsonCommand</code> handler to the JSON command. To load this script in Oracle SQLcl, a simple
+      <code class="ocode">script json.js</code> command will enable the extended functionality.
+    </p>
+
+    <div class="ocode">
+      <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+        <div><a href="#copy">Copy</a></div>
+      </div>
+
+      <pre>
+  <code>
+  /* json.js */
+  var jsonCommand = function(ctx, conn, sql) {
+      print(sql);
+      var ret = util.executeReturnList(sql, null);
+      var rows = [];
+      for (var r in ret) {
+          var cols = {};
+          for (var k in ret[r]) cols[k] = ret[r][k];
+          rows.push(cols);
+      } 
+      print(JSON.stringify(rows, null, 4));
+  }
+  
+  var handle = function(conn, ctx, cmd) {
+      if (cmd.getSql().toLowerCase().startsWith(&#39;json&#39;)) {
+          jsonCommand(ctx, conn, cmd.getSql().replace(/^json\s/i, &#39;&#39;));
+          return true;
+      }
+      return false;
+  }
+  
+  var CommandRegistry = Java.type(&quot;oracle.dbtools.raptor.newscriptrunner.CommandRegistry&quot;);
+  var CommandListener = Java.type(&quot;oracle.dbtools.raptor.newscriptrunner.CommandListener&quot;);
+  
+  var JsonCommand = Java.extend(CommandListener, {
+      handleEvent: handle,
+      beginEvent: function() {},
+      endEvent: function() {}
+  });
+  
+  CommandRegistry.addForAllStmtsListener(JsonCommand.class);
+  </code></pre>
+    </div>
+
+    <p align="center"><strong>Listing 7. Implementing the new Oracle SQLcl command to output results as valid
+        JSON.</strong></p>
+
+    <p>Many more ways of using the <code class="ocode">SCRIPT</code> command exist. Because Oracle SQLcl exposes the
+      <code class="ocode">Connection</code> object to the script, it is possible to use it for comparing, migrating,
+      unloading, exporting, or crunching data in various ways. Because all Oracle SQLcl scripts have access to its
+      classpath, built-in libraries that ship with Oracle SQLcl can be used, for example:
+    </p>
+
+    <ul>
+      <li><strong>Apache HttpComponents</strong>: consuming REST APIs and web resources</li>
+      <li><strong>Java Secure Channel (JSch)</strong>: accessing servers over SSH</li>
+      <li><strong>StringTemplate</strong>: template engine</li>
+      <li><strong>Jackson</strong>: JSON processing</li>
+    </ul>
+    <strong>Summary</strong>
+
+    <p>Thanks to the ubiquity and popularity of JDBC, Nashorn turns out to be an excellent language for database work.
+      Without the need for compile-time dependencies that require the setup of Maven or Gradle, all that is needed for
+      running high-performing JVM bytecode is a JAR driver and a script. Combined with the portability of code, Nashorn
+      scripts will work on every operating system and every JDBC-compatible database, without the need for porting or
+      recompiling. That agility is often sought after in today&#39;s dynamic software projects, especially when it
+      doesn&#39;t sacrifice the performance and reliability of the JVM.</p>
+
+    <div class="aboutAuthor">
+      <h3>About the Author</h3>
+
+      <div class="author">
+        <div class="bio"><strong>Przemyslaw Piotrowsk</strong> is principal software engineer with 10+ years of
+          experience in design, development and maintenance of database systems. He is an Oracle Database 11<em>g</em>
+          Certified Master, an Oracle Database 12<em>c</em> Certified Master, and an Oracle Database Cloud Certified
+          Master, focusing on database engineering and infrastructure automation.</div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- /CC01v0 -->
+<!-- / _Raw-HTML -->

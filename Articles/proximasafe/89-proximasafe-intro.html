@@ -1,0 +1,946 @@
+<section class="cc01 cc01v0 cpad" id="link0">
+    <div class="cc01w1 cwidth">
+
+
+
+
+        <p><em>Signals transmitted</em><br />
+            <em>Message received</em><br />
+            <em>Reaction making impact</em><br />
+            <em>Invisibly</em>
+        </p>
+        <p>&mdash;Neil Peart, (1982)
+        </p>
+
+
+    </div>
+</section>
+<!-- /cc01v0 -->
+
+
+
+
+<section class="cc01 cc01v0 cpad" id="link1">
+    <div class="cc01w1 cwidth">
+
+        <h2>What is Proxima?</h2>
+
+
+
+        <p>During the hot summer of 2018 (now it seems like aeons ago), the Oracle Innovation Team in Rome created a
+            Smart City model - named Proxima City made of Lego Bricks, Arduinos connected to sensors and a bunch of
+            Raspberry Pi to demonstrate the capabilities of Oracle Cloud Infrastructure.</p>
+
+        <p>We based the use cases design upon the things we dreamed about every day: dispose the garbage in a proper,
+            responsible manner, get the latest and greatest news about what was functioning (and not functioning) in the
+            city, book a parking slot in the best location available for our working day route, 'login' to the city
+            infrastructure as a student, as a professional or as a casual tourist admiring the stunning architectures
+            and monuments of the past (we happen, here in Italy, to stumble upon ancient artifacts we can't immediately
+            recognize).</p>
+
+
+        <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/dev-promima-safe-chapter1-1.jpg"
+                alt="dev-promima-safe-chapter1-1" style="margin-bottom: 25px;"></p>
+
+
+        <p>The dialog with the smart city was implemented through a number of channels: Chatbots, Mobile apps and
+            classical web-oriented retrieval of useful information to make our life (a little bit) easier when living
+            and breathing in a hyper dense urban chaos like the Eternal City. Eventually, it was a success: conferences,
+            speeches, fairs (even some <a
+                href="https://www.ilmessaggero.it/speciali/makerfaire/maker_faire_2018_la_smart_city_futuro_proxima-4032740.html">mentions</a>
+            and prizes) and a focus on OCI capabilities.</p>
+
+        <p>Having an open design, the physical model was replicated dozens of times worldwide (including Redwood
+            Shores!), and each instance had subtle but substantial differences to the original structure, showing how an
+            idea can be expanded and improved by interconnecting worldwide teams and adapt the model to the needs
+            of a particular city/country.</p>
+
+        <p><strong>From Smart to Safe</strong><br />
+            Then, Covid-19 begun to hit our lives. The Smart City concept morphed into something different: as a
+            citizen I'd be less interested in knowing that the subway or my bus ride has a 4.2 minutes delay compared
+            to the original schedule, and possibly be mindful in determining if I <strong>can</strong> take advantage of
+            different urban
+            services in a <strong>safe</strong> fashion, extending the safety protocols to closed environments (offices,
+            university rooms,
+            workplaces). And, matter of fact, this is the idea we'll be facing here, trying to build a lab as a tool to
+            design
+            safety-related use cases.</p>
+        <p><em>Mutatis Mutandis</em>, we'll modify the original patterns and configurations exposed with Proxima City to
+            allow a
+            Smart City Lab become a Safe City Lab, hence the name <strong>ProximaSafe</strong>. We'll explore a number
+            of
+            technologies involved in different areas - with Oracle Cloud Infrastructure at the core - to build a tiny
+            lab
+            that can be exploited to implement any new idea in something substantial. </p>
+
+    </div>
+</section>
+<!-- /cc01v0 -->
+<!-- SET UP -->
+
+<!-- cc01v0 -->
+
+<section class="cc01 cc01v0 cpad" id="link1s1">
+    <div class="cc01w1 cwidth">
+        <h2>Data</h2>
+
+        <p>Let's get rid of the generic and overrated 'Data is the new oil' catchphrase for a moment, we just need to
+            mention the types of data - and their velocity - that a model can efficiently process in each of the stages
+            involved in building a development lab:</p>
+
+        <ul class="obullets">
+            <li>edge data, produced by microcontrollers-sensors and gateways, the atomic units of information
+                representing state and values in a single, memorable point in time</li>
+            <li>data in motion, or fast data - seen as streams of certified information directed to points of first
+                analysis and aggregation, useful to detect anomalies or state change before reaching any destination
+                appointed to data-wrangling activities</li>
+
+            <li>data at rest, seen as data residing in a structured or semi-structured repository ready for full-blown
+                analytics and phenomena discovery</li>
+        </ul>
+
+
+
+        <p>In this context, we're going to elaborate and deepen the setup of distinct environments to reach our goal:
+            conceive and design practical use cases related to safety procedures and protocols by continuously
+            producing information from the edge, continuously analyze the streams of information sourced by the edge
+            to detect anomalies and - then - store data in a repository suitable for Business Intelligence and data
+            operations.</p>
+        <p>The logical representation of the data flow could be depicted (L to R) as the following:</p>
+
+
+        <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/dev-promima-safe-chapter1-2.jpg"
+                alt="dev-promima-safe-chapter1-2" style="margin-bottom: 25px;"></p>
+
+        <p>Yes, that looks a lot like the three-staged diagram we used to build Proxima City. What's new then? We'll
+            introduce a feedback route at the Stream Analysis level, where the errors or anomalies detection
+            capabilities can be leveraged to send return messages to the edge and eventually activate some actuators -
+            in a lab, that could result in the activation of a 'red flag' in a corridor, or messages displayed in a
+            smart
+            badge and a wearable device. What can we do with OCI and what's the relationship with microdevices
+            present on the edge (i.e. in our lab)? The overall schema can be seen in this diagram:</p>
+
+        <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/dev-promima-safe-chapter1-3.jpg"
+                alt="dev-promima-safe-chapter1-3" style=" margin-bottom: 25px;"></p>
+
+        <p>where, on the left, the edge data from sensors are sent to a local Raspberry Pi running an MQTT server
+            such as Mosquitto (our Gateway), who happily converses with its Mosquitto Cloud twin (Proxima Server).
+            Then, sensors data are sent to the Streaming section and analyzed. The dark arrows path is the road back
+            to the edge where errors are reported to execute local actions (issue warnings, trigger actuators, show
+            alarms and other types of signalling to subscriber devices such as smart badges, alarm panels, etc.).</p>
+
+        <p>"Why Mosquitto? Why MQTT?" I hear you say. Well, it's open source, it's easy, it's fun. Maybe not enough
+            for industrial-strength implementations, but surely beloved by techies, geeks, tweakers and tinkerers (you
+            know who you are), with a pinch of 'designed to be debugged' flavor, so certainly suitable for the
+            construction of a testbed oriented to developers.</p>
+
+    </div>
+</section>
+
+
+
+<section class="cc01 cc01v0 cpad" id="link1s2">
+    <div class="cc01w1 cwidth">
+        <h3>Environments</h3>
+
+        <p>We need environments reflecting the considerations described above: perhaps the simplest way is to build
+            three different enviroments, with different scopes and different orientations:
+        </p>
+
+        <ul class="obullets">
+            <li>The <strong>Edge</strong> enviroment containing sensors and gateway. All the sensors and actuators are
+                connected
+                to a RPi (MQTT Edge Gateway) bridged to an OCI instance (ProximaSafe server) which includes the cloud
+                MQTT counterpart.</li>
+
+            <li>The <strong>Data in Motion</strong> enviroment where the events sent by the Edge are received by the
+                cloud MQTT
+                running in the SAFEserver OCI Compute instance and relayed in OCI Streaming. An instance of
+                Golden Gate Stream Analytics connected to the OCI Streaming topic is analyzing the messages and,
+                via published pipeline analysis, filters the messages and performs anomalies detection in the Edge.
+                Both alarms and filtered messages are conveyed to the subsequent subsystem.
+            <li>
+            <li>A <strong>Data at Rest</strong> environment responsible for BI and Reporting activities and - more
+                generally - to
+                enable medium and long term analytics-related tasks.</li>
+
+        </ul>
+
+        <p>So, we can think about the subsystems layout as the following:</p>
+
+        <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/dev-promima-safe-chapter1-4.jpg"
+                alt="dev-promima-safe-chapter1-4" style="margin-bottom: 25px;"></p>
+
+        <p>The Edge side of the lab is going to be (mostly) built with some M5stack components, based on the ESP32
+            architecture, programmed in 'Arduino mode' (old fashioned but effective C/C++) instead of microPython.
+            Being a vintage old boy baby boomer, it was quite easy to start with the antiques No problemo, there'll be
+            other parts built with Python, so bear with me. The Raspberry Pi is in charge to host a Mosquitto server, so
+            everything is miniaturized and portable, ready to be seamlessy lift-and-shifted from site A to site B
+            (during
+            lockdown, a mere two-steps walk spanning the opposite corners of my room).</p>
+
+        <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/dev-promima-safe-chapter1-5.jpg"
+                alt="dev-promima-safe-chapter1-5" style="margin-bottom: 25px;"></p>
+
+        <p>We'll explore and detail this configuration later in the next chapters.
+        </p>
+
+    </div>
+</section>
+
+
+
+<!-- cc01v0 -->
+
+<section class="cc01 cc01v0 cpad" id="link2">
+    <div class="cc01w1 cwidth">
+        <h2>Scope and Chapters</h2>
+        <p>The entire setup will be divided in three chapters (there is a strong possibility that this story will become
+            too
+            long to be contained in a single article), each one with a specific focus:</p>
+
+        <ul class="obullets">
+            <li><strong>Chapter 1</strong> (well, you're reading it right now): setting up, connect and test the Oracle
+                Cloud
+                Infrastructure services needed to listen to events from the Edge, and successfully handle the stream
+                of data to detect an anomaly.</li>
+            <li><strong>Chapter 2:</strong> bridge the Edge environment to OCI cloud services, so that communication is
+                bidirectional.</li>
+            <li><strong>Chapter 3:</strong> unleash creativity and tinker with Edge components to build up a number of
+                basic use
+                cases.</li>
+        </ul>
+        <p>It's definitely time to focus on the OCI services, so let's do it.</p>
+
+    </div>
+</section>
+<!-- /cc01v0 -->
+
+
+<section class="cc01 cc01v0 cpad" id="link3">
+
+    <div class="cc01w1 cwidth">
+        <h2>Map of the Activities</h2>
+        <p>Here's a minimalistic map of the activies for this first episode.
+        </p>
+        <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/dev-promima-safe-chapter1-6.jpg"
+                alt="dev-promima-safe-chapter1-6" style="margin-bottom: 25px;"></p>
+
+
+    </div>
+</section>
+
+<section class="cc01 cc01v0 cpad" id="link4">
+    <div class="cc01w1 cwidth">
+
+        <h3>Building the Stream Analysis subsystem in OCI
+        </h3>
+
+        <p>We're going to build the streaming middle-section of our microlab with two elements:</p>
+
+
+        <p>1. The <a href="https://docs.oracle.com/en-us/iaas/Content/Streaming/Concepts/streamingoverview.htm">OCI
+                Streaming Service</a> allows the creation of a stream within Oracle Cloud Infrastructure, the
+            managed service that guarantees and provides a flexible option to handle the messages injected
+            from our miniaturized edge.</p>
+        <p>2. An OCI Marketplace instance of <a
+                href="https://docs.oracle.com/en/middleware/fusion-middleware/osa/19.1/understanding/overview-oracle-streaming-analytics.html#GUID-E1AC004F-697F-4A94-8D96-9438263FE3F2">Golden
+                Gate Stream Analytics</a>, which will be our best friend in
+            intercepting streamed messages and applying patterns (and some logic) to identify anomalies.</p>
+
+        <p>These two components can be interconnected easily within OCI and (yes) outside OCI boundaries, so we'll
+            start setting up the Streaming component.</p>
+
+    </div>
+</section>
+
+<section class="cc01 cc01v0 cpad" id="link4s1">
+    <div class="cc01w1 cwidth">
+
+        <h3>Provision and configure the OCI Streaming Component</h3>
+        <p>On the Main OCI page, scroll the left menu (hamburger menu) until the Solutions and Platform group, click
+            on Streaming and you'll be presented with the Streams summary page, where you can start the
+            creation/configuration of your Stream by pushing that suspicious blue button:</p>
+
+
+        <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/dev-promima-safe-chapter1-7.jpg"
+                alt="dev-promima-safe-chapter1-7" style="border: 1px solid #999999; margin-bottom: 25px;"></p>
+
+        <p>Configuration is easy: select a name, your OCI compartment, the reference Stream Pool (if you haven't
+            created one, OCI will create it for you and allows you to configure it):</p>
+
+
+        <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/dev-promima-safe-chapter1-8.jpg"
+                alt="dev-promima-safe-chapter1-8" style="border: 1px solid #999999; margin-bottom: 5px;"></p>
+
+        <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/dev-promima-safe-chapter1-9.jpg"
+                alt="dev-promima-safe-chapter1-9" style="border: 1px solid #999999; margin-bottom: 25px;"></p>
+
+        <p>The creation process is a breeze. Let's test it by producing a test message - the button is located in the
+            Home » Streaming » Stream Details page and consuming it in the Recent Message pane:</p>
+
+        <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/dev-promima-safe-chapter1-10.jpg"
+                alt="dev-promima-safe-chapter1-10" style="border: 1px solid #999999; margin-bottom: 5px;"></p>
+
+
+        <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/dev-promima-safe-chapter1-11.jpg"
+                alt="dev-promima-safe-chapter1-11" style="border: 1px solid #999999; margin-bottom: 25px;"></p>
+
+        <p>Now that the stream is actually working, let's jump to the subsequent step - the creation of the Stream
+            Analytics component.</p>
+
+    </div>
+</section>
+
+<section class="cc01 cc01v0 cpad" id="link4s2">
+    <div class="cc01w1 cwidth">
+
+        <h3>Provision and configure the Golden Gate Stream Analytics Component
+        </h3>
+        <p>Stream Analytics will be the stream processing center of gravity for all messages sent from sensors and/or
+            development boards. In fact, we could consider it as the event driven engine of our portable lab. Being
+            placed in the Cloud, we can avoid the burden of management and operations and be laser-focused on the
+            development of analysis pipelines.</p>
+        <p>The Stream Analytics underlying clustered architecture is based on Spark Streaming and its configuration
+            and programming relies on a Designer UI that will allow us to produce the continuous query pipelines
+            needed to detect if something's wrong on the edge side. This package contains some little gems already
+            configured and ready to use:</p>
+
+        <ul class="obullets">
+            <li><strong>Oracle Stream Analytics</strong></li>
+            <li><strong>Oracle GoldenGate for Big Data</strong></li>
+            <li><strong>Apache Kafka</strong></li>
+            <li><strong>Apache Spark</strong></li>
+            <li><strong>Apache Ignite</strong></li>
+            <li><strong>Oracle Java</strong></li>
+            <li><strong>Oracle MySQL Enterprise Edition</strong></li>
+
+        </ul>
+
+
+        <p>The <strong>OCI Marketplace</strong> is the go-to site that encompasses guides, tutorials and a short <a
+                href="?ytid=GAE18Eir4C0" rel="vbox">video</a> that shows a
+            step-by-step guide to deploy an active instance of Golden Gate Stream Analytics within OCI in few minutes!
+            Summarizing the steps included in the <a href="?ytid=GAE18Eir4C0" rel="vbox">video</a>, we are going to:</p>
+
+        <ul class="obullets">
+            <li>Get the Application (push on the <strong>Get App</strong> green button)</li>
+            <li>Select the OCI destination region (have your OCI credentials and compartment ready!)</li>
+            <li>Sign in to OCI specifying your cloud tenant and your credentials</li>
+        </ul>
+
+        <p>You'll be led to a page in which you can specify the version - pick up the STANDARD one and you'll be
+            entitled to use it freely for 30 days, and specify the destination OCI <a
+                href="https://docs.oracle.com/en-us/iaas/Content/Identity/Tasks/managingcompartments.htm">compartment</a>.
+            The Greyed-out button
+            Launch Stack will become active, and by clicking it you are officially - and transparently - using the <a
+                href="https://docs.oracle.com/en-us/iaas/Content/ResourceManager/Concepts/resourcemanager.htm">OCI
+                Resource Manager</a>], the OCI cloud service that wraps <a
+                href="https://www.terraform.io/">Terraform</a> and makes your life easier to automate creation /
+            deletion of OCI resources.</p>
+
+
+
+        <p><strong>Network considerations</strong></p>
+
+        <p>During the configuration you'll be asked to detail the desired network configuration: normally it's a good
+            practice to create your own network infrastructure in advance to have a designed granular access to the
+            resources. For this purpose, though, we'll keep it simple as we won't provide Resource Manager with the
+            information to create a VCN and let it create a Virtual Cloud Network (public) to keep things rolling
+            seamlessly. The network created will be used also by the OCI Compute instance taking care of getting
+            messages from the Edge and routing them to OCI artifacts.</p>
+
+        <p><strong>Instance details</strong></p>
+        <p>We need to choose an Availability Domain, a Compute shape (4, 8, or 16 CPU - 4 would be enough for our
+            project), let OCI assign a Public IP to access the Designer and Admin Console from our comfortable couch,
+            and insert the SSH public key (we'll need to SSH to the instance to retrieve the administration password).
+            Review all parameters in the appropriate summary page and hit Create - this will trigger a job creation
+            within Resource Manager which will provision the complete package (about 3/4 minutes).</p>
+
+        <p>Once the instance has been created, let's open a Secure Shell to the instance via the assigned Public IP
+            seen in the Compute Instance page:</p>
+
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+ssh -i &lt;Your Private Key&gt;pc@&lt;Public IP>
+Last login: never (ever)
+-bash: warning: setlocale: LC_CTYPE: cannot change locale (UTF-8): No such
+file or directory
+[opc@ggsa ~]$ ls
+README.txt
+[opc@ggsa ~]$
+</code></pre>
+        </div>
+
+        <p>and fetch the <strong>osaadmin</strong> password to enter the console
+        </p>
+
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+<i>[opc@ggsa ~]$ cat README.txt | grep -n 'osaadmin'
+16:Your osaadmin password to login to OSA UI is &lt;YourPassword&gt;
+[opc@ggsa ~]$ </i>
+</code></pre>
+        </div>
+
+
+        <p>which can be used to access our istance. The link https://&lt;Public IP&gt;/osa/login.html should
+            greet us with the welcome page, accessible with user osaadmin and the password grabbed as previously
+            indicated.
+        </p>
+
+        <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/dev-promima-safe-chapter1-12.jpg"
+                alt="dev-promima-safe-chapter1-12" style="border: 1px solid #999999; margin-bottom: 25px;"></p>
+
+        <p><strong>Source Connection Configuration</strong></p>
+
+        <p>Okey-dokey, let's connect Stream Analytics with the (OCI Streaming) stream we created previously. We just
+            go the <strong>Catalog</strong> tab from the Home Page and select from the <em>Create New </em>Item combo
+            the <em>Connection item:</em>
+        </p>
+
+
+        <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/dev-promima-safe-chapter1-13.jpg"
+                alt="dev-promima-safe-chapter1-13" style="border: 1px solid #999999; margin-bottom: 25px;"></p>
+
+
+        <p>and fill this form with the name of the Connection, a fancy description, a tag (I suggest to use tags
+            thoroughly, that'll save you some time) selecting the Connection type as Kafka. Then, quickly move to the
+            connection details where we need to provide some info - that you can grab from the Stream Pool Details in
+            the OCI Streaming console (Home » Streaming » Stream Pools » Stream Pools Details - and on the
+            bottom-left pane named Resources select the Kafka Connection Settings link).</p>
+        <p>You've got to produce an Authorization Token - easy to do, go here for a hint, as you can see: </p>
+
+        <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/dev-promima-safe-chapter1-14.jpg"
+                alt="dev-promima-safe-chapter1-14" style="border: 1px solid #999999; margin-bottom: 25px;"></p>
+
+
+        <p>We'll note (and copy) all the parameters needed to fill the <strong>Connection Details</strong> page form,
+            selecting our
+            Authentication Token as the password for your username and test the connection:</p>
+
+        <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/dev-promima-safe-chapter1-15.jpg"
+                alt="dev-promima-safe-chapter1-15" style="border: 1px solid #999999; margin-bottom: 25px;"></p>
+
+
+        <p>and <em>hey presto!</em>, we've just joined the core components of this stream analysis lab.</p>
+
+
+        <p>Within Golden Gate <strong>Stream</strong> Analytics, in addition to the Connection we just created, we need
+            to set up an
+            object (strangely) called Stream. Hitting the now famous Green Button <strong>Create New Item</strong> in
+            the Catalog
+            tab, we can select the Stream item
+        </p>
+
+
+        <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/dev-promima-safe-chapter1-16.jpg"
+                alt="dev-promima-safe-chapter1-16" style="border: 1px solid #999999; margin-bottom: 25px;"></p>
+
+        <p>and proceed, in sequence, to fill the following forms, specifying:</p>
+
+
+        <ul class="obullets">
+            <li>the type of Stream (Kafka)</li>
+        </ul>
+
+        <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/dev-promima-safe-chapter1-17.jpg"
+                alt="dev-promima-safe-chapter1-17" style="border: 1px solid #999999; margin-bottom: 25px;"></p>
+
+
+
+
+        <ul class="obullets">
+            <li>the connection, the Stream previously configured (PStream) </li>
+        </ul>
+
+        <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/dev-promima-safe-chapter1-18.jpg"
+                alt="dev-promima-safe-chapter1-18" style="border: 1px solid #999999; margin-bottom: 25px;"></p>
+
+
+
+        <ul class="obullets">
+            <li>whether Golden Gate Stream Analytics should be lenient about missing columns name</li>
+        </ul>
+
+        <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/dev-promima-safe-chapter1-19.jpg"
+                alt="dev-promima-safe-chapter1-19" style="border: 1px solid #999999; margin-bottom: 25px;"></p>
+
+        <p>And, finally, the shape of the messages. Note that there's a variety of ways to specify or determine the
+            shape, ranging from <strong>Infer Shape</strong> to <strong>Manual configuration</strong>. I'll explain,
+            later in this article, the data format
+            used for this setup</p>
+
+
+        <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/dev-promima-safe-chapter1-20.jpg"
+                alt="dev-promima-safe-chapter1-20" style="border: 1px solid #999999; margin-bottom: 25px;"></p>
+
+        <p>As much as I'd like to explain the simplicity and the intuitiveness in creating an analysis pipeline in
+            Golden
+            Gate Stream Analytics, it isn't time yet. We still need to setup more components, but the time will come.
+            Now, let's setup an OCI compute instance to host the Cloud-side MQTT server and develop a piece of
+            software (in Python, at last!) that will wisely route the messages from MQTT to a Stream.</p>
+
+        <p><strong>Create the OCI Compute Instance</strong></p>
+        <p>The creation of an OCI Compute Instance is intuitive and straightforward, but in case you're like me (poor
+            ability to keep notions in an organic cache) you'll find a crib here.</p>
+
+        <p>What you would do is to select an appropriate shape: minimal I'd say - at this stage, as we don't expect
+            critical traffic volumes. Furthermore, we're headed to miniaturization of a personal lab! Here are some
+            suggestions:</p>
+
+
+        <ul class="obullets">
+            <li>Select the Autonomous Linux Developer Image, it'll save you time and keystrokes, as most of the
+                needed packages are included.</li>
+            <li>Reuse the Network Infrastructure already set up by Golden Gate Stream Analytics (VCN & subnets):
+                although it's not ideal, it'll be useful for this simple configuration.</li>
+            <li>Create it as a Stack and execute the Stack with Resource Manager. OCI Resource Manager
+                (Terraform) is your friend, with a nice bonus for me (i.e. remembering what I've done later).</li>
+
+        </ul>
+        <p>Don't forget to take some security aspects into consideration:</p>
+
+
+
+        <ul class="obullets">
+            <li>Configure the Oracle Linux instance firewall accordingly (the MQTT port must be alive, kicking and
+                talking to something/somebody else)</li>
+            <li>Setup a Security List and the relating security rule to control the exposure of the MQTT port to the
+                edge.</li>
+
+        </ul>
+
+
+        <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/dev-promima-safe-chapter1-21.jpg"
+                alt="dev-promima-safe-chapter1-21" style="border: 1px solid #999999; margin-bottom: 25px;"></p>
+
+
+        <p>Then, let's proceed to prepare the environment for subsequent steps like:</p>
+
+
+
+
+        <ul class="obullets">
+            <li>Install the OCI Command Line Interface with <code class="ocode">oci setup config</code>. That will be
+                handy to access
+                OCI resources from the Matrix command line terminal.</li>
+
+            <li>Setup <strong>venv</strong> with <code class="ocode">python3.6 -m py36env</code>. Yes, we'll use some
+                Python here.</li>
+            <li>Insert source py36env/bin/activate in a test script and wherever you feel appropriate</li>
+            <li>Install the Extra Packages for Enterprise Linux <a
+                    href="https://fedoraproject.org/wiki/EPEL">(EPEL)</a>: <code
+                    class="ocode">sudo yum install -y oracle-epel-release-el7</code></li>
+
+        </ul>
+
+        <p><strong>Install, configure & test the MQTT Broker</strong></p>
+
+        <p>As said, we'll use Mosquitto as the MQTT broker in OCI with <code
+                class="ocode">sudo yum install mosquitto</code>, and add
+            some configuration, like</p>
+
+
+        <ul class="obullets">
+            <li>Create a password file (not really effective for the overall security posture, but I'd add credentials
+                anyway): <code class="ocode">mosquitto_passwd -c &lt;YourUsername&gt; &lt;YourPassword&gt;</code>.
+            <li>Move the file to the right directory: <code class="ocode">sudo mv passwordfile /etc/mosquitto</code>.
+            <li>Edit the default Mosquitto configuration found in /etc/mosquitto/mosquitto.conf in order to:
+                <p>Identify and change the default port. If the service is likely to be exposed to the wild internet,
+                    leaving the default settings to 1883 would be a no-no, maybe, and add username & password
+                    previously set in the appropriate sections.</p>
+            </li>
+            <li>Restart Mosquitto: <code class="ocode">sudo systemcl restart mosquitto</code>.</li>
+            <li>Test mosquitto with mosquitto clients, such as <strong>mosquitto_sub</strong> and
+                <strong>mosquitto_pub</strong>
+
+                <p>in a Matrix Terminal session, subscribe to all topics with mosquitto_sub -h 127.0.0.1 -p
+                    <port> -t '#' -u &lt;YourUsername&gt; - &lt;YourPassword&gt;.
+                </p>
+
+                <p>in another Matrix Terminal session, publish a message with <code class="ocode">mosquitto_pub -h 127.0.0.1 -p 
+	    &lt;port>-t 'Test' -u &lt;YourUsername&gt; -P &lt;YourPassword&gt; -m '{"Name":"Jack Torrance"}'</code>.</p>
+            </li>
+
+            <li>if all is well, you should see the message on the subscriber's terminal session: in such a case, grab a
+                coffee or a nice cup of tea, as we're going secure our MQTT Server first, and then installling the OCI
+                SDK and examples for Python.</li>
+        </ul>
+
+        <p><strong>Secure the MQTT Server running on OCI Compute</strong></p>
+
+        <p>There's a number of guides and tutorials, on the Web, about configuring and using the MQTT TLS security,
+            either via <a href="https://letsencrypt.org/">Let's Encrypt</a> or just creating your own CA, Server Keys
+            and certificates. What I did here is follow
+            the shortest path (creating my own stuff), but feel free to follow your creativity and developer flair.
+        </p>
+
+        <p><strong>Note: when entering the country, organization and other info donʼt use the same exact information
+                for the CA and the Server Certificate as you might encounter problems.</strong></p>
+
+
+        <ul class="obullets">
+            <li>Generate a CA key
+
+                <p>1. openssl genrsa -des3 -out ca.key 4096 and choose a password, in my case password1,<br />
+                    2. openssl req -new -x509 -days 2112 -key ca.key -out ca.crt</p>
+            </li>
+
+            <li>Generate a server key
+
+                <p>1. openssl genrsa -des3 -out server.key 4096 and choose another password, in my case password2</p>
+            </li>
+
+            <li>Generate a Certificate Signing Request
+
+                <p>1. openssl req -new -key server.key -out server.csr</p>
+            </li>
+
+
+            <li>Sign the Certificate Signing Request
+
+                <p>1. openssl x509 -req -days 365 -in server.csr -CA ca.crt -CAkey ca.key -set_serial 01 -out server.crt
+                </p>
+            </li>
+
+            <li>Verify that every bit is ok
+                <p>1. openssl rsa -noout -text -in server.key<br />
+                    2. openssl req -noout -text -in server.csr<br />
+                    3. openssl rsa -noout -text -in ca.key<br />
+                    4. openssl rsa -noout -text -in ca.key</p>
+            </li>
+
+
+            <li>Make a version of the server key that doesn't need the password
+
+                <p>1. openssl rsa -in server.key -out server.key.insecure<br />
+                    2. mv server.key server.key.secure<br />
+                    3. mv server.key.insecure server.key</p>
+            </li>
+
+            <li>Edit the file /usr/lib/python3.6/site-packages/certifi/cacert.pem adding the ca.crt file content (PEM
+                public Key)</li>
+
+
+        </ul>
+
+        <p>Be sure to put (and mantain!) the appropriate files in a certs directory under /etc/mosquitto and have
+            this directory saved where you want to perform some tests, like</p>
+
+
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+[opc@proximaserver ~]$ mosquitto_pub -t 'edge/device/machines' -h &lt;IP
+Address of OCI compute&gt; -u &lt;username&gt; -P &lt;password&gt; -p &lt;your port&gt; --
+insecure --cafile certs/ca.crt --cert certs/server.crt --key
+certs/server.key -m '{"Developers Developers Developers Developers!"}'
+</code></pre>
+        </div>
+
+
+        <p>We won't configure bridging (the dialog between Edge Mosquitto and Cloud Mosquitto) for now, that will be
+            done in the second part of our prolix boomer babbling.</p>
+
+        <p><strong>Get the OCI SDK for Python and Install Libraries</strong></p>
+
+        <p>Well, it's time to perform some moves on the chessboard:</p>
+
+
+        <ul class="obullets">
+            <li>Clone the git repository from <strong>GitHub</strong>: <code
+                    class="ocode">git clone https://github.com/oracle/oci-python-sdk.git.</code></li>
+        </ul>
+
+        <p>This repository contains a wealth of source code and examples, and is regularly updated to reflect the
+            evolution of OCI APIs. Then,</p>
+
+        <ul class="obullets">
+            <li>Install the Python SDK: <code class="ocode">pip install oci</code></li>
+            <li>Install the Paho Library: <code class="ocode">pip install paho-mqtt</code></li>
+        </ul>
+
+
+        <p>and we're ready to write and execute a little python module that will grab sensors messages from the
+            Cloud-side Mosquitto and route the messages to OCI streaming, which in turn will be the source connection
+            for Golden Gate Stream Analytics. To do that, we'll grab the example named stream_example.py and taylor it
+            to our needs. The module is available here (NOTE: insert the GitHub link, open in a new window/tab).</p>
+
+        <p>Here are some snippets.</p>
+
+        <p>Import the <strong>paho</strong> library enabling the subscription to MQTT topics managed by the Cloud-side
+            Mosquitto.</p>
+
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+# imports
+import paho.mqtt.client as mqtt
+import time
+import oci
+import sys
+import ssl
+from base64 import b64encode, b64decode
+</code></pre>
+        </div>
+
+        <p>Make sure that all the necessary arguments are set before executing this python module:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+
+# Check Args
+if len(sys.argv) < 6:
+ print('Usage : ' + sys.argv[0] + " " +
+"oci_config oci_compartment_name oci_stream_name mqtt_hostname
+mqtt_port " + 
+"[mqtt_username] [mqtt_password] [cert_dir] ")
+ exit (0)
+oci_config_file = sys.argv[1]
+oci_compartment_name = sys.argv[2]
+oci_stream_name = sys.argv[3]
+mqtt_hostname = sys.argv[4]
+mqtt_port = int (sys.argv[5])
+mqtt_username = (sys.argv[6])
+mqtt_password = (sys.argv[7])
+cert_dir = (sys.argv[8])
+if len(sys.argv) > 6:
+ mqtt_username = sys.argv[6]
+if len(sys.argv) > 7:
+ mqtt_password = sys.argv[7]
+if len(sys.argv) > 8:
+ cert_dir = sys.argv[8]
+</code></pre>
+        </div>
+
+
+        <p>and subscribe to relevant topics:</p>
+
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+mqttc.connect(mqtt_hostname, mqtt_port)
+mqttc.subscribe("edge/device/#", 0)
+mqttc.subscribe("cloud/device/#", 0)
+
+</code></pre>
+        </div>
+
+        <p>We'll leave it as it is for now, keeping in mind that with an additional (small) effort it could be easily
+            transformed in a container image and possibly a microservice within OKE (the mighty Kubernetes Engine
+            within Oracle Cloud Infrastructure).</p>
+
+        <p><strong>Testing your router with mock sensor's data</strong></p>
+        <p>Before being ready to accept data from the edge, let's describe a simplistic data format in JSON which we'll
+            use to program the M5 microcontrollers later: we'll use to test the end-to-end flow issuing a command from
+            our own Matrix terminal (I still love the green-on-black, VT100-like, steampunk-oriented shell) seeing if
+            it's
+            been accepted by the stream analysis module. We'll inspire to what the Innovation Team has already made
+            in Proxima City, plus the geo-coordinates:</p>
+
+
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+{
+ "DEV_ID":"Colosseum",
+ "sensor":"Environmental",
+ "PROGR":1,
+ "TSTAMP":12345678,
+ "temp":20,
+ "hum":45,
+ "Lat":41.89024902749216, 
+ "Lon":12.49195874712777,
+"STATUS":"Safety sensor inside Colosseum, in Rome."
+}
+</code></pre>
+        </div>
+
+        <p>Let's execute the mqtt2oci Python code on the Compute instance that runs mosquitto:</p>
+
+
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+source /home/opc/scripts/py36env/bin/activate
+export OCI_COMPARTMENT=&lt;My Compartment Name&gt;
+export OCI_STREAM_NAME=PSstream
+export MQTT_HOSTNAME=&lt;My HostName
+export MQTT_PORT=&lt;The port exposed&gt;
+export MQTT_USERNAME=&lt;Username&gt;
+export MQTT_PASSWORD=&lt;Password&gt;
+export CERTIFICATES="/home/opc/mqtt/certs"
+python -u mqtt2streaming.py ~/.oci/config $OCI_COMPARTMENT
+$OCI_STREAM_NAME $MQTT_HOSTNAME $MQTT_PORT $MQTT_USERNAME $MQTT_PASSWORD
+$CERTIFICATES</code></pre>
+        </div>
+
+        <P>and open a couple of Matrix shells (yes!) to send and trace the message:</P>
+
+        <ul class="obullets">
+            <li><strong>Listen</strong> to messages on any topic</li>
+
+        </ul>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+mosquitto_sub -d -t '#' -h &lt;your host&gt; -u &lt;username&gt; -P &lt;password&gt; -p
+&lt;port&gt; --insecure --cafile certs/ca.crt --cert certs/server.crt --key
+certs/server.key
+
+</code></pre>
+        </div>
+
+
+
+        <ul class="obullets">
+            <li><strong>Fire</strong> the message</li>
+
+        </ul>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+mosquitto_pub -t 'edge/device/machines' -h &lt;your host&gt; -u &lt;username&gt; -P
+&lt;password&gt; -p &lt;port&gt; --insecure --cafile certs/ca.crt --cert
+certs/server.crt --key certs/server.key -m
+'{"DEV_ID":"Colosseum","sensor":"Environmental","PROGR":1,"TSTAMP":1234567
+8,"temp":20,"hum":45,"Lon":12.491958,"Lat":41.890249,"STATUS":"Safety
+sensor inside Colosseum, Rome."}'
+</code></pre>
+        </div>
+
+
+
+        <p>If all is good, the results should be:</p>
+
+        <ul class="obullets">
+            <li>On the <strong>Listen</strong> shell:</li>
+
+        </ul>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+log buffer Received PUBLISH (d0, q0, r0, m0), 'edge/device/machines', ... 
+(175 bytes)
+message edge/device/machines 0
+{"DEV_ID":"Colosseum","sensor":"Environmental","PROGR":1,"TSTAMP":12345678
+,"temp":20,"hum":45,"Lon":12.491958,"Lat":41.890249,"STATUS":"Safety
+sensor inside Colosseum, Rome."}
+Publishing message to the stream ocid1.stream.oc1.eu-frankfurt
+1.amaaaaaazfnr5nqatjglweu6qgzgrtnippcge3tjrunpzrgvkqc7en375ipq 
+Published message to partition 0 , offset 31420
+</code></pre>
+        </div>
+
+        <p>indicating that the message has been correctly routed to OCI Streaming, which can be verified on the OCI
+            Streaming web console by retrieving messages in the last 60 seconds:</p>
+
+
+        <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/dev-promima-safe-chapter1-22.jpg"
+                alt="dev-promima-safe-chapter1-22" style="border: 1px solid #999999; margin-bottom: 25px;"></p>
+
+
+        <p>and, ultimately, check the correct reception on the Stream Analytics designer console by positioning your
+            cursor and clicking on the first node:</p>
+
+
+        <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/dev-promima-safe-chapter1-23.jpg"
+                alt="dev-promima-safe-chapter1-23" style="border: 1px solid #999999; margin-bottom: 25px;"></p>
+
+
+        <h3>Next Episode: from Edge to Serverless</h3>
+        <p>We have just touched a number of things here, but the best is yet to come! In the next episode we're going
+            to explore the following topics:</p>
+        <ul class="obullets">
+            <li><strong>Selecting</strong> the functionalities to be assigned to the edge components</li>
+            <li><strong>Installing, Configuring and Bridging</strong> the local MQTT Server in the Raspberry Pi</li>
+            <li><strong>Develop and Deploy</strong> a serverless function to send alarms to the edge available as an API
+            </li>
+        </ul>
+
+        <p>See you on the next chapter: <a href="/proximasafe-part-2/">From Edge to Serverless</a></p>
+        <p>Zip and Zest!</p>
+
+        <!-- end -->
+    </div>
+</section>
+
+
+
+<!-- CC01v0 -->
+<section class="cc01 cc01v0 cpad" id="about">
+    <div class="cc01w1 cwidth" style="display: flex; gap: 25px;">
+
+        <div class="cc01w2 cc01fl">
+            <img src="https://oracle-devrel.github.io/devo-image-repository/images/bio-gabriele-provinciali.jpg">
+        </div>
+
+        <div class="cc01w2">
+
+            <h2>About the Author</h2>
+
+
+            <p>Gabriele Provinciali works as Solution Architect in Rome, Italy - passionate about everything that is
+                tinkerable!</p>
+        </div>
+    </div>
+</section>
+<!-- /CC01v0 -->

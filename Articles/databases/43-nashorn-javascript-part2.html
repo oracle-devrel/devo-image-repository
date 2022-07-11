@@ -1,0 +1,539 @@
+<section class="cc01 cc01v0 cpad crule">
+    <div class="cc01w1 cwidth">
+
+        <p>The Nashorn engine has been deprecated in JDK 11 as part of <a href="https://openjdk.java.net/jeps/335"
+                target="_blank">JEP 335</a> and and has been removed from JDK15 as part of <a
+                href="https://openjdk.java.net/jeps/372" target="_blank">JEP 372</a>. To learn more, please read <a
+                href="https://www.graalvm.org/reference-manual/js/NashornMigrationGuide/" target="_blank">Migration
+                Guide from Nashorn to GraalVM JavaScript</a>.</p>
+
+
+
+        <p>This series of articles introduces Nashorn, a blazing fast JavaScript runtime engine that shipped with Java
+            SE 8 to provide a lightweight environment for extending, supplementing, and often even replacing Java code.
+            Full Java Virtual Machine (JVM) capabilities and dynamic typing represent an effective tooling that will
+            appeal to developers and admins alike</p>
+
+        <ul class="obullets">
+            <li>Part 1: <a href="https://developer.oracle.com/databases/nashorn-javascript-part1.html">Introducing
+                    JavaScript, ECMAScript, and Nashorn</a></li>
+            <li>Part 2: The Java in JavaScript</li>
+            <li>Part 3: <a href="https://developer.oracle.com/databases/nashorn-javascript-part3.html">Database
+                    Scripting </a></li>
+        </ul>
+
+        <p>After Sun Microsystems sealed the licensing deal in December 1995, the language that started at Netscape as
+            Mocha and later LiveScript, became JavaScript—having literally nothing in common with Java. The only reason
+            for rebranding at the time was to increase JavaScript's popularity given the recent release of Java 1.0. The
+            release of Nashorn brings an interesting closure to the story, given how closely integrated these two
+            languages are. Both Sun and, later, Oracle have attempted to explore the possibilities of dynamic runtimes
+            and were largely successful in bringing rapid development capabilities to the Java Virtual Machine (JVM)
+            platform.</p>
+
+        <p>The introduction of the Java Scripting API in Java 6 changed how the JVM is perceived in the software world.
+            Whereas Java remains the primary citizen, there is now fair share of JVM development running Scala, Ruby, or
+            Python code through the Java Scripting API. With the inclusion of Nashorn in Java SE 8, it's now possible to
+            leverage scripting without third-party dependencies, because Nashorn became part of the official JDK and
+            Java runtime environment (JRE) offerings.</p>
+        <strong>Scripting for the Java Platform </strong>
+
+        <p>The Java Scripting API allows for seamless integration of any compatible language directly with the <code
+                class="ocode ocode-initialized">ScriptEngine</code> object. <a
+                data-lbl="77 - JSR 223 (Scripting for the Java Platform)" data-trackas="devoArticleTechDatabaseNashorn2"
+                href="https://www.jcp.org/en/jsr/detail?id=223">JSR 223 (Scripting for the Java Platform)</a> languages
+            are discovered by the JVM automatically by providing a <code
+                class="ocode ocode-initialized">ScriptEngineFactory</code> implementation to the Service Provider
+            Interface (SPI).</p>
+
+        <p>Listing 1 demonstrates the use of the Java Scripting API to enumerate all JSR 223–compatible runtimes
+            available to the JVM. Note that the <code class="ocode ocode-initialized">jython-standalone-2.7.1.jar</code>
+            file has been added to the classpath, whereas Nashorn does not require any declaration and is always
+            available. The <code class="ocode ocode-initialized">printEngine</code> function lists typical properties of
+            a script factory, providing consistent output information about engines at run time.</p>
+
+        <div class="ocode ocode-initialized">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard"><button
+                    aria-label="Copy code block 5">Copy</button>
+                <div></div>
+                <div class="ocode-success" aria-hidden="true">Copied to Clipboard</div>
+                <div class="ocode-error" aria-hidden="true">Error: Could not Copy</div>
+            </div>
+
+            <pre aria-label="Code block 5"><code>/* engines.js */
+    var printEngine = function(e) {
+        print(java.lang.String.format("%s %s -- %s",
+            e.getEngineName(), 
+            e.getEngineVersion(), 
+            e.getExtensions(), 
+            e.getLanguageName()));
+    }
+    
+    var engines = new javax.script.ScriptEngineManager().getEngineFactories();
+    engines.stream().forEach(printEngine); 
+    
+    $ jjs -J-Djava.class.path=lib/jython-standalone-2.7.1.jar engines.js
+    Oracle Nashorn 1.8.0_144 -- [js]
+    jython 2.7.1 -- [py]</code></pre>
+            <textarea readonly="readonly" aria-hidden="true" tabindex="-1"></textarea>
+        </div>
+
+        <p align="center"><strong>Listing 1. Nashorn running along with Jython on the JVM.</strong></p>
+
+        <p>In the example in Listing 1, along with the <code class="ocode ocode-initialized">ScriptEngine</code> code,
+            Nashorn is directly using the Java 8 Stream interface and expression closure supplied to <code
+                class="ocode ocode-initialized">forEach</code>—if the function has a simple return type, the braces and
+            <code class="ocode ocode-initialized">return</code> keyword may be omitted. An expression such as <code
+                class="ocode ocode-initialized">function(v) v</code> is a convenient equivalent of the <code
+                class="ocode ocode-initialized">function(v) { return v; }</code> declaration, which is very useful for
+            working with Java 8 APIs.</p>
+
+        <p>The JDK ships with a dedicated launcher for JSR 223 programs called <code
+                class="ocode ocode-initialized">jrunscript</code>. If it is called without parameters, it goes straight
+            to the Nashorn engine. That's yet another way to invoke Nashorn, which is especially useful for one-liners.
+            In Listing 2, Nashorn communicates with the Java Management Extensions (JMX) operating system's <code
+                class="ocode ocode-initialized">MXBean</code> to pull information about the total amount of physical
+            memory available to the JVM.</p>
+
+        <div class="ocode ocode-initialized">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard"><button
+                    aria-label="Copy code block 13">Copy</button>
+                <div></div>
+                <div class="ocode-success" aria-hidden="true">Copied to Clipboard</div>
+                <div class="ocode-error" aria-hidden="true">Error: Could not Copy</div>
+            </div>
+
+            <pre aria-label="Code block 13"><code>$ jrunscript.exe -e "print(java.lang.management.ManagementFactory.getOperatingSystemMXBean().getTotalPhysicalMemorySize())"
+    12566515712</code></pre>
+            <textarea readonly="readonly" aria-hidden="true" tabindex="-1"></textarea>
+        </div>
+
+        <p align="center"><strong>Listing 2. Using the <code class="ocode ocode-initialized">jrunscript</code> tool to
+                invoke inline Nashorn code on operating system MXBean.</strong></p>
+        <strong> Nashorn from Java </strong>
+
+        <p>The key element of the Java Scripting API is the <code class="ocode ocode-initialized">ScriptEngine</code>
+            object, which binds engines to the JVM and allows full interactivity. Objects can be sent to and from the
+            engine with simple <code class="ocode ocode-initialized">get</code> and <code
+                class="ocode ocode-initialized">put</code> methods. Functions are accessed with the <code
+                class="ocode ocode-initialized">invoke</code> family of methods, and entire scripts may be sent to the
+            engine with the combination of the <code class="ocode ocode-initialized">eval</code> function and the <code
+                class="ocode ocode-initialized">FileReader</code> object.</p>
+
+        <p>The script engine manager facility is very straightforward to instantiate, as illustrated in Listing 3. Java
+            can feed <code class="ocode ocode-initialized">ScriptEngine</code> with evaluated code or this can be done
+            through the <code class="ocode ocode-initialized">put</code> method. What comes from the engine is the <code
+                class="ocode ocode-initialized">ScriptObjectMirror</code> object, which requires some processing to get
+            cast to Java types, unless primitive types such as <code class="ocode ocode-initialized">int</code> or <code
+                class="ocode ocode-initialized">String</code> are returned.</p>
+
+        <p>In the example in Listing 3, the <code class="ocode ocode-initialized">intArray</code> JavaScript variable
+            needs casting to an integer array to initialize the <code class="ocode ocode-initialized">intArray</code>
+            variable. Similarly, the Java string array <code class="ocode ocode-initialized">stringList</code> is put
+            in, and then cast back to the string array and converted to a list of strings. The key difference in how
+            <code class="ocode ocode-initialized">ScriptEngine</code> objects are retrieved is that Nashorn objects must
+            be retrieved as a <code class="ocode ocode-initialized">ScriptObjectMirror</code> wrapper, whereas native
+            Java objects that were put into the engine can be pulled back with no interim objects. If the returning
+            object shows up as <code class="ocode ocode-initialized">[Object object]</code> through the <code
+                class="ocode ocode-initialized">toString()</code> method, this means it needs casting and conversion to
+            be accessible with Java.</p>
+
+        <div class="ocode ocode-initialized">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard"><button
+                    aria-label="Copy code block 33">Copy</button>
+                <div></div>
+                <div class="ocode-success" aria-hidden="true">Copied to Clipboard</div>
+                <div class="ocode-error" aria-hidden="true">Error: Could not Copy</div>
+            </div>
+
+            <pre aria-label="Code block 33"><code>/* NashornDemo.java */
+    import javax.script.ScriptEngine;
+    import javax.script.ScriptEngineManager;
+    import javax.script.ScriptException;
+    import java.util.Arrays;
+    import java.util.List;
+    import jdk.nashorn.api.scripting.ScriptObjectMirror;
+    
+    public class NashornDemo {
+        public static void main(String[] args) throws ScriptException {
+            ScriptEngineManager manager = new ScriptEngineManager();
+            ScriptEngine engine = manager.getEngineByName("nashorn");
+    
+            engine.eval("var intArray = [1, 2, 3];");
+            ScriptObjectMirror mirror = (ScriptObjectMirror) engine.get("intArray");
+            Integer[] intArray = mirror.to(Integer[].class);
+            System.out.println(intArray.length);
+    
+            engine.put("stringList", new String[]{"jeden", "dwa", "trzy"});
+            List&lt;String&gt; stringList = Arrays.asList((String[]) engine.get("stringList"));
+            System.out.println(stringList);
+        }
+    }
+    
+    $ javac NashornDemo.java &amp;&amp; java NashornDemo
+    3
+    [jeden, dwa, trzy]
+    4534</code></pre>
+            <textarea readonly="readonly" aria-hidden="true" tabindex="-1"></textarea>
+        </div>
+
+        <p align="center"><strong>Listing 3. Exchanging simple objects over the Nashorn ScriptEngine.</strong></p>
+
+        <p>A common use case for deploying <code class="ocode ocode-initialized">ScriptEngine</code> in Java
+            applications is to provide extensibility without the need for using the Service Provider Interface (SPI),
+            Open Source Gateway Initiative (OSGi), or other plugin frameworks. The ability to allow custom code inside
+            an application can greatly enhance adoption and work around steep programming learning curves for less
+            advanced users.</p>
+
+        <p>Nashorn can also allow third-party JavaScript modules to be used directly in Java code. Consider the sample
+            program in Listing 4, which executes a function on the popular <a data-lbl="78 - Moment.js"
+                data-trackas="devoArticleTechDatabaseNashorn2" href="https://momentjs.com/">Moment.js</a> library
+            through the script engine interface. The <code class="ocode ocode-initialized">eval</code> method is used on
+            the <code class="ocode ocode-initialized">FileReader</code> object to load the JavaScript library and return
+            a string value. There is no need for putting <code class="ocode ocode-initialized">ScriptObjectMirror</code>
+            in between because primitives such as <code class="ocode ocode-initialized">String</code> or <code
+                class="ocode ocode-initialized">int</code> are recognized as Java primitives.</p>
+
+        <div class="ocode ocode-initialized">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard"><button
+                    aria-label="Copy code block 40">Copy</button>
+                <div></div>
+                <div class="ocode-success" aria-hidden="true">Copied to Clipboard</div>
+                <div class="ocode-error" aria-hidden="true">Error: Could not Copy</div>
+            </div>
+
+            <pre aria-label="Code block 40"><code>import javax.script.ScriptEngine;
+    import javax.script.ScriptEngineManager;
+    import java.io.FileReader;
+    
+    public class NashornMoment {
+        public static void main(String[] args) throws Exception {
+            ScriptEngineManager manager = new ScriptEngineManager();
+            ScriptEngine engine = manager.getEngineByExtension("js");
+            engine.eval(new FileReader("moment.js"));
+            System.out.println(engine.eval("moment().format('LLL')"));
+        }
+    }</code></pre>
+            <textarea readonly="readonly" aria-hidden="true" tabindex="-1"></textarea>
+        </div>
+
+        <p align="center"><strong>Listing 4. Invoking a method on an external JavaScript module.</strong></p>
+
+        <p>All engines created with <code class="ocode ocode-initialized">ScriptEngineManager</code> with the <code
+                class="ocode ocode-initialized">getEngine</code> family of functions do not accept extra arguments. That
+            shortcoming can be worked around in Nashorn by supplying the JVM with the system property <code
+                class="ocode ocode-initialized">-Dnashorn.args</code>. In Java code, <code
+                class="ocode ocode-initialized">ScriptEngineManager</code> can be replaced with <code
+                class="ocode ocode-initialized">NashornScriptEngineFactory</code> to be able to provide custom
+            properties such as ECMAScript 6 (ES6) compatibility or a custom class loader. If ES6 compatibility was
+            omitted in Listing 5, the script would throw <code class="ocode ocode-initialized">ScriptException</code>
+            saying <code class="ocode ocode-initialized">&lt;eval&gt;:1:0 Expected an operand but found const</code>. To
+            learn all the ways parameters can be provided to the <code
+                class="ocode ocode-initialized">getScriptEngine</code> method, refer to the JDK API reference for the
+            <code class="ocode ocode-initialized">NashornScriptEngineFactory</code> class. An equivalent way of invoking
+            this engine with just <code class="ocode ocode-initialized">ScriptEngine</code> would be by providing <code
+                class="ocode ocode-initialized">-Dnashorn.args=--language=es6</code> to the list of JVM arguments.</p>
+
+        <div class="ocode ocode-initialized">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard"><button
+                    aria-label="Copy code block 52">Copy</button>
+                <div></div>
+                <div class="ocode-success" aria-hidden="true">Copied to Clipboard</div>
+                <div class="ocode-error" aria-hidden="true">Error: Could not Copy</div>
+            </div>
+
+            <pre aria-label="Code block 52"><code>import javax.script.ScriptEngine;
+    import javax.script.ScriptException;
+    import jdk.nashorn.api.scripting.NashornScriptEngineFactory;
+    
+    public class NashornFactory {
+        public static void main(String[] args) throws ScriptException {
+            NashornScriptEngineFactory factory = new NashornScriptEngineFactory();
+            ScriptEngine engine = factory.getScriptEngine("--language=es6");
+            engine.eval("const a = 100");
+        }
+    }</code></pre>
+            <textarea readonly="readonly" aria-hidden="true" tabindex="-1"></textarea>
+        </div>
+
+        <p align="center"><strong>Listing 5. Nashorn script engine factory used to create an engine with extra
+                attributes.</strong></p>
+
+        <p>Not everything has to be pulled back to Java for processing. JavaScript's specification contains a built-in
+            JSON Object that is used for encoding and decoding JSON format. Nashorn can effectively work around a lack
+            of this functionality in JDK 8 and earlier versions. The example in Listing 6 illustrates how Nashorn can
+            leverage web content fetched with Java to then extract required weather information with JSON. (The
+            OpenWeatherMap API requires the <code class="ocode ocode-initialized">appid</code> key which was sanitized
+            from the source code.)</p>
+
+        <div class="ocode ocode-initialized">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard"><button
+                    aria-label="Copy code block 54">Copy</button>
+                <div></div>
+                <div class="ocode-success" aria-hidden="true">Copied to Clipboard</div>
+                <div class="ocode-error" aria-hidden="true">Error: Could not Copy</div>
+            </div>
+
+            <pre aria-label="Code block 54"><code>import javax.script.ScriptEngine;
+    import javax.script.ScriptEngineManager;
+    import java.io.BufferedReader;
+    import java.io.InputStreamReader;
+    import java.net.URL;
+    import java.util.stream.Collectors;
+    
+    public class NashornWeather {
+    
+        public static void main(String[] args) throws Exception {
+            String response;
+            String url = "http://api.openweathermap.org/data/2.5/weather?q=Krakow,PL";
+            try (
+                InputStreamReader is = new InputStreamReader(new URL(url).openStream());
+                BufferedReader reader = new BufferedReader(is)) {
+                response = reader.lines().collect(Collectors.joining());
+            }
+            ScriptEngineManager manager = new ScriptEngineManager();
+            ScriptEngine engine = manager.getEngineByName("nashorn");
+            engine.put("response", response);
+            System.out.println(engine.eval("JSON.parse(response).weather[0].description"));
+        }
+    }</code></pre>
+            <textarea readonly="readonly" aria-hidden="true" tabindex="-1"></textarea>
+        </div>
+
+        <p align="center"><strong>Listing 6. Using Nashorn for consuming a JSON REST API.</strong></p>
+
+        <p>Script engine execution scopes can be isolated from each other with contexts and bindings. Because new code
+            loaded into the Nashorn interpreter could clutter global scope, scripts that are intended for execution in
+            isolation can be launched through the <code class="ocode ocode-initialized">loadWithNewGlobal</code>
+            function. The global scope <code class="ocode ocode-initialized">ENGINE_SCOPE</code> is equivalent to
+            ECMAScript's global, which is accessed through top-level use of the <code
+                class="ocode ocode-initialized">this</code> keyword. For specific use of <code
+                class="ocode ocode-initialized">ScriptContext</code>, check the <a
+                data-lbl="79 - Nashorn jsr223 engine notes" data-trackas="devoArticleTechDatabaseNashorn2"
+                href="https://wiki.openjdk.java.net/display/Nashorn/Nashorn+jsr223+engine+notes">Nashorn jsr223 engine
+                notes</a> on the OpenJDK wiki.</p>
+        <strong> Java from Nashorn </strong>
+
+        <p>Nashorn can seamlessly work with Java objects and most of the time requires no extra wrappers. By default,
+            major packages such as <code class="ocode ocode-initialized">com</code>, <code
+                class="ocode ocode-initialized">edu</code>, <code class="ocode ocode-initialized">java</code>, <code
+                class="ocode ocode-initialized">javafx</code>, <code class="ocode ocode-initialized">javax</code>, and
+            <code class="ocode ocode-initialized">org</code> are made available to the global scope, so there's no need
+            to "import" them. Other packages could be referenced with the <code
+                class="ocode ocode-initialized">Packages</code> global object or a recommended way is with the <code
+                class="ocode ocode-initialized">Java.type</code> global method. Along these lines, <code
+                class="ocode ocode-initialized">java.util.HashMap</code>, <code
+                class="ocode ocode-initialized">Packages.java.util.HashMap</code>, and <code
+                class="ocode ocode-initialized">Java.type("java.util.HashMap")</code> are three equivalent ways of
+            accessing the Java hash map from Nashorn.</p>
+
+        <p>Because Nashorn is dynamic whereas Java is statically typed, the method signature is determined at runtime.
+            An example of the commonly used overloaded method <code class="ocode ocode-initialized">println</code> is
+            shown in Listing 7. Another interesting addition was introduction of <a
+                data-lbl="80 - JEP 196: Nashorn Optimistic Typing" data-trackas="devoArticleTechDatabaseNashorn2"
+                href="http://openjdk.java.net/jeps/196">JEP 196: Nashorn Optimistic Typing</a>, which still requires the
+            explicit parameter <code class="ocode ocode-initialized">-ot</code> in JDK 8 but becomes the default
+            behavior in JDK 9. This optimization of the guesswork involved with assumptions about referenced Java types
+            may slightly degrade the JVM startup time but it improves performance greatly during runtime, with warmed-up
+            Nashorn code nearing half the speed of the JavaScript V8 engine.</p>
+
+        <div class="ocode ocode-initialized">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard"><button
+                    aria-label="Copy code block 72">Copy</button>
+                <div></div>
+                <div class="ocode-success" aria-hidden="true">Copied to Clipboard</div>
+                <div class="ocode-error" aria-hidden="true">Error: Could not Copy</div>
+            </div>
+
+            <pre aria-label="Code block 72"><code>jjs&gt; java.lang.System.out.println
+    [jdk.internal.dynalink.beans.OverloadedDynamicMethod
+     void java.io.PrintStream.println()
+     void java.io.PrintStream.println(boolean)
+     void java.io.PrintStream.println(char)
+     void java.io.PrintStream.println(char[])
+     void java.io.PrintStream.println(double)
+     void java.io.PrintStream.println(float)
+     void java.io.PrintStream.println(int)
+     void java.io.PrintStream.println(long)
+     void java.io.PrintStream.println(Object)
+     void java.io.PrintStream.println(String)
+    ]</code></pre>
+            <textarea readonly="readonly" aria-hidden="true" tabindex="-1"></textarea>
+        </div>
+
+        <p align="center"><strong>Listing 7. Overloaded Java method of a standard output stream as seen by
+                Nashorn.</strong></p>
+
+        <p>Although Nashorn doesn't ship with built-in introspection mechanisms by default, such tools can be easily
+            implemented. Refer to Listing 8 for a Nashorn port of Python's <code
+                class="ocode ocode-initialized">dir()</code> function, a well-known method for examining objects'
+            attributes and methods. Exact Python behavior was not retrofitted entirely, because the dynamic nature of
+            class loaders prohibits enumeration of packages without unpacking all classpath entries. In the example,
+            Nashorn's concise syntax is made even cleaner through the use of Java 8 streams and lambdas.</p>
+
+        <div class="ocode ocode-initialized">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard"><button
+                    aria-label="Copy code block 74">Copy</button>
+                <div></div>
+                <div class="ocode-success" aria-hidden="true">Copied to Clipboard</div>
+                <div class="ocode-error" aria-hidden="true">Error: Could not Copy</div>
+            </div>
+
+            <pre aria-label="Code block 74"><code>/* dir.js */
+    var dir = function(obj, search) {
+        with(new JavaImporter(java.util, java.util.stream)) {
+            var members = new HashMap();
+            var signature = function(method) {
+                var s = method.getReturnType().getSimpleName() 
+                    + " " + method.getName() + "(";
+                s = s + Arrays.stream(method.getParameters()).map(function(p) {
+                    return p.getType().getSimpleName() + " " + p.getName();
+                }).collect(Collectors.joining(", ")) + ")";
+                return s;
+            }
+            for (var c = obj.getClass(); c != null; c = c.getSuperclass()) {
+                Arrays.stream(c.getFields()).forEach(function(f) {
+                    members.putIfAbsent(f.getName(), f.getName());
+                });
+                Arrays.stream(c.getMethods()).forEach(function(m) {
+                    members.putIfAbsent(m.getName(), signature(m));
+                });
+            }
+            return members.entrySet().stream()
+                .sorted(function(e1, e2) e1.getKey().compareTo(e2.getKey()))
+                .map(function(e) e.getValue())
+                .filter(function(p) !search || p.contains(search))
+                .collect(Collectors.toList());
+        }
+    }
+    
+    jjs&gt; dir(new java.util.HashMap())
+    
+    [void clear(), Object clone(), Object compute(Object arg0, BiFunction arg1), Object 
+    computeIfAbsent(Object arg0, Function arg1), Object computeIfPresent(Object arg0, 
+    BiFunction arg1), boolean containsKey(Object arg0), boolean containsValue(Object arg0),
+    Set entrySet(), boolean equals(Object arg0), void forEach(BiConsumer arg0), Object
+    get(Object arg0), Class getClass(), Object getOrDefault(Object arg0, Object arg1), int
+    hashCode(), boolean isEmpty(), Set keySet(), Object merge(Object arg0, Object arg1, 
+    BiFunction arg2), void notify(), void notifyAll(), Object put(Object arg0, Object arg1),
+    void putAll(Map arg0), Object putIfAbsent(Object arg0, Object arg1), Object 
+    remove(Object arg0), boolean replace(Object arg0, Object arg1, Object arg2), void 
+    replaceAll(BiFunction arg0), int size(), String toString(), Collection values(), void wait()]</code></pre>
+            <textarea readonly="readonly" aria-hidden="true" tabindex="-1"></textarea>
+        </div>
+
+        <p align="center"><strong>Listing 8. Using the Nashorn helper <code class="ocode ocode-initialized">dir()</code>
+                function to list object attributes and methods.</strong></p>
+
+        <p>The example shown in Listing 8 also exhibits the JavaScript <code class="ocode ocode-initialized">with</code>
+            clause and the <code class="ocode ocode-initialized">JavaImporter</code> object that come from Rhino, and
+            have both are two new features that were ported from Mozilla Rhino to Nashorn for backwards compatibility.
+            In every situation where mixing with global scope is unwanted, the <code
+                class="ocode ocode-initialized">with</code> clause can shield the inner scope, whereas the <code
+                class="ocode ocode-initialized">JavaImporter</code> allows you to quickly expose package contents. The
+            <code class="ocode ocode-initialized">JavaImporter</code> doesn't always have to rely on the <code
+                class="ocode ocode-initialized">with</code> clause; a standalone importer can be convenient too.</p>
+
+        <p>Nashorn ships with a number of language extensions that aim to make platform interoperability even more
+            seamless. One of them is the <code class="ocode ocode-initialized">Java.from</code> function for converting
+            Java arrays to native JavaScript arrays. The reverse function <code
+                class="ocode ocode-initialized">Java.to</code> converts an existing JavaScript object to a requested
+            Java type, in accordance with the ECMAScript specification. An example of their use is shown in Listing 9.
+        </p>
+
+        <div class="ocode ocode-initialized">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard"><button
+                    aria-label="Copy code block 84">Copy</button>
+                <div></div>
+                <div class="ocode-success" aria-hidden="true">Copied to Clipboard</div>
+                <div class="ocode-error" aria-hidden="true">Error: Could not Copy</div>
+            </div>
+
+            <pre aria-label="Code block 84"><code>jjs&gt; var home = new java.io.File(".");
+    
+    jjs&gt; home.listFiles()
+    [Ljava.io.File;@2d1ef81a
+    
+    jjs&gt; Java.from(home.listFiles())
+    .\demo.js,.\dir.js,.\es6.js,.\jvm-npm.js,.\jython-standalone-2.7.1.jar, 
+    .\listEngines.js,.\module.js,.\mustache.js,.\qunit-2.4.0.js,.\underscore.js,.\unittest.js</code></pre>
+            <textarea readonly="readonly" aria-hidden="true" tabindex="-1"></textarea>
+        </div>
+
+        <p align="center"><strong>Listing 9. Demonstration of Nashorn array conversion.</strong></p>
+
+        <p>Nashorn is fully capable of implementing Java's abstract classes and interfaces using the <code
+                class="ocode ocode-initialized">new</code> operator and non-abstract classes through the <code
+                class="ocode ocode-initialized">Java.extend</code> method. Accordingly, Java superclasses can be
+            references from Nashorn code through the <code class="ocode ocode-initialized">Java.super</code> method. New
+            methods cannot be added through overloading and Nashorn can only implement, extend, and interact with
+            existing methods in this scenario. To add new class attributes at runtime, a special <code
+                class="ocode ocode-initialized">Object.bindProperties</code> method can be used. An example of extending
+            the <code class="ocode ocode-initialized">Callable</code> interface is shown in Listing 10, where the Java
+            Executor framework works seamlessly with Nashorn. Because of dynamic typing used against the <code
+                class="ocode ocode-initialized">submit</code> method, the implementation requires the exact method
+            signature <code class="ocode ocode-initialized">executor["submit(java.util.concurrent.Callable)"]</code>.
+        </p>
+
+        <div class="ocode ocode-initialized">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard"><button
+                    aria-label="Copy code block 92">Copy</button>
+                <div></div>
+                <div class="ocode-success" aria-hidden="true">Copied to Clipboard</div>
+                <div class="ocode-error" aria-hidden="true">Error: Could not Copy</div>
+            </div>
+
+            <pre aria-label="Code block 92"><code>var Callable = Java.type("java.util.concurrent.Callable");
+    var Worker = Java.extend(Callable, {
+        call: function() {
+            return Math.random();
+        }
+    });
+    
+    var executor = java.util.concurrent.Executors.newFixedThreadPool(4);
+    var random, futures = [];
+    try {
+        for (var i = 1; i &lt;= 10; i++) {
+            futures.push(executor["submit(java.util.concurrent.Callable)"](new Worker()));
+        }
+    
+        var random = futures.map(function(f) f.get());
+    } finally {
+        executor.awaitTermination(1, java.util.concurrent.TimeUnit.SECONDS);
+        executor.shutdownNow();
+    }
+    
+    print(random);</code></pre>
+            <textarea readonly="readonly" aria-hidden="true" tabindex="-1"></textarea>
+        </div>
+
+        <p align="center"><strong>Listing 10. Nashorn implementing Runnable interface.</strong></p>
+        <strong> Extensions </strong>
+
+        <p>Besides full ECMAScript 5.1 support and selected support for ES6, Nashorn features a number of language
+            extensions that can further enrich development flow, many of them stemming from Mozilla Rhino. Notable
+            enhancements include multiple <code class="ocode ocode-initialized">try</code>-<code
+                class="ocode ocode-initialized">catch</code> statements, <code
+                class="ocode ocode-initialized">for each</code> loops, anonymous functions, and typed arrays—created
+            with <code class="ocode ocode-initialized">Java.type("int[]")</code> and various methods on the built-in
+            <code class="ocode ocode-initialized">Object</code> object. A full list of the extensions can be found at
+            the OpenJDK <a data-lbl="81 - Nashorn extensions" data-trackas="devoArticleTechDatabaseNashorn2"
+                href="https://wiki.openjdk.java.net/display/Nashorn/Nashorn+extensions">Nashorn extensions</a> page, a
+            must-have resource for getting started with the language.</p>
+
+        <p align="center" class="xsml">Figure 1. The Nashorn extensions page</p>
+        <strong> Summary </strong>
+
+        <p>Nashorn fills the void between Java and JavaScript that was created when Mozilla developed and rebranded the
+            language. The level of interoperability between Nashorn and Java demonstrates a long-term commitment in
+            sustaining and further developing the language, with new features shipping in even minor JDK releases. Being
+            part of Oracle's JDK and OpenJDK, Nashorn is ready to use on most systems or easily deployed with native
+            package managers.</p>
+
+        <h3>About the Author</h3>
+
+        <p><strong>Przemyslaw Piotrowsk</strong> is principal software engineer with 10+ years of experience in design,
+            development and maintenance of database systems. He is an Oracle Database 11 <em>g</em> Certified Master, an
+            Oracle Database 12 <em>c</em> Certified Master, and an Oracle Database Cloud Certified Master, focusing on
+            database engineering and infrastructure automation.</p>
+    </div>
+</section>

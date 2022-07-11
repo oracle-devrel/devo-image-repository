@@ -1,0 +1,192 @@
+<article class="page has-sidebar" itemscope="" itemtype="https://schema.org/CreativeWork">
+    <div class="page__inner-wrap">
+
+        <section class="page__content" itemprop="text">
+
+
+            <picture class="aligncenter">
+                <source
+                    srcset="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/datalakeocichart_4481-9331b237844018b1.png 1x">
+                <img loading="lazy"
+                    src="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/datalakeocichart_4481-9331b237844018b1.png"
+                    data-original="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/datalakeocichart_4481-9331b237844018b1.png"
+                    data-at2x="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/datalakeocichart_4481-9331b237844018b1@2x.png"
+                    alt="OCI Datalake Architecture Overview" title="OCI Datalake Architecture Overview">
+            </picture>
+
+            <p>What is a data lake? Simply, a data lake is a place to store both your structured and unstructured data.
+                It’s also a great method for organizing large volumes of diverse data from diverse sources.</p>
+
+            <p>In this article, we’ll guide you through deploying a data lake in OCI and quickly get you up and running
+                so you can explore its many benefits!</p>
+
+            <p>For more information, see:</p>
+
+            <ul>
+                <li><a
+                        href="https://docs.oracle.com/iaas/Content/GSG/Tasks/signingup.htm?source=:ex:tb:::::WWMK211125P00021:WW_FY22_DevRel_DotBuild&amp;SC=:ex:tb:::::WWMK211125P00021:WW_FY22_DevRel_DotBuild&amp;pcode=WWMK211125P00021">Signing
+                        Up for Oracle Cloud Infrastructure</a></li>
+                <li><a
+                        href="https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/terraformgettingstarted.htm?source=:ex:tb:::::WWMK211125P00021:WW_FY22_DevRel_DotBuild&amp;SC=:ex:tb:::::WWMK211125P00021:WW_FY22_DevRel_DotBuild&amp;pcode=WWMK211125P00021">Getting
+                        started with Terraform</a></li>
+                <li><a
+                        href="https://docs.oracle.com/en-us/iaas/Content/API/Concepts/cloudshellintro.htm?source=:ex:tb:::::WWMK211125P00021:WW_FY22_DevRel_DotBuild&amp;SC=:ex:tb:::::WWMK211125P00021:WW_FY22_DevRel_DotBuild&amp;pcode=WWMK211125P00021">Getting
+                        started with OCI Cloud Shell</a></li>
+                <li><a
+                        href="https://www.oracle.com/big-data/what-is-data-lake/?source=:ex:tb:::::WWMK211125P00021:WW_FY22_DevRel_DotBuild&amp;SC=:ex:tb:::::WWMK211125P00021:WW_FY22_DevRel_DotBuild&amp;pcode=WWMK211125P00021">What
+                        is a data lake?</a></li>
+            </ul>
+
+            <h2 id="prerequisites">Prerequisites<a class="header-link" href="#prerequisites" title="Permalink"><span
+                        class="sr-only">Permalink</span><i class="fas fa-link"></i></a></h2>
+
+            <p>In order to successfully complete this tutorial, you’ll need:</p>
+
+            <ul>
+                <li>An Oracle Cloud Infrastructure (OCI) Free Tier account. <a
+                        href="https://signup.cloud.oracle.com/?language=en&amp;sourceType=:ow:de:te::::RC_WWMK211116P00260:DotBuildGetStarted&amp;intcmp=:ow:de:te::::RC_WWMK211116P00260:DotBuildGetStarted&amp;source=:ex:tb:::::WWMK211125P00021:WW_FY22_DevRel_DotBuild&amp;SC=:ex:tb:::::WWMK211125P00021:WW_FY22_DevRel_DotBuild&amp;pcode=WWMK211125P00021">Start
+                        for Free</a>.</li>
+                <li>A MacOS, Linux, or Windows computer with <code
+                        class="language-plaintext highlighter-rouge">ssh</code> support installed.</li>
+                <li>Access to the <a
+                        href="https://docs.oracle.com/en-us/iaas/Content/API/Concepts/cloudshellintro.htm?source=:ex:tb:::::WWMK211125P00021:WW_FY22_DevRel_DotBuild&amp;SC=:ex:tb:::::WWMK211125P00021:WW_FY22_DevRel_DotBuild&amp;pcode=WWMK211125P00021">OCI
+                        Cloud Shell</a> - It provides a great platform for quickly working with Terraform as well as a
+                    host of other OCI interfaces and tools.</li>
+                <li>The <a
+                        href="https://docs.cloud.oracle.com/iaas/Content/ResourceManager/Concepts/resourcemanager.htm?source=:ex:tb:::::WWMK211125P00021:WW_FY22_DevRel_DotBuild&amp;SC=:ex:tb:::::WWMK211125P00021:WW_FY22_DevRel_DotBuild&amp;pcode=WWMK211125P00021">OCI
+                        Resource Manager (ORM)</a> - This Quick Start uses the ORM to make deployment easy.</li>
+                <li>The ORM stack - Select the button below to download the <code
+                        class="language-plaintext highlighter-rouge">master.zip</code> file:</li>
+            </ul>
+
+            <p><a
+                    href="https://cloud.oracle.com/resourcemanager/stacks/create?zipUrl=https://github.com/oracle-quickstart/oci-datalake/releases/download/0.1/master.zip&amp;source=:ex:tb:::::WWMK211125P00021:WW_FY22_DevRel_DotBuild&amp;SC=:ex:tb:::::WWMK211125P00021:WW_FY22_DevRel_DotBuild&amp;pcode=WWMK211125P00021"><img
+                        src="https://oci-resourcemanager-plugin.plugins.oci.oraclecloud.com/latest/deploy-to-oracle-cloud.svg?source=:ex:tb:::::WWMK211125P00021:WW_FY22_DevRel_DotBuild&amp;SC=:ex:tb:::::WWMK211125P00021:WW_FY22_DevRel_DotBuild&amp;pcode=WWMK211125P00021"
+                        alt="Deploy to Oracle Cloud"></a></p>
+
+            <h2 id="getting-started">Getting started<a class="header-link" href="#getting-started"
+                    title="Permalink"><span class="sr-only">Permalink</span><i class="fas fa-link"></i></a></h2>
+
+            <p>After logging into the console you’ll be taken through the same steps described in the <a
+                    href="#deploy-with-orm">Deploy</a> section below.</p>
+
+            <blockquote class="notice">
+                <p><strong>NOTE:</strong> If you use this template to create another repo you’ll need to change the link
+                    for the button to point at your repo.</p>
+            </blockquote>
+
+            <h2 id="local-development">Local Development<a class="header-link" href="#local-development"
+                    title="Permalink"><span class="sr-only">Permalink</span><i class="fas fa-link"></i></a></h2>
+
+            <p>Make sure your credentials are defined in <code
+                    class="language-plaintext highlighter-rouge">$HOME/.oci/config</code> file since Terraform takes
+                takes the default value from the <code class="language-plaintext highlighter-rouge">.oci/config</code>
+                file.</p>
+
+            <p>For example:</p>
+
+            <div class="language-console highlighter-rouge">
+                <div class="highlight">
+                    <pre class="highlight"><code><span class="go">user=ocid1.user.oc1..aaaaaxxxwf3a \
+fingerprint=de:50:15:13:...:d6 \
+key_file=/Users/shadab/.oci/oci_api_key.pem \
+tenancy=ocid1.tenancy.oc1..aaaaaaaa2txfa \
+compartment=ocid1.compartment.oc1..aaaa5pti7sq \
+region=us-ashburn-1
+</span></code></pre>
+                </div>
+            </div>
+
+            <div class="language-console highlighter-rouge">
+                <div class="highlight">
+                    <pre class="highlight"><code><span class="go">git clone https://github.com/oracle-quickstart/oci-datalake &amp;&amp; cd oci-datalake
+</span></code></pre>
+                </div>
+            </div>
+
+            <h3 id="initialize">Initialize<a class="header-link" href="#initialize" title="Permalink"><span
+                        class="sr-only">Permalink</span><i class="fas fa-link"></i></a></h3>
+
+            <p>Initialize the Terraform provider for OCI and Random:</p>
+
+            <div class="language-console highlighter-rouge">
+                <div class="highlight">
+                    <pre class="highlight"><code><span class="go">terraform init
+</span></code></pre>
+                </div>
+            </div>
+
+            <h3 id="build-plan">Build Plan<a class="header-link" href="#build-plan" title="Permalink"><span
+                        class="sr-only">Permalink</span><i class="fas fa-link"></i></a></h3>
+
+            <div class="language-console highlighter-rouge">
+                <div class="highlight">
+                    <pre class="highlight"><code><span class="go">terraform plan -var-file=config.tfvars -out oci_datalake.out
+</span></code></pre>
+                </div>
+            </div>
+
+            <h3 id="apply">Apply<a class="header-link" href="#apply" title="Permalink"><span
+                        class="sr-only">Permalink</span><i class="fas fa-link"></i></a></h3>
+
+            <div class="language-console highlighter-rouge">
+                <div class="highlight">
+                    <pre class="highlight"><code><span class="go">terraform apply "oci_datalake.out"
+</span></code></pre>
+                </div>
+            </div>
+
+            <h3 id="destroy">Destroy<a class="header-link" href="#destroy" title="Permalink"><span
+                        class="sr-only">Permalink</span><i class="fas fa-link"></i></a></h3>
+
+            <div class="language-console highlighter-rouge">
+                <div class="highlight">
+                    <pre class="highlight"><code><span class="go">terraform destroy -var-file=config.tfvars
+</span></code></pre>
+                </div>
+            </div>
+
+            <h2 id="deploy-with-orm">Deploy with ORM<a class="header-link" href="#deploy-with-orm"
+                    title="Permalink"><span class="sr-only">Permalink</span><i class="fas fa-link"></i></a></h2>
+
+            <ol>
+                <li>
+                    <p><strong>Import the stack -</strong> <a
+                            href="https://console.us-ashburn-1.oraclecloud.com/resourcemanager/stacks/create?source=:ex:tb:::::WWMK211125P00021:WW_FY22_DevRel_DotBuild&amp;SC=:ex:tb:::::WWMK211125P00021:WW_FY22_DevRel_DotBuild&amp;pcode=WWMK211125P00021">Log
+                            in</a> to OCI to import the stack:</p>
+
+                    <p><strong>Home &gt; Solutions &amp; Platform &gt; Resource Manager &gt; Stacks &gt; Create
+                            Stack</strong></p>
+                </li>
+                <li>
+                    <p><strong>Upload stack -</strong> Upload the <code
+                            class="language-plaintext highlighter-rouge">master.zip</code> and provide a name and
+                        description for the stack:</p>
+
+                    <picture class="aligncenter">
+                        <source
+                            srcset="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/datalakeoci_4a6e6eb3_bbfb_d66353a189bc.png 1x">
+                        <img loading="lazy"
+                            src="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/datalakeoci_4a6e6eb3_bbfb_d66353a189bc.png"
+                            data-original="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/datalakeoci_4a6e6eb3_bbfb_d66353a189bc.png"
+                            data-at2x="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/datalakeoci_4a6e6eb3_bbfb_d66353a189bc@2x.png"
+                            alt="Create Stack Dialog" title="Create Stack Dialog">
+                    </picture>
+                </li>
+                <li>
+                    <p><strong>Configure the Stack -</strong> The UI will present the variables to the user dynamically,
+                        based on their selections.</p>
+                </li>
+            </ol>
+
+            <!--- Links -->
+
+
+
+
+        </section>
+
+    </div>
+
+
+</article>

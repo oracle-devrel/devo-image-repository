@@ -1,0 +1,628 @@
+<!-- U03v5 -->
+<!-- _Raw-Text -->
+<section class="cc01 cc01v0 cpad crule">
+    <div class="cc01w1 cwidth">
+
+        <!-- CB104v0 -->
+        <section class="cb104 cb104v0 cpad" data-trackas="cb104" data-ocomid="cb104">
+            <div class="cb104w1 cwidth">
+                <div class="col-framework col2 col2-thirds-col1 col-gutters col-justified">
+                    <div class="col-w1">
+                        <div class="col-item">
+                            <div class="col-item-w1">
+                                <p><strong>Zend Server, a high-performance, enterprise-ready PHP stack, comes with a
+                                        built-in "Java bridge" to connect PHP with JEE applications and services. Here's
+                                        how it works.</strong></p>
+                                <p>Whether you're experienced in Java, or PHP, or both, the ability to integrate these
+                                    two development environments together is a "best of both worlds" scenario for
+                                    enterprise Web application developers. PHP is one of the most versatile environments
+                                    for Web application development, with a wealth of extensions and add-on libraries
+                                    freely available through the PECL and PEAR repositories and the <a
+                                        href="//framework.zend.com/">Zend Framework</a>. In the PHP environment,
+                                    developers can easily perform tasks as diverse as accessing cloud services,
+                                    programmatically generating PDFs and processing XML.</p>
+
+
+                            </div>
+                        </div>
+                        <div class="col-item">
+                            <div class="col-item-w1 bgvlightgrey">
+                                <h3>Downloads:</h3>
+                                <ul class="cta-list">
+                                    <li>
+                                        <!--  <div class="icn-img icn-download bcolorbefore">&nbsp;</div> -->
+                                        <a class="otn-software"
+                                            href="https://www.oracle.com/technetwork/middleware/downloads/index-087510.html">Oracle
+                                            WebLogic Server</a>
+                                    </li>
+                                    <!-- <div class="icn-img icn-download bcolorbefore">&nbsp;</div> -->
+                                    <li><a class="otn-software"
+                                            href="https://www.oracle.com/technetwork/database/database-technologies/php/zend-server-096314.html">
+                                            Zend Server</a></li>
+
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- /CB104v0 -->
+
+
+        <p>In the Java environment, Java developers get all the benefits of Java's security, multi-threading capability
+            and full Unicode implementation. These benefits, together with development tools and frameworks like Java
+            Server Pages (JSP), Enterprise JavaBeans (EJB), JavaServer Faces (JSF), Hibernate and Spring have made Java
+            a very popular choice for application development.</p>
+        <p>So why not connect PHP with Java, and directly access Java methods and objects from within a PHP application?
+            This is particularly handy if, say, you already have Java-based infrastructure in place and need to develop
+            a Web interface around it. By accessing existing your Java architecture from PHP, you reduce code
+            duplication and save time on porting and testing code; by using PHP to build the Web interface, you leverage
+            PHP's ease of use, support for modern Web technologies and extensive add-on library.</p>
+        <p>Now, at first glance, getting PHP and Java to talk nice to each other might seem like an onerous task.
+            However, there's an easy way to do it: Zend Server, a high-performance, enterprise-ready PHP stack that runs
+            on both Windows and Linux and that comes with a built-in "Java bridge" to connect PHP with JEE applications
+            and services. This article will tell you more, demonstrating just how simple it is to use Zend Server to
+            connect PHP applications with Java classes deployed on Oracle WebLogic middleware.</p>
+
+        <h3>Introducing the Zend Java Bridge</h3>
+        <p>First up, a quick introduction. Zend Server is a ready-to-use PHP stack that makes it easy to develop and run
+            PHP applications in both Windows and UNIX-based environments. It includes an updated version of PHP, support
+            for a wide variety of database systems (including Oracle and MySQL), and a number of Zend-specific add-ons
+            for improving PHP performance and diagnostics. It also comes with a built-in "Java bridge" that can be used
+            to connect PHP applications with Java classes deployed on Oracle WebLogic middleware.</p>
+        <p>There are currently two versions of Zend Server available: a community edition and a commercial version. Both
+            versions include the Zend Java Bridge, which allows easy integration of PHP and Java applications. This
+            component is implemented as a daemon or background service, which instantiates its own Java Virtual Machine
+            (JVM) and exposes an API for PHP developers to access this JVM. This API allows PHP developers to directly
+            access Java objects and services, with the Zend Java Bridge "translating" requests and responses between the
+            two languages. As you'll shortly see, the system is reasonably easy to configure with Zend Server's
+            point-and-click interface, and is also quite developer-friendly.</p>
+        <p>The Zend Java Bridge offers some key advantages for enterprise or high-traffic environments:</p>
+        <ul class="obullets">
+            <li>
+                Single JVM instance: The Zend Java Bridge uses a single JVM for all PHP processes, resulting in a
+                smaller memory footprint and more efficient operation.
+            </li>
+            <li>
+                Loose coupling: The Zend Java Bridge is a component of Zend Server, and can be enabled or disabled
+                without any impact on the rest of the system. Turning the component on or off is easy through Zend
+                Server's Web-based configuration interface.
+            </li>
+            <li>
+                Support and training: Each release of the Zend Java Bridge is tested and certified for use with PHP and
+                other related tools. Developers and administrators can also access training and commercial support in
+                deploying the Zend Java Bridge within their IT environment.
+            </li>
+        </ul>
+        <p>It's worth noting that the Zend Java Bridge is not the only available option. PHP's built-in support for XML
+            and JSON formats means that even without the Zend Java Bridge, it's still possible to access Java resources
+            exposed as Web services from PHP. PHP 4.x also included a <a href="//www.php.net/java">Java extension</a>
+            that allowed Java classes to be instantiated directly from PHP, as well as a Java Servlet SAPI that allowed
+            PHP to be integrated into a servlet environment.</p>
+        <p>Other open-source tools also exist to achieve the same result. For example,
+            <!-- <a href="http://www.caucho.com/resin-3.0/quercus/"> -->Quercus
+            <!-- </a> --> is a 100% Java implementation of PHP, while the <a
+                href="http://php-java-bridge.sourceforge.net/">PHP/Java Bridge</a> is a Java Web application that allows
+            two-way method invocation between PHP and Java using an XML-based protocol. Quercus and the PHP/Java Bridge
+            are not discussed in this article; however, you can find more information on using the PHP/Java Bridge in
+            <!-- <a href="http://www.oracle.com/technology/pub/articles/dev2arch/2007/02/php-java-bridge.html"> -->this
+            article
+            <!-- </a> --> by Gary Horen.
+        </p>
+
+        <h3>Installing and Configuring the Zend Java Bridge</h3>
+        <p>For purposes of this article, I'll assume that you have a current version of Oracle WebLogic Server and JRE
+            1.5+, with all samples installed and the Samples domain active. In case you don't, you can download a
+            version of Oracle WebLogic Server suitable for your development environment from the Oracle WebLogic <a
+                target="" href="https://www.oracle.com/middleware/technologies/weblogic.html">homepage</a> on OTN. Note
+            that the code samples are not installed automatically; you must perform a custom installation to obtain
+            these. The examples in this article were tested using Oracle WebLogic Server 11<em>g</em> (V10.3.2) with JDK
+            1.6 on Linux with Zend Server 5.0.1 and PHP 5.3.</p>
+        <p>I'll also assume that you have the latest version of Zend Server installed and working on a development
+            system. In case you don't, you can download a
+            <!-- <a href="http://www.oracle.com/technology/tech/php/zend-server.html"> -->current version
+            <!-- </a> -->; versions are available for Linux, Microsoft Windows, Mac OS X and IBM i. You'll find detailed
+            instructions on how to install and configure Zend Server in the <a
+                href="http://files.zend.com/help/Zend-Server-5/installation_guide.htm">Zend Server Installation
+                Guide</a>, as well as in
+            <!-- <a target="" href="ssLINK/083732"> -->this OTN article
+            <!-- </a> -->.
+        </p>
+        <p>Once Zend Server is successfully installed, you will be able to access it at the URL <code
+                class="ocode">http://localhost:10081/ZendServer</code>. The first time you access this URL, you will be
+            asked to accept the software license agreement, and enter an administrator password and a license key.
+            Remember that you can get a <a href="//www.zend.com/en/products/server/license/request">trial license
+                key</a>. In the absence of the license key, Zend Server will function in community mode, with many of
+            its key features disabled.</p>
+        <p>Once you enter the requested information, you should see the server administration console, which provides a
+            birds-eye view of current server status. Here's what it looks like:</p>
+
+        <p align="center"><img alt="" src="//www.oracle.com/ocom/groups/public/@otn/documents/webcontent/152539.jpg" />
+        </p>
+
+
+        On Windows systems, the Zend Server installation package includes the Zend Java Bridge and the installation
+        routine will automatically detect the system JDK and install and activate the component. On Linux systems, the
+        Zend Java Bridge will typically need to be downloaded and configured manually. So, navigate to the Server Setup
+        -&gt; Components page, and check if the Zend Java Bridge is installed and active.
+
+        <p align="center"><img alt="" src="//www.oracle.com/ocom/groups/public/@otn/documents/webcontent/152540.jpg" />
+        </p>
+        <p>If the "Status" of Zend Java Bridge is "ON" then it means Zend Java Bridge is installed. If the "Status" of
+            Zend Java Bridge is "OFF" you can then activate it by clicking the "Turn on" link in "Action" column and
+            restarting PHP. On some platforms you must first download and install the bridge. Subscribers to Oracle's
+            Unbreakable Linux Network can install the zend-server-repo RPM, and then install the Zend Java Bridge with
+            yum, as below:</p>
+
+
+        <div class="ocode">
+            <pre>
+<code>shell&gt; up2date zend-server-repo
+shell&gt; yum install php-5.3-java-bridge-zend-server
+</code>
+</pre>
+        </div>
+
+        <p>
+            Users of Debian-based distributions can install the component with aptitude, as shown below:</p>
+
+        <code class="ocode">shell&gt; aptitude install php-5.3-java-bridge-zend-server</code>
+
+        <p>
+            In either case, the package manager will download and install the Zend Java Bridge to the <code
+                class="ocode">/usr/local/zend/</code> directory hierarchy. Once the package has been installed, you will
+            be prompted to enter the full path to the system's Java executable. In case you don't know the location of
+            your system's JDK, you can safely use the JDK that ships with Oracle WebLogic Server. On Linux systems, you
+            can change this path at a later date by executing the <code
+                class="ocode">/usr/local/zend/bin/setup_jb.sh</code> shell script.</p>
+        <p>If all goes well, the Zend Java Bridge will now start up, displaying a success message at the console. And if
+            you navigate back to the Server Setup -&gt; Components page, you should now see that the Zend Java Bridge is
+            active. If this is not the case, you might need to start the Zend Java Bridge server daemon manually; the
+            Zend Server Installation Guide has more information on how to accomplish this using the package setup and
+            control scripts. Once the server daemon has started, you can turn on the Zend Java Bridge through the Server
+            Setup -&gt; Components page.</p>
+        <p>If, despite your best efforts, you're not able to activate the Zend Java Bridge, you can troubleshoot it
+            further:</p>
+        <ul class="obullets">
+            <li>
+                Check that the Zend Java Bridge server daemon is running.
+            </li>
+            <li>
+                Check that the JAR file required by the Java Bridge component (javamw.jar) is part of your Java
+                CLASSPATH.
+            </li>
+            <li>
+                Check that your Java CLASSPATH includes a correct version of the JRE.
+            </li>
+        </ul>
+        <p>Changes to Zend Java Bridge configuration can be accomplished by using the Server Setup -&gt; Components
+            -&gt; Zend Java Bridge -&gt; Directives option to display a list of available configuration options. Here's
+            a list of available settings:</p>
+
+        <p align="center"><img alt=""
+                src="https://www.oracle.com/ocom/groups/public/@otn/documents/webcontent/152541.jpg" /></p>
+
+        <p>Among the things you can control: the server port on which the Java Bridge is listening for requests, the
+            encoding used when transmitting data from PHP to Java, and whether or not Java objects should be converted
+            to primitives. Unless you have a good reason to change them, leave these settings at their default values.
+        </p>
+        <h3>Accessing Built-In Java Classes with Zend Server</h3>
+        <p>
+            Once you've got all the pieces installed, it's time to take the Zend Java Bridge out for a spin. As noted
+            earlier, the Zend Java Bridge provides an API for PHP developers to access Java classes from within a PHP
+            script. To illustrate, consider the following Java class, which uses the java.util.GregorianCalendar class
+            to perform simple date addition:</p>
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
+class MyClass
+{
+    public static void main(String[] args)
+    {
+        SimpleDateFormat sdf = new SimpleDateFormat("d MMM yyyy hh:mm aaa");
+
+        // set calendar to 1 Jan 2010
+        Calendar calendar = new GregorianCalendar(2010,Calendar.JANUARY,1);
+        String date = sdf.format(calendar.getTime());
+        System.out.println("Starting date is: " + date);
+
+        // add 4 months 3 days
+        System.out.println("Adding 4 months 3 days... ");
+        calendar.add(Calendar.MONTH, 4);
+        calendar.add(Calendar.DAY_OF_MONTH, 3);
+
+        // print ending date value 
+        date = sdf.format(calendar.getTime());
+        System.out.println("Ending date is: " + date);
+    }
+}
+</code></pre>
+        </div>
+
+        <p>Now, try doing the same thing with PHP, by using the java.util.GregorianCalendar class through the Zend Java
+            Bridge:</p>
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+&lt;?php
+// initialize calendar object
+$cal = new Java("java.util.GregorianCalendar");
+$cal-&gt;set(2010,$cal-&gt;JANUARY,1);
+
+// initialize date object
+$date = new Java("java.text.SimpleDateFormat", "d MMM yyyy hh:mm aaa");
+
+// format and print starting date
+echo "Starting date is: " . $date-&gt;format($cal-&gt;getTime()) . '&lt;br/&gt;';
+
+// add 4 months 3 days
+echo "Adding 4 months 3 days...&lt;br/&gt;";
+$cal-&gt;add($cal-&gt;MONTH, 4);
+$cal-&gt;add($cal-&gt;DAY_OF_MONTH, 3);
+
+// format and print ending date
+echo "Ending date is: " . $date-&gt;format($cal-&gt;getTime());
+?&gt;
+</code></pre>
+        </div>
+        <p>Save this script to the Zend Server document root, which is usually <code class="ocode">/var/www/html</code>
+            on Oracle Enterprise Linux and Red Hat Linux, and <code
+                class="ocode">C:\Program Files\Zend\Apache2\htdocs\</code> on Windows.</p>
+        <ol class="decimal">
+            <li>
+                This script begins by initializing a new Java object, passing the object constructor the name of the
+                Java class to instantiate - in this case, an instance of the java.util.GregorianCalendar object. This
+                request is transmitted to the JVM via the Zend Java Bridge; the JVM then creates the GregorianCalendar
+                object and returns it to the calling PHP script. The object's set() method is then used to initialize
+                the calendar to a specific date and time.
+            </li>
+            <li>
+                Next, a second Java object is created, this time an instance of the java.text.SimpleDateFormat class,
+                and the date format to use is passed to the SimpleDateFormat object constructor as an additional
+                argument. The resulting object's format() method is then used to format the date and time returned by
+                the GregorianCalendar object's getTime() method, and the result is printed to the display using PHP's
+                echo statement.
+            </li>
+            <li>
+                To further demonstrate the use of Java class methods in a PHP script, the next few lines of code use the
+                GregorianCalendar object's add() method to perform simple date addition - in this case, moving the
+                calendar ahead by 4 months and 3 days - and then again printing the revised date and time by calling
+                Java object methods.
+            </li>
+        </ol>
+        <p>Here's what the output looks like:</p>
+
+        <p align="center"><img alt=""
+                src="https://www.oracle.com/ocom/groups/public/@otn/documents/webcontent/152542.jpg" /></p>
+
+        <p>To better understand how a request for a Java object is transferred from the PHP environment to the Java
+            environment via the Zend Java Bridge, consider the following figure, which depicts the information flow
+            between the two environments:</p>
+
+        <p align="center"><img alt=""
+                src="https://www.oracle.com/ocom/groups/public/@otn/documents/webcontent/152543.gif" /></p>
+        <h3>Accessing Custom Java Classes with Zend Server</h3>
+        <p>It isn't just built-in Java objects that you can access, either. The Zend Java Bridge also allows you to
+            access user-defined Java classes from within a PHP script, so long as these are included in the Java
+            classpath.</p>
+        <p>To see this in action, create a simple Java class as <code class="ocode">/tmp/Menu.java</code>, as below:</p>
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+public class Menu
+{
+  private static String[] myArray = {"eggs", "hamburgers", "tomato soup", "chicken pot pie", 
+                                     "spaghetti bolognese", "ice cream", "chocolate chip cookies", 
+                                     "grilled sole"};
+
+  public static void main(String[] args)
+  {
+    Menu m = new Menu();
+    System.out.println(m.getMenu());
+  }
+
+  public static String getMenu()
+  {
+    String menu = "Today's menu is: ";
+    for (int i = 0; i &lt; 3; i++) {
+      int r = (int)(Math.random() * (myArray.length - 1));
+      menu += myArray[r];
+      if (i != 2) {
+        menu += ", ";
+      }
+    }
+    return menu;
+  }
+}
+</code></pre>
+        </div>
+
+        <p>Nothing complicated here - the class exposes a getMenu() method, which randomly selects food items from an
+            array and returns them to the caller. Save and compile this class using the Java compiler, as shown below:
+        </p>
+
+        <code class="ocode">shell&gt; javac Menu.java</code>
+        <p>Assuming that the compiled output is saved to /tmp/Menu.class, the next step is add the location of the
+            compiled class to the Java classpath. You can alter the classpath used by the Zend Java Bridge by editing
+            the corresponding configuration file, which can be found at /usr/local/zend/etc/watchdog-jb.ini file (Linux)
+            or C:\Program Files\Zend\Zend Server\etc\java_bridge_server.ini (Windows). Here's an example of the
+            classpath configuration:</p>
+
+        <code class="ocode">zend_wd.env.java_daemon=CLASSPATH=.:/usr/local/zend/bin/javamw.jar:/tmp/Menu.class:
+</code>
+        <p>
+            After making the changes, restart Zend Server to have them take effect. Then, create and save the following
+            PHP script to the Web server document root:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+&lt;?php
+// initialize custom Java class and invoke class method
+$m = new Java("Menu");
+echo $m-&gt;getMenu();
+?&gt;
+</code>
+</pre>
+        </div>
+        <p>
+            This script initializes an instance of the custom Java class, and then invokes the class' getMenu() method.
+            When you request this script through a browser, you should see the following output:</p>
+
+        <p align="center"><img alt=""
+                src="https://www.oracle.com/ocom/groups/public/@otn/documents/webcontent/152545.jpg" /></p>
+        <p>In most cases, the Zend Java Bridge will correctly recognize Java data types and convert them to native PHP
+            structures. Consider the following revision of the previous example, which revises the Menu.getMenu() method
+            to return an array instead of a string:</p>
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+public class Menu
+{
+  private static String[] myArray = {"eggs", "hamburgers", "tomato soup", "chicken pot pie", 
+                                     "spaghetti bolognese", "ice cream", "chocolate chip cookies", 
+                                     "grilled sole"};
+
+  public static void main(String[] args)
+  {
+    Menu m = new Menu();
+    System.out.println(m.getMenu());
+  }
+
+  public static String[] getMenu()
+  {
+    String[] menuArray;
+    menuArray = new String[3];
+    for (int i = 0; i &lt; 3; i++) {
+      int r = (int)(Math.random() * (myArray.length - 1));
+      menuArray[i] = myArray[r];
+    }
+    return menuArray;
+  }
+}
+</code>
+</pre>
+        </div>
+        <p>Update the PHP script to display a dump of the return value:</p>
+
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+&lt;?php
+// initialize custom Java class and invoke class method
+$m = new Java("Menu");
+print_r($m-&gt;getMenu());
+?&gt;
+</code></pre>
+        </div>
+        <p>
+            And here's what you'll see:</p>
+
+        <p align="center"><img alt=""
+                src="https://www.oracle.com/ocom/groups/public/@otn/documents/webcontent/152546.jpg" /></p>
+        <p>By default, the Zend Java Bridge converts Java objects to primitives. This behaviour can however be altered
+            with the <code class="ocode">zend_jbridge.use_java_objects</code> configuration directive in the Zend Server
+            Web-based control panel, which can be toggled to return Java objects "as is" without first converting them
+            to primitives.</p>
+        <p>However, it's important to note that the Zend Java Bridge will not perform dynamic data typing on your
+            objects and values when passing them the other way, from PHP to Java. In general, if your input parameters
+            are not correctly mapped to the data types expected by Java, the Zend Java Bridge will throw an exception.
+            To avoid these kinds of exceptions, it's generally a good idea to explicitly specify your data types when
+            passing data from PHP to Java. You'll find detailed examples of how to do this in the Zend Server Reference
+            Manual, as well as in the next example.</p>
+        <p>In case things go wrong, remember that you can always use Zend Server's Code Tracing (Monitor -&gt; Code
+            Tracing) feature to trace the entire request and identify the source of an error. Server error logs are also
+            useful for troubleshooting and debugging, and you can access these logs through the Monitor -&gt; Logs tab
+            of the Web-based control panel.</p>
+        <h3>Accessing Enterprise JavaBeans with Zend Server</h3>
+        <p>In addition to allowing you to access custom Java classes, the Zend Java Bridge also makes it easy to access
+            other resources, such as Enterprise JavaBeans, deployed on a Java application server. These beans can be
+            accessed from a PHP script using the Java Naming and Directory Interface (JNDI).</p>
+        <p>To illustrate, consider that Oracle WebLogic Server comes with a number of sample beans that demonstrate
+            different server capabilities. One such bean is the AccountHome bean, which provides an API to create bank
+            accounts, deposit and withdraw funds, and retrieve current account balances. With JNDI at hand, it's a
+            simple matter to access this bean from a PHP script via the Zend Java Bridge. Here's an example, which
+            illustrates by accessing the deployed EJB on the Oracle WebLogic Server and using it to interactively create
+            a new account and perform various account operations:</p>
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+  &lt;html&gt;
+  &lt;head&gt;&lt;/head&gt;
+  &lt;body&gt;
+  &lt;h2&gt;Bank Account Administration&lt;/h2&gt;
+  &lt;?php
+  if (isset($_POST['submit'])) {
+    // set environment
+    $config = array(
+       'java.naming.factory.initial' =&gt; 'weblogic.jndi.WLInitialContextFactory',
+       'java.naming.provider.url' =&gt; 't3://localhost:7001'
+    );
+
+    // initialize Java class
+    $context = new Java('javax.naming.InitialContext', $config);
+
+    // look up bean using JNDI name
+    $obj = $context-&gt;lookup('ejb20-beanManaged-AccountHome');
+
+    // assume input is properly filtered and validated
+    $acc = (int) $_POST['acc'];
+    $amt = (int) $_POST['amt'];
+    $op = $_POST['op'];
+
+    // check if requested account is present
+    // if not, create and set opening balance of $0
+    try {
+      $account = $obj-&gt;findByPrimaryKey($acc);
+      $messages[] = 'Found account #' . $acc . ' with current balance: $' . $account-&gt;balance();
+    } catch (Exception $e) {
+      $account = $obj-&gt;create($acc, 0);
+      $messages[] = 'Account not present, creating new account #' . $acc . ' with opening balance: $0';
+    }
+
+
+    // check requested operation
+    // withdraw or deposit funds as required
+    switch ($op) {
+      case 'D':
+        $account-&gt;deposit($amt);
+        $messages[] = 'Added: $' . $amt;
+        break;
+      case 'W':
+        $account-&gt;withdraw($amt);
+        $messages[] = 'Subtracted: $' . $amt;
+        break;
+    }
+
+    // get new account balance
+    $messages[] = 'New account balance is: $' . $account-&gt;balance();
+
+    // print messages
+    echo 'MESSAGES &lt;br/&gt;';
+    echo implode($messages, '&lt;br/&gt;');
+  }
+  ?&gt;
+  &lt;form method="post"&gt;
+    &lt;select name="op"&gt;
+      &lt;option value="D"&gt;Deposit&lt;/option&gt;
+      &lt;option value="W"&gt;Withdraw&lt;/option&gt;
+    &lt;/select&gt;
+     amount:
+    &lt;input type="text" size="4" name="amt" /&gt;
+     to/from account #:
+    &lt;input type="text" size="10" name="acc" /&gt;
+    &lt;input type="submit" name="submit" value="Go!" /&gt;
+    &lt;/form&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</code>
+</pre>
+        </div>
+        <p>
+            This script generates a Web form asking the user to enter an account number and the amount of money to
+            deposit or withdraw into that account. Once the form is submitted, the script creates a new initial context
+            by specifying the WebLogic implementation and provider URL. This context is used to look up the JNDI name
+            for the bean, and return it as an object. It now becomes possible to access the methods of this object as
+            though they were native PHP methods, with the Zend Java Bridge taking care of transmitting arguments and
+            return values between the PHP script and Oracle WebLogic Server.</p>
+        <p>The first step, once the bean becomes available to PHP, is to look up the specified account number to see if
+            it exists in the database. All account data is maintained in a database; this database is automatically
+            started when you activate the Oracle WebLogic Server Samples domain. The bean exposes a findByPrimaryKey()
+            method which can be used to look up the account and return an object representing it; if this method fails,
+            indicating that the requested account does not exist, the script uses the bean's create() method to create a
+            new account with the specified number and set its opening balance to 0.</p>
+        <p>The next step is to add or remove funds from the account, depending on the operation selected by the user.
+            This is accomplished with the account object's withdraw() and deposit() methods, both of which are called by
+            the PHP script with the amount specified as a method argument. The revised account balance can now be
+            obtained with a call to the account object's balance() method, and the result is printed to the output
+            device with PHP's echo statement.</p>
+        <p>This example also demonstrates how to handle data types when passing data from a PHP script to a Java object
+            via the Zend Java Bridge. When the form values in this example are submitted to the PHP script, they are
+            submitted as string data. However, the bean's create(), withdraw() and deposit() methods all expect integer
+            values, and so it is necessary to cast the account number and amount as integers before using them in bean
+            methods.</p>
+        <p>Here's a figure that depicts how the request is handled by the Zend Java Bridge:</p>
+
+        <p align="center"><img alt=""
+                src="https://www.oracle.com/ocom/groups/public/@otn/documents/webcontent/152547.gif" /></p>
+        <p>Before you can run this example, you must ensure that the WebLogic class files, particularly weblogic.jar,
+            are present in the classpath specified in the Zend Java Bridge configuration file. If this is not the case,
+            make the changes to the classpath and restart Zend Server for your changes to take effect.</p>
+        <p>Here's an example of the initial form:</p>
+        <p align="center"><img alt=""
+                src="https://www.oracle.com/ocom/groups/public/@otn/documents/webcontent/152548.jpg" /></p>
+        <p>And here's an example of the data presented after performing some account operations:</p>
+
+        <p align="center"><img alt=""
+                src="https://www.oracle.com/ocom/groups/public/@otn/documents/webcontent/152549.jpg" /></p>
+        <h3>Understanding Performance Issues and Best Practices</h3>
+        <p>
+            The Zend Java Bridge is an extremely robust implementation, using a single JVM instance to reduce overhead
+            and thereby produce more efficient system architecture. This centralized implementation also makes debugging
+            easier, and allows developers to focus their performance optimizations efforts on a single point.</p>
+        <p>Additionally, the same tuning parameters that are available to any Java application can also be applied to
+            the Zend Java Bridge. For example, unused memory from the single JVM instance is automatically handled by
+            Java's regular garbage collection mechanism. Please see the document Java Tuning White Paper for more
+            information.</p>
+        <p>To optimize Zend Java Bridge performance, the Zend team suggests monitoring the performance of the Zend Java
+            Bridge under different usage scenarios and adjusting the number of worker threads upwards or downwards based
+            on concurrent load analysis. Alternatively, if available use cases exist to predict the likely load on the
+            server, it's also possible to aggressively configure the Zend Java Bridge for a high level of load, to
+            ensure that performance meets expectations. The number of worker threads can be set in the Zend Java Bridge
+            configuration file, using the zend.javamw.threads variable. There are several monitoring tools out in the
+            market e.g jconsole that can help you in monitoring and managing the JVM. Please see the document <a
+                href="//docs.oracle.com/javase/6/docs/technotes/guides/management/index.html">Monitoring and Management
+                for the Java Platform</a> for more information.</p>
+        <h3>Conclusion</h3>
+        <p>
+            As the examples in this article demonstrate, Zend Server comes with a high-performance, loosely-coupled JVM
+            implementation, a robust and secure PHP stack, built-in caching and job queuing, and browser-based
+            administration. All of these features make it a good choice for developers looking to integrate PHP
+            applications with existing Oracle WebLogic Server environments.</p>
+        <p><strong>Vikram Vaswani</strong> is the founder and CEO of <a href="//www.melonfire.com"
+                class="bodyink">Melonfire</a>, a consultancy firm with special expertise in open-source tools and
+            technologies. He is the author of four books on PHP and MySQL, and a frequent contributor to Zend Developer
+            Zone, IBM DeveloperWorks, and other community sites.</p>
+
+        <p>Copyright Zend Technologies, 2010.</p>
+
+    </div>
+</section>
+</article>
+<!-- / _Raw-Text -->
+
+<!-- U10v0 -->

@@ -1,0 +1,116 @@
+<!-- U03v5 -->
+<!-- _Raw-Text -->
+<section class="cc01 cc01v0 cpad crule">
+    <div class="cc01w1 cwidth">
+        <p>Before diving into some of the technical challenges that went into building the Matrix Bullet Time Demo, it
+            is useful to review the general problem statement and the hardware design solution that went with it. The
+            goal for this demo was to take instantaneous photos of a subject from 360 degrees, and then stitch these
+            photos together to form a movie. The intended final effect was for it to appear as though the camera was
+            moving around a subject frozen in time.</p>
+
+        <p>To accomplish this, Jasper Potts and I needed to mount a large number of cameras in a 360-degree circle. To
+            add some visual interest, we wanted to design it such that the cameras were mounted in a kind of helix. Each
+            of these cameras needed to be focused on a single, distinct point. Each camera had to be connected with a
+            central server to receive the commands to take a picture at the same moment in time and to transfer images
+            back to the server to turn them into a movie.</p>
+
+        <p align="center"><img alt="Figure 1. Me writing the software beneath the assembled helix."
+                src="//www.oracle.com/a/tech/img/java-bullet-timef1.jpg" style="width: 720px;" /></p>
+        <p align="center" class="xsml">Figure 1. Me writing the software beneath the assembled helix.</p>
+
+        <p>We built the Matrix Bullet Time Demo from 60 individual Raspberry Pi 3 single-board computers with Raspberry
+            Pi cameras. There were a few interesting problems to solve in trying to mount 60 Raspberry Pi units in such
+            a way that we could surround the subject in 360 degrees! We needed to design a mounting system and a method
+            of powering that many Raspberry Pi units. We also needed to take into account how to break down and
+            transport the rig between locations. (During JavaOne, we had the demo in two different locations on
+            different days, and we also wanted to design it to be shipped internationally.) Jasper found a lighting
+            track system with curved tracks which, when joined together, formed a circle. By hanging this track from
+            adjustable stands, he was able to vary the height of the track as it circled, forming the helix shape we
+            were looking for.</p>
+
+        <p align="center"><img alt="Figure 2. Close-up of a Raspberry Pi and a camera."
+                src="//www.oracle.com/a/tech/img/java-bullet-timef2.jpg" style="width: 720px;" /></p>
+        <p align="center" class="xsml">Figure 2. Close-up of a Raspberry Pi and a camera.</p>
+
+        <p>One of the benefits of using a lighting track system is that it handles power distribution. You provide the
+            120 volt input power to the track and it carries that power through copper wires built into the track. At
+            any point where you want to have a light, you use a mount designed for the track system, which transfers the
+            power through the mount to the light. What we had to do instead was route this power to a transformer for
+            each Raspberry Pi that would step down the power to 5 watts. Jasper designed custom boards, printed them
+            with a 3D printer, and mounted these to the light mounts. In this way, power was delivered to each of the 60
+            Raspberry Pi units.</p>
+
+        <p>Originally we tried to use Wi-Fi dongles for each Raspberry Pi for communicating with the server, but we had
+            a horrible time getting consistent latencies and consistent connectivity. Instead, we ran an Ethernet cable
+            from each Raspberry Pi along the track to switches and from there to the server. Jasper and his wife Fiona
+            put in all the hard work designing, printing, and assembling the hardware for this demo.</p>
+        <p align="center"><img alt="Figure 3. Jasper assembling the hardware."
+                src="//www.oracle.com/a/tech/img/java-bullet-timef3.jpg" style="width: 720px;" /></p>
+        <p align="center" class="xsml">Figure 3. Jasper assembling the hardware.</p>
+
+        <p>On the software side, we needed to run software both on the Raspberry Pi units and on a central coordinating
+            server. We also had a web UI for running the demo. Users entered their Twitter username so that the final
+            video that we uploaded to Twitter could be linked back to their own personal Twitter account. The overall
+            system worked like this:</p>
+
+        <ul class="obullets">
+
+            <li>The user would input their Twitter handle on the Oracle JavaScript Extension Toolkit (Oracle JET) web UI
+                we built for this demo, which was running on a Microsoft Surface tablet.</li>
+            <li>The user would then click a button on the Oracle JET web UI to start a 10-second countdown.</li>
+            <li>The web UI would invoke a REST API on the Java server to start the countdown.</li>
+            <li>After a 10-second delay, the Java server would send a multicast message to all the Raspberry Pi units at
+                the same moment instructing them to take a picture.</li>
+            <li>Each camera would take a picture and send the picture data back up to the server.</li>
+            <li>The server would make any adjustments necessary to the picture (see below), and then using FFMPEG, the
+                server would turn those 60 images into an MP4 movie.</li>
+            <li>The server would respond to the Oracle JET web UI&#39;s REST request with a link to the completed movie.
+            </li>
+            <li>The Oracle JET web UI would display the movie and allow the user to either upload it to Twitter or
+                discard it.</li>
+        </ul>
+
+        <p>In general, this system worked really well. The primary challenge that we encountered was getting all 60
+            cameras to focus on exactly the same point in space. If the cameras were not precisely focused on the same
+            point, then it would seem like the &quot;virtual&quot; camera (the resulting movie) would jump all over the
+            place. One camera might be pointed a little higher, the next a little lower, the next a little left, and the
+            next rotated a little. This would create a disturbing &quot;bouncy&quot; effect in the movie.</p>
+
+        <p>We took two approaches to solve this. First, each Raspberry Pi camera was mounted with a series of adjustable
+            parts, such that we could manually visit each Raspberry Pi and adjust the yaw, pitch, and roll of each
+            camera. We would place a tripod with a pyramid target mounted to it in the center of the camera helix as a
+            focal point, and using a hand-held HDMI monitor we visited each camera to manually adjust the cameras as
+            best we could to line them all up on the pyramid target. Even so, this was only a rough adjustment and the
+            resulting videos were still very bouncy.</p>
+
+        <p>The next approach was a software-based approach to adjusting the translation (pitch and yaw) and rotation
+            (roll) of the camera images. We created a JavaFX app to help configure each camera with settings for how
+            much translation and rotation was necessary to perfectly line up each camera on the same exact target point.
+            Within the app, we would take a picture from the camera. We would then click the target location, and the
+            software would know how much it had to adjust the x and y axis for that point to end up in the dead center
+            of each image. Likewise, we would rotate the image to line it up relative to a &quot;horizon&quot; line that
+            was superimposed on the image. We had to visit each of the 60 cameras to perform both the physical and
+            virtual configuration.</p>
+
+        <p>Then at runtime, the server would query the cameras to get their adjustments. Then, when images were received
+            from the cameras (see step 6 above), we used the Java 2D API to transform those images according to the
+            translation and rotation values previously configured. We also had to crop the images, so we adjusted each
+            Raspberry Pi camera to take the highest resolution image possible, and then we cropped it to 1920x1080 for a
+            resealing hi-def movie.</p>
+
+        <p>On each Raspberry Pi, we used a simple Python app. All communication between the Pi units and the server was
+            done over a multicast connection. On the server, when images were received they were held in memory and
+            streamed to FFMPEG, such that only the resulting movie was actually written to disk. All communication
+            between the Oracle JET web UI and the server was done using REST. The server itself was a simple Java 9
+            application (we just used the built-in Java web server for our REST API). I would have liked to revisit this
+            and make use of some of the lightweight Java microservice web servers out there, because that would have
+            resulted in our having less code. But the end result was still rather pleasant for such a small project.</p>
+
+        <h3>About the Author</h3>
+
+        <p>Richard Bair is currently the cloud architect for the Oracle Internet of Things suite of products. Previously
+            he spent several years as the Chief Java Client Architect at Oracle. He has presented numerous times at
+            JavaOne over the past 12 years.</p>
+    </div>
+</section>
+<!-- /CC01v0 -->

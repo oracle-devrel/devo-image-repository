@@ -1,0 +1,405 @@
+<!-- _Raw-HTML -->
+<!-- CC01v0 -->
+<section class="cc01 cc01v0 cpad">
+    <div class="cc01w1 cwidth">
+        <p>No one has achieved success with <a href="https://developer.oracle.com/microservices/">microservices</a> just
+            by talking about them. Unfortunately, many organizations spend a lot of time on exactly that, debating how
+            to approach microservices. It is as though there is one perfect approach to designing and working with
+            microservices that needs only be uncovered. In actual fact, there is no such definitive solution; even if
+            there were, it would hold true only until changes in the organization, business objectives, technology
+            frameworks and regulations made adjustments necessary.</p>
+
+        <p>It is tempting&mdash;just as it was a decade ago with SOA Web Services&mdash;to spend a lot of time and
+            energy on identifying microservices. Creating an exhaustive overview of all microservices, defining the
+            exact scope and interface of each, is not feasible and is not a smart investment of time. It would be a lot
+            of work, and that work would never be complete. The definition of microservices is not an end in itself and
+            giving in to this temptation represents a serious risk. Microservices are an instrument for achieving
+            sustained business agility in a changing world of functional and non-functional requirements and evolving
+            technical, political, economic, and legal parameters. Microservices cannot be defined once and for all, and
+            they should not have to be. As architects and developers we are agile and flexible. We embrace change in all
+            aspects of our IT organizations.</p>
+
+        <p>Here&rsquo;s another organizational risk familiar from the SOA era: starting with an exclusive focus on the
+            technology for implementing microservices and on the microservices platform, the underlying platform for
+            eventually running the microservices (that do not even exist yet and for which no requirements are yet
+            known). It is all too easy to spend time on this seemingly useful exercise and, after months of
+            investigation and selection and architecting, to end up with an impractical, oversized and over-engineered
+            platform &ndash; and no running microservices. Such discussions slow down the process of microservice
+            adoption, obstruct the view of the essential challenges, and set up an organization for disappointing
+            results (if not outright frustration).</p>
+
+        <p>A third category of risk is to just start building microservices without a clear business need for or
+            objective with a microservice architecture or, even worse, without really understanding what a microservices
+            architecture entails from an organizational perspective. The operative keyword being overlooked: DevOps.</p>
+
+        <p>This article provides some insights and guidelines that can help propel teams of architects beyond
+            discussions and into action. Perhaps it can also help establish some architecture guidelines, such as the
+            importance of domain design.</p>
+
+        <h3>What do we want to achieve with microservices?</h3>
+
+        <p>When discussing microservices, we must remember what our objectives are. Microservices are not the objective;
+            they are merely the means. Microservices are meant to help us with those objectives and if they do not do
+            so, we neither need nor want them.</p>
+
+        <p>Both in Development and in Operations we want to have better control and more insight so we can change
+            functional and non-functional aspects as dictated by business needs. And we have the impression that
+            microservice concepts and considerations will help us get there.</p>
+
+        <h3>What is a microservice, anyway?</h3>
+
+        <p>It&rsquo;s a reasonable enough question to ask, but apparently it&rsquo;s a tough one to answer. It seems
+            easier to describe what the microservices architecture is intended for than to explicitly define a
+            microservice itself. Perhaps we tend to stay away from a concrete definition because we find we are not so
+            much in agreement with our peers as we thought we were. Let me try to describe the picture I see in my mind
+            when talking about microservices:</p>
+
+        <p>A microservice is <em>an independent business component that we can change, release, scale, relocate, make
+                available, replace, charge for, report on and decide about, without dependencies on other microservices
+                (and their associated teams, owners, users, etc.). A microservice has clear business value and
+                implements a specific business capability. A microservice is owned through its entire DevOps/BusOps
+                lifecycle by a single team of no more than 6-8 people. One team could own a few microservices; each
+                service will fall under precisely one team.</em></p>
+
+        <p>The word &ldquo;<strong>micro</strong>service&rdquo; leads many people to assume microservices are much
+            smaller than &ldquo;regular&rdquo; services. But, to me, one microservice can easily comprise several of our
+            typical SOA (Web) Services. In my mind:</p>
+
+        <ul class="obullets">
+            <li>Most organizations will have dozens of microservices, perhaps a few hundred in cases of extreme size or
+                functional complexity; I do not envision thousands or more microservices in an organization.</li>
+            <li>Microservices can (partly) be implemented through one or more serverless functions.</li>
+            <li>Microservices can have (part of) a SaaS service or standard application at their core.</li>
+            <li>Microservices will have to collaborate--by responding to each other&#39;s events or participating in
+                workflows and transactions; ideally, however, they are not aware of each other, only of events and/or
+                generic platform components.</li>
+        </ul>
+
+        <p>Note: I find no clear connection between microservices and containers. Of course, containers are a great
+            vehicle for achieving standardized and automated CI/CD, release, scaling and management, and allow us to
+            package application and platform components together into standalone units; as such, they can be a great
+            help for implementing microservices. At the same time, one microservice can easily be implemented using
+            several containers or totally without using containers.</p>
+
+        <h3>Comparison with departments in a company?</h3>
+
+        <p>Microservices are designed from business functionality and responsibility (maximize cohesion vs. maximize
+            decoupling), based on business domain decomposition. Microservices translate to technical stuff, such as
+            deployment artifacts and containers and perhaps database schemas or partitions, and even more to
+            organizational aspects, such as ownership, planning and budgeting, coordination and team management.</p>
+
+        <p>Microservices can be compared with departments in a company: relatively separate units with a clear
+            responsibility that can be largely &quot;encapsulated&quot; and are interacted with in largely predefined
+            ways that should not be bypassed by outsiders.</p>
+
+        <p>The size and number of departments and their scope is not easily defined in a generic manner. Some are small,
+            some large. Some may consist of just a part timer (e.g., our legal department consists of a specialist hired
+            for 6 hours per week) and others can be fairly large (the pool of truck drivers, for example). As the
+            company grows or diversifies, the departments can be split into more specialized units.</p>
+
+        <p>At the departmental level or per department, it is decided how activities are performed, who is hired or
+            fired, where activities are performed and when the department is available to perform work. Too many tiny
+            departments can introduce a lot of overhead and very complex process chains, even though they may allow a
+            high degree of specialization and flexibility. Departments that are too large are hard to manage and may
+            adopt different ways of working. Creating two departments out of a single one or combining several
+            departments into one unit is a fairly common practice, although it may not always be a very smooth
+            transition.</p>
+
+        <p>Exploration of the bounded contexts that are the breeding ground for microservices takes place in a similar
+            way as the above search for the optimal departmental structure: as part of domain-driven design. Citing <a
+                href="https://medium.com/@geraldcroes?source=post_header_lockup" target="_blank">G&eacute;rald
+                Cro&euml;s</a>: &quot;Bounded contexts are the <a
+                href="https://en.wikipedia.org/wiki/Single_responsibility_principle" target="_blank">Single
+                Responsibility Principle</a> applied to your domain model. Each part of your system has its
+            intelligence, data, and vocabulary. Each part is independent of one another.&quot;</p>
+
+        <h3>General guidelines</h3>
+
+        <p>When defining microservices, some general guidelines override all other, more subjective considerations:</p>
+
+        <ul class="obullets">
+            <li>A microservice can be fully taken care of by a single team.</li>
+            <li>The (business) ownership of the microservice is clear&mdash;a single decision-making unit regarding both
+                functionality and operational, non-functional requirements</li>
+            <li>A microservice is stand-alone, independent of other microservices, both logically (design time
+                dependencies) and physically</li>
+            <li>The implementation of the microservice is encapsulated, known only to the team.</li>
+            <li>The technology to implement the microservice is used at the discretion of the team, within certain
+                limits: the microservice must be run on the generic enterprise infrastructure and at enterprise level
+                (in order to reduce the list of skills the organization needs to maintain and facilitate collaboration
+                between teams and the movement of employees across teams). A portfolio of allowed technologies can be
+                defined from which teams can choose. However, restrictions with respect to the implementation technology
+                should be limited as these may have a negative impact on the team&#39;s motivation and sense of
+                ownership, the development of the microservice, as well as its runtime stability and future
+                maintainability.</li>
+            <li>The implementation of a microservice is simple and straightforward: easy to change, easy to understand
+                for existing and new team members, and not requiring the acquisition of too many skills in order to
+                collaborate on the team (so the technology stack should be limited).</li>
+            <li>The microservice should provide clear business value and deliver well-defined business functionality (if
+                we cannot explain to non-IT staff what a microservice is for, we should reconsider its very existence).
+            </li>
+            <li>A microservice exists within a single bounded context.</li>
+            <li>A microservice can be owner of specific business data and also make use of data it does not own. Data
+                owned by the microservice can be queried or manipulated only through the microservice. Data in the
+                bounded context of which the microservice is not the owner is read-only to the microservice; a local
+                copy can be synchronized from the owning microservice.</li>
+            <li>A single, unified enterprise data model and a single, one-stop database with all enterprise data are not
+                desirable and are in contrast with microservice principles. Eventual consistence across microservices
+                (and across the data stores owned by microservices) is the common situation. ACID (cross-bounded context
+                transaction with immediate consistency) is implemented only when it is truly required and well-motivated
+                from business requirements. Data duplication is not considered a bad thing, although the ownership of
+                data (the single point of truth) should always be clear. Note: even within a bounded context or
+                microservice it might be wise to explicitly mark transactions that require ACID processing, even if for
+                the moment such processing may seem free because a relational database is used for persistency.</li>
+        </ul>
+
+        <p>As Sam Newman states: <em>&quot;When it comes to how small is small enough, I like to think in these terms:
+                the smaller the service, the more you maximize the benefits and downsides of microservice architecture.
+                As you get smaller, the benefits around interdependence increase. But so too does some of the complexity
+                that emerges from having more and more moving parts. As you get better at handling this complexity, you
+                can strive for smaller and smaller services.&quot; (Building Microservices, by Sam Newman, O&#39;Reilly
+                Media, Inc., 2016, ISBN: 1491950358)</em></p>
+
+        <h3>Starting a new microservice: why and when?</h3>
+
+        <p>Two application sections that are currently part of the same microservice (or monolith) are perhaps better
+            off in distinct microservices if they have stark differences in one or more characteristics, to such an
+            extent that it hampers us or cramps our style. Some measures and mechanisms are expensive, so they should
+            not be wasted on application areas that do not require them. Making functionality Highly Available or Ultra
+            Secure or Supremely Well Tested comes at a price. Identifying areas that need special measures and isolating
+            them as separate components (i.e., microservices) to ensure the elevated levels are focused and applied only
+            where needed is one of the considerations.</p>
+
+        <p>The motivation for breaking off a chunk from an existing application component should be the fact that the
+            chunk is currently not (in) a separate microservice makes it harder or more expensive to do things we want
+            to do to only one of them, such as make functional changes, improve availability, test for regression, set
+            up monitoring, train developers, or achieve high level of confidentiality. Therefore, we branch off one or
+            more microservices to remove these limitations that we experience. The effort of branching off and the
+            overhead introduced as a result of having two or more microservices instead of a single microservice is
+            justified by the gains from the independence we realize between the microservices. Otherwise, we don&rsquo;t
+            do it.</p>
+
+        <p>Characteristics that drive the decision to extract one or more microservices from an existing component (when
+            various areas within a component hugely differ in them):</p>
+
+        <h3>Business</h3>
+
+        <ul class="obullets">
+            <li>Lack of functional] cohesion: a microservice should concern itself with a single responsibility (again
+                the <a href="https://en.wikipedia.org/wiki/Single_responsibility_principle" target="_blank">Single
+                    Responsibility Principle</a>); if a microservice is found to be doing multiple, unrelated things,
+                then it should be split up.</li>
+            <li>Rate of change: if two areas have a very different change rate (e.g., one is stable, almost static, and
+                the other is constantly on the move), they probably should be taken apart; for one, the testing and CD
+                effort will be unnecessarily large if we constantly process a subdomain that does not change.</li>
+            <li>Dependencies: if two areas have no mutual dependencies, why should they be in the same microservice? If
+                they have very different external dependencies, these dependencies may have too broad an impact
+                (impacting a subdomain that has no need for them).</li>
+            <li>Business value and criticality level (a specialization of the previous bullet): if one area in a
+                component is critical to the daily operation of a business, and another area is much more mundane, they
+                will have to be treated in very different ways&mdash;certainly in terms of Operations; that may be a
+                reason for identifying two different microservices.</li>
+            <li>Usages and user communities, business domain, terminology: when the usage patterns, or simply the group
+                of users for two subdomains, are very different from each other, or very different domain knowledge is
+                required, it may well be that two teams with different cultures, communication styles and functional and
+                technical attitudes are required; different teams implies different microservices.</li>
+        </ul>
+
+        <h3>Organization</h3>
+
+        <ul class="obullets">
+            <li>Ownership and decision process: if the way in which the evolution and priorities for two areas is
+                decided is very different, it may be a problem for at least one of them if their lifecycle is intimately
+                linked in a single microservice; time to say goodbye?</li>
+            <li>Budget and funding: similar and related to the previous characteristic, if the way the Dev and Ops of
+                two areas are funded is very different, this may be prohibitive to the evolution of one or both.</li>
+            <li>Size and complexity: reasons for considering multiple teams and [therefore] multiple microservices
+                include if one team (around 8 people) is not enough to take proper care of the current component, or if
+                one specific area in a component is very complex and requires highly specialized training and skills to
+                work on.</li>
+        </ul>
+
+        <h3>Architecture, technology, non-functionality</h3>
+
+        <ul class="obullets">
+            <li>CD process requirements, including QA demands: if part of a component requires a very stringent QA
+                process (e.g., various levels of testing and approval and an extreme degree of automated regression
+                testing) while a different part can be extremely relaxed, the evolution of the second part can be
+                unnecessarily slowed down and made more complex and expensive until it is split off.</li>
+            <li>Technology and skillset: when two areas require very different technologies and skillsets to be
+                developed and operated, it may put a too large burden on a single team; this can be resolved by having
+                two teams (or by standardizing on a common, more narrow stack).</li>
+            <li>Security level: if one area requires very advanced confidentiality and rather extreme security measures
+                while a different area does not, the cost (not just financially, but also in complexity of changing,
+                testing and managing) of having specialized resources for the entire component instead of for only a
+                subdomain may be prohibitive, and splitting the special-needs microservice from the component may be in
+                order.</li>
+            <li>Massive interaction and/or shared transaction scope: if two areas have frequent interactions or perform
+                activities that are logically and perhaps physically part of the same transaction, that may be a reason
+                for not breaking them up. As stated, interactions across microservice boundaries are more complex and
+                certainly introduce runtime overhead; logical transactions across microservice boundaries even further
+                increase the complexity and overhead.</li>
+            <li>Billing: usage for different areas in a component is charged for in very different ways, and could be
+                based on different metrics, different types of subscriptions, at very different price levels, to very
+                different users or departments.</li>
+        </ul>
+
+        <h3>Operational</h3>
+
+        <ul class="obullets">
+            <li>Sizing, scale and [dynamic] scalability requirements: if we have to significantly scale a component
+                because one area within that component has severe scalability requirements, we are allocating resources
+                to scaling other areas that have far more relaxed scalability needs; this can become very wasteful, and
+                a driver for breaking the different areas apart.</li>
+            <li>Availability requirements: similar to the previous discussion on scale, if one area has very advanced
+                H/A requirements and another does not, the effort of implementing H/A for the entire component, through
+                compute resources and people, will partly be redundant.</li>
+        </ul>
+
+        <h3>How to deal with change</h3>
+
+        <p>There is no perfect microservices design and certainly not one that will remain a perfect fit forever.
+            Organizations are in constant flux, as is the world around them. What was a great fit yesterday in terms of
+            microservices may no longer match the situation of tomorrow. We might as well face that we do not design for
+            posterity and instead embrace the changes and refactor our microservices accordingly.</p>
+
+        <h3>Change is the only constant, so let&#39;s embrace change</h3>
+
+        <p>The Agile way of working and thinking mandates us to embrace change&mdash;change with regard to functionality
+            and priorities and also with respect to technology, process and architecture. This mentality needs to be
+            spread throughout the complete organization from the C-Level down to the clerks in the business departments.
+            This critical aspect is not often seen in organizations.</p>
+
+        <p>We should be prepared to modify our microservices design when the situation changes, and be happy for the
+            chance to improve instead of chagrined that our design apparently was not good enough. This can happen, for
+            example, when the decision is made to implement a SaaS service, to outsource part of the business
+            activities, to implement specific security considerations regarding certain types of data, or to merge the
+            organization and its IT assets with another company&mdash;or simply when the organization is successful and
+            is growing rapidly.</p>
+
+        <h3>Refactor microservices: split and (rarely) merge</h3>
+
+        <p>We should be prepared almost at any time to extract newly identified microservices from an existing
+            application component. When the cracks revealing a candidate microservice begin to show and a certain subset
+            of an existing application component or microservice is found to meaningfully differ from the larger context
+            it lives in (e.g., on one or more of the characteristics listed above), we have to split off that subset as
+            a new microservice.</p>
+
+        <p>This will happen so regularly that organizations should have no difficulty going through this process. Given
+            that we will start out with one or very few microservices, it is likely that we will have to split off
+            microservices regularly. We can facilitate that process by preparing for it; just as in the figure above, we
+            should define and visualize the boundaries between subdomains so there is awareness in our team about the
+            areas that, though part of a single entity, should be treated as at least a little separate from each other.
+            We should assign names to these subdomains and use those names in user stories, documentation and in the
+            naming conventions for our software artefacts. Interactions within the microservices and across the border
+            between the subdomains should be created in a considered manner: whenever possible, through the public
+            channel (API or, better yet, events) or at least all through a single interface. There should be no direct
+            references or dependencies between data models in the subdomains.</p>
+
+        <p>The biggest challenge with splitting microservices is data. It&rsquo;s easier to split off code than it is to
+            split data, both the data model and the actual data records. Once data is split, the way transactions are
+            supported must also be reconsidered, at least if transactions were supported across the boundary where we
+            now have two microservices. The transaction design perhaps should be changed, or patterns like SAGA and
+            Event Sourcing must be considered.</p>
+
+        <p>Note: The reverse operation of merging two microservices into a single component should be much easier.
+            Formerly heavily decoupled components with disjunct ownership, backlogs and budgets are combined into a
+            single unit with permission&mdash;but no mandate&mdash;to interact more intimately. In reality, merging
+            mature microservices does not happen very often; a merge will be considered only when there is no
+            justification for having two separate microservices and when the short-term effort to merge is less than the
+            long-term overhead of continuing with the existing situation. Unfortunately, the risk and effort are
+            typically not justified since there is no immediately apparent gain from merging. By having and practicing a
+            clear procedure for merging microservices, just as we have for splitting them, we get closer to embracing
+            change and can get a better fit for the microservices with our organization.</p>
+
+        <h3>Example: the subdomains in a web shop&#39;s logistics microservice</h3>
+
+        <p>Here&rsquo;s a simple example: a small organization runs a web shop. Its application landscape has been
+            designed based on the functionality required, the SaaS services subscribed to, the structure of the
+            organization and the user groups. The size of the outfit is also a factor: the IT department is currently
+            very small and the scale of the operation is very limited.</p>
+
+        <p>However, it is clear from the beginning that the logistics microservice comprises areas of functionality that
+            are related but distinct as well. Warehousing (keeping track of the stock and ensuring that replenishment is
+            done from vendors and) Shipping (picking orders up from the warehouse and transferring them to shipping
+            partners for delivery to customers) are both part of Logistics. They have touchpoints and definitely deal
+            with similar aspects of the business, yet they are different.</p>
+
+        <p>It is too early for this organization to break up the Logistics domain into Warehousing and Shipping (and
+            more?), but it makes sense to recognize the separate areas that may well evolve into distinct microservices.
+            We do this by associating user stories, documentation, software artefacts, etc., explicitly with their
+            respective sub-domains when naming and organizing them. Additionally, we try to prevent any direct
+            dependencies between artefacts from these two subdomains. The data models should be kept separate.
+            Interactions between the two subdomains should be explicitly managed, documented and implemented, ideally
+            through external APIs and events.</p>
+
+        <p>In the same organization, a similar example is provided by the Orders and Shopping Cart. Right now, they not
+            only share one bounded context but they are also implemented in a single service. However, chances are that
+            Ordering and Shopping Cart will evolve separately and change for different reasons. They may eventually
+            become separate services&mdash;and perhaps distinct bounded contexts. We will then have to consider the
+            split in data and define events so the two pieces of functionality can still interoperate. even though now
+            they&rsquo;re fully decoupled.</p>
+
+        <h3>Fewer microservices is better</h3>
+
+        <p>The fewer microservices we need to achieve our true objective, the better it is. More microservices means
+            more overhead and costs; in terms of organizational responsibilities and work coordination; complexity and
+            administration effort (cross-domain transactions, more moving parts to oversee, monitor); resource usage
+            (each microservice requires additional infrastructure resources); and performance (highly decoupled
+            interactions across microservices will take considerably longer in terms of network latency than internal
+            calls within a microservice).</p>
+
+        <p>If one microservice could bring us all we need, that would be great! One component that does it all: is that
+            therefore a monolith? Well, literally it is. But it should not have the challenges commonly associated with
+            monoliths (such as hard to scale, hard to change), or it would be broken up into multiple microservices.</p>
+
+        <p>In reality, in most situations our application landscape will be heterogeneous along various axes and too big
+            to be taken care of by a single team. Because of relevant differences between various areas in our
+            application landscape, we might entertain the thought of splitting off some areas as microservices.
+            Ultimately, it is the functional design&mdash;translating to bounded contexts&mdash;that probably is the
+            biggest deciding factor in designing the microservices and therefore the eventual granularity.</p>
+
+        <p>Note: an interesting discussion can be held around the distinction between bounded context (an area of
+            shared, consistent business terminology and data model language along with all persistent data stores,
+            aligned with a business sub domain) and microservice. We could argue that several microservices (with, e.g.,
+            different scalability requirements) can be created within one bounded context. In terms of business
+            responsibility and DevOps ownership, ideally the bounded context is not split up and if there are in fact
+            multiple microservices for pragmatic reasons, they should all be owned by the same team.</p>
+
+        <h3>Acknowledgments</h3>
+
+        <p>Suggestions, contributions and general feedback from the following people have made this a better article,
+            and I thank them for it: Jeroen Kooij, Luis Weir, Sven Bernhardt, Michiel van der Sluis, and Sander
+            Rosenhart.</p>
+
+        <h3>Resources</h3>
+
+        <p>[1] Building Microservices, by Sam Newman, O&#39;Reilly Media, Inc., 2016, ISBN: 1491950358<br />
+            http://gorodinski.com/blog/2013/04/29/sub-domains-and-bounded-contexts-in-domain-driven-design-ddd/ [2]
+            &ldquo;Sub-domains and Bounded Contexts in Domain-Driven Design (DDD)&rdquo; by Lev Gorodinski , April 2013
+            - <a href=""
+                target="_blank">http://gorodinski.com/blog/2013/04/29/sub-domains-and-bounded-contexts-in-domain-driven-design-ddd/</a><br />
+            [3] &ldquo;How big is a microservice?&rdquo; by Ben Morris, March 2015 - <a
+                href="http://www.ben-morris.com/how-big-is-a-microservice"
+                target="_blank">http://www.ben-morris.com/how-big-is-a-microservice/</a><br />
+            [4] &ldquo;Thoughts on the macro architecture and the infrastructure for microservices&rdquo; by Michael
+            Douglas, April 2018 - <a
+                href="https://medium.freecodecamp.org/microservices-from-idea-to-starting-line-ae5317a6ff02"
+                target="_blank">https://medium.freecodecamp.org/microservices-from-idea-to-starting-line-ae5317a6ff02</a>
+        </p>
+
+
+        <h4>About the Author</h4>
+
+        <p><strong>Lucas Jellema</strong> is solution architect and CTO at AMIS, based in the Netherlands. He works as a
+            consultant, architect, and instructor in such diverse areas as Database and SQL, Java/Java EE, SOA/BPM and
+            PaaS and SaaS Cloud Solutions. The running theme through most of his activities is the transfer of knowledge
+            and enthusiasm (and live demos). An Oracle ACE Director and Developer Champion, Lucas is a well-known
+            speaker at Oracle Code, Oracle OpenWorld, JavaOne, Devoxx and various User Group conferences around the
+            world. His articles have appeared on Oracle Developer Community, the AMIS Technology weblog and in magazines
+            and websites around the world. Lucas is the author of Oracle SOA Suite 11g Handbook (2010, McGraw Hill) and
+            Oracle SOA Suite 12c Handbook (2015, McGraw Hill)</p>
+    </div>
+</section>
+<!-- /CC01v0 -->
+<!-- / _Raw-HTML -->

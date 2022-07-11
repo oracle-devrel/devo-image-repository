@@ -1,0 +1,2885 @@
+<!-- U03v5 -->
+<!-- _Raw-HTML -->
+<section class="cc01 cc01v0 cpad crule">
+    <div class="cc01w1 cwidth">
+        <p><a href="/databases/learning-r-for-pl-sql-developers-part-1.html">Part 1</a> | Part 2 | <a
+                href="/databases/learning-r-for-pl-sql-developers-part-3.html">Part 3</a> of a series that presents an
+            easier way to learn R by comparing and contrasting it to PL/SQL.</p>
+
+        <p>Welcome to the second installment of this series. In this installment, you will learn about the more advanced
+            concepts of the R language such as evaluating conditions, executing loops, and creating program units such
+            as functions.</p>
+        <a name="1"></a>
+
+        <h3>Reading Input</h3>
+
+        <p>But before we start, let&#39;s explore a rather trivial activity in any interactive program: accepting an
+            input from the user at runtime. The R function for that is called <code class="ocode">readline()</code>. It
+            prompts the user for an input and reads the input to be stored as a value. Here is an example:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+&gt; <strong>v1 &lt;- readline(prompt = &quot;what&#39;s the good word&gt; &quot;)</strong>
+what&#39;s the good word&gt; 
+</code></pre>
+        </div>
+
+        <p>You can enter a value at the blinking cursor. Suppose you enter <code class="ocode">1</code>. The variable
+            <code class="ocode">v1</code> will be assigned the value of 1. If you type <code class="ocode">v1</code>,
+            you will see the value. Remember from <a
+                href="http://www-content.oracle.com/technetwork/articles/bi/learning-r-for-plsql-developers-3941807.html"
+                target="">Part 1</a> that you can just type the variable name and the value will be displayed. There is
+            no need for a <code class="ocode">print()</code> function.
+        </p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+&gt; <strong>v1</strong>
+[1] &quot;1&quot;
+</code></pre>
+        </div>
+
+        <p>But note the double quotes. This is a character string. You can confirm that by using the <code
+                class="ocode">class()</code> function, which you learned about in Part 1:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+&gt; <strong>class(v1)</strong>
+[1] &quot;character&quot;
+</code></pre>
+        </div>
+
+        <p>If you want to use the value as a number, then you must convert it to a number by using the <code
+                class="ocode">as.numeric()</code> function, which you learned about in Part 1, or the <code
+                class="ocode">as.integer()</code> function. Here is an example:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+&gt; <strong>v1 &lt;- as.numeric(v1)</strong>
+</code></pre>
+        </div>
+
+        <p>Confirm that it&#39;s a numeric value now:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+&gt; <strong>class(v1)</strong>
+[1] &quot;numeric&quot;
+</code></pre>
+        </div>
+
+        <p>Alternatively, you can use this:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+&gt; <strong>v1 &lt;- as.integer(v1)</strong>
+&gt; <strong>class(v1)</strong>
+[1] &quot;integer&quot;
+</code></pre>
+        </div>
+        <a name="2"></a>
+
+        <h3>What IF</h3>
+
+        <p>Like the <code class="ocode">IF</code> statement in PL/SQL, the most basic conditional operation in R is also
+            <code class="ocode">IF</code>. In PL/SQL, the general structure of the IF condition is:
+        </p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+IF <em>conditional expression</em> THEN
+&nbsp;&nbsp;<em>some statements</em>
+ELSE 
+&nbsp;&nbsp;<em>some statements</em>
+END IF;</code></pre>
+        </div>
+
+        <p>Here is some sample code:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+-- pl1.sql
+
+declare
+  v1 number;
+begin
+  v1 := &amp;inputvalue;
+  if (v1 &lt; 101) then
+    dbms_output.put_line(&#39;v1 is less than 101&#39;);
+  end if;
+end;
+</code></pre>
+        </div>
+
+        <p>Here is the output (after you input 100 at the prompt):</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+Enter value for inputvalue: <strong>100</strong>
+old 4: v1 := &amp;inputvalue;
+new 4: v1 := 100;
+v1 is less than 101
+</code></pre>
+        </div>
+
+        <p>Here is how you write the same logic in R:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+#r1.txt
+
+v1 &lt;- is.integer(readline(prompt = &quot;enter a number&gt; &quot;))
+if (v1&lt;101)
+{
+   print (&quot;v1 is less than 101&quot;)
+}
+</code></pre>
+        </div>
+
+        <p>Here is the output:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+[1] &quot;v1 is less than 101&quot;
+</code></pre>
+        </div>
+
+        <p>There are a few things to note here before we further:</p>
+
+        <ul>
+            <li>After the <code class="ocode">if</code> condition, the action block is enclosed by two curly braces:
+                <code class="ocode">{</code> and <code class="ocode">}</code>. This is the standard convention in R.
+                This is similar to the convention in C language.
+            </li>
+            <li>There is no line-ending character, for example, a semicolon (<code class="ocode">;</code>). A line ends
+                with the normal end-of-line character.</li>
+            <li>The indentation is purely for readability reasons. R doesn&#39;t need the indentation as syntax, just
+                like PL/SQL. This is different from other languages such as Python, where indentation denotes the block
+                that the code belongs to. In R, the curly braces delineate that block.</li>
+        </ul>
+        <a name="3"></a>
+
+        <h3>Or, ELSE ...</h3>
+
+        <p>When there is <code class="ocode">IF</code>, there must be <code class="ocode">ELSE</code>. In PL/SQL, you
+            would write like this:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+--pl2.sql
+
+declare
+  v1 number;
+begin
+  v1 := &amp;inputvalue;
+  if (v1 &lt; 101) then
+    dbms_output.put_line(&#39;v1 is less than 101&#39;);
+  else
+    dbms_output.put_line(&#39;v1 is not less than 101&#39;);
+  end if;
+end;
+</code></pre>
+        </div>
+
+        <p>The R syntax is also the same&mdash;-<code class="ocode">ELSE</code>&mdash;but there is a catch you should be
+            aware of. Here is the equivalent R code:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+v1 &lt;- 100
+if (v1 &lt; 101)
+{
+&nbsp;&nbsp; print (&#39;v1 is less than 101&#39;)
+print (&#39;Not Indented&#39;)
+<strong>} else</strong>
+{
+&nbsp;&nbsp; print (&#39;v1 is greater than 101&#39;)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; print (&#39;Way Too much Indented&#39;)
+}
+</code></pre>
+        </div>
+
+        <p>I used the indentation messages to show you how indentations are not important in R, just as in PL/SQL. But I
+            want to show you a very important differentiator. Note the presence of a curly brace before the <code
+                class="ocode">else</code> in the code above. The ending curly brace of the <code class="ocode">IF</code>
+            condition tells R to stop evaluating and start processing. If you have an <code class="ocode">ELSE</code>,
+            it must come in the <em>same</em> line after the curly brace; otherwise, the R interpreter will not be able
+            to evaluate the <code class="ocode">else</code>. Note what happens when you put <code
+                class="ocode">else</code> in the next line:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+# r2a.txt
+v1 &lt;- 100
+if (v1&lt;=100)
+{
+&nbsp;&nbsp; print (&#39;v1 is less than or equal to 100&#39;)
+print (&#39;Not Indented&#39;)
+<strong>}</strong> 
+<strong>else</strong> 
+{
+&nbsp;&nbsp; print (&#39;v1 is greater than 100&#39;)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; print (&#39;Way Too much Indented&#39;)
+}
+</code></pre>
+        </div>
+
+        <p>Output:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+[1] &quot;v1 is less than or equal to 100&quot;
+[1] &quot;Not Indented&quot;
+Error: unexpected &#39;else&#39; in &quot;else&quot;
+Execution halted
+</code></pre>
+        </div>
+
+        <p>The <code class="ocode">else</code> was not properly handled, because it was not in the same line as the
+            ending curly brace of the <code class="ocode">IF</code>. This is a very important syntax difference from
+            PL/SQL that you should be aware of. Most developers familiar with other languages such as C, where the curly
+            braces are used as well, make this mistake.</p>
+
+        <p>What if you want to put another condition? There could be another <code class="ocode">IF</code> after the
+            <code class="ocode">ELSE</code>:
+        </p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+#r3.txt
+v1 &lt;- 100
+if (v1 &lt; 100)
+{
+&nbsp;&nbsp; print (&#39;v1 is less than 100&#39;)
+} else 
+&nbsp; if (v1 == 100)
+{
+&nbsp;&nbsp; print (&#39;v1 is equal to 100&#39;)
+} else
+{
+&nbsp;&nbsp; print (&#39;v1 is greater than 100&#39;)
+}
+</code></pre>
+        </div>
+
+        <p>Executing that code, we get this:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+C:\&gt;<strong>rscript r3.txt</strong>
+[1] &quot;v1 is equal to 100&quot;
+</code></pre>
+        </div>
+        <a name="4"></a>
+
+        <h3>Null is Nothing</h3>
+
+        <p>When you have to put in a line but nothing needs to be done, you usually use a <code
+                class="ocode">NULL</code> statement in PL/SQL.</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+--pl4.sql
+declare
+  x number := 10;
+  y number := 11;
+begin
+  if (x&lt;y) then
+    dbms_output.put_line(&#39;Yes&#39;);
+  else
+    <strong>null</strong>;
+  end if;
+end;
+/</code></pre>
+        </div>
+
+        <p>The <code class="ocode">null</code> statement in line 9 is required. You have to put a valid PL/SQL statement
+            within the <code class="ocode">IF</code> and <code class="ocode">END IF</code> statements. Otherwise, the
+            code will produce an error. In R, you don&#39;t need to put anything between the curly braces. The following
+            is the equivalent code in R.</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+# r4.txt
+
+x &lt;- 10
+y &lt;- 11
+if (x&lt;y) {
+  print (&quot;Yes&quot;)
+} else
+{
+}
+</code></pre>
+        </div>
+        <a name="5"></a>
+
+        <h3>Let&#39;s Make a Case</h3>
+
+        <p>The <code class="ocode">CASE</code> statement of PL/SQL is pretty powerful. It allows you to define several
+            conditions in one expression. Here is an example.</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+--pl5.sql
+
+declare
+  n1 number;
+begin
+  n1 := 5;
+  case
+    when (n1&lt;=25) then
+      dbms_output.put_line(&#39;n1 is within 25&#39;);
+    when (n1&lt;=50) then
+      dbms_output.put_line(&#39;n1 is within 50&#39;);
+    when (n1&lt;=75) then
+      dbms_output.put_line(&#39;n1 is within 75&#39;);
+    else
+      dbms_output.put_line(&#39;n1 is greater than 75&#39;);
+  end case;
+end;
+/
+</code></pre>
+        </div>
+
+        <p>There is an equivalent of the <code class="ocode">CASE</code> statement in R. It&#39;s called the <code
+                class="ocode">switch()</code> function. But unlike <code class="ocode">CASE</code>, the <code
+                class="ocode">switch()</code> function works in different ways when the first argument is an integer or
+            a character. Let&#39;s first see the effect with an integer input:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+&gt; <strong>v1 &lt;- switch (1,&#39;first&#39;,&#39;second&#39;,&#39;third&#39;,&#39;fourth&#39;)</strong>
+&gt; <strong>v1</strong>
+[1] &quot;first&quot;
+</code></pre>
+        </div>
+
+        <p>The <code class="ocode">switch</code> statement returned <code class="ocode">&quot;first&quot;</code> because
+            the first argument is the integer 1. Therefore, the <code class="ocode">switch</code> statement picked the
+            first argument from the list of selections. Similarly, if you choose other numbers, <code
+                class="ocode">switch</code> will choose the corresponding values.</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+# r5.txt
+
+&gt; <strong>v1 &lt;- switch (2,&#39;first&#39;,&#39;second&#39;,&#39;third&#39;,&#39;fourth&#39;)</strong>
+&gt; <strong>v1</strong>
+[1] &quot;second&quot;
+&gt; <strong>v1 &lt;- switch (3,&#39;first&#39;,&#39;second&#39;,&#39;third&#39;,&#39;fourth&#39;)</strong>
+&gt; <strong>v1</strong>
+[1] &quot;third&quot;
+&gt; <strong>v1 &lt;- switch (4,&#39;first&#39;,&#39;second&#39;,&#39;third&#39;,&#39;fourth&#39;)</strong>
+&gt; <strong>v1</strong>
+[1] &quot;fourth&quot;
+</code></pre>
+        </div>
+
+        <p>What if you pass a number for which there is no corresponding selection, for example, 0? Let&#39;s see:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+# r5a.txt
+
+&gt; <strong>v1 &lt;- switch (0,&#39;first&#39;,&#39;second&#39;,&#39;third&#39;,&#39;fourth&#39;)</strong>
+&gt; <strong>v1</strong>
+NULL
+&gt; <strong>v1 &lt;- switch (5,&#39;first&#39;,&#39;second&#39;,&#39;third&#39;,&#39;fourth&#39;)</strong>
+&gt; <strong>v1</strong>
+NULL
+</code></pre>
+        </div>
+
+        <p>Note the output, which shows <code class="ocode">NULL</code>. In <a
+                href="https://developer.oracle.com/databases/learning-r-for-pl-sql-developers-part-1">Part 1</a>, you
+            saw a value called <code class="ocode">NA</code>, which was roughly the equivalent of <code
+                class="ocode">NULL</code> in PL/SQL. The R <code class="ocode">NULL</code> has no clear equivalent;
+            it&#39;s sort of <em>undefined</em>.</p>
+
+        <p>The first argument does not have to be an integer. It could also be an <em>implied</em> integer, for example,
+            a boolean value. Remember, boolean <code class="ocode">TRUE</code> and <code class="ocode">FALSE</code>
+            evaluate to 1 and 0, respectively. If the first parameter is an expression that results in a boolean value,
+            it is converted to an integer. If the expression is <code class="ocode">3 &lt; 5</code>, the result will be
+            <code class="ocode">TRUE</code>, that is, 1; so <code class="ocode">switch</code> will pick the first
+            argument from the choices:
+        </p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+# r5b.txt
+
+&gt; <strong>v1 &lt;- switch (3&lt;5,&#39;first&#39;,&#39;second&#39;,&#39;third&#39;,&#39;fourth&#39;)</strong>
+&gt; <strong>v1</strong>
+[1] &quot;first&quot;
+</code></pre>
+        </div>
+
+        <p>Unfortunately it doesn&#39;t work in all cases. What if the expression evaluates to <code
+                class="ocode">FALSE</code>? It will be then converted to 0; but there is no 0th choice. So it will
+            return a <code class="ocode">NULL</code>:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+# r5c.txt
+
+&gt; <strong>v1 &lt;- switch (3&gt;5,&#39;first&#39;,&#39;second&#39;,&#39;third&#39;,&#39;fourth&#39;)</strong>
+&gt; <strong>v1</strong>
+NULL
+</code></pre>
+        </div>
+
+        <p>The <code class="ocode">switch</code> function works differently when the first input is a character. In this
+            format, you will need to provide the return values for several input values. You can also provide the
+            default value for when none of the input values match. For instance, here is an R expression that returns
+            the position of vowels, that is, 1 for a, 2 for b, and so on. It should return 0 if the input is not a
+            vowel.</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+# r6.txt
+
+&gt; <strong>v1 &lt;- switch(&#39;a&#39;,a=1,e=2,i=3,o=4,u=5,0)</strong>
+&gt; <strong>v1</strong>
+[1] 1
+&gt; <strong>v1 &lt;- switch(&#39;z&#39;,a=1,e=2,i=3,o=4,u=5,0)</strong>
+&gt; <strong>v1</strong>
+[1] 0
+</code></pre>
+        </div>
+
+        <p>This format of the <code class="ocode">switch()</code> function is closer to the <code
+                class="ocode">CASE</code> statement in PL/SQL when there is a default value.</p>
+        <a name="6"></a>
+
+        <h3>FOR the Love of Loop</h3>
+
+        <p>Consider the usual looping code in PL/SQL using the <code class="ocode">FOR ... LOOP ... END LOOP</code>
+            construct. The general structure is this:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+FOR i in <em>StartingNumber</em> ... <em>EndingNumber</em> LOOP
+   ...
+END LOOP;
+</code></pre>
+        </div>
+
+        <p>The R equivalent also uses <code class="ocode">for</code>; but there is no <code class="ocode">LOOP</code>
+            keyword and, consequently, no <code class="ocode">END LOOP</code> either. As in the case of the <code
+                class="ocode">if</code> statement, the end of the conditional expression is marked by the curly brace
+            start. Also, like the <code class="ocode">if </code>statement, the block of program statements to be
+            repeated is identified by being enclosed inside curly braces.</p>
+
+        <p>But before we start talking about <code class="ocode">loop</code>, we need to know how to create a start and
+            end number range. It&#39;s the <code class="ocode">seq()</code> function.</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+&gt; <strong>seq(10,20)</strong>
+[1] 10 11 12 13 14 15 16 17 18 19 20
+</code></pre>
+        </div>
+
+        <p>Let&#39;s see a very simple function that generates 11 values from 10 to 20 and displays them one by one:</p>
+
+        <p>Here&#39;s PL/SQL code:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+-- pl7.sql
+
+begin
+  for i in 1..10 loop
+    dbms_output.put_line(&#39;i= &#39;||i);
+  end loop;
+end;
+</code></pre>
+        </div>
+
+        <p>Here&#39;s the R code:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+for (i in seq(10:20)) {
+  print(i)
+}
+</code></pre>
+        </div>
+
+        <p>Here&#39;s the output:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+[1] 10
+[1] 11
+[1] 12
+[1] 13
+[1] 14
+[1] 15
+[1] 16
+[1] 17
+[1] 18
+[1] 19
+[1] 20
+</code></pre>
+        </div>
+
+        <p>The <code class="ocode">seq()</code> function is very useful in R. You will be using it a lot to create data,
+            especially when trying to fit models. Let&#39;s see some more parameters of this function. If you want to
+            skip values, you can pass the optional third parameter to specify the skip values. Let&#39;s say, we want to
+            print 10 to 20 but skip every 2 numbers.</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+&gt; <strong>seq(10,20,2)</strong>
+[1] 10 12 14 16 18 20
+</code></pre>
+        </div>
+
+        <p>Similarly we can use the third parameter to increment negatively. To produce numbers from 20 to 10,
+            incrementing by 1, the third parameter should be -1:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+&gt; <strong>seq(20,10,-1)</strong>
+[1] 20 19 18 17 16 15 14 13 12 11 10
+</code></pre>
+        </div>
+        <a name="7"></a>
+
+        <h3>Give Me a Break</h3>
+
+        <p>If you want to break the loop iteration, just use the <code class="ocode">break</code> statement, which is
+            exactly same as the <code class="ocode">break</code> statement in PL/SQL. If you want to enter a number and
+            check if it has a multiple between 10 and 20, you could use the following. In R <code
+                class="ocode">%%</code> is the modulo operator, equivalent to the <code class="ocode">mod()</code>
+            function in PL/SQL. The expression <code class="ocode">v1 %% v2</code> returns 0 if <code
+                class="ocode">v1</code> is a multiple of <code class="ocode">v2</code>. You want to iterate through the
+            loop from 10 and 20, but stop when you find a multiple. The <code class="ocode">break</code> statement comes
+            in there.</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+# r8.txt
+
+n &lt;- as.integer(readline(&quot;Enter a number&gt; &quot;))
+for (i in rep(10:20)) {
+  print(i)
+  if (i%%n == 0)
+  {
+     break
+  }  
+}
+</code></pre>
+        </div>
+
+        <p>Executing it produces the following:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+&gt; <strong>source (&quot;r8.txt&quot;)</strong>
+
+Enter a number&gt; <strong>7</strong>
+[1] 10
+[1] 11
+[1] 12
+[1] 13
+[1] 14
+</code></pre>
+        </div>
+        <a name="8"></a>
+
+        <h3>Looping While</h3>
+
+        <p>The second type of loop we will cover is a variant of <code class="ocode">FOR</code> but without a start and
+            end: the <code class="ocode">WHILE</code> loop. It allows you to loop as long as a condition is met (the
+            condition can be set to always be true for a forever loop). Here is an example of printing the 10 number.
+        </p>
+
+        <p>PL/SQL code:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+-- pl9.sql
+declare
+  i number := 0;
+begin
+  while (i&lt;11) loop
+     dbms_output.put_line(&#39;i= &#39;||i);
+     i := i+1;
+  end loop;
+end;
+/</code></pre>
+        </div>
+
+        <p>The output:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+i= 0
+i= 1
+i= 2
+i= 3
+i= 4
+i= 5
+i= 6
+i= 7
+i= 8
+i= 9
+i= 10
+</code></pre>
+        </div>
+
+        <p>In R, the syntax is the same: <code class="ocode">while</code>. Like the <code class="ocode">FOR</code> loop,
+            the code to be inside the <code class="ocode">WHILE</code> loop is marked by the curly braces, equivalent to
+            the <code class="ocode">BEGIN</code> and <code class="ocode">END</code> markers of PL/SQL. Like PL/SQL, the
+            indentations are merely for readability; they are not part of the syntax.</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+# r9.txt
+i &lt;- 0
+while (i&lt;11) {
+  print(i)
+  i &lt;- i+1
+}
+</code></pre>
+        </div>
+
+        <p>The output:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+[1] 0
+[1] 1
+[1] 2
+[1] 3
+[1] 4
+[1] 5
+[1] 6
+[1] 7
+[1] 8
+[1] 9
+[1] 10
+</code></pre>
+        </div>
+        <a name="9"></a>
+
+        <h3>Breaking from the While Loop</h3>
+
+        <p>Suppose you want to put a condition in the loop that will make the program break away from the loop when the
+            condition is satisfied. For instance, in the previous program, you want to break form the loop when the
+            variable <code class="ocode">i</code> is a multiple of 5. In PL/SQL, you can do that in two different ways:
+        </p>
+
+        <ul>
+            <li><code class="ocode">exit when <em>ConditionIsSatisfied</em></code></li>
+            <li><code class="ocode">if (<em>ConditionIsSatisfied</em>) then exit</code></li>
+        </ul>
+
+        <p>Functionally they are the same. In R, the keyword <code class="ocode">break</code> breaks the loop from
+            executing and jumps out to the first line <em>after</em> the loop. We will examine the approaches in both
+            these languages.</p>
+
+        <p>In PL/SQL using approach 1:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+--pl10a.sql
+declare
+  i number := 1;
+begin
+  while (i&lt;11) loop
+    exit when mod (i,5) = 0;
+    dbms_output.put_line(&#39;i= &#39;||i);
+    i := i+1;
+  end loop;
+end;
+/</code></pre>
+        </div>
+
+        <p>The output:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+i= 1
+i= 2
+i= 3
+i= 4
+</code></pre>
+        </div>
+
+        <p>In PL/SQL using approach 2:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+--pl10b.sql
+declare
+  i number := 1;
+begin
+  while (i&lt;11) loop
+     dbms_output.put_line(&#39;i= &#39;||i);
+     i := i+1;
+     if mod (i,5) = 0 then
+        exit;
+     end if;
+  end loop;
+end;
+/</code></pre>
+        </div>
+
+        <p>In either approach, the output is the same. While the output is same, the approaches are different and might
+            behave differently. In the first approach, the condition for breaking is checked immediately at the start of
+            the loop. In the second approach, it&#39;s evaluated after the counter is incremented. So you have to be
+            careful when coding for either approach. The change in logic might be subtle, but it is important and can
+            introduce bugs in a program.</p>
+
+        <p>In R, there is no equivalent of the first version. The second version is what you would use in R. You already
+            saw an example in the <code class="ocode">FOR</code> loop. Let&#39;s see the same for the <code
+                class="ocode">WHILE</code> loop. Here is the R code. Execute it yourself on the R command line see the
+            results.</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+# r10.txt
+i &lt;- 1
+while (i&lt;11) {
+  print(i)
+  if (i%%5 == 0) {
+    break
+  }
+  i &lt;- i+1
+}
+</code></pre>
+        </div>
+        <a name="10"></a>
+
+        <h3>Repeat Until I Break</h3>
+
+        <p>You might have seen another case where you you need to repeat the loop indefinitely until a break condition
+            comes in. In those cases a <code class="ocode">WHILE</code> loop with a condition that always evaluates to
+            <code class="ocode">TRUE</code> will help. Here is an example in PL/SQL:
+        </p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+WHILE (TRUE) LOOP
+...
+IF <em>Condition</em> THEN 
+&nbsp;&nbsp; BREAK;
+END IF
+END LOOP
+</code></pre>
+        </div>
+
+        <p>In R, you can write it the same way:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+while(TRUE) 
+{
+&nbsp;&nbsp; if <em>Condition</em> 
+&nbsp;&nbsp; {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break
+&nbsp;&nbsp; }
+}
+</code></pre>
+        </div>
+
+        <p>There is a simpler way in R: using the <code class="ocode">repeat</code> clause. Here is an example:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+# r11.txt
+n &lt;- as.integer(readline(&quot;Enter an integer&gt; &quot;))
+i &lt;- 1
+<strong>repeat</strong> {
+  if (i == n) 
+  {
+     cat(&quot;It took me &quot;, i, &quot; iterations to find your number\n&quot;)
+     break
+  }
+  i &lt;- i+1
+}
+</code></pre>
+        </div>
+
+        <p>Executing it, produces the following:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+Enter an integer&gt; <strong>29</strong>
+It took me 29 iterations to find your number
+</code></pre>
+        </div>
+        <a name="11"></a>
+
+        <h3>Next, Please</h3>
+
+        <p>Another element of the loop is the <code class="ocode">next</code> statement. This allows you to skip over a
+            loop based on a condition. Let&#39;s take the same example we saw for the <code class="ocode">break</code>
+            statement. But let&#39;s say we don&#39;t need to count in multiples of 5. In other words, we count how many
+            iterations we had to do to come to the number entered by the user; but we will not count iterations 5, 10,
+            15, and so on.</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+# r12.txt
+n &lt;- as.integer(readline(&quot;Enter an integer&gt; &quot;))
+i &lt;- 0
+j &lt;- 1
+repeat {
+  i &lt;- i+1
+  if (i %% 5 == 0)
+  {
+     next
+  }
+  if (i == n) 
+  {
+     cat(&quot;It took me &quot;, j, &quot; iterations to find your number\n&quot;)
+     break
+  }
+  j &lt;- j+1
+}
+</code></pre>
+        </div>
+
+        <p>Executing it produces this:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+&gt; <strong>source(&#39;r12.txt&#39;)</strong>
+Enter an integer&gt; 29
+It took me 24 iterations to find your number
+</code></pre>
+        </div>
+        <a name="12"></a>
+
+        <h3>Let&#39;s Continue</h3>
+
+        <p>Remember the PL/SQL <code class="ocode">continue</code> statement? It is used inside a loop to instruct the
+            program to jump to the end of the loop and continue with the rest of the loop iterations as usual. The
+            syntax is equivalent to the <code class="ocode">next</code> statement in R. Let&#39;s see a small example:
+        </p>
+
+        <p>The PL/SQL code:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+-- pl13.sql
+declare
+  mynum number := 3;
+begin
+  for i in 1..10 loop
+    if mod (i,mynum) = 0 then
+      dbms_output.put_line(&#39;multiple found as &#39;||i);
+      continue;
+      dbms_output.put_line(&#39;we are continuing&#39;);
+    end if;
+    dbms_output.put_line (&#39;No multiple found as &#39;||i);
+  end loop;
+end;
+/
+</code></pre>
+        </div>
+
+        <p>Executing the code:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+No multiple found as 1
+No multiple found as 2
+multiple found as 3
+No multiple found as 4
+No multiple found as 5
+multiple found as 6
+No multiple found as 7
+No multiple found as 8
+multiple found as 9
+No multiple found as 10
+</code></pre>
+        </div>
+
+        <p>The R code:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+# r13.txt
+mynum &lt;- 3
+for (i in 1:10)
+{
+   if (i%%mynum == 0)
+   { 
+      cat (&quot;Multiple found as &quot;, i, &quot;\n&quot;)
+      next
+   }
+   cat (&quot;No multiple found as &quot;, i, &quot;\n&quot;)
+}
+</code></pre>
+        </div>
+
+        <p>Executing the R code:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+&gt; <strong>source(&#39;r13.txt&#39;)</strong>
+No multiple found as 1
+No multiple found as 2
+Multiple found as 3
+No multiple found as 4
+No multiple found as 5
+Multiple found as 6
+No multiple found as 7
+No multiple found as 8
+Multiple found as 9
+No multiple found as 10
+</code></pre>
+        </div>
+        <a name="13"></a>
+
+        <h3>Functions</h3>
+
+        <p>As is the case in most languages, R provides repeatable code segments, similar to procedures and functions in
+            PL/SQL. As you already know, in PL/SQL, a procedure does not return anything (although it can have an <code
+                class="ocode">OUT</code> parameter; but that&#39;s not a return, so it&#39;s not the same thing), and a
+            function returns a single value. In R, the equivalents of both PL/SQL procedures and functions is called
+            simply a <em>function</em>. A Python function may or may not return anything.</p>
+
+        <p>In this article, we will cover how to write functions and use them in your programs. As in Part 1 of this
+            series, we will see how to do something in PL/SQL and then do the equivalent in R.</p>
+
+        <p>A function definition in PL/SQL has this general syntax format:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+function <em>FunctionName </em>(
+&nbsp; <em>Parameter1Name</em> in <em>DataType</em>,
+&nbsp; <em>Parameter2Name</em> in <em>DataType</em>,
+...
+return <em>ReturnDatatype</em>
+is
+&nbsp;&nbsp; <em>localVariable1 datatype</em>;
+&nbsp;&nbsp; <em>localVariable2 datatype</em>;
+begin
+&nbsp;&nbsp; <em>... function code ...</em>
+&nbsp;&nbsp;&nbsp; return <em>ReturnVariable</em>;
+end;
+</code></pre>
+        </div>
+
+        <p>A procedure definition in PL/SQL has this general syntax:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+procedure <em>ProcedureName</em> (
+&nbsp;<em>Parameter1Name</em> in <em>DataType</em>,
+&nbsp;<em>Parameter2Name</em> in <em>DataType</em>,
+...
+) 
+is
+&nbsp;&nbsp; <em>localVariable1 datatype</em>;
+&nbsp;&nbsp; <em>localVariable2 datatype</em>;
+begin
+<em>... procedure code ...</em>
+end;
+</code></pre>
+        </div>
+
+        <p>A function definition syntax is somewhat convoluted in my opinion, compared PL/SQL; but the rest of the body
+            is pretty standard. R follows this simple syntax:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+<em>FunctionName </em> &lt;- function (<em>Parameter1Name</em>,<em>Parameter2Name</em>, ...) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <em>... function code ...</em>
+&nbsp; return <em>ReturnVariable</em>
+
+}
+</code></pre>
+        </div>
+
+        <p>Note some important properties of the R function definition compared to the PL/SQL equivalent:</p>
+
+        <ul>
+            <li>The definition starts with the name of the function and the assignment operator.</li>
+            <li>The parameters, if any, come inside the parentheses.</li>
+            <li>Only the parameter names are listed. The data types are not mentioned, unlike with PL/SQL. Parameters
+                are optional; a function doesn&#39;t need to have parameters.</li>
+            <li>There body of the function is indicated by <code class="ocode">{</code> and <code
+                    class="ocode">}</code>. Unlike PL/SQL, there is no <code class="ocode">BEGIN ... END</code>
+                construct.</li>
+            <li>There is no mention of what the function returns during the definition. If you notice there is no
+                mention in the definition as to whether the function even returns anything.</li>
+            <li>The indentation after the <code class="ocode">{</code> sign is merely for readability; it&#39;s not
+                needed. This is the same style followed in R to mark <code class="ocode">IF ... THEN ... ELSE</code>
+                blocks or loops.</li>
+            <li>The function may optionally return something at the final line. The syntax is the same as in PL/SQL:
+                <code class="ocode">return <em>ReturnVariable</em></code>.
+            </li>
+        </ul>
+
+        <p>Now that you&#39;ve got the basic idea about the syntax vis-&agrave;-vis PL/SQL, let&#39;s start with a very
+            simple procedure in PL/SQL that accepts a principal amount and interest rate, computes the interest amount
+            and the new principal after the interest is added, and displays the new principal.</p>
+
+        <p>Here is how we do it in PL/SQL. Note that I deliberately chose to use the R naming convention, for example,
+            <code class="ocode">pPrincipal</code>, not a PL/SQL-style variable name such as <code
+                class="ocode">p_principal</code>.
+        </p>
+
+        <p>PL/SQL code:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+-- pl14.sql
+declare procedure calcInt (
+  pPrincipal number,
+  pIntRate number
+) is
+  newPrincipal number;
+begin
+  newPrincipal := pPrincipal * (1+(pIntRate/100));
+  dbms_output.put_line (&#39;New Principal is &#39;||newPrincipal);
+end;
+
+begin
+calcInt(100,10);
+end;
+/
+</code></pre>
+        </div>
+
+        <p>Here is the output:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+New Principal is 110
+</code></pre>
+        </div>
+
+        <p>R code:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+# r14.txt
+
+calcInt &lt;- function (pPrincipal, pIntRate)
+{
+  newPrincipal &lt;- pPrincipal * (1+(pIntRate/100))
+  paste(&quot;New Principal is &quot;,as.character(newPrincipal))
+}
+</code></pre>
+        </div>
+
+        <p>We save this as <code class="ocode">r1.txt</code> and call it using the <code class="ocode">source()</code>
+            function you learned about in Part 1 of this series.</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+&gt; <strong>source(&#39;r14.txt&#39;)</strong>
+&gt; <strong>calcInt(100,10)</strong>
+[1] &quot;New Principal is 110&quot;
+</code></pre>
+        </div>
+
+        <h3>Default Value of Parameters</h3>
+
+        <p>Sometimes you need to pass a default value to a parameter. This value is in effect if the user does not
+            explicitly pass the parameter. Building on the previous procedure, suppose we want to make the parameter
+            <code class="ocode">pIntRate</code> optional, that is, make it a certain value (such as 5) when the user
+            does not explicitly mention it. In PL/SQL, you mention the parameter this way:
+        </p>
+
+        <p><code class="ocode"><em>ParameterName DataType := DefaultValue</em></code></p>
+
+        <p>In R, it&#39;s exactly the same, but because the assignment operator in R is the equals sign (<code
+                class="ocode">=</code>), not <code class="ocode">:=</code>, that&#39;s what you need to use. Besides,
+            remember, you don&#39;t mention the data type for parameters. Here is the general syntax:</p>
+
+        <p><code class="ocode"><em>ParameterName = DefaultValue</em></code></p>
+
+        <p>You can write the PL/SQL function this way (the changes are in bold):</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+--pl15.sql
+declare
+  procedure calcInt (
+     pPrincipal number,
+     pIntRate number <strong>:= 5</strong>
+) is
+  newPrincipal number;
+begin
+  newPrincipal := pPrincipal *(1+(pIntRate/100));
+  dbms_output.put_line(&#39;New Principal is &#39;||newPrincipal);
+end;
+
+begin
+-- don&#39;t mention the pIntRate parameter.
+-- defaults to 5
+calcInt(100);
+end;
+/</code></pre>
+        </div>
+
+        <p>R code:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+# r15.txt
+calcInt &lt;- function (pPrincipal, pIntRate <strong>= 5</strong>)
+{
+  newPrincipal &lt;- pPrincipal * (1+(pIntRate/100))
+  paste(&quot;New Principal is &quot;,as.character(newPrincipal))
+}
+</code></pre>
+        </div>
+
+        <p>One important property of functions in R is that the default values can be variables as well. This is not
+            possible in PL/SQL. For instance, in PL/SQL the following will be illegal:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+-- pl16.sql
+declare
+  defIntRate number := 5;
+procedure calcInt (
+  pPrincipal number,
+  pIntRate number := defIntRate;
+) is
+&nbsp;
+...
+</code></pre>
+        </div>
+
+        <p>But it&#39;s perfectly valid in R. Let&#39;s see how:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+# r16.txt
+defIntRate &lt;- 5
+calcInt &lt;- function (pPrincipal, pIntRate = defIntRate)
+{
+  newPrincipal &lt;- pPrincipal * (1+(pIntRate/100))
+  paste(&quot;New Principal is &quot;,as.character(newPrincipal))
+}
+</code></pre>
+        </div>
+
+        <p>The variable <code class="ocode">defIntRate</code> dynamically influences the operation of the function. If
+            you change the value of this variable, the function changes as well. Consider this following example:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+&gt; <strong>calcInt(100)</strong>
+[1] &quot;New Principal is 105&quot;
+</code></pre>
+        </div>
+
+        <p>Now let&#39;s change the value of this variable to 10 and re-execute this function.</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+&gt; <strong>defIntRate &lt;- 10</strong>
+&gt; <strong>calcInt(100)</strong>
+[1] &quot;New Principal is 110&quot;
+</code></pre>
+        </div>
+
+        <p>The new value of the variable took effect in the function.</p>
+
+        <h3>Positional Parameters</h3>
+
+        <p>You already know that in PL/SQL, you do not have to provide parameter values in the order in which the
+            parameters were defined in the procedure. You can pass values by specifying the parameter by name. For
+            instance, if a procedure <code class="ocode">F1</code> assumes the parameters <code class="ocode">P1</code>
+            and <code class="ocode">P2</code>&mdash;<em>in that order</em>&mdash;you can call the procedure this way
+            with the parameter values <code class="ocode">Val1</code> and <code class="ocode">Val2</code>, respectively:
+        </p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+F1 (Val1, Val2);
+</code></pre>
+        </div>
+
+        <p>But you can also call them with explicit parameter name assignments:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+F1 (P2 =&gt; Val2, P1 =&gt; Val1);
+</code></pre>
+        </div>
+
+        <p>This explicit naming allows you to order the parameters any way you want when calling the procedure. It also
+            allows you to skip some non-mandatory parameters. In R, the equivalent syntax is this:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+F1 (P2=Val2, P1=Val1)
+</code></pre>
+        </div>
+
+        <p>So, just the greater-than operator (<code class="ocode">=&gt;</code>) is changed to the equals sign (<code
+                class="ocode">=</code>). Let&#39;s see examples in both PL/SQL and R.</p>
+
+        <p>PL/SQL example:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+--pl7.sql
+declare
+  procedure calcInt (
+    pPrincipal number,
+    pIntRate number := 5
+) is
+  newPrincipal number;
+begin
+  newPrincipal := pPrincipal *(1+(pIntRate/100));
+  dbms_output.put_line(&#39;New Principal is &#39;||newPrincipal);
+end;
+
+begin
+  calcInt(pIntRate=&gt;10, pPrincipal=&gt;100);
+end;
+/</code></pre>
+        </div>
+
+        <p>The output is this:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+New Principal is 110
+</code></pre>
+        </div>
+
+        <p>R example:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+# r3.txt
+calcInt &lt;- function (pAccType = &quot;Savings&quot;, pPrincipal, pIntRate = 5)
+{
+  vIntRate &lt;- pIntRate
+  if (pAccType == &quot;Savings&quot;)
+  {
+    # eligible for bonus int rate
+    vIntRate &lt;- pIntRate + 5
+  }
+  newPrincipal &lt;- pPrincipal * (1+(vIntRate/100))
+  paste(&quot;New Principal is &quot;,as.character(newPrincipal))
+}
+</code></pre>
+        </div>
+
+        <p>Executing the R code produces this:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+&gt; <strong>calcInt(pPrincipal=100)</strong>
+[1] &quot;New Principal is 110&quot;
+&gt; <strong>calcInt(pPrincipal=100, pAccType = &quot;Savings&quot;)</strong>
+[1] &quot;New Principal is 110&quot;
+&gt; <strong>calcInt(pPrincipal=100, pAccType = &quot;Checking&quot;)</strong>
+[1] &quot;New Principal is 105&quot;
+</code></pre>
+        </div>
+
+        <p>One of the useful cases in PL/SQL is to define a default value only when the value is not explicitly
+            provided. Take for instance, when the user didn&#39;t specify anything for the interest rate, and you want
+            the default values to be based on something else, for example, the account type. If the account type is
+            Savings (the default), the interest rate should should be 10 percent; otherwise, it should be 5 percent.
+            Here is how you will need to write the function:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+-- pl18.sql
+declare
+  procedure calcInt (
+    pPrincipal number,
+    pIntRate number := null,
+    pAccType varchar2 := &#39;Savings&#39;
+  ) is
+    newPrincipal number;
+    vIntRate number;
+  begin
+    if (pAccType = &#39;Savings&#39;) then
+      if (pIntRate is null) then
+         vIntRate := 10;
+      else
+         vIntRate := pIntRate;
+      end if;
+    else
+      if (pIntRate is null) then
+        vIntRate := 5;
+      else
+        vIntRate := pIntRate;
+      end if;
+    end if;
+    newPrincipal := pPrincipal * (1+(vIntRate/100));
+    dbms_output.put_line(&#39;New Principal is &#39;|| newPrincipal);
+  end;
+begin
+  calcInt(100);
+  calcInt(100, pAccType =&gt; &#39;Checking&#39;);
+end;
+/</code></pre>
+        </div>
+
+        <p>The equivalent of the following line:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+pIntRate       number := null,
+</code></pre>
+        </div>
+
+        <p>in R is this:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+pIntRate = NULL
+</code></pre>
+        </div>
+
+        <p>The PL/SQL equivalent of <code class="ocode">IS NULL</code> in R is the function <code
+                class="ocode">is.null()</code>. Here is the complete R example (note the capitalization of
+            &quot;NULL&quot;):</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+# r18.txt
+calcInt &lt;- function (pAccType = &quot;Savings&quot;, pPrincipal, pIntRate = NULL)
+{
+  if (is.null(pIntRate)) 
+  {
+     vIntRate &lt;- 5
+  } else
+  {
+    vIntRate &lt;- pIntRate
+  }
+  if (pAccType == &quot;Savings&quot;)
+  {
+     # eligible for bonus int rate
+     vIntRate &lt;- pIntRate + 5
+  }
+  newPrincipal &lt;- pPrincipal * (1+(vIntRate/100))
+  paste(&quot;New Principal is &quot;,as.character(newPrincipal))
+}
+</code></pre>
+        </div>
+
+        <p>Executing the R code produces this:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+&gt; <strong>source(&#39;r18.txt&#39;)</strong>
+&gt; <strong>calcInt(pPrincipal=100, pAccType = &quot;Checking&quot;)</strong>
+[1] &quot;New Principal is 105&quot;
+&gt; <strong>calcInt(pPrincipal=100, pAccType = &quot;Checking&quot;, pIntRate = 10)</strong>
+[1] &quot;New Principal is 110&quot;
+&gt; <strong>calcInt(pPrincipal=100, pAccType = &quot;Checking&quot;, pIntRate = NULL)</strong>
+[1] &quot;New Principal is 105&quot;
+</code></pre>
+        </div>
+
+        <h3>Returning Values</h3>
+
+        <p>So far, we have talked about procedures in PL/SQL, which do not return anything. In contrast, functions in
+            PL/SQL return a value. Here is a simple example of a function that returns the interest rate for the account
+            type, which is the parameter passed to it:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+--pl19
+declare
+  function getIntRate(
+    pAccType in varchar2
+  )
+  return number
+  is
+    vRate number;
+  begin
+    case pAccType
+      when &#39;Savings&#39; then vRate := 10;
+      when &#39;Checking&#39; then vRate := 5;
+      when &#39;MoneyMarket&#39; then vRate := 15;
+    end case;
+    return vRate;
+  end;
+begin
+  dbms_output.put_line(&#39;Int Rate = &#39;||getIntRate(&#39;Savings&#39;));
+  dbms_output.put_line(&#39;Int Rate = &#39;||getIntRate(&#39;Checking&#39;));
+  dbms_output.put_line(&#39;Int Rate = &#39;||getIntRate(&#39;MoneyMarket&#39;));
+end;
+/</code></pre>
+        </div>
+
+        <p>Here is the output:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+Int Rate = 10
+Int Rate = 5
+Int Rate = 15
+</code></pre>
+        </div>
+
+        <p>The equivalent of the following code line:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+return vRate;
+</code></pre>
+        </div>
+
+        <p>in R, fortunately, is similar, but <em>not exactly</em> the same:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+return (vRate)
+</code></pre>
+        </div>
+
+        <p>Note the parentheses. Here is the R function:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+# r19.txt
+getIntRate &lt;- function (pAccType)
+{
+  if (pAccType == &quot;Savings&quot;)
+  {
+    vRate &lt;- 10
+  } else
+  if (pAccType == &quot;Checking&quot;)
+  {
+    vRate &lt;- 5
+  } else
+  if (pAccType == &quot;MoneyMarket&quot;)
+  {
+    vRate &lt;- 15
+  }
+  return (vRate)
+}
+</code></pre>
+        </div>
+
+        <p>Executing the R code produces this:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+&gt; <strong>getIntRate(&quot;Savings&quot;)</strong>
+[1] 10
+</code></pre>
+        </div>
+
+        <p>You can try the other values:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+&gt; <strong>getIntRate(&quot;Checking&quot;)</strong>
+&gt; <strong>getIntRate(&quot;MoneyMarket&quot;)</strong>
+</code></pre>
+        </div>
+
+        <p>Another way to write the same function logic is using the <code class="ocode">switch()</code> function you
+            learned about earlier in this article. It&#39;s the equivalent of the <code class="ocode">CASE</code>
+            statement in PL/SQL.</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+# r19a.txt
+getIntRate &lt;- function (pAccType)
+{
+  vRate &lt;- switch (pAccType,&quot;Savings&quot;=10, &quot;Checking&quot;=5, &quot;MoneyMarket&quot;=15,0)
+  return (vRate)
+}
+</code></pre>
+        </div>
+
+        <p>A very important concept of functions in R is that the <code class="ocode">return (...)</code> value is
+            implicit. By default, the function returns the value of the last assigned object, even if you don&#39;t
+            actually have an explicit <code class="ocode">return</code> statement. Let&#39;s see the example of a very
+            simple function that takes a number and two variables are assigned inside the body. The function doesn&#39;t
+            return anything.</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+# r20.txt
+
+f1 &lt;- function(inVal)
+{
+   v1 &lt;- inVal * 2
+   v2 &lt;- v1 * 2
+}
+</code></pre>
+        </div>
+
+        <p>As you can see, the function returns nothing. Now let&#39;s call the function:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+&gt; <strong>f1(2)</strong>
+</code></pre>
+        </div>
+
+        <p>There is no result, because the function doesn&#39;t return or print anything. Now let&#39;s capture the
+            return value of the function in a variable <code class="ocode">v3</code>:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+&gt; <strong>v3 &lt;- f1(2)</strong>
+&gt; <strong>v3</strong>
+[1] 8
+</code></pre>
+        </div>
+
+        <p>How did the function return 8, when we didn&#39;t write a <code class="ocode">return</code> statement?
+            It&#39;s because the last assigned value was <code class="ocode">v2</code> and that was implicitly returned.
+            By default, all functions will implicitly return the last value assigned. So does it mean that we need not
+            write the <code class="ocode">return</code> statement? Of course not. We need an explicit <code
+                class="ocode">return</code> in the function code for these two reasons:</p>
+
+        <ul>
+            <li>To clearly state what we are returning</li>
+            <li>To stop the function from executing the rest of the code if I have what I need in order to return from
+                the function.</li>
+        </ul>
+
+        <h3>Variable Scope</h3>
+        <a name="14"></a>
+
+        <p>As you write multiple levels of code in R, such as subprograms calling other subprograms, you might face the
+            prospect of encountering the same names being defined for variables inside these subprograms. In that case,
+            which of the values assigned to the variables will be relevant? This is where you have to know how the scope
+            of the variables, which is a very important concept to remember. Let&#39;s start with a simple example
+            function that accepts an input value, stores it in a local variable called <code class="ocode">v1</code>,
+            and prints it.</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+#r21.txt
+f1 &lt;- function(inVal)
+{
+  v1 &lt;- inVal
+  cat (&quot;v1=&quot;, v1, &quot;\n&quot;)
+}
+</code></pre>
+        </div>
+
+        <p>Executing the code produces this:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+&gt; <strong>source(&quot;r21.txt&quot;)</strong>
+&gt; <strong>f1(1)</strong>
+v1= 1
+</code></pre>
+        </div>
+
+        <p>What will happen if you have another variable outside the function that has the same name of &quot;v1&quot;?
+            Will the function use the value set inside the function or simply get the value from outside? Let&#39;s
+            change the code and see the output. We first set the value of <code class="ocode">v1</code> to 10 outside
+            the function and set it to 1 inside:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+#r22.txt
+v1 &lt;- 10
+f1 &lt;- function(inVal)
+{
+  v1 &lt;- inVal
+  cat (&quot;v1=&quot;, v1, &quot;\n&quot;)
+}</code></pre>
+        </div>
+
+        <p>When we execute the code, what should we get? Let&#39;s see:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+&gt; <strong>source(&quot;r22.txt&quot;)</strong>
+&gt; <strong>f1(1)</strong>
+v1= 1
+</code></pre>
+        </div>
+
+        <p>The output is 1, which is the value assigned <em>inside</em> the function. The prior assigned value, 10, was
+            not considered. This is the expected behavior in pretty much any language, including PL/SQL. So it&#39;s no
+            surprise.</p>
+
+        <p>However, what happens if a variable called <code class="ocode">v1</code> is not even created inside the
+            function, as shown below:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+#r22a.txt
+v1 &lt;- 10
+f1 &lt;- function(inVal)
+{
+cat (&quot;v1=&quot;, v1, &quot;\n&quot;)
+}
+</code></pre>
+        </div>
+
+        <p>Note that the variable <code class="ocode">v1</code> is not defined inside the function, yet it is called in
+            the <code class="ocode">cat()</code> function. In PL/SQL, if you reference a variable not defined in the
+            function, you will get a syntax error. Let&#39;s see what happens in R. Executing the R code results in
+            this:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+&gt; <strong>source(&quot;r22a.txt&quot;)</strong>
+&gt; <strong>f1(1)</strong>
+v1= 10
+</code></pre>
+        </div>
+
+        <p>Whoa! What happened? We did not get a syntax error. Instead R pulled up the variable <code
+                class="ocode">v1</code> defined outside the function. This is a very important property of R, which is
+            very unlike PL/SQL. You should pay attention to this behavior, because it can cause many bugs if it is not
+            understood properly. Let&#39;s recap. If a variable is referenced inside a function, R first looks to see if
+            that variable is already defined <em>inside</em> the function. If so, the value is used. Otherwise, if that
+            variable is not defined, R looks up to the immediate top level code to see if that variable is defined
+            there. If it is found, <em>that value</em> is used. If is is not found there, the next upper level of code
+            is checked, and so on.</p>
+        <a name="Summ"></a>
+
+        <h3>Summary</h3>
+
+        <p>Let&#39;s take a recap of what we explored in this article. Like the previous article, we will examine one
+            element of PL/SQL and contrast it with the equivalent R element.</p>
+
+        <table border="1" cellpadding="3" cellspacing="0" style="width:90%">
+            <tbody>
+                <tr>
+                    <th scope="col">&nbsp;</th>
+                    <th scope="col">PL/SQL</th>
+                    <th scope="col">R</th>
+                </tr>
+                <tr>
+                    <td>Read user input</td>
+                    <td>It&#39;s actually done in SQL*Plus using <code class="ocode">PROMPT</code> and <code
+                            class="ocode">ACCEPT</code>.</td>
+                    <td>It&#39;s done using the <code class="ocode">readline()</code> function, which returns a string.
+                        So, the input must be converted to whatever type you wish. For example, <code
+                            class="ocode">as.integer()</code> converts the input to an integer.</td>
+                </tr>
+                <tr>
+                    <td>Basic <code class="ocode">IF</code></td>
+                    <td><code class="ocode">if (<em>condition</em>) then<br />
+			&nbsp;&nbsp;&nbsp;&nbsp;<em>List of statements to be executed</em><br />
+			end if;<br />
+			&nbsp;&nbsp;&nbsp;&nbsp;<em>List of statements outside of IF block</em></code></td>
+                    <td><code class="ocode">if (<em>condition</em>)<br />
+			{<br />
+			&nbsp;&nbsp;&nbsp;&nbsp;<em>List of statements to be executed</em><br />
+			}<br />
+			&nbsp;&nbsp;&nbsp;&nbsp;<em>List of statements outside of IF block</em></code><br />
+                        <br />
+                        Note the dissimilarities:<br />
+                        1. There is no <code class="ocode">end if</code>.<br />
+                        2. The code for the <code class="ocode">IF</code> block is inside curly braces, which is
+                        equivalent to <code class="ocode">if..end if</code>.<br />
+                        3. The condition must be within parentheses.
+                    </td>
+                </tr>
+                <tr>
+                    <td><code class="ocode">ELSE</code></td>
+                    <td><code class="ocode">if (<em>condition</em>) then<br />
+			&nbsp;&nbsp;&nbsp;<em>List of statements to be executed</em><br />
+			else<br />
+			&nbsp;&nbsp;&nbsp;<em>List of statements</em><br />
+			end if;<br />
+			<em>List of statements outside of IF block</em></code></td>
+                    <td><code class="ocode">if (<em>condition</em>)<br />
+			&nbsp;&nbsp;&nbsp;<em>List of statements to be executed</em><br />
+			} else<br />
+			&nbsp;&nbsp;&nbsp;<em>List of the statements in else block</em><br />
+			}</code><br />
+                        <br />
+                        There is no <code class="ocode">end if</code> and as with <code class="ocode">IF</code>, the
+                        blocks of code are enclosed in curly braces. The <code class="ocode">else</code> statement must
+                        be on the same line as the ending curly brace.
+                    </td>
+                </tr>
+                <tr>
+                    <td><code class="ocode">ELSIF</code></td>
+                    <td><code class="ocode">ELSIF</code></td>
+                    <td>No equivalent. You should use <code class="ocode">else if (<em>condition</em>)</code>.</td>
+                </tr>
+                <tr>
+                    <td>Do nothing where a legal, syntactically correct statement is needed</td>
+                    <td><code class="ocode">NULL;</code></td>
+                    <td>Not needed. You can use <code class="ocode">{}</code> to indicate a null.</td>
+                </tr>
+                <tr>
+                    <td><code class="ocode">FOR</code> loop</td>
+                    <td><code class="ocode">for i in <em>Start...End</em><br />
+			loop<br />
+			&nbsp;&nbsp;&nbsp;&nbsp;<em>List of statements</em><br />
+			end loop;</code></td>
+                    <td><code class="ocode">for (i in <em>Start</em>,<em>End</em>)<br />
+			{<br />
+			&nbsp;&nbsp;&nbsp;&nbsp;<em>List of statements</em><br />
+			} <em>Statement not inside the for loop</em></code><br />
+                        <br />
+                        Note that the expression for the <code class="ocode">for</code> loop is within parentheses,
+                        which is mandatory.
+                    </td>
+                </tr>
+                <tr>
+                    <td>Skip counters in a loop, for example, skipping one number as, 1, 3, 5, and so on</td>
+                    <td><code class="ocode">for i in <em>Start...End</em><br />
+			loop<br />
+			&nbsp;&nbsp;&nbsp;&nbsp;if mod(i,2) = 0 then<br />
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<em>Do something</em><br />
+			&nbsp;&nbsp;&nbsp;&nbsp;end if;<br />
+			end loop;</code></td>
+                    <td><code class="ocode">for i in seq(<em>Start, End, how much to skip</em>)<br />
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<em>Do something</em><br />
+			}</code></td>
+                </tr>
+                <tr>
+                    <td>Count backwards in a loop, for example, 3, 2, 1, and so on</td>
+                    <td><code class="ocode">for i in reverse <em>Start...End</em><br />
+			loop<br />
+			&nbsp;&nbsp;&nbsp;&nbsp;<em>List of statements</em><br />
+			end loop;</code></td>
+                    <td><code class="ocode">for (i in seq(<em>Start</em>, <em>End</em>, -1))<br />
+			{<br />
+			&nbsp;&nbsp;&nbsp;&nbsp;<em>List of statements</em><br />
+			}</code><br />
+                        &nbsp;</td>
+                </tr>
+                <tr>
+                    <td><code class="ocode">WHILE</code> loop</td>
+                    <td><code class="ocode">while (<em>condition</em>) loop<br />
+			&nbsp;&nbsp;&nbsp;&nbsp;<em>List of statements;</em><br />
+			end loop;</code><br />
+                        &nbsp;</td>
+                    <td><code class="ocode">while (<em>condition</em>)<br />
+			{<br />
+			&nbsp;&nbsp;&nbsp;&nbsp;<em>List of statements</em><br />
+			}<br />
+			<em>Statement not inside the while loop</em></code><br />
+                        <br />
+                        Note that the condition must be within parentheses.
+                    </td>
+                </tr>
+                <tr>
+                    <td>Break away from a loop</td>
+                    <td><code class="ocode">EXIT WHEN (<em>Some condition</em>);</code><br />
+                        <br />
+                        or<br />
+                        <br />
+                        <code class="ocode">IF (<em>Some condition</em>) THEN EXIT;</code>
+                    </td>
+                    <td>Inside a loop:<br />
+                        <br />
+                        <code class="ocode">if (<em>Some condition</em>) {<br />
+			&nbsp;&nbsp;&nbsp;&nbsp;break<br />
+			}</code><br />
+                        <br />
+                        Note the curly braces.
+                    </td>
+                </tr>
+                <tr>
+                    <td><code class="ocode">case</code> statement</td>
+                    <td><code class="ocode">case<br />
+			&nbsp;&nbsp;&nbsp;&nbsp;when <em>Some condition</em> then<br />
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<em>List of statements;</em><br />
+			&nbsp;&nbsp;&nbsp;&nbsp;when <em>Some other condition</em> then<br />
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<em>List of statements;</em><br />
+			end case;</code></td>
+                    <td>Use the <code class="ocode">switch()</code> function.</td>
+                </tr>
+                <tr>
+                    <td>Continue in a loop</td>
+                    <td><code class="ocode">CONTINUE</code></td>
+                    <td><code class="ocode">next</code></td>
+                </tr>
+                <tr>
+                    <td>Repeat a loop</td>
+                    <td>No direct equivalent. Can be simulated using the <code
+                            class="ocode">WHILE(TRUE) LOOP ... END LOOP;</code> construct.</td>
+                    <td>The following repeats the loop until an explicit break comes:<br />
+                        <br />
+                        <code class="ocode">repeat {<br />
+			&nbsp;&nbsp;&nbsp;&nbsp;<em>Statements</em><br />
+			&nbsp;&nbsp;&nbsp;&nbsp;if (<em>condition</em>) {<br />
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break<br />
+			&nbsp;&nbsp;&nbsp;&nbsp;}<br />
+			}</code>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Procedures and functions</td>
+                    <td><code class="ocode">function <em>FunctionName </em>(<br />
+			&nbsp;&nbsp;&nbsp;&nbsp;<em>Parameter1Name</em> in <em>DataType</em>,<br />
+			&nbsp;&nbsp;&nbsp;&nbsp;<em>Parameter2Name</em> in <em>DataType</em>,<br />
+			&nbsp;&nbsp;&nbsp;&nbsp;...<br />
+			)<br />
+			return <em>ReturnDatatype</em><br />
+			is<br />
+			&nbsp;&nbsp;&nbsp;&nbsp;<em>localVariable1 datatype</em>;<br />
+			&nbsp;&nbsp;&nbsp;&nbsp;<em>localVariable2 datatype</em>; begin<br />
+			&nbsp;&nbsp;&nbsp;&nbsp;<em>... function code ...</em><br />
+			&nbsp;&nbsp;&nbsp;&nbsp;return <em>ReturnVariable</em>;<br />
+			end;</code><br />
+                        <br />
+                        A procedure definition in PL/SQL has this general syntax:<br />
+                        <br />
+                        <code class="ocode">procedure <em>ProcedureName</em>(<br />
+			&nbsp;&nbsp;&nbsp;&nbsp;<em>Parameter1Name </em>in <em>DataType</em>,<br />
+			&nbsp;&nbsp;&nbsp;&nbsp;<em>Parameter2Name </em>in <em>DataType</em>,<br />
+			&nbsp;&nbsp;&nbsp;&nbsp;...<br />
+			)<br />
+			is<br />
+			&nbsp;&nbsp;&nbsp;&nbsp;<em>localVariable1 datatype</em>;<br />
+			&nbsp;&nbsp;&nbsp;&nbsp;<em>localVariable2 datatype</em>;<br />
+			begin<br />
+			&nbsp;&nbsp;&nbsp;&nbsp;<em>... procedure code ...</em><br />
+			end;</code>
+                    </td>
+                    <td>A function definition in R follows this simple syntax:<br />
+                        <br />
+                        <code class="ocode"><em>FunctionName</em> &lt;- <em>function</em> (<em>Parameter1Name</em>, <em>Parameter2Name</em>, ...)<br />
+			{<br />
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<em>... function code ...</em><br />
+			&nbsp;&nbsp;&nbsp;&nbsp;return <em>SomeValue</em><br />
+			}</code><br />
+                        <br />
+                        Unlike in PL/SQL, there is no difference between procedures and functions. Both types are called
+                        functions. A function may or may not return anything. If it does return something, you do not
+                        specify what data type it returns at the time of definition.<br />
+                        <br />
+                        Function definitions start with the function name assignment operator followed by the keyword
+                        <code class="ocode">function</code> compared to <code class="ocode">function</code> or <code
+                            class="ocode">procedure</code> in PL/SQL.<br />
+                        <br />
+                        Like PL/SQL, the parameters shown above are optional; not all functions need parameters. The
+                        parameters do not have data types listed at definition. Therefore, you can pass any type of data
+                        at runtime.<br />
+                        <br />
+                        Unlike PL/SQL, if you don&#39;t have any parameters, you still need to have the parentheses, for
+                        example, <code class="ocode">myFunc &lt;- function () {</code><br />
+                        <br />
+                        Unlike PL/SQL, there is no <code class="ocode">begin ... end</code> block to designate the code
+                        for a function. The curly braces determine the code of the function.<br />
+                        <br />
+                        Like PL/SQL, the <code class="ocode">return </code>statement is the last statement of the
+                        function code to be executed.<br />
+                        <br />
+                        Unlike PL/SQL, even if there is no <code class="ocode">return</code> statement, the function
+                        returns the last assigned value of a variable.
+                    </td>
+                </tr>
+                <tr>
+                    <td>Parameter default value</td>
+                    <td><code class="ocode"><em>ParameterName DataType</em> := <em> DefaultValue</em></code></td>
+                    <td><code class="ocode"><em>ParameterName</em> = <em> DefaultValue</em></code><br />
+                        <br />
+                        Unlike PL/SQL, default values of parameters can be variables, for example:<br />
+                        <br />
+                        <code class="ocode">defIntRate = 5<br />
+			calcInt &lt;- function (pPrincipal, pIntRate = defIntRate) {</code>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Positional parameter specification in functions and procedures</td>
+                    <td>If a PL/SQL procedure named <code class="ocode">F1</code> has two parameters, <code
+                            class="ocode">P1 </code>and <code class="ocode">P2</code> (in that order), you have to pass
+                        the parameter values at runtime in the same order, as shown below, where <code
+                            class="ocode">Val1</code> and <code class="ocode">Val2 </code>are values for parameters
+                        <code class="ocode">P1</code> and <code class="ocode">P2</code>, respectively:<br />
+                        <br />
+                        However, you can also use positional parameters by specifying the parameter names and their
+                        values in any other order by using the <code class="ocode">=&gt;</code> operator, as shown
+                        below:<br />
+                        <br />
+                        <code class="ocode">F1 (P2 =&gt; Val2, P1 =&gt; Val1);</code>
+                    </td>
+                    <td>You can do the same thing in R, as follows:<br />
+                        <br />
+                        <code class="ocode">f1 (p2 = val2, p1 = val1)</code>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Explicitly set input values of parameters to null at design time so that in the code you can
+                        check if the parameter value was passed or not.</td>
+                    <td><code class="ocode">pIntRate number := null,</code></td>
+                    <td><code class="ocode">pIntRate = NULL</code><br />
+                        <br />
+                        Note that &quot;NULL&quot; is uppercase.
+                    </td>
+                </tr>
+                <tr>
+                    <td>Return values for a function</td>
+                    <td><code class="ocode">return <em>SomeValue</em>;</code></td>
+                    <td><code class="ocode">return (<em>SomeValue</em>)</code><br />
+                        <br />
+                        The big difference is that you do not need to specify whether the function has to return
+                        something, and if it does, you do not need to specify the data type of the return value at
+                        design time.<br />
+                        <br />
+                        Also, the return value has to be within parentheses.
+                    </td>
+                </tr>
+                <tr>
+                    <td>Global variables</td>
+                    <td>The variables defined outside functions will be different from variables defined with the same
+                        name inside functions.</td>
+                    <td>Same behavior. However, two important caveats are particularly important for PL/SQL developers
+                        to remember:<br />
+                        <br />
+                        1. Because there is no such thing as declaration of variables, variables come into existence
+                        when they are first referenced. If they are referenced inside a function first, they are local;
+                        otherwise, they are global. If you must be 100 percent clear about the scope, simply first
+                        assign a value such as &quot;None&quot; to the variable wherever you want the scope to be.<br />
+                        <br />
+                        2. If a variable is not referenced at all in a function, but a variable of the same name exists
+                        in the program outside the function, the variable is valid inside the function as well.
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>Quiz</h3>
+        <a name="Quiz"></a>
+
+        <p>Let&#39;s test your understanding with these simple questions.</p>
+
+        <h3>Questions</h3>
+
+        <p>1. Consider the following code:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+#q1.txt
+f1 &lt;- function (inVal)
+{
+  v1 &lt;- inVal * 2
+  cat (&quot;Inside f1, v1=&quot;, v1, &quot;\n&quot;)
+}
+f2 &lt;- function (inVal)
+{
+  v1 &lt;- inVal * 2
+  cat (&quot;Inside f2, v1=&quot;, v1, &quot;\n&quot;)
+}
+f3 &lt;- function (inVal)
+{
+  v1 &lt;- inVal * 2
+  cat (&quot;Inside f3, v1=&quot;, v1, &quot;\n&quot;)
+}
+
+f3(f2(f1(2)))
+</code></pre>
+        </div>
+
+        <p>Here is the output:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+&gt; <strong>source (&quot;q1.txt&quot;)</strong>
+Inside f1, v1= 4
+Inside f2, v1=
+Inside f3, v1=
+</code></pre>
+        </div>
+
+        <p>Why don&#39;t we see the values of v1 in the other functions?</p>
+
+        <p>2. Consider the following function:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+# q2.txt
+
+f1 &lt;- function (inVal)
+{
+   v1 &lt;- inVal * 2
+}
+</code></pre>
+        </div>
+
+        <p>Note that there is no <code class="ocode">return</code> statement. So this code doesn&#39;t return anything.
+            However, we still call it and assign the return value to another variable <code class="ocode">v2</code>:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+&gt; <strong>v2 &lt;- f1(2)</strong>
+&gt; <strong>v2</strong>
+[1] 4
+</code></pre>
+        </div>
+
+        <p>How come the function returned 4?</p>
+
+        <p>3. You are starting an R session from scratch. You gave the following command:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+# q3.txt
+if (x&lt;y) {
+  print(&#39;yes&#39;)
+}
+</code></pre>
+        </div>
+
+        <p>And the output was this:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+Error: object &#39;x&#39; not found
+</code></pre>
+        </div>
+
+        <p>Why was the error produced? Isn&#39;t it true that R defines variables when they are referenced?</p>
+
+        <p>4. What will be result of the following code?</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+# q4.txt
+v1 &lt;- 10
+f1 &lt;- function (inVal)
+{
+   v1 &lt;- 4
+   2 * v1 * f2(inVal)
+}
+f2 &lt;- function (inVal)
+{
+   inVal * v1
+}
+f1(2)
+</code></pre>
+        </div>
+
+        <p>5. What will be the output of the following?</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+&gt; <strong>v1 &lt;- 2</strong>
+&gt; <strong>v2 &lt;- switch(v1,100,200,300,400)</strong>
+&gt; <strong>v2</strong>
+</code></pre>
+        </div>
+
+        <p>6. Along the same lines, here is modified code where you ask the user to input the value of <code
+                class="ocode">v1</code> instead of hardcoding it.</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+# q6.txt
+
+&gt; <strong>v1 &lt;- readline(&quot;Enter a number&gt; &quot;)</strong>
+Enter a number&gt; <strong>2</strong>
+&gt; <strong>v2 &lt;- switch(v1,100,200,300,400)</strong>
+</code></pre>
+        </div>
+
+        <p>But it failed with the following message:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+Error: duplicate &#39;switch&#39; defaults: &#39;100&#39; and &#39;200&#39;</code></pre>
+        </div>
+
+        <p>What happened? The only change you made was to accept the value; and now it&#39;s producing an error.</p>
+
+        <p>7. You are writing a statement to check the number input by the user is less than 100. Here is the code you
+            wrote:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+# q7.txt
+
+&gt; <strong>v1 &lt;- as.integer(readline(&quot;Enter a number&gt; &quot;))</strong>
+Enter a number&gt; <strong>5</strong>
+&gt; <strong>v2 &lt;- switch((v1&lt;100), &quot;Yes, less than 100&quot;, &quot;No, greater than 100&quot;)</strong>
+&gt; <strong>v2</strong>
+[1] &quot;Yes, less than 100&quot;
+</code></pre>
+        </div>
+
+        <p>It worked correctly. It reported that the number entered by the user (5) is less than 100. So, you
+            re-executed the statement with a different input:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+&gt; <strong>v1 &lt;- as.integer(readline(&quot;Enter a number&gt; &quot;))</strong>
+Enter a number&gt; 200
+&gt; <strong>v2 &lt;- switch((v1&lt;100), &quot;Yes, less than 100&quot;, &quot;No, greater than 100&quot;)</strong>
+&gt; <strong>v2</strong>
+NULL
+</code></pre>
+        </div>
+
+        <p>Note the output. It&#39;s <code class="ocode">NULL</code>, not the desired output. Why?</p>
+
+        <p>8. What is the difference between <code class="ocode">break</code> and <code class="ocode">next</code>
+            statements?</p>
+
+        <p>9. You have all the R commands in a file called, say, <code class="ocode">myscript.R</code>. How can you call
+            the script and not have to enter the commands one by one?</p>
+
+        <p>10. I am trying to write a simple function that merely prints the word &quot;Hello.&quot; So the function
+            doesn&#39;t accept any parameters. Here is how I started typing, but I got an error:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+&gt; <strong>printHello &lt;- function</strong>
++ {
+Error: unexpected &#39;{&#39; in:
+&quot;printHello &lt;- function
+{&quot;
+</code></pre>
+        </div>
+
+        <p>Why did I get the error? I don&#39;t have any parameter; so I can&#39;t pass it anyway.</p>
+
+        <h3>Answers</h3>
+
+        <p>1. Note the function definition. There are no <code class="ocode">return</code> statements inside the
+            function. So the <code class="ocode">v1</code> value was not populated. The correct syntax would have been
+            this:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+#q1a.txt
+f1 &lt;- function (inVal)
+{
+v1 &lt;- inVal * 2
+cat (&quot;Inside f1, v1=&quot;, v1, &quot;\n&quot;)
+return (v1)
+}
+f2 &lt;- function (inVal)
+{
+v1 &lt;- inVal * 2
+cat (&quot;Inside f2, v1=&quot;, v1, &quot;\n&quot;)
+return (v1)
+}
+f3 &lt;- function (inVal)
+{
+v1 &lt;- inVal * 2
+cat (&quot;Inside f3, v1=&quot;, v1, &quot;\n&quot;)
+return (v1)
+}
+
+f3(f2(f1(2)))
+</code></pre>
+        </div>
+
+        <p>Here is output now:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+&gt; <strong>source(&quot;q1a.txt&quot;)</strong>
+Inside f1, v1= 4
+Inside f2, v1= 8
+Inside f3, v1= 16
+</code></pre>
+        </div>
+
+        <p>2. Even though the function might not have an explicit <code class="ocode">return</code> statement, the last
+            assigned value is returned implicitly. Because <code class="ocode">v1</code> was assigned last, it was
+            returned.</p>
+
+        <p>3. No; R creates variables when they are assigned, not when they are referenced. In this code, you simply
+            referenced <code class="ocode">x</code> and <code class="ocode">y</code> without assigning any value to
+            them. So they were not created. The following would have been valid code in which the values of <code
+                class="ocode">x</code> and <code class="ocode">y</code> were assigned.</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+# q3a.txt
+x &lt;- 1
+y &lt;- 2
+if (x&lt;y) {
+  print(&#39;yes&#39;)
+}
+</code></pre>
+        </div>
+
+        <p>4. It will be 160. Here is why. Inside the <code class="ocode">f1</code> code, you see a reference to <code
+                class="ocode">f2</code>; so R will go on to evaluate <code class="ocode">f2(2)</code>. Inside the <code
+                class="ocode">f2</code> code, there is a reference to variable <code class="ocode">v1</code>. But there
+            is no variable <code class="ocode">v1</code> defined inside <code class="ocode">f2</code>. So R will look up
+            the variable <code class="ocode">v1</code> defined at the beginning of the code (that is, 10). So <code
+                class="ocode">f2(2)</code> will return 2 * 10 (that is, 20). Then control will pass to function <code
+                class="ocode">f1</code>. However, there is a variable named <code class="ocode">v1</code> inside it. So,
+            that value (that is, 4) will be used. <code class="ocode">f1(2)</code> will evaluate to 2 * 4 * <code
+                class="ocode">f2(2)</code>. Because <code class="ocode">f2(2)</code> returned 20, this expression will
+            be 2 * 4 * 20 = 160.</p>
+
+        <p>5. It will be 200. When you pass an integer as the first argument to <code class="ocode">switch</code>, it
+            uses that to decide which position it will look up to get the value. In this case, you have passed 2; hence,
+            it will look up to the second position, which has the value 200. Hence, the <code
+                class="ocode">switch</code> function will return 200.</p>
+
+        <p>6. The function <code class="ocode">readline()</code> returns a value of character data type. So <code
+                class="ocode">v1</code> is a character. The <code class="ocode">switch()</code> function behaves
+            differently when the first argument is a character instead of a number. So, the syntax for the rest of the
+            arguments in the <code class="ocode">switch</code> was wrong. The correct code is this:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+# q6a.txt
+
+&gt; <strong>v1 &lt;- as.integer(readline(&quot;Enter a number&gt; &quot;))</strong>
+Enter a number&gt; 2
+&gt; <strong>v2 &lt;- switch(v1,100,200,300,400)</strong>
+&gt; <strong>v2</strong>
+[1] 200
+</code></pre>
+        </div>
+
+        <p>7. The <code class="ocode">switch</code> function works on integers only, not on logical values. In the first
+            case (5&lt;100), the expression is TRUE, which becomes 1. Therefore, <code class="ocode">switch()</code>
+            picks up the first value on the list: &quot;Yes, less than 100&quot;. However, in the second case, it was
+            FALSE, which equates to 0, and there was nothing for the 0-th option. It&#39;s not possible.</p>
+
+        <p>So, how would you write that code to test if the input number is less than or greater than 100? One option is
+            to use <code class="ocode">if ... else ,,,</code> construct. But if you want to use <code
+                class="ocode">switch()</code>, you should use this:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+# q7a.txt
+
+v2 &lt;- switch((v1&lt;100)+1, &quot;No, greater than 100&quot;, &quot;Yes, less than 100&quot;)
+</code></pre>
+        </div>
+
+        <p>Now the code will yield right results.</p>
+
+        <p>8. The <code class="ocode">break</code> statement stops the loop and exits the loop completely. The code
+            after the loop is executed. The <code class="ocode">next</code> statement simply jumps control to the end of
+            the loop; so control goes back to the beginning of the loop again.</p>
+
+        <p>9. There are two options:</p>
+
+        <ul>
+            <li>Use Rscript. From the command line call this:<br />
+                &nbsp;
+                <div class="ocode">
+                    <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                        <div><a href="#copy">Copy</a></div>
+                    </div>
+
+                    <pre>
+<code>
+C:\&gt; <strong>rscript myscript.r</strong>
+</code></pre>
+                </div>
+            </li>
+            <li>From the R command-line interpreter, call the script using this:<br />
+                &nbsp;
+                <div class="ocode">
+                    <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                        <div><a href="#copy">Copy</a></div>
+                    </div>
+
+                    <pre>
+<code>
+&gt; <strong>source(&quot;myscript.r&quot;)</strong>
+</code></pre>
+                </div>
+            </li>
+        </ul>
+
+        <p>In both options, we assume that the script file is in that directory.</p>
+
+        <p>10. Even if you don&#39;t need parameters (or arguments) to R functions, you still need to use parentheses:
+        </p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+printHello &lt;- function()
+</code></pre>
+        </div>
+
+        <h3>About the Authors</h3>
+
+        <p><strong>Arup Nanda</strong> <a href="mailto:arup@proligence.com">arup@proligence.com</a> has been an Oracle
+            DBA since 1993, handling all aspects of database administration, from performance tuning to security and
+            disaster recovery. He was <em>Oracle Magazine&#39;s</em> DBA of the Year in 2003 and received an Oracle
+            Excellence Award for Technologist of the Year in 2012. Arup Nanda has been an Oracle DBA since 1993,
+            handling all aspects of database administration, from performance tuning to security and disaster recovery.
+            He was <em>Oracle Magazine&#39;s</em> DBA of the Year in 2003 and received an Oracle Excellence Award for
+            Technologist of the Year in 2012.</p>
+    </div>
+</section>
+<!-- / _Raw-HTML -->
+<!-- _Raw-Text -->

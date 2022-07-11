@@ -1,0 +1,766 @@
+<!-- U03v5 -->
+<!-- _Raw-Text -->
+<section class="cc01 cc01v0 cpad crule">
+    <div class="cc01w1 cwidth">
+        <p>The dominant cloud topic in 2017 was serverless architectures. At the Devoxx conference in Belgium, one of
+            the most prestigious developer conferences in Europe, you could attend at least seven different
+            presentations about "serverless."</p>
+
+        <p>This article introduces the Fn Project as a major new step in the serverless landscape. It’s different from
+            most other solutions: Fn is a cloud-agnostic, polyglot, open source framework for serverless computing with
+            Docker as the only dependency. It is also brand new; Fn was open sourced at the Java One 2017 conference.
+        </p>
+
+        <p>This article has several objectives. First, to lay the foundation and give you, as a developer, a quick
+            introduction into the serverless world by demonstrating its unique advantages and by clarifying some
+            not-so-well-defined terms. Second, and most importantly, to show how to quickly get started coding with the
+            new Fn Project. For hands-on development we cover Go and Java, monitoring, testing, local development, JSON
+            parameter marshalling, using Docker hub and running Fn in the cloud. Finally, the article provides an
+            overview of recent announcements and what to expect next. Fn is just the beginning of a journey into the
+            serverless world.</p>
+
+        <h3>Introduction</h3>
+
+        <p>Serverless is obviously not a very good name. Let’s face it: the IT industry is pretty bad at proper naming
+            and delivering exact definitions of new concepts. Cloud computing doesn’t happen in the sky. Data lakes
+            aren’t wet. Serverless indeed involves real servers. So let’s better define “serverless” and some related
+            concepts before we start coding.</p>
+
+        <h3>Function as a Service (FaaS)</h3>
+
+        <p>Function as a Service (FaaS) as a cloud service started in 2014 with AWS Lambda. The idea of FaaS is simple:
+            you run your source code, but don’t need to care about the underlying language runtime, container, virtual
+            machine, or server. In the easiest scenario, you just copy your source code, paste into a web frame of the
+            FaaS cloud service, and run it.</p>
+
+        <p>Technically, cloud-based FaaS solutions are implemented on top of containers (similar to, but not necessarily
+            built with, Docker). However, this container is usually not exposed to the end user. The function is run
+            only when it’s triggered by an event; this is why it is also called ephemeral compute. With FaaS, there is
+            no server constantly running for a user. There is also no runtime permanently listening on an IP address and
+            open port.</p>
+
+        <p>Events that can trigger a function depend on the cloud provider. Common examples of event sources are: a file
+            upload, a REST request or a message consumed from a messaging system.</p>
+
+        <p>What makes FaaS interesting on public clouds is that you pay only for the invocation of the function. Also,
+            the scaling is automated—i.e., there is no configuration for the number of function instances required.</p>
+
+        <p>This "never pay for idle" concept is compelling. Several use cases report cost savings of one or two orders
+            of magnitude when replacing a traditional, server-based application [1,2].</p>
+
+        <p>Let’s be fair and also have a look at the drawbacks. The main concern with today’s FaaS implementations is
+            vendor lock-in:</p>
+
+        <ul class="obullets">
+            <li>The function itself is triggered by a typed, cloud-provider-specific event.</li>
+            <li>The wiring between various event sources and functions often creates a hard coupling between your
+                function and the services of a specific public cloud provider.</li>
+        </ul>
+
+        <p>The concept of FaaS is still evolving, and there is a discussion amongst architects whether functions
+            shouldn’t better be treated as containers [3]. Currently, none of the bigger public cloud providers expose
+            the underlying container of a function.</p>
+
+        <h3>Microservices vs FaaS</h3>
+
+        <p>A microservices architecture tries to implement an application as a set of independent services. Each service
+            runs in its own process and owns its data; the services communicate with a light-weight protocol [4]. When
+            FaaS and microservices were both new, there was discussion about whether FaaS is just an implementation of
+            microservices.</p>
+
+        <p>In short: FaaS fulfils the definition of microservices. However, since a FaaS implements only a single
+            function, several functions must be composed into a meaningful microservice. But how?</p>
+
+        <h3>Serverless Cloud Architectures</h3>
+
+        <p>Now that we have explained FaaS, let’s have a look at the difference between "serverless" and FaaS.</p>
+
+        <p>Serverless is an architectural trend that tries to "reduce all notion of infrastructure" [5]. So FaaS is
+            serverless. A serverless cloud service is a PaaS service with real pay per use and automated scalability.
+        </p>
+
+        <p>For an example of a serverless cloud service let’s picture a messaging service. If you pay only for the
+            number of messages that you produce and consume, and if the service scales automatically, it’s fair to call
+            it serverless.</p>
+
+        <p>If servers are visible, with message brokers deployed to them, and you pay per hour provisioned if you
+            produce or consume messages or not, then it is not serverless.</p>
+
+        <h3>FaaS (Frameworks)</h3>
+
+        <p>Currently, more than a dozen FaaS frameworks or platforms are available. (For an overview of the projects see
+            [6].) These projects can be classified into three different categories, based on their objective and reach
+            (where each category typically includes the characteristics of the previous one) [7]:</p>
+
+        <p>1.Complexity: Reduce the complexity of a particular vendor’s cloud-based FaaS implementation—e.g., the
+            configuration of the API gateway and access management that is required for a REST- based function. A
+            typical example for this category: AWS Chalice.<br />
+            2. Portability: Provide an abstraction framework for portability and ease of use on top of the FaaS
+            implementation of various public cloud providers. A popular example is the serverless.com framework.<br />
+            3. Standards: Provide a standard-based, serverless platform or framework to abstract running functions from
+            the operation of servers. These frameworks are typically developed without a particular cloud provider in
+            mind. When running such a framework on top of IaaS, servers are abstracted away, automated scaling is
+            possible, but no true per invocation is achieved due to the IaaS pricing model. Examples for this category
+            are Open FaaS, and Fn Project.</p>
+
+        <h3>Fn Project</h3>
+
+        <p>Fn Project is a serverless platform with a number of unique advantages: Fn is container-centric, polyglot,
+            cloud agnostic and has Docker as the only dependency. At the moment, Fn project is a software platform and
+            no FaaS as PaaS is available.</p>
+
+        <p>It’s easiest to understand all these features when seeing Fn in action and running some functions yourself.
+            So let’s get started with the installation first, and then do some coding.</p>
+
+        <h3>Fn Project Installation</h3>
+
+        <p>Fn installs easily on Windows and Unix systems with a one-line command.</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+$ curl -LSs https://raw.githubusercontent.com/fnproject/cli/master/install 
+| sh
+</code></pre>
+        </div>
+
+        <p>On Mac OS it can be installed with brew. For more details regarding the installation details see [8].On Mac
+            OS it can be installed with brew. For more details regarding the installation details see [8].</p>
+
+        <h3>Some Fn Basics with Go</h3>
+
+        <p>To get your head around the Fn features I explained above, let’s start with a simple Go function. We create a
+            new directory. In the new directory, we initialize a local Fn function using the Go language:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+# create oradev and with boilerplate for go
+
+$ fn init --runtime go oradev 
+$ cd oradev</code></pre>
+        </div>
+
+        <p>Then you can immediately run the function with the run command and observe the output of our HelloWorld
+            application. It will look as follows:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+$ fn run
+
+Building image oradev:0.0.1 ..
+{"message":"Hello World"}</code></pre>
+        </div>
+
+        <p>To see why this was possible, have a look at the generated files. There is a func.yaml configuration file
+            generated that specifies a version number and the Go runtime. Also, a default go routine (func.go) is
+            generated for you with a test data file test.json. <code>$ tree</code></p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+.
+├── func.go
+├── func.yaml
+└── test.json
+</code></pre>
+        </div>
+
+        <p>If you carefully check the output above when running the function, you’ll spot that a Docker image
+            oradev:0.0.1 was built.</p>
+
+        <p>The <code>fn run</code> command invokes the function directly. To create an endpoint for the function, we
+            first need to start the Fn server in another terminal.</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+$ fn start</code></pre>
+        </div>
+
+        <p>Once the server is running, you can deploy the function with the following command:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+$ fn deploy --app mygo –-local
+
+Deploying oradev to app: mygo at path: /oradev
+Bumped to version 0.0.2
+Building image oradev:0.0.2 ..
+Updating route /oradev using image oradev:0.0.2...
+</code></pre>
+        </div>
+
+        <p>The function name is taken from the folder name. Alternatively, you can specify it in the func.yaml file.</p>
+
+        <p>While deploying the function, the version of the Docker image is bumped to 0.0.2. Due to the deploy command,
+            a new application is registered. An endpoint for the function is also created. To verify this, run the
+            following two Fn commands that list the applications and the new route:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+# check deployed applications
+$ fn apps list
+mygo
+
+# check existing routes
+$ fn routes list mygo
+
+path	image		endpoint
+/oradev	oradev:0.0.2	localhost:8080/r/mygo/oradev
+</code></pre>
+        </div>
+
+        <p>The function is registered now with Fn server, which acts like a micro API gateway. It accepts calls to the
+            endpoint that we listed above and calls the deployed function. To try this yourself, run the following
+            command:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+$ # invoke function via fn server
+$ fn call mygo /oradev
+
+{"message":"Hello World"}
+</code></pre>
+        </div>
+
+        <p>Alternatively, since Fn servers provide a URL for the function, you can also invoke it with a simple curl
+            command from the UNIX command line:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+$ # invoke function with UNIX curl
+$ curl localhost:8080/r/mygo/oradev
+{"message":"Hello World"}
+</code></pre>
+        </div>
+
+        <p>Yet another alternative is running the Docker image directly. Let’s try and run the generated Docker image
+            with the following command:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+$ # run the docker image
+$ docker run oradev:0.0.2
+{"message":"Hello World"}
+</code></pre>
+        </div>
+
+        <p>All three approaches yield identical results.</p>
+
+        <h3>Container / Function Duality</h3>
+
+        <p>Note that invoking the function via its URL endpoint or running the Docker container returns exactly the same
+            result! However, the Docker image that contains the function was built automatically, without any additional
+            configuration or command necessary. So to speak Fn Project gives you Docker for free.</p>
+
+        <p>Two of the many benefits of using Docker are:</p>
+
+        <ul class="obullets" <li>You can run Docker images in any public cloud</li>
+            <li>The Docker hub can store Docker images, which implies that the Docker hub can store your functions.</li>
+        </ul>
+
+        <p>We will explore both concepts below. With Fn you simply write a function without paying attention to Docker,
+            yet benefit from it by running your function as a container.</p>
+
+        <h3>Fn Monitoring</h3>
+
+        <p>Fn Project also comes with a basic monitoring tool that can be run as a Docker container with the following
+            command:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+$ docker run --rm -it --link fnserver:api -p 4000:4000 -e "FN_API_URL=http://api:8080" fnproject/ui
+
+> FunctionsUI@0.0.21 start /app
+> node server
+
+Using API url: api:8080
+Server running on port 4000
+</code></pre>
+        </div>
+
+        <p>To access the console, open a browser and connect to port 4000. Run the Go function a couple of times more to
+            see a change in the graphs of the monitoring console [9].</p>
+
+        <p align="center"><img alt="Graph changes as viewed in monitoring console"
+                src="https://www.oracle.com/a/tech/img/serverless-fn-project-figure1.jpg" style="width: 720px;" /></p>
+        <p align="center" class="xsml">Graph changes as viewed in monitoring console</p>
+
+        <h3>Prometheus Monitoring</h3>
+
+        <p>For a more sophisticated monitoring solution, Cloud Native Computing Foundation (CNCF) Prometheus with CNCF
+            Grafana is a good option. Fn exports metrics that allow monitoring with Prometheus without any additional
+            configuration.</p>
+
+        <p>Even without installing Prometheus, you can have a look at the metrics that are exported for Prometheus with
+            the /metrics URL:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+$ curl localhost:8080/metrics | head
+
+# HELP fn_api_completed Completed requests by path
+# TYPE fn_api_completed counter
+fn_api_completed{app="mygo",path="/oradev"} 11
+# HELP fn_api_queued Queued requests by path
+# TYPE fn_api_queued gauge
+fn_api_queued{app="mygo",path="/oradev"} 0
+# HELP fn_api_running Running requests by path
+# TYPE fn_api_running gauge
+fn_api_running{app="mygo",path="/oradev"} 0
+# HELP fn_docker_stats_cpu_kernel docker_stats metric cpu_kernel
+...
+</code></pre>
+        </div>
+
+        <p>Further details regarding Prometheus and Fn are described in [10].</p>
+
+        <h3>Java HelloWorld Example</h3>
+
+        <p>You could create a Java HelloWorld example the same way as we did the Go example just by replacing the
+            runtime switch with Java:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+$ cd ~ && mkdir javatest && cd javatest
+$ fn init --runtime java
+Runtime: java
+Function boilerplate generated.
+func.yaml created.
+</code></pre>
+        </div>
+
+        <p>Java 9 is the default Java version. Note that for a Java project a Maven pom.xml file and a unit test
+            HelloFunctionTest.java are also generated.</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+$ tree 
+
+.
+├── func.yaml
+├── pom.xml
+└── src
+    ├── main
+    │   └── java
+    │       └── com
+    │           └── example
+    │               └── fn
+    │                   └── HelloFunction.java
+    └── test
+        └── java
+            └── com
+                └── example
+                    └── fn
+                        └── HelloFunctionTest.java
+</code></pre>
+        </div>
+
+        <h3>Java JSON Parameter Marshalling and Function Logic</h3>
+
+        <p>To show some more advanced features of Fn we skip the Java HelloWorld example and look at a mock example for
+            a recommendation engine instead. You can clone it from github with the following command:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+$ git clone https://github.com/fmunz/fn-recommend.git
+$ cd fn-recommend
+</code></pre>
+        </div>
+
+        <p>Have a look at the API of the function that simulates the recommendation logic. It uses a POJO as an input
+            parameter that defines the traveller’s age, destination, and the month of travel:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+# check the API of the handler function
+$ grep handle src/main/java/com/munzandmore/fn/RecommendFunction.java 
+
+    public String handleRequest(Traveller t) {
+
+# examine the Traveller POJO
+$ cat src/main/java/com/munzandmore/fn/Traveller.java 
+
+package com.munzandmore.fn;
+public class Traveller {
+    public Integer age ;
+    public String  destination ;
+    public String  month;
+}
+</code></pre>
+        </div>
+
+        <p>This time we also want to push it automatically to Docker hub (unlike with the previous Go example, which we
+            kept local). Therefore, we set the environment variable <code>FN_REGISTRY</code> to the
+            <code>DOCKER_ID</code> and we also log into Docker hub. In the example below, replace <code>DOCKER_ID</code>
+            with your own Docker login.</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+# set environment for Docker hub
+$ export FN_REGISTRY=YOUR_DOCKER_ID
+$ docker login
+Login with your Docker ID to push and pull images from Docker Hub. If you don't have a Docker ID, head over to https://hub.docker.com to create one.
+Username: DOCKER_ID
+Password: 
+Login Succeeded
+</code></pre>
+        </div>
+
+        <p>Then deploy the function. We use the function for an Adventure Travel application, hence the name:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+$ fn deploy --app advtravel 
+Deploying fn-recommend to app: advtravel at path: /fn-recommend
+Bumped to version 0.0.2
+Building image DOCKER_ID/fn-recommend:0.0.2 
+Pushing DOCKER_ID/fn-recommend:0.0.2 to docker registry...The push refers to repository [docker.io/DOCKER_ID/fn-recommend]
+7e2c18073a13: Layer already exists 
+...
+0.0.2: digest: sha256:549e492a08d924dcfeef5f0354dc7d2df57cba820bcfa7ec550a1779a173983c size: 1997
+Updating route /fn-recommend using image DOCKER_ID/fn-recommend:0.0.2...umped to version 0.0.2
+</code></pre>
+        </div>
+
+        <p>From the output above you can tell that a Docker image is created and pushed to the Docker hub under
+            <code>DOCKER_ID/fn-recommend:0.0.2.</code></p>
+
+        <p>Again, you can check for the new application and the new route created within Fn server:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+$ fn apps list 
+advtravel
+mygo
+
+
+$ fn routes list advtravel
+path		image			endpoint
+/fn-recommend	DOCKER_ID/fn-recommend:0.0.2  localhost:8080/r/advtravel/fn-recommend
+
+</code></pre>
+        </div>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+You can run the function with a POST request with the curl command by providing the necessary JSON data structure for the request. As default, Fn uses the Jackson Java framework to automatically marshall the JSON input parameter to the correct Java type, but you can also use any marshalling framework for JSON or other formats like XML, etc.
+
+$ cat testdata/muc.json
+{
+    "age": 41,
+    "destination": "Munich",
+    "month": "Oct"
+}
+# get a recommendation for Munich in October
+$ curl -X POST --data @testdata/syd.json localhost:8080/r/advtravel/fn-recommend 
+
+Visit the Octoberfest!
+# there is more test data under testdata/Casablanca.json   
+# see what is recommended for that city!
+</code></pre>
+        </div>
+
+        <p>For evaluating different input parameters, a graphical tool such as Postman is more convenient. Check what
+            the Fn-based mock recommends for a trip to Sydney:</p>
+
+        <p align="center"><img alt="Figure 2. Example of Fn-based mock"
+                src="https://www.oracle.com/a/tech/img/serverless-fn-project-figure2.jpg" style="width: 720px;" /></p>
+
+        <p>The output should look as follows:</p>
+
+        <p align="center"><img alt="Figure 3. Example of Fn-based mock output"
+                src="https://www.oracle.com/a/tech/img/serverless-fn-project-figure3.jpg" style="width: 720px;" /></p>
+
+        <h3>Fn in Public Clouds (IaaS)</h3>
+
+        <p>A common question is how to use Fn Project, a cloud-agnostic framework, in public clouds. Similar to the
+            local installation that we used in the examples above, it can be installed on any public cloud IaaS. For
+            most IaaS clouds it is enough to pass the installation command directly to the creation of a compute
+            instance as so-called "user data" (commands that are acted upon when the instance is provisioned). Also,
+            when running Fn in a public cloud, don’t forget to enable access rules for Fn Server allowing port 8080,
+            either from your own IP or all public IP addresses.</p>
+
+        <p>Obviously, when running Fn Project on an IaaS you do not get the true pay per invocation benefit as you would
+            with a FaaS implemented by the cloud provider as PaaS. Still, functions are run serverless from a user’s
+            perspective in a standardized, portable, and scalable way.</p>
+
+        <p>Once Fn Server is running on your favourite cloud provider, you could deploy the recommender example from
+            above in two different ways.</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+# example 1 (for demo purpose only, in production use approach below)
+# note: run these commands on the cloud instance
+$ fn apps create advtravel
+$ fn routes create advtravel /fn-recommend DOCKER_ID/fn-recommend:0.0.2
+
+# check for the created route
+$ fn routes list advtravel
+</code></pre>
+        </div>
+
+        <p>Note that with the two commands above you never had to copy over the function or the container image to the
+            cloud instance. When the function is invoked the first time, Fn will pull the Docker container, store it
+            locally, and then run the function.</p>
+
+        <p>Another probably even more useful way to deploy the function is to set the FN_API_URL environment variable
+            locally, point it to the remote cloud instance, and then run the local Fn deploy command against the remote
+            cloud instance.</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+# example 2
+# run these commands on cloud instance
+
+
+$ export FN_API_URL=URLCloudInstance
+$ fn deploy --app advtravel 
+$ fn routes list advtravel
+</code></pre>
+        </div>
+
+        <p>Once the Fn is running in the cloud and your application is deployed you can access the application from a
+            local machine using the command-line or Postman. The invocation is the same as in the local example—just
+            replace localhost with the public IP address of your cloud instance:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+$ curl -X POST --data @testdata/syd.json PUBLIC_IP:8080/r/advtravel/fn-recommend 
+</code></pre>
+        </div>
+
+        <p>A recorded live demo from the Devoxx conference about deploying a Fn-based recommendation engine mock on IaaS
+            can be seen at footnote [11].</p>
+
+        <h3>JAX-RS, Spring Cloud and more</h3>
+
+        <p>Since Fn Project has Docker as the only dependency and for Java projects a Maven pom.xml file is also
+            generated, your function development can be easily extended to use other Java frameworks.</p>
+
+        <p>Work has been done by the Fn team to support JAX-RS with Fn projects [12]. Spring also supports the
+            implementation of business logic as functions using their convention-over-configuration approach with Spring
+            Cloud Functions. Spring Cloud Functions can be used together with Fn [13, 14].</p>
+
+        <h3>Fn LB</h3>
+
+        <p>A separate component, Fn LB deals with load balancing and intelligent traffic routing. If functions are
+            deployed as hot functions, a container is kept alive for 30 seconds (and not restarted for every
+            invocation). Fn LB will then route invocations to these hot functions to ensure optimal performance [15].
+        </p>
+
+        <h3>Fn Flow</h3>
+
+        <p>At the beginning of this article we discussed the difference between microservices and FaaS and explained
+            that a microservice typically contains more than a single method or function. Today, graphical tools or
+            higher-level PaaS are often used to compose FaaS into more meaningful larger services. However, these
+            graphical tools often don’t provide much visibility into the details of the higher-level service. Lessons
+            learned from development with ESB and BPEL show that these details cannot all be displayed at the same time
+            and therefore they are more often than not buried under some property tab of the graphical model. Therefore,
+            showing "flow" in a graphical model is often limited.</p>
+
+        <p>Fn Flow tackles this issue for Fn Project. It follows an interesting, different, code-first approach by using
+            the Java 8 CompletableFutures API with methods such as thenApply() or then thenCompose(), etc. No graphical
+            tool or lengthy YAML file is required; the composition of functions is done with Java 8 constructs only and
+            is therefore easily readable.</p>
+
+        <p>An interesting application of this concept is shown in a demonstration of using SAGAs instead of an ACID
+            transaction for a travel booking application based on microservices [16].</p>
+
+        <p align="center"><img alt="Using SAGAs for a travel booking application based on microservices"
+                src="https://www.oracle.com/a/tech/img/serverless-fn-project-figure4.jpg" style="width: 720px;" /></p>
+        <p align="center" class="xsml">Using SAGAs for a travel booking application based on microservices</p>
+
+        <p>What looks like a regular Java 8 program at first sight, during execution resembles more like what you might
+            know from Apache Spark. The execution happens in parallel, function input parameters are being marshalled
+            and return values are being unmarshalled. Every function is executed in its own container using chaining,
+            error handling and fan in/out.</p>
+
+        <p>Fn Flow can track the call graphs and visualize them (the screenshot below is taken from [17]).</p>
+
+        <p align="center"><img alt="Tracking and visualizing call graphs"
+                src="https://www.oracle.com/a/tech/img/serverless-fn-project-figure5.jpg" style="width: 720px;" /></p>
+        <p align="center" class="xsml">Tracking and visualizing call graphs</p>
+
+        <h3>Fn on Kubernetes</h3>
+
+        <p>At Kubecon in December 2017, support for Fn on Kubernetes was officially announced.</p>
+
+        <p>Fn can now be installed from the command line using Helm, a Kubernetes package manager. Preconfigured
+            packages of Fn resources, including Fn service, Fn UI, Flow service and Flow UI, are provided as a Helm
+            chart. Using this Helm chart, Fn is deployable on any Kubernetes cluster [18]. It also enables the running
+            of Fn on the brand new Oracle managed Kubernetes service, Oracle Container Engine (OCE) or a local
+            installation of minikube on your laptop [19] [20].</p>
+
+        <p>If Fn LB is deployed with Kubernetes, it can be updated if Fn Server Kubernetes pods are added or removed.
+        </p>
+
+        <h3>Summary</h3>
+
+        <p>Fn Project is an interesting new approach to the serverless world. It is cloud agnostic and therefore avoids
+            the cloud vendor lock-in. Further, developers are not bound to certain languages when using Fn. Functions
+            are automatically placed into a Docker image without any additional effort from the developer, so they can
+            be run anywhere by just pointing Fn to the correct image on Docker Hub.</p>
+
+        <p>Fn ties into the world of Cloud Native Computing Foundation projects with support for Kubernetes and
+            Prometheus as a first start and with hopefully more to come. Last but not least, it will be interesting to
+            see if Oracle or any other cloud provider will offer an Fn-based FaaS service as PaaS in the near future
+            with pay per invocation and fully automated scaling [21].</p>
+
+        <h3>References</h3>
+
+        <ul class="obullets">
+            <li><a href="https://www.youtube.com/watch?v=gT9x9LnU_rE" target="_blank">Reference Expedia</a></li>
+            <li><a href="https://goo.gl/uAMGYF" target="_blank">Reference Postlight</a></li>
+            <li><a href="https://medium.com/oracledevs/containers-vs-functions-51c879216b97" target="_blank">Functions
+                    vs Containers</a></li>
+            <li><a href="https://martinfowler.com/articles/microservices.html" target="_blank">Microservices, M.
+                    Fowler</a></li>
+            <li><a href="https://www.youtube.com/watch?v=UNg9lmk60sg" target="_blank">Mark Cavage, Serverless, Java One
+                    Keynote 2017</a></li>
+            <li><a href="https://github.com/faas-lane/FaaS-Lane/tree/master/candidates" target="_blank">Overview FaaS
+                    Frameworks</a></li>
+            <li><a href="http://www.munzandmore.com/2018/cc/serverless-faas-frameworks-and-platform-classification"
+                    target="_blank">Serverless Classification</a></li>
+            <li><a href="https://github.com/fnproject/fn" target="_blank">Fn Project Installation</a></li>
+            <li><a href="https://github.com/fnproject/ui" target="_blank">Fn UI</a></li>
+            <li><a href="https://medium.com/fnproject/announcing-prometheus-metrics-from-fn-2d0f9ddf0f09"
+                    target="_blank">Fn Monitoring with Prometheus</a></li>
+            <li><a href="https://github.com/fnproject/fn-jrestless-example" target="_blank">Fn with JAX-RS </a></li>
+            <li><a href="https://spring.io/blog/2017/07/05/introducing-spring-cloud-function" target="_blank">Spring
+                    Cloud Functions</a></li>
+            <li><a href="https://medium.com/fnproject/announcing-spring-cloud-function-support-for-fn-project-921e54f49d99"
+                    target="_blank">Fn with Spring Cloud Functions</a></li>
+            <li><a href="https://medium.com/fnproject/serverless-sagas-with-fn-flow-d8199b608b12"
+                    target="_blank">Serverless Sagas with Fn Flow </a></li>
+            <li><a href="https://medium.com/fnproject/8-reasons-why-we-built-the-fn-project-bcfe45c5ae63"
+                    target="_blank">8 Reasons why we built Fn Project </a></li>
+            <li><a href="https://medium.com/fnproject/fn-project-helm-chart-for-kubernetes-e97ded6f4f0c"
+                    target="_blank">Fn Project with Helm Chart for Kubernetes </a></li>
+            <li><a href="https://blogs.oracle.com/developers/kubernetes-serverless-and-federation-oracle-at-kubecon-2017"
+                    target="">Fn Project on Kubernetes</a></li>
+            <li><a href="https://blogs.oracle.com/developers/announcing-oracle-container-engine-and-oracle-container-registry-service"
+                    target="">Oracle Container Engine</a></li>
+            <li><a href="http://www.munzandmore.com/2017/cc/devoxx-2017-serverless" target="_blank">Serverless and Fn
+                    Slideset </a></li>
+        </ul>
+
+        <h3>About the Author</h3>
+
+        <p>Dr Frank Munz is an expert in cloud computing, big data, fast data, containers, and Oracle Fusion Middleware.
+            He runs the boutique consulting firm munz & more and works as a software architect, cloud evangelist, and
+            independent Oracle Developer Champion. </p>
+    </div>
+</section>

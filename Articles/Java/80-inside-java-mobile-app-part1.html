@@ -1,0 +1,200 @@
+<!-- _Raw-HTML -->
+<section class="cc01 cc01v0 cpad crule">
+    <div class="cc01w1 cwidth">
+        <p>Those of you who attended the Oracle Technology Network (OTN) Java Hub or demos during a few recent Java
+            conferences (for example, JavaOne, Devoxx, and JFokus) probably know the coffee machine that allows
+            attendees to order a personalized coffee, the Computer Numerical Control (CNC) machine that creates
+            user-designed badges, or any of the other &quot;OTN Experiences.&quot; These OTN Experiences are
+            demonstrations of end-to-end Java projects, spanning from embedded devices, through mobile devices, and onto
+            cloud systems.</p>
+
+        <p>The focus of this article is on building mobile applications that allow attendees to consume the OTN
+            Experiences. <a href="/java/inside-java-mobile-app-part2.html">In a follow-up article, I will talk about how
+                the OTN Experiences are connected to the web and how they are exposed using Oracle Cloud</a>.</p>
+
+        <p>There are a few mobile apps in the Apple App Store and the Google Play Store that provide the OTN
+            Experiences. Recently, the OTN demo app was released to support the OTN Experiences at the JFokus
+            conference. You can find it in the <a class="textLinks"
+                href="https://itunes.apple.com/us/app/otn-codelounge/id1200292536" target="_blank">App Store</a> and in
+            the <a class="textLinks" href="https://play.google.com/store/apps/details?id=com.gluonhq.otnexp"
+                target="_blank">Play Store</a> For this article, we will create a standalone Java client application
+            that works on desktop, mobile, and embedded devices (such as the Raspberry Pi), and that provides the same
+            user interface as the apps you could use at the conferences.</p>
+
+        <p>By using the <a class="textLinks" href="https://gluonhq.com/get-started/ide-plugins/" target="_blank">Gluon
+                Mobile IDE plugin</a>, the Java client application can easily be installed on iOS and Android phones,
+            without changing a single line of code. Gluon Mobile will adapt your code to the requirements of the native
+            operating systems, and it leverages hardware-accelerated graphics using the JavaFX rendering system.</p>
+
+        <h3>Getting the Demo App</h3>
+
+        <p>For this article, we will use dummy back-end implementations, but as mentioned, in the next article we will
+            replace this standalone behavior with the real cloud connection that is used to connect the mobile apps to
+            Oracle Cloud and use the back-end functionality.</p>
+
+        <p>The code for this application is available in the repository at <a class="textLinks"
+                href="https://github.com/gluonhq/otnarticle1.git"
+                target="_blank">https://github.com/gluonhq/otnarticle1.git</a>. Check out that repository using the
+            following command:</p>
+
+        <p>git clone https://github.com/gluonhq/otnarticle1.git</p>
+
+        <p align="center" class="xsml">Then run the code using this command:</p>
+
+        <p>/gradlew runt</p>
+
+        <h3>Gluon Mobile</h3>
+
+        <p>The screens you see in the application are primarily intended to run on mobile devices, so you&#39;ll note
+            that when running them on a desktop, the aspect ratio of the window is a similar shape. This allows
+            developers to develop and test on a desktop system before deploying to a real mobile device for testing.
+            However, as noted, the Gluon Mobile software stack makes it trivial to get the code onto a real mobile
+            device. Using the following command, developers with an Apple computer who have the XCode tools installed
+            can easily run the application on an iPhone or iPad that is connected to their system:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+
+
+  </code></pre>
+
+            <div class="codeSamples"><code>./gradlew launchIosDevice </code></div>
+
+            <p><code>If you don&#39;t have a device connected, but you want to see how the app would look on a mobile device, you can run the following command:</code>
+            </p>
+
+            <div class="codeSamples"><code>./gradlew launchIphoneSimulator </code></div>
+
+            <p><code>Developers who have the Android SDK installed can install the app on their connected Android devices by running this command:</code>
+            </p>
+
+            <div class="codeSamples"><code>./gradlew androidInstall </code></div>
+        </div>
+
+        <p>Running the application on a mobile device is not hard, but it is beyond the scope of this article. If you
+            experience any issues, refer to the <a class="textLinks"
+                href="http://docs.gluonhq.com/mobile/latest/#_getting_started" target="_blank">Gluon Mobile
+                documentation</a>.</p>
+
+        <p>In the remainder of this article, I assume you are using NetBeans, IntelliJ, or Eclipse IDE and, for
+            convenience, you already have the Gluon plugin installed. If you don&#39;t have the Gluon plugin yet, follow
+            these <a class="textLinks" href="http://docs.gluonhq.com/mobile/latest/#_project_setup"
+                target="_blank">instructions</a>.</p>
+
+        <p>I use NetBeans in this article, but the other IDEs follow a similar approach.</p>
+
+        <p>When opening the application in NetBeans, you can see that the application has a Java source section and a
+            resource section. There are a number of iOS and Android sections, but because our application is completely
+            cross-platform, we won&#39;t use them.</p>
+
+        <h3>Edit FXML Views Using Scene Builder</h3>
+
+        <p>The OTN demo application is a Java client application, and it uses JavaFX for rendering its UI. One of the
+            benefits of JavaFX is that the UI can be decoupled from the application&#39;s functionality. A UI can be
+            designed using the FXML markup language. The most popular tool for doing this is Gluon Scene Builder, which
+            can be <a class="textLinks" href="http://www.gluonhq.com/products/scene-builder"
+                target="_blank">downloaded</a>.</p>
+
+        <p>Looking in the <code>resources/com/gluonhq/otndemo/views</code> folder, you will see that there are four FXML
+            files, describing the four views in the application:</p>
+
+        <ul class="bullets">
+            <li>Experiences</li>
+            <li>About</li>
+            <li>Coffee</li>
+            <li>Badge</li>
+        </ul>
+
+        <p>Although not required, in this application, a View corresponds to a view in the mobile application. Each of
+            those FXML files has a corresponding <code>Presenter</code> class that hooks the UI to the code.</p>
+
+        <h3>The Java Code</h3>
+
+        <p>The starting point of the application is the <code>OtnDemo class in com.gluonhq.otndemo</code>. This class
+            extends MobileApplication and, thus, it can leverage some out-of-the-box functionality offered by Gluon
+            Mobile to make the application instantly able to be deployed across iOS and Android devices.</p>
+
+        <p><strong>Note:</strong> See the <a class="textLinks" href="http://docs.gluonhq.com/mobile/javadoc/latest"
+                target="_blank">Javadoc</a> while reading this article.</p>
+
+        <p>The OTN demo application overrides the <code> init() and postInit()</code> methods. In the
+            <code>init()</code> method, the different views are registered. The four views that are defined in the FXML
+            files and are controlled by the respective presenters are added to the list of views. Gluon Mobile manages
+            the transition between the views. Once the views are registered, we can define a Layer to be used by the
+            NavigationDrawer. The items to be shown in the NavigationDrawer are controlled by a flag called
+            <code>AppView.Flag.SHOW_IN_DRAWER</code>. We add the necessary flags to the views while declaring them in
+            the <code>OTNView class</code>.
+        </p>
+
+        <p>The Experiences view is the default view, and it is marked as the default view using the
+            <code>AppView.Flag.HOME_VIEW </code>flag. Therefore, it will be shown when the application starts. The
+            experiences.fxml file does not contain much content. But when the Experiences view is loaded, the
+            <code>ExperiencesPresenter&#39;s initialize</code> method is called. This will create a
+            <code>GridPane</code> that is shown at the center of the Experiences view. The <code>GridPane</code>
+            contains two items, linked to two services that each has its own view: the <code>CoffeeView</code> and the
+            <code>BadgeView</code>. Both the <code>CoffeeView</code> and the <code>BadgeView</code> have an FXML
+            declaration <code>(coffee.fxml and badge.fxml)</code> and a controller class
+            <code>(CoffeePresenter and BadgePresenter)</code>.
+        </p>
+
+        <p>By inspecting the differences between the coffee code and the badge code (both the FXML files and the
+            Presenter class) you can see that there are a number of ways to declare content in a JavaFX application. The
+            FXML file can contain all content, and the <code>Presenter</code> can be empty. The other extreme is no FXML
+            file, with the <code>Presenter</code> taking care of all content. The coffee and badge views both use an
+            FXML file and a <code>Presenter</code> class, but the balance of content in the FXML file versus the
+            <code>Presenter</code> is different.
+        </p>
+
+        <p>The <code>coffee.fxml </code>file contains most of the view for the coffee service. Note that it contains a
+            custom control for selecting the strength of the coffee, which was taken from the Medusa project created by
+            Gerrit Grunwald. The <code>badge.fxml </code>file contains less content, and has most of its drawing code in
+            the <code>Presenter</code> and in subclasses.</p>
+
+        <p>The <code>FXML</code> files have a style class defined that is used to style the nodes in the respective
+            views via<code> JavaFX CSS</code>. All the styles are defined in the otn.css file.</p>
+
+        <h3>The Service</h3>
+
+        <p>When the user is ready to order a cup of coffee or print the badge, a request is made to a back-end service.
+            In this first version of the OTN demo application, we don&#39;t make a real connection to a back end.
+            Instead, we have a Service class that mocks the connection to the back end. In a next article, we will
+            discuss the real Service class that works with the real back-end systems.</p>
+
+        <p>The methods for ordering a cup of coffee and requesting a badge to be printed are expected to make a request
+            to the back end, which returns a unique identifier corresponding to the request. Our client application
+            creates a quick response (QR) code based on this unique identifier, and then renders the QR code. The demo
+            hardware that was used in the OTN demo areas read this QR code, and sent it to the back end to determine the
+            details about the requested service.</p>
+
+        <p>The fake Service class we are using in this article will return a random identifier, and a QR code is
+            generated and presented to the user.</p>
+
+        <h3>Summary</h3>
+
+        <p>Real-world applications are often more complex than simple demos or tutorials. A combination of multiple
+            devices, hardware, and software should be taken into account. The data flow in an end-to-end application
+            spans between embedded and mobile devices on one end and cloud systems on the other end.</p>
+
+        <p>In this article, we explored how Java and JavaFX are very well positioned to be your favorite building blocks
+            for creating Java client applications that work on mobile devices.</p>
+
+        <h3>About the Author</h3>
+
+        <p><strong>Johan Vos</strong> started working with Java in 1995. He was part of the Blackdown team, porting Java
+            to Linux. His main focus is on end-to-end Java, combining back-end systems and mobile/embedded devices. He
+            received a Duke&#39;s Choice Award in 2014 for his work on JavaFX on mobile devices.</p>
+
+        <p>In 2015, he cofounded Gluon, which allows enterprises to create mobile Java client applications leveraging
+            their existing back-end infrastructure. Gluon received a Duke&#39;s Choice Award in 2015. Vos is a Java
+            Champion, a member of the BeJUG steering group and the Devoxx steering group. and he is a JCP member. He is
+            the lead author of Pro JavaFX 8 (Apress, 2014), and he has been a speaker at numerous conferences on Java.
+        </p>
+    </div>
+</section>
+
+<!-- / _Raw-HTML -->

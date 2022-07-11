@@ -1,0 +1,758 @@
+<section class="cc01 cc01v0 cpad" id="link0">
+    <div class="cc01w1 cwidth">
+
+        <p><em>I set a course just east of Lyra<br />
+                And northwest of Pegasus<br />
+                Flew into the light of Deneb<br />
+                Sailed across the Milky Way<br />
+            </em></p>
+        <p>&mdash;Neil Peart, (1977)
+        </p>
+
+
+    </div>
+</section>
+<!-- /cc01v0 -->
+<section class="cc01 cc01v0 cpad" id="link1">
+    <div class="cc01w1 cwidth">
+
+        <h2>A quick recap</h2>
+
+
+
+        <!--<p>Greetings, and welcome to <strong>Chapter Two</strong> of our journey!</p>-->
+
+        <p>In the previous article we showed the ProximaSafe scope, overall architecture and the components need to
+            achieve our goal: get the stream flow coming from a determined edge environment in OCI, perform the
+            analysis of the stream to detect possible anomalies and send back the errors to the edge in order to carry
+            out corrective actions. All this with development boards commercially available (almost) anywhere and easy
+            to pack and transport anywhere.</p>
+        <p>Now it is time to having fun fiddling with sensors and OCI Functions, covering a number of areas such as:
+        </p>
+
+
+        <ul class="obullets">
+            <li><strong>Selecting</strong> components our MicroEdge lab environment</li>
+            <li><strong>Identifying</strong> functionalities and libraries for Edge components, both emitters and
+                receivers (publishers
+                and subscribers)</li>
+            <li><strong>Configuring and Bridging</strong> our local MQTT server with the Cloud MQTT server residing on
+                OCI
+                Compute</li>
+            <li><strong>Develop</strong> a Serverless component in <a
+                    href="//www.oracle.com/cloud-native/functions/">Oracle Functions</a> to return error conditions and
+                warnings to the
+                edge</li>
+            <li><strong>Creating</strong> an API deployment addressing the serverless function, to be accessed from the
+                Stream Analytics module described in <a href="/proximasafe/chapter-1/">Chapter One</a></li>
+        </ul>
+
+
+        <p>That said, without further ado let's dive into some practical aspects of the matter.</p>
+
+    </div>
+</section>
+<!-- /cc01v0 -->
+
+
+<!-- cc01v0 -->
+
+<section class="cc01 cc01v0 cpad" id="link1s1">
+    <div class="cc01w1 cwidth">
+        <h2>Selecting the edge components</h2>
+
+        <p>During the spring of 2020 (and the relating lockdown) I fell - almost immediately - in love with the <a
+                href="https://m5stack.com/" target="_blank">M5Stack</a>
+            development boards series, based on the <a
+                href="https://www.espressif.com/sites/default/files/documentation/esp32_datasheet_en.pdf"
+                target="_blank">ESP32 microcontroller</a>. These cute little boxes have an integrated
+            display, which - sometimes - is useful to help with building simple and intuitive on-board GUIs (that's not
+            my case, I'll always be an ASCII fanboy) or debugging and showing messages contents without bothering to
+            open a serial terminal from the Arduino IDE. Furthermore, a sumptuous choice of different programming
+            models, IDEs and languages is available:
+        </p>
+
+        <ul class="obullets">
+            <li><a href="https://www.arduino.cc/" target="_blank">Arduino</a> mode and the related <a
+                    href="https://www.arduino.cc/en/software" target="_blank">IDE</a>: the elected programming language
+                is C/C++, it is fun and suitable
+                for almost-extinct IT apatosaurus like myself </li>
+            <li><a href="https://platformio.org/" target="_blank">PlatformIO</a> IDE, which is powerful and cool at the
+                same time: it allows to perform static code analysis
+                and neatly manages projects and libraries</li>
+            <li>UIFlow, a graphical environment (web-based and/or local app) that's programmable in Blockly and
+                <a href="https://micropython.org/" target="_blank">MicroPython</a>
+            </li>
+        </ul>
+
+
+
+        <p>Needless to say, I'll go for the first choice. I cleary remember the time when IDEs didn't exist (yes, I'm
+            that
+            old) and all you got from a compile-link-run session was a disturbing message that read "segmentation fault
+            (core dump)". We now have modern and productive environments, and - overall - choice, so pick up your
+            environment of choice and follow the rest of this articles as a reference.</p>
+
+
+        <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/dev-promima-safe-chapter2-1.jpg"
+                alt="dev-promima-safe-chapter2-1" style="margin-bottom: 25px;"></p>
+
+        <p>In addition to the ESP32 family, we'll use an ESP8266-based smart badge that will act as a wearable
+            device.</p>
+        <p>And, of course, we can't help but use the ubiquitous Raspberry Pi - that year over year is getting specs
+            almost on-par with his bigger cousins - to act as physical and logical link between edge and the Cloud
+            environments. This pocketable Linux device will be crucial in bridging the local MQTT instance to the OCI
+            Cloud instance described and set up in the previous chapter.</p>
+
+        <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/dev-promima-safe-chapter2-2.jpg"
+                alt="dev-promima-safe-chapter2-2" style=" margin-bottom: 25px;"></p>
+
+    </div>
+</section>
+
+
+
+<section class="cc01 cc01v0 cpad" id="link1s2">
+    <div class="cc01w1 cwidth">
+        <h3>The Raspberry Side: MQTT Bridging</h3>
+
+        <p>Installing <a href="https://mosquitto.org/">Mosquitto</a> and the related CLI utilities on a Pi is
+            straightforward, by issuing the command sudo apt install mosquitto and sudo apt install mosquitto-clients.
+            Once started, you can check the status by issuing the command systemctl status mosquitto, which should be
+            followed by
+            something like:</p>
+
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+ Loaded: loaded (/lib/systemd/system/mosquitto.service; enabled; vendor
+preset: enabled)
+ Active: active (running) since Tue 2021-03-30 17:22:35 CEST; 19h ago
+ Docs: man:mosquitto.conf(5)
+ man:mosquitto(8)
+ Main PID: 635 (mosquitto)
+ Tasks: 1 (limit: 4915)
+ CGroup: /system.slice/mosquitto.service
+ └─635 /usr/sbin/mosquitto -c /etc/mosquitto/mosquitto.conf
+...
+</code></pre>
+        </div>
+
+        <p>and proceed to modify the /etc/mosquitto/conf.d/mosquitto.conf file configuring the bridging mechanism. Most
+            of the default parameters are just fine (unless you want to setup an encrypted connection between
+            microcontrollers and the edge instance). In our case we'll just configure the bridge, so using our favorite
+            editor of choice, even if your favorite search engine suggests otherwise(!):nd proceed to modify the
+            /etc/mosquitto/conf.d/mosquitto.conf file configuring the bridging mechanism. Most of the default parameters
+            are just fine (unless you want to setup an encrypted connection between microcontrollers and the edge
+            instance). In our case we'll just configure the bridge, so using our
+            favorite editor of choice, even if your favorite search engine suggests otherwise(!):</p>
+
+        <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/dev-promima-safe-chapter2-3.jpg"
+                alt="dev-promima-safe-chapter2-3" style="margin-bottom: 25px;"></p>
+
+        <p>and reaching the Bridges section:</p>
+
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+# =================================================================
+# Bridges
+# =================================================================
+
+# A bridge is a way of connecting multiple MQTT brokers together.
+# Create a new bridge using the "connection" option as described below. Set
+# options for the bridges using the remaining parameters. You must specify the
+# address and at least one topic to subscribe to.
+</code></pre>
+        </div>
+
+        <p>we can add the following parameters:</p>
+
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+connection proxima
+address [host:port]
+topic # out 0 "" edge/
+topic alarm in 0 cloud/ edge/
+
+</code></pre>
+        </div>
+
+
+
+
+
+        <p>Where the host and port parameters are the public IP address and the of the OCI instance we configured
+            in the first episode, and the other parameters indicate that:
+        </p>
+        <ul class="obullets">
+            <li>in the first line, we're going to relay all messages to the Cloud instance (prefixed by the edge/
+                parameter), so <strong>all</strong> the messages issued on the the edge in the topic device/machine/x
+                will be
+                processed by the Cloud Mosquitto as edge/device/machine/x.</li>
+
+            <li>in the second line, we'll receive any message from the Cloud in the topic alarm, specifying the
+                cloud/ prefix and locally processed in topic cloud/alarm.</li>
+
+        </ul>
+
+        Sure enough, we also need to setup the certificate based SSL/TLS support, so reach for the section
+        regarding security and complete it with:
+
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+# -----------------------------------------------------------------
+# Certificate based SSL/TLS support
+# -----------------------------------------------------------------
+# Either bridge_cafile or bridge_capath must be defined to enable TLS support
+# for this bridge.
+# bridge_cafile defines the path to a file containing the
+# Certificate Authority certificates that have signed the remote broker
+# certificate.
+# bridge_capath defines a directory that will be searched for files containing
+# the CA certificates. For bridge_capath to work correctly, the certificate
+# files must have ".crt" as the file ending and you must run "openssl rehash
+# [path to capath]" each time you add/remove a certificate.
+# bridge_capath
+bridge_cafile /etc/mosquitto/certs/ca.crt
+
+# Path to the PEM encoded client certificate, if required by the remote broker.
+bridge_certfile /etc/mosquitto/certs/server.crt
+
+# Path to the PEM encoded client private key, if required by the remote broker.
+bridge_keyfile /etc/mosquitto/certs/server.key
+
+# When using certificate based encryption, bridge_insecure disables
+# verification of the server hostname in the server certificate. This can be
+# useful when testing initial server configurations, but makes it possible for
+# a malicious third party to impersonate your server through DNS spoofing, for
+# example. Use this option in testing only. If you need to resort to using this
+# option in a production environment, your setup is at fault and there is no
+# point using encryption.
+bridge_insecure true
+</code></pre>
+        </div>
+
+
+        <p>thus creating a certs directory under /etc/mosquitto and copying the ca.cert, server.crt and
+            server.key files we generated during the first episode in section <strong>Secure the MQTT Server running on
+                OCI Compute</strong>. </p>
+
+
+        <p>That is easy to test. Issuing a listening command to the Cloud instance in a shell, as shown in the first
+            episode:
+        </p>
+
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+mosquitto_sub -d -t '#' -h [your host] -u [username] -P [password] -p [port] --insecure --cafile certs/ca.crt --cert certs/server.crt --key certs/server.key
+</code></pre>
+        </div>
+
+
+        <p>and sending a message to the local Raspberry Pi</p>
+
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+mosquitto_pub -h [your RPi IP address] -t test -m 'Sympathetic resonance'
+</code></pre>
+        </div>
+
+        <p>we should receive on the Cloud Mosquitto shell the message:
+        </p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+Client (null) received PUBLISH (d0, q0, r0, m0, 'edge/testtopic', ... (21
+bytes))
+Sympathetic resonance
+</code></pre>
+        </div>
+
+        <p>showing that the two thingies are effectively talking themselves - albeit in a single direction, for now.</p>
+        <p>The pipelines we'll design in Stream Analytics will provide the logic to test the bidirectional dialogue.
+            And,
+            now, let's have some healthy fun with sensors!</p>
+
+
+
+    </div>
+</section>
+
+<!-- cc01v0 -->
+
+<section class="cc01 cc01v0 cpad" id="link2">
+    <div class="cc01w1 cwidth">
+        <h2>Edge Programming</h2>
+        <p>The goal is to build an edge that can easily fit into a small briefcase, and - certainly - an ESP32-based kit
+            will help saving space, time, and power consumption. Let's consider a setup that includes some edge
+            emitters (MQTT publishers), some receivers (MQTT subscribers) and the Gateway:</p>
+
+
+        <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/dev-promima-safe-chapter2-4.jpg"
+                alt="dev-promima-safe-chapter2-4" style="margin-bottom: 25px;"></p>
+    </div>
+</section>
+
+<section class="cc01 cc01v0 cpad" id="link2s1">
+    <div class="cc01w1 cwidth">
+
+        <h3>Publishers</h3>
+
+        <ul class="obullets">
+            <li>A multipurpose <strong>*ESP32 </strong>development board that can be used to generate single or burst
+                messages to
+                trigger actions within Stream Analytics. Connecting a detection sensors - of course - would be a lot
+                better, but I'd find hard to simulate a gathering alert within my workshop room. Firing the messages
+                directly from the board has a clear advantage over messages sent from a shell or a software
+                simulator: we could connected a sensor to the board and maintain the same codebase.</li>
+
+
+            <li>An <strong>Arduino MKR1000</strong> connected to a DHT11 sensor. I tried to use an Env Hat based on the
+                BMP80
+                sensor attached to a M5Stick-C but that proved to be extremely unreliable in terms of data
+                measurement: the temperature and humidity detected are heavily affected by the heat generated
+                from the M5Stick-C, so I'll perservere with an old-fashioned configuration encompassing the Arduino
+                and a simpler, cheaper DHT11.</li>
+        </ul>
+
+        <p>You can find all the sources I've used at this link (NOTE: insert the GitHub link, open in a new window/tab).
+        </p>
+    </div>
+</section>
+
+<section class="cc01 cc01v0 cpad" id="link2s2">
+    <div class="cc01w1 cwidth">
+        <h3>Subscribers</h3>
+
+
+        <ul class="obullets">
+            <li>An <strong>ESP8266-based Smart Badge</strong> that will change a text status message whenever something
+                relevant has been detected and analysed in OCI.</li>
+
+            <li>An <strong>ESP32 Edge Alert device</strong> that could be eventually connected to some actuators to show
+                the
+                alerts and make people aware about the occuring anomaly.</li>
+
+            <li>An <strong>ESP32 Billboard</strong> based on <a
+                    href="https://notenoughtech.com/home-automation/m5paper-the-kindle-of-development-and-automation/">M5Paper</a>,
+                a small but powerful e-ink tablet that will show the
+                sequence of alerts coming from OCI.</li>
+
+            <li>An <strong>ESP32 Wearabl</strong>e and/or pocketable Beeper.</li>
+        </ul>
+
+
+        <p>Both the publisher and the subscriber will use the PubSubClient API. Specifically, the Publishers will send
+            messages to the local MQTT server via the publish method:
+        </p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+Result = mqttClient.publish(MACHINE_TOPIC, msg, true);
+ M5.Lcd.setCursor(10, 60);
+ if (Result)
+ M5.Lcd.println("Sent.");
+ else
+ M5.Lcd.println("Not sent.");
+</code></pre>
+        </div>
+
+
+        <p>while Subscribers will initialize the callback in the setup() portion of the code (executed only once at
+            startup):
+        </p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+configTime(gmtOffset_sec, daylightOffset_sec, ntpServer);
+ timestamp = getTime();
+ if (timestamp > 0)
+ noTime = false;
+ mqttClient.subscribe(TOPIC);
+ Serial.println("Subscribed!");
+ mqttClient.setCallback(DisplayCallback);
+ delay(100);
+</code></pre>
+        </div>
+
+
+        <p>and upon the reception of new messages (in our case, from OCI), processing will occur in
+        </p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+void DisplayCallback(char* topic, byte* payload, unsigned int len)
+{
+ // Process message
+ // Serial.println((String)topic);
+}
+</code></pre>
+        </div>
+
+        <p>Programming these gizmos is fun and it's a very effective means of spreading the culture of programming
+            among students of all levels (including myself). Plus, there's plenty of examples available on the Web.</p>
+        <p>Still, we need to design a way to return alarm messages from Stream Analytics to the edge, using the MQTT
+            Bridge feature we set up not too long ago.</p>
+        <p>As described in the previous Episode, our approach will be as the following:
+        </p>
+
+        <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/dev-promima-safe-chapter2-5.jpg"
+                alt="dev-promima-safe-chapter2-5" style="margin-bottom: 25px;"></p>
+
+
+        <p>thus we (thankfully) need to tinker with Oracle Functions.</p>
+
+    </div>
+</section>
+<!-- /cc01v0 -->
+
+
+<section class="cc01 cc01v0 cpad" id="link3">
+
+    <div class="cc01w1 cwidth">
+        <h2>Serverless Time!</h2>
+        <p>FnProject is a cool Open Source serverless platform that can scale from microdevices to megainstallations,
+            launched in 2017, and later transformed and evolved in an industrial-strength OCI service called Oracle
+            <strong>Functions</strong>.
+        </p>
+
+
+        <p>Developing a function in OCI requires either:</p>
+
+
+        <ul class="obullets">
+            <li>Preparing your environment and use the handy OCI Cloud Shell, as shown here
+            <li>or using your local machine as a development environment, that involves:
+                <ul>
+                    <li>a <a
+                            href="https://docs.oracle.com/en-us/iaas/Content/Functions/Tasks/functionssetupapikey.htm#Set_up_an_Oracle_Cloud_Infrastructure_API_Signing_Key_for_Use_with_Oracle_Functions">Signing
+                            Key</a></li>
+                    <li>a <a
+                            href="https://docs.oracle.com/en-us/iaas/Content/Functions/Tasks/functionsconfigureocicli.htm#Create_a_Profile_in_the_Oracle_Cloud_Infrastructure_CLI_Configuration_File">Profile</a>
+                    </li>
+                    <li>a valid <a
+                            href="https://docs.oracle.com/en-us/iaas/Content/Functions/Tasks/functionsinstalldocker.htm#Install_Docker_for_Use_with_Oracle_Functions">Docker</a>
+                        installation</li>
+                    <li>the Fn Project <a
+                            href="https://docs.oracle.com/en-us/iaas/Content/Functions/Tasks/functionsinstallfncli.htm#Install_the_Fn_Project_CLI">CLI</a>
+                    </li>
+                    <li>an <a
+                            href="https://docs.oracle.com/en-us/iaas/Content/Functions/Tasks/functionscreatefncontext.htm#Create_an_Fn_Project_CLI_Context_to_Connect_to_Oracle_Cloud_Infrastructure">OCI
+                            Context</a></li>
+                    <li>setting the Context <a
+                            href="https://docs.oracle.com/en-us/iaas/Content/Functions/Tasks/functionssetoracleprofile.htm#Set_the_Context_for_the_Fn_Project_CLI_Using_the_oracleprofile_Parameter">setup</a>
+                    </li>
+                    <li>an <a
+                            href="https://docs.oracle.com/en-us/iaas/Content/Functions/Tasks/functionsgenerateauthtokens.htm#Generate_an_Auth_Token_to_Enable_Login_to_Oracle_Cloud_Infrastructure_Registry">Auth
+                            Key</a></li>
+                    <li>using docker login to store the function in Oracle Cloud Infrastructure Registry as a <a
+                            href="https://docs.oracle.com/en-us/iaas/Content/Functions/Tasks/functionslogintoocir.htm#Log_in_to_Oracle_Cloud_Infrastructure_Registry">docker
+                            image</a></li>
+                </ul>
+            </li>
+        </ul>
+        Either way, you'll be good to go with the function deployment in OCI.
+        We will use a Custom Dockerfile to build our image in Python, such as the following:
+
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+FROM fnproject/python:3.6-dev as build-stage
+WORKDIR /function
+ADD requirements.txt /function/
+RUN pip3 install --target /python/ --no-cache --no-cache-dir -r
+requirements.txt && rm -fr ~/.cache/pip /tmp* requirements.txt func.yaml
+Dockerfile .venv
+ADD . /function/
+RUN rm -fr /function/.pip_cache
+FROM fnproject/python:3.6
+WORKDIR /function
+COPY --from=build-stage /python /python
+COPY --from=build-stage /function /function
+COPY certs /function
+ENV PYTHONPATH=/function:/python
+ENTRYPOINT ["/python/bin/fdk", "/function/func.py", "handler"]
+</code></pre>
+        </div>
+
+        <p>specifying Python requirements in <strong>requirements.txt</strong> file as we're going to use the Paho
+            Library:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+fdk
+paho-mqtt
+</code></pre>
+        </div>
+
+        <p>and write some code to complete the round trip, copying the certs folder and files used to access the
+            MQTT Server on OCI in the function directory. Please find the Dockerfile and the code at this address
+            (NOTE: insert the GitHub link, open in a new window/tab).</p>
+        <p><strong>Oracle Functions</strong> (as <strong>Fn Project</strong>) requires the function to be installed in
+            an artifact called <strong>Application</strong>, a
+            logical grouping of functions, which can be created via the fn CLI (specifying the OCI subnets) or in the
+            OCI
+            Web console following the path <strong>Home » Developer Services » Functions</strong>:
+        </p>
+
+
+        <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/dev-promima-safe-chapter2-6.jpg"
+                alt="dev-promima-safe-chapter2-6" style="margin-bottom: 25px;"></p>
+
+
+        <p>Once the application is created, we can deploy the function (this time we'll leverage the good-ole CLI) using
+        </p>
+
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+fn build
+fn deploy --app [app name]
+</code></pre>
+        </div>
+
+
+
+
+
+        <p>where you can see some familiar Docker (layer-related) output messages and the result of deployment.
+        </p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+Building image fra.ocir.io/emeaseitalyproxima/gabbarepository/mqtt_pub:0.0.2 .
+Parts: [fra.ocir.io emeaseitalyproxima gabba-repository mqtt_pub:0.0.2]
+Pushing fra.ocir.io/emeaseitalyproxima/gabba-repository/mqtt_pub:0.0.2 to
+docker registry...The push refers to repository
+[fra.ocir.io/emeaseitalyproxima/gabba-repository/mqtt_pub]
+77ff3ee9cb37: Pushed
+3353efa4559: Pushed 
+0f6cdd7e71a8: Layer already exists 
+3697bae2d860: Layer already exists 
+0b66d6c41076: Layer already exists 
+85e1ba76ed69: Layer already exists 
+6881daa7bad0: Layer already exists 
+7352730c981f: Layer already exists 
+9d95bea46bad: Layer already exists 
+b84a8d46e8fb: Layer already exists 
+f66ed577df6e: Layer already exists 
+0.0.2: digest:
+sha256:e82a0abc009c0a132fc6c3c35fc8d88f516589b35a96907c41e41a350619872d
+size: 2626
+Updating function mqtt_pub using image
+fra.ocir.io/emeaseitalyproxima/gabba-repository/mqtt_pub:0.0.2...
+
+
+</code></pre>
+        </div>
+
+
+        <p>The status of the function will be reflected in the OCI Web Console as well as in CLI, issuing the command
+            fn list functions <app name>:</p>
+
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+NAME           IMAGE           ID
+mqtt_pub fra.ocir.io/emeaseitalyproxima/gabba-repository/mqtt_pub:0.0.2
+ocid1.fnfunc.oc1.eu-frankfurt
+ 1.aaaaaaaaabbknysfrffi2olayuzykycv5boop72qi75k5aqgjwjfjdlycutq
+
+
+
+</code></pre>
+        </div>
+
+        <p>The function must be provided with the three input parameters that can be set on the OCI Web Console in
+            the Configuration submenu:
+        </p>
+
+
+        <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/dev-promima-safe-chapter2-7.jpg"
+                alt="dev-promima-safe-chapter2-7" style="margin-bottom: 25px;"></p>
+
+
+        <p>specifying your Mosquitto username, password and the alarm topic edge/alarm. Note those parameters,
+            as we'll use them to perform some smoke test!
+        </p>
+
+    </div>
+</section>
+
+<section class="cc01 cc01v0 cpad" id="link4">
+    <div class="cc01w1 cwidth">
+
+        <h3>Creating the API Gateway and an API deployment</h3>
+
+        <p>The mechanisms to expose and consume APIs in Oracle Cloud Infrastructure are accessible in the <strong>Main
+                menu » Developer Services » API Management </strong>section of OCI Web Console. We'll create an API
+            Gateway
+            first, and then an API deployment specifying the Oracle Function we created previously. Creating an API
+            Gateway involves specifying:</p>
+
+
+        <ul class="obullets">
+            <li>The <strong>Name</strong> (duh!)</li>
+            <li>the <strong>Type</strong> (public/private)</li>
+            <li>the <strong>Virtual Cloud Network</strong> (the one created by Stream Analytics, or your own)</li>
+            <li>the <strong>Subnet</strong> (ditto)</li>
+
+
+        </ul>
+
+        <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/dev-promima-safe-chapter2-8.jpg"
+                alt="dev-promima-safe-chapter2-8" style="margin-bottom: 25px;"></p>
+
+        <p>Hitting the blue <strong>Create</strong> button starts the magic, and creation is quick. Then, we can proceed
+            to shape our
+            API deployment by clicking the link named "Deployments" in the bottom left Resources section and fire the
+            <strong>Create Deployment</strong> procedure, which consists of three stages:
+        </p>
+
+
+        <ul class="obullets">
+            <li>Providing the name, the prefix, and additional Policies such as Authentication, CORS, Rate Limiting
+                (quite important if API is exposed to the cruel external world)</li>
+
+            <p><img src="https://oracle-devrel.github.io/devo-image-repository/images/dev-promima-safe-chapter2-9.jpg"
+                    alt="dev-promima-safe-chapter2-9" style="margin-bottom: 25px;"></p>
+
+            <li>Provide the Routing logic with the path, method (we'll use POST), the type (Oracle Functions), the
+                Application and the Function name we previously deployed
+            </li>
+
+
+            <li>Carefully review your API configuration and submit!</li>
+
+            <p>This configuration will be managed by Stream Analytics as a Target, used at the end of an analysis
+                pipeline
+                to invoke the function and send an alarm to the edge.</p>
+
+            <p>The combination of Sources (messages from the edge routed to OCI Streaming), Patterns already available
+                for phenomena detection and <strong>Targets</strong> (Autonomous DB, Serverless Functions, Kafka
+                Endpoints) will be the
+                triad (in musical context) to be tinkered designing new use cases and discover valuable information not
+                previously available.</p>
+
+
+    </div>
+</section>
+
+
+
+<section class="cc01 cc01v0 cpad" id="link5">
+    <div class="cc01w1 cwidth">
+
+        <h3>Next Episode - Use cases and Stream Analytics
+            pipelines</h3>
+
+        <p>Going further, we'll need to design some simple use cases as an example and develop some pipelines
+            within Stream Analytics to close the loop and test our setup. See you on the next chapter</p>
+
+
+        <p>See you on the next chapter. <a href="/proximasafe-part-3">Sensors, Pipelines and back to Edge</a></p>
+        <p>Zip and Zest!</p>
+
+        <!-- end -->
+    </div>
+</section>
+
+<!-- CC01v0 -->
+<section class="cc01 cc01v0 cpad" id="about">
+    <div class="cc01w1 cwidth" style="display: flex; gap: 25px;">
+
+        <div class="cc01w2 cc01fl">
+            <img src="https://oracle-devrel.github.io/devo-image-repository/images/bio-gabriele-provinciali.jpg">
+        </div>
+
+        <div class="cc01w2">
+
+            <h2>About the Author</h2>
+
+
+            <p>Gabriele Provinciali works as Solution Architect in Rome, Italy - passionate about everything that is
+                tinkerable!</p>
+        </div>
+    </div>
+</section>
+<!-- /CC01v0 -->

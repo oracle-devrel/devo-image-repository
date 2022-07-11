@@ -1,0 +1,328 @@
+<!-- U03v5 -->
+<!-- _Raw-HTML -->
+<section class="cc01 cc01v0 cpad crule">
+    <div class="cc01w1 cwidth">
+        <p>In <a class="textLinks" href="/java/inside-java-mobile-app-part1.html">Part 1</a> of this series, I showed
+            how developers can use the Java APIs (for example, JavaFX APIs) to create a Java client application that
+            runs on desktop, mobile, and embedded devices using <a class="textLinks"
+                href="http://www.gluonhq.com/products/mobile">Gluon Mobile</a>. I showed that with a 100 percent pure
+            Java codebase, applications can be uploaded to the Apple App Store and the Google Play Store.</p>
+
+        <p>The app we created in that article was a standalone application. When the app ran, it didn&#39;t need any
+            additional information, apart from what is in the application bundle. It goes without saying, but this is
+            not a very common situation. In reality, most apps interact with back-end applications. Typical back-end
+            interactions include the retrieval of weather information from a REST endpoint or of the financial
+            transaction associated with buying a ticket and making a seat reservation for a concert. Because there are
+            many Java developers working on back-end projects, these back-end systems are often familiar environments.
+        </p>
+
+        <p>The example demonstrated in the previous article presented end users with a selection of coffee types from
+            which they could place an order. The list of possible coffee types was statically included inside the
+            application. In this article, we will make this a remote interaction.</p>
+
+        <p><strong>Mobile Apps Need Back-End Data and Functionality</strong></p>
+
+        <p>We have a back-end system that provides the possible coffee types. By doing a REST call to a specific
+            endpoint, the coffee types are returned in a JSON response:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+curl &quot;http://javahub.gluonhq.com/javahub-demo-backend/modules/coffee/types&quot;
+
+[
+
+  {
+
+    &quot;name&quot;:&quot;Ethiopia&quot;,
+
+    &quot;type&quot;:&quot;1&quot;,
+
+    &quot;_links&quot;:{
+
+      &quot;self&quot;:&quot;http://javahub.gluonhq.com/javahub-demo-backend/modules/coffee/types/coffee/types/1&quot;
+
+    }
+
+  },
+
+  {
+
+    &quot;name&quot;:&quot;Honduras&quot;,
+
+    &quot;type&quot;:&quot;2&quot;,
+
+    &quot;_links&quot;:{
+
+      &quot;self&quot;:&quot;http://javahub.gluonhq.com/javahub-demo-backend/modules/coffee/types/coffee/types/2&quot;
+
+    }
+
+  },
+
+  {
+
+    &quot;name&quot;:&quot;Colombia&quot;,
+
+    &quot;type&quot;:&quot;3&quot;,
+
+    &quot;_links&quot;:{
+
+      &quot;self&quot;:&quot;http://javahub.gluonhq.com/javahub-demo-backend/modules/coffee/types/coffee/types/3&quot;
+
+    }
+
+  }
+
+]
+
+
+</code></pre>
+        </div>
+
+        <p>There are a number of ways to connect a mobile app with an enterprise back end and to handle the
+            interactions. In theory, you can directly use the tools that you use in enterprise systems to connect to
+            other enterprise systems. In practice, however, this is not encouraged in most cases due to a number of
+            reasons:</p>
+
+        <ul>
+            <li>Although mobile devices have become more powerful, they still have fewer resources than servers do, and
+                those resources need to be shared with other apps. Enterprise software is often designed with getting
+                maximum performance from available resources in mind, rather than with sharing resources.</li>
+            <li>Mobile devices are not always connected to the internet. Lots of boilerplate code would be needed to
+                check if all requests are successfully retrieved and to optionally reschedule failed requests when
+                connectivity is restored&mdash;taking transactional behavior into account.</li>
+            <li>Mobile devices and apps have a specific lifecycle and need to behave according to specific policies.
+                Some resources are conditionally available. The network might be a free Wi-Fi network or a paid cellular
+                network. The battery might be low, and the app might be in the background. Depending on those
+                conditions, an app should behave differently. Those conditions are not found on enterprise systems.</li>
+            <li>Back-end systems typically don&#39;t want to allow any client to connect to them. Because mobile users
+                can be connected via any mobile data provider or Wi-Fi network, a direct connection from the mobile app
+                to the back-end system requires the back-end system to be accessible by every potential host on the
+                planet. This increases the chances of attacks and security breaches.</li>
+        </ul>
+
+        <p><strong>Respecting Mobile and Enterprise Requirements by Using an MBaaS</strong></p>
+
+        <p>A typical solution to overcome these problems is to position a mobile back-end as a service (MBaaS) between
+            the mobile devices and the back-end system.</p>
+
+
+
+        <p>Using an MBaaS, mobile devices don&#39;t connect to the back end directly; instead, they connect to the
+            MBaaS, which may forward their request to a back-end system.</p>
+
+        <p><a class="textLinks" href="http://www.gluonhq.com/products/cloudlink">Gluon CloudLink</a> is an MBaaS that
+            can be connected to by mobile apps regardless of the way in which they are written. However, Gluon CloudLink
+            works best when mobile apps are written with <a class="textLinks"
+                href="http://www.gluonhq.com/products/mobile">Gluon Mobile</a>, the toolkit used to create the app in
+            the previous article.</p>
+
+        <p>Gluon CloudLink is a public cloud service that can connect to other back-end and cloud systems (see Figure
+            2), but you can also install it as a service inside other clouds. In this article, I will demonstrate this
+            using Oracle Container Cloud Service, which is part of Oracle Cloud.</p>
+
+
+        <p><strong>Installing Gluon CloudLink on Oracle Cloud</strong></p>
+
+        <p>If you have an Oracle Cloud (trial) account, you can install your own or third-party software in Oracle
+            Container Cloud Service. You can configure a datasource (for example, a MySQL service or an Oracle Database
+            service), and link it to your application(s) in Oracle Container Cloud Service. You can access more Oracle
+            Cloud services, for example, you can leverage the storage capabilities provided by Oracle Storage Cloud
+            Service. A great advantage of Oracle Container Cloud Service is that it supports a microservices
+            architecture, and it allows for scalable applications. Gluon CloudLink is a back-end service that internally
+            contains a number of microservices, and each of them can individually be scaled. Using Gluon CloudLink on
+            Oracle Cloud allows you to scale the middleware according to your own needs. You have your own instance(s)
+            running Gluon CloudLink, which connect to your own database service (the public cloud version of Gluon
+            CloudLink is a multitenant service, where data is isolated between applications, but it is stored in the
+            same data storage system).</p>
+
+        <p><strong>Note</strong>: In the next article, I will explain the internals of Oracle Container Cloud Service,
+            and I will show how a microservices product such as Gluon CloudLink can be installed and configured on
+            Oracle Cloud. In this article, I will abstract away these internal details to simplify the discussion.</p>
+
+        <p>Applications that leverage Gluon CloudLink can be managed using Gluon Dashboard, which is a web application
+            that allows developers, architects, and operators to configure and monitor their mobile apps and the
+            connections to the enterprise back-end systems. You can open Gluon Dashboard by navigating to <a
+                class="textLinks" href="https://gluon.io/">https://gluon.io/</a>.</p>
+
+
+
+        <p>By default, Gluon Dashboard will connect to the public Gluon CloudLink software as a service (SaaS)
+            installation. Navigate to the Oracle Cloud&ndash;specific page at <a class="textLinks"
+                href="https://gluon.io/oracle_cloud">https://gluon.io/oracle_cloud</a> to be able to connect to your
+            privately hosted Gluon CloudLink instance in your Oracle Cloud infrastructure. In case this is the first
+            time you want to use Gluon CloudLink on your Oracle Cloud infrastructure, Gluon Dashboard will guide you
+            through the process of installing Gluon CloudLink on Oracle Cloud. You need to provide your Oracle Cloud
+            credentials, and then the Gluon CloudLink framework will be provisioned on your own Oracle Cloud instances.
+            Your data is stored in an instance of Oracle MySQL Cloud Service that is private to you. If you don&rsquo;t
+            have an Oracle Cloud account, you can <a class="textLinks" href="https://cloud.oracle.com/tryit">sign up for
+                a trial</a>.</p>
+
+        <p>After you successfully authenticate in the Gluon Dashboard, the application will search for an existing Gluon
+            CloudLink installation on your Oracle Cloud environment. If it doesn&#39;t find one, a dialog box will be
+            shown proposing to install Gluon CloudLink on your Oracle Cloud environment, as shown in Figure 5:</p>
+
+
+
+        <p>Click <strong>OK</strong> if you want to install the software. The required software will be installed on
+            your account, and you can follow the progress in a console. This can take some time (for example, 15
+            minutes).</p>
+
+        <p>Once the Gluon CloudLink microservices are installed on your Oracle Cloud environment, you are redirected to
+            the Gluon Dashboard landing view (Figure 6), which shows a menu and an initially empty usage graph.</p>
+
+
+        <p><strong>Tunneling Requests Through Gluon CloudLink</strong></p>
+
+        <p>There are many things you can do with Gluon Dashboard, but we will focus on getting the coffee types from our
+            back-end system and providing them to the mobile app. If you select <strong>API Management</strong>, you can
+            add a remote function. Let&#39;s create a function named <code class="ocode">otnCoffees</code> and provide
+            the REST endpoint that will return the coffee types, as shown in Figure 7:</p>
+
+
+
+        <p>When you click <strong>Save</strong>, Gluon Dashboard sends the information to Gluon CloudLink. Then, when a
+            mobile app requests the <code class="ocode">otnCoffees</code> function, Gluon CloudLink knows what to do: it
+            will invoke the remotely defined endpoint.</p>
+
+        <p>Now, we need to modify the code for the mobile app so that it retrieves the list of coffee types by calling
+            Gluon CloudLink. Currently, we have the service providing the data as follows:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+    public ReadOnlyListProperty retrieveOTNCoffees() {
+
+        ObservableList list = FXCollections.observableArrayList();
+
+        Platform.runLater(() -&gt; {
+
+            list.add(new OTNCoffee(&quot;type1&quot;, &quot;Moka&quot;));
+
+            list.add(new OTNCoffee(&quot;type2&quot;, &quot;Arabica&quot;));
+
+        });
+
+        return new SimpleListProperty(list);
+
+    }</code></pre>
+        </div>
+
+        <p>We will now use the Gluon CloudLink client APIs and replace that code with the following code:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+    public ReadOnlyListProperty retrieveOTNCoffees() {
+
+        if (otnCoffees == null) {
+
+ DataClient dataClient = DataClientBuilder.create()
+
+                .operationMode(OperationMode.CLOUD_FIRST)
+
+                .build();
+
+ 
+
+            GluonObservableList gluonCoffees = DataProvider.retrieveList(dataClient.createFunctionListDataReader(&quot;otnCoffees&quot;, OTNCoffee.class));
+
+            otnCoffees = new ReadOnlyListWrapper&lt;&gt;(gluonCoffees);
+
+              }
+
+        return otnCoffees.getReadOnlyProperty();
+
+    }</code></pre>
+        </div>
+
+        <p>In this new code, we first construct a Gluon CloudLink <code class="ocode">DataClient</code>, which will
+            manage the connection with Gluon CloudLink and beyond. The <code class="ocode">DataClient</code> is asked to
+            operate in <code class="ocode">CLOUD_FIRST</code> mode, which means that it will first ask Gluon CloudLink
+            for its data, and if a connection cannot be made, it will look into its local cache (on the mobile device)
+            to present the data that was retrieved before.</p>
+
+        <p>Next, the <code class="ocode">DataClient</code> is bound to the remote function named <code
+                class="ocode">otnCoffees</code> and the result is expected to be a list of <code
+                class="ocode">OTNCoffee</code> instances.</p>
+
+        <p>The static method <code class="ocode">retrieveList</code> on <code class="ocode">DataProvider</code> is then
+            called, and the data is stored in a <code class="ocode">GluonObservableList</code>, which extends the JavaFX
+            <code class="ocode">ObservableList</code> by adding a few properties that contain information about the
+            status of the retrieval.</p>
+
+        <p>Note that we didn&#39;t have to provide a URL for the actual back-end service. This is all configured by
+            using Gluon Dashboard in Gluon CloudLink, so once the mobile application can make a secure connection to
+            Gluon CloudLink, we&#39;re all set.</p>
+
+        <p>Gluon CloudLink defines a key pair for each mobile application, and in the case of a hosted version of Gluon
+            CloudLink (as opposed to the public SaaS version of Gluon CloudLink), the host name needs to be provided to
+            the mobile application as well.</p>
+
+        <p>In Gluon Dashboard, the Credentials view allows you to store the required configuration file inside the
+            resource directory of the mobile application, where it will be picked up by the Gluon Mobile tools that
+            create the app.</p>
+
+
+
+        <p>As can be seen in Figure 8, the required configuration is generated by Gluon CloudLink in a JSON format.</p>
+
+        <p>On the client, we simply bind the call to the <code class="ocode">otnCoffees</code> function, as defined in
+            Gluon CloudLink, to a JavaFX <code class="ocode">ObservableList</code>. By moving the configuration to the
+            middleware, we avoid any risks related to changes in the URL structure or protocol, which would require a
+            rebuild, redeployment, and redistribution of the mobile app. If you don&#39;t want to stress your real
+            back-end system, you can also use Gluon Dashboard to send mock data back to your mobile client. The switch
+            between mock data and the real data can be made by a single click in Gluon Dashboard, rather than by having
+            to recompile and resubmit your app to the App Store and the Play Store.</p>
+
+        <p>Note that we didn&#39;t create a separate thread for retrieving the data from the back-end system. This is
+            done under the hood by the Gluon CloudLink client. The result is a JavaFX <code
+                class="ocode">ObservableList</code> that can immediately be used by the graphical components in the
+            client app&mdash;in this case, the list is used in a selection control.</p>
+
+        <p>In this particular case, the three coffee types are likely to arrive quickly at the mobile app. But in case
+            there is much data to be retrieved from the back end, using the <code class="ocode">ObservableList</code>
+            allows developers to already render the retrieved data while new data comes in. Because Gluon CloudLink
+            Client will populate the <code class="ocode">ObservableList</code> when the data is parsed, the visual
+            control that is backed by this <code class="ocode">ObservableList</code> will be updated on the fly. This
+            eliminates a huge amount of boilerplate code.</p>
+
+        <p><strong>Summary</strong></p>
+
+        <p>In this article, we extended the OTN demo app from the previous article. Rather than showing a hardcoded list
+            of coffee types, we retrieved the list from a back-end service. However, we didn&#39;t access that back-end
+            service directly; we used middleware called Gluon CloudLink that bridges the gap between the mobile devices
+            and the enterprise infrastructure.</p>
+
+
+        <p>We explored how you can provision Gluon CloudLink on your Oracle Cloud infrastructure, and how you can easily
+            configure Gluon CloudLink using its dashboard to map client requests onto external requests by defining
+            functions that can be called on the mobile client.</p>
+
+        <h3>About the Authors</h3>
+
+        <p><strong>Johan Vos</strong> started working with Java in 1995. He was part of the Blackdown team, porting Java
+            to Linux. His main focus is on end-to-end Java, combining back-end systems and mobile/embedded devices. He
+            received a Duke&#39;s Choice Award in 2014 for his work on JavaFX on mobile devices.</p>
+
+        <p>In 2015, he cofounded Gluon, which allows enterprises to create mobile Java client applications leveraging
+            their existing back-end infrastructure. Gluon received a Duke&#39;s Choice Award in 2015. Vos is a Java
+            Champion, a member of the BeJUG steering group and the Devoxx steering group. and he is a JCP member. He is
+            the lead author of Pro JavaFX 8 (Apress, 2014), and he has been a speaker at numerous conferences on Java.
+        </p>
+    </div>
+</section>
+<!-- / _Raw-HTML -->

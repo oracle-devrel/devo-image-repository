@@ -1,0 +1,336 @@
+<!-- RC24v0 -->
+<section class="rc24 rc24v1 cpad" id="defining">
+    <div class="rc24w1 cwidth">
+        <p>A Docker container is a packaging format that packages all the code and dependencies of an application in a
+            standard format that allows it to run quickly and reliably across computing environments. A Docker container
+            is a popular lightweight, standalone, executable container that includes everything needed to run an
+            application, including libraries, system tools, code, and runtime. Docker is also a software platform that
+            allows developers to build, test, and deploy containerized applications quickly.</p>
+        <p>Containers as a Service (CaaS) or Container Services are managed cloud services that manage the lifecycle of
+            containers. Container services help orchestrate (start, stop, scale) the runtime of containers. Using
+            container services, you can simplify, automate, and accelerate your application development and deployment
+            lifecycle.</p>
+        <p>Docker and Container Services have seen rapid adoption and have been a tremendous success over the last
+            several years. From an almost unknown and rather technical <a
+                href="https://developer.oracle.com/open-source/what-is-open-source/" data-lbl="open-source">open
+                source</a> technology in 2013, Docker has evolved into a standardized runtime environment now officially
+            supported for many Oracle enterprise products.</p>
+        <h3>Define Docker terminology</h3>
+        <h4>Docker:</h4>
+        <p>A software container platform designed for developing, shipping, and running apps leveraging container
+            technology. Docker comes in two versions: enterprise edition and community edition</p>
+        <h4>Container:</h4>
+        <p>Unlike a VM which provides hardware virtualization, a container provides lightweight, operating-system-level
+            virtualization by abstracting the &ldquo;user space.&rdquo; <a
+                href="https://www.docker.com/resources/what-container" target="_blank">Containers</a> share the host
+            system’s kernel with other containers. A container, which runs on the host operating system, is a standard
+            software unit that packages code and all its dependencies, so applications can run quickly and reliably from
+            one environment to another. Containers are nonpersistent and are spun up from images.</p>
+        <h4>Docker engine:</h4>
+        <p>The open source host software building and running the containers. Docker Engines act as the client-server
+            application supporting containers on various Windows servers and Linux operating systems, including <a
+                href="/linux/what-is-linux/">Oracle Linux</a>, CentOS, Debian, Fedora, RHEL, SUSE, and Ubuntu.</p>
+        <h4>Docker images:</h4>
+        <p> Collection of software to be run as a container that contains a set of instructions for creating a container
+            that can run on the Docker platform. Images are immutable, and changes to an image require to build a new
+            image.</p>
+        <h4>Docker Registry:</h4>
+        <p>Place to store and download images. The registry is a stateless and scalable server-side application that
+            stores and distributes <a href="https://docs.docker.com/registry/" target="_blank">Docker images</a>.</p>
+        <div class="obttns">
+            <div> <a href="/cloud-native/container-registry/" data-lbl="cloud-container-registry">Cloud Container
+                    Registry</a> </div>
+        </div>
+    </div>
+</section>
+<!-- /RC24v0 -->
+
+<!-- RC24v0 -->
+<section class="rc24 rc24v0 cpad" id="who-uses-docker">
+    <div class="rc24w1 cwidth">
+        <h2 class="rw-ptitle">Who uses Docker?</h2>
+        <p>Docker is an open application development framework that&rsquo;s designed to benefit DevOps and developers.
+            Using Docker, developers can easily build, pack, ship, and run applications as lightweight, portable,
+            self-sufficient containers, which can run virtually anywhere. Containers allow developers to package an
+            application with all of its dependencies and deploy it as a single unit. By providing prebuilt and
+            self-sustaining application containers, developers can focus on the application code and use without
+            worrying about the underlying operating system or deployment system.</p>
+        <p>Additionally, developers can leverage thousands of open source container applications that are already
+            designed to run within a Docker container. For DevOps teams, Docker lends itself to continuous integration
+            and development toolchains and reduces the constraints and complexity needed within their system
+            architecture to deploy and manage the applications. With the introduction of container orchestration cloud
+            services, any developer can develop containerized applications locally in their development environment, and
+            then move and run those containerized applications in production on cloud services, such as managed
+            Kubernetes services.</p>
+        <h3>Docker and developers</h3>
+        <p>Containers can be packaged by any kind of developer. Individuals in the software industry often separate
+            developers by specialization&mdash;front end, back end, or any concentration between. While you mostly may
+            see back-end developers packaging containers, anyone familiar with CaaS basic concepts can succeed in this
+            particular area of the software development life cycle. Before you’re ready to package your
+            application&rsquo;s dependencies, check out <a href="https://developer.oracle.com">developer.oracle.com</a>
+            and familiarize yourself with tools you can use to build your application or program.</p>
+    </div>
+</section>
+<!-- /RC24v0 -->
+
+<!-- RC24v0 -->
+<section class="rc24 rc24v1 cpad" id="docker-vs-kubernetes">
+    <div class="rc24w1 cwidth">
+        <h2 class="rw-ptitle">Docker versus Kubernetes</h2>
+        <div class="rc24w2">
+            <p>Linux containers have existed since 2008, but they were not well known until the emergence of Docker
+                containers in 2013. With the onset of Docker containers, came the explosion of interest in developing
+                and deploying containerized applications. As the number of containerized applications grew to span
+                hundreds of containers deployed across multiple servers, operating them became more complex. How do you
+                coordinate, scale, manage, and schedule hundreds of containers? This is where <a
+                    href="/cloud/what-is-kubernetes/">Kubernetes</a> can help. Kubernetes is an open source
+                orchestration system that allows you to run your Docker containers and workloads. It helps you manage
+                the operating complexities when moving to scale multiple containers deployed across multiple servers.
+                The Kubernetes engine automatically orchestrates the container lifecycle, distributing the application
+                containers across the hosting infrastructure. Kubernetes can quickly scale resources up or down,
+                depending on the demand. It continually provisions, schedules, deletes, and monitors the health of the
+                containers.</p>
+        </div>
+    </div>
+</section>
+<!-- /RC24v0 -->
+
+<!-- RC24v0 -->
+<section class="rc24 rc24v0 cpad" data-a11y="true" id="docker-basics">
+    <div class="rc24w1 cwidth">
+        <h2 class="rw-ptitle">Docker Basics</h2>
+        <div class="rc24w2">
+            <p>The core concepts of Docker are images and containers. A Docker image contains everything that is needed
+                to run your software: the code, a runtime (for example, Java Virtual Machine (JVM), drivers, tools,
+                scripts, libraries, deployments, and more.</p>
+            <p>A Docker container is a running instance of a Docker image. However, unlike in traditional virtualization
+                with a type 1 or type 2 hypervisor, a Docker container runs on the kernel of the host operating system.
+                Within a Docker image there is no separate operating system, as illustrated in Figure 1.</p>
+
+            <figure> <img data-src="/a/ocom/img/cc01-what-is-docker-figure1.png" alt="docker basics image">
+                <figcaption>Figure 1</figcaption>
+            </figure>
+
+
+            <figure class="rc24inline-rt">
+                <div class="ytembed ytvideo ytthumbnail" data-ytid="O7qOqTd6N44" data-autoplay="1"
+                    aria-label="Core Concepts: Deployment Infrastructure - VMs vs. Kubernetes video"><img
+                        src="/a/ocom/img/yt-video-thumbnail-o7qoqtd6n44.jpg" alt=""> </div>
+            </figure>
+            <h3>Isolation vs. Virtualization</h3>
+
+            <p>Every Docker container has its own file system, its own network stack (and therefore its own IP address),
+                its own process space, and defined resource limitations for CPU and memory. Since a Docker container
+                does not have to boot an operating system, it starts up instantly. Docker is about isolation, i.e.,
+                separating the resources of a host operating system, as opposed to virtualization, i.e., providing a
+                guest operating system on top of the host operating system.</p>
+
+            <h3>Incremental Files System</h3>
+
+            <figure class="rc24inline-rt"> <img data-src="/a/ocom/img/cc01-what-is-docker-figure2.png"
+                    alt="incremental files system image">
+                <figcaption>Figure 2</figcaption>
+            </figure>
+
+            <p>The file system of a Docker image is layered, with copy-on-write semantics. This enables inheritance and
+                reuse, saves resources on disk, and enables incremental image download.</p>
+            <p>As illustrated in Figure 2, a Docker image with a WebLogic deployment could be based on an image with an
+                Oracle WebLogic Server domain, which could be based on a WebLogic image, which is based on a Java
+                Development Kit ( JDK) image, which in turn is based on an Oracle Linux base image.</p>
+            <h3>Docker Registry</h3>
+            <p>While Docker images are easy to build and developers love the simplicity and portability of Docker
+                images, they quickly discovered that managing thousands of Docker images is very challenging. Docker
+                Registry address this challenge. Docker Registry is a standard way to store and distribute Docker
+                images. The Registry is an open source-based repository under the permissive Apache license.</p>
+            <p>Docker Registry also helps improve access control and security of the Docker images stored in its
+                repository. It manages the distribution of images and also can integrate with application development
+                workflows. Developers can setup their own Docker Registry, or use a hosted Docker Registry service such
+                as Docker Hub, Oracle Container Registry, Azure Container Registry, etc.</p>
+            <p>Docker Hub is a hosted Docker registry managed by Docker. Docker Hub has over 100,000 container images
+                from software vendors, open source projects, and the community. Docker Hub contains software and
+                applications from official repositories such as NGINX, Logstash, Apache HTTP, Grafana, MySQL, Ubuntu,
+                and Oracle Linux.</p>
+            <p>When starting a container, Docker will by default automatically pull the corresponding image from the
+                public Docker Hub if it is not available locally. Moreover, you can also create your own images and push
+                them to Docker Hub into either a public or private repository.</p>
+            <figure> <img data-src="/a/ocom/img/cc01-docker-registry.jpg" alt="Figure 3: Docker Registry screenshot">
+                <figcaption>Figure 3</figcaption>
+            </figure>
+            <h3>Docker as a Microservices Runtime</h3>
+            <p>The idea of cutting monolithic applications into smaller chunks of microservices attracts a lot of
+                attention these days among software developers.</p>
+            <p>Microservices are independently deployed as a process, use light-weight protocols to communicate with
+                each other, and every service owns its data<sup>5</sup>. Since microservices follow a decentralized
+                governance approach, they require a rather high amount of infrastructure automation, automated testing,
+                fully automated CD pipelines, and skilled, agile DevOps teams.</p>
+            <p>There is still a lot of discussion about this architectural style, yet it would be naive to assume that
+                an application decomposed into microservices can be simply operated as a set of processes. To name only
+                a few requirements, a microservice needs to be host-independent, and isolated on an operating system
+                level. It must run within its resource limits, must be scaled up and down, restarted if failed, and
+                discovered and connected to other microservices via a software defined network layer.</p>
+            <p>Therefore, running a microservice in a Docker container puts you at an excellent jumping-off point to
+                achieve most of these goals.</p>
+        </div>
+    </div>
+</section>
+<!-- /RC24v0 -->
+
+
+<!-- RC24v0 -->
+<section class="rc24 rc24v1 cpad" id="docker">
+    <div class="rc24w1 cwidth">
+        <h2 class="rw-ptitle">Docker&mdash;Two Key Dimensions</h2>
+        <div class="rc24w2">
+            <p>Docker changes the way we build, ship, and run software in two different dimensions:</p>
+            <ul class="obullets">
+                <li>It enhances the process to get applications reliably from development to production.</li>
+                <li>It provides a standards image format to get from on-premises to cloud.</li>
+            </ul>
+            <p>Both dimensions are explained in more detail in the following paragraphs.</p>
+        </div>
+    </div>
+</section>
+<!-- /RC24v0 -->
+
+<!-- RC24v0 -->
+<section class="rc24 rc24v1 cpad" id="docker-image">
+    <div class="rc24w1 cwidth">
+        <h2 class="rw-ptitle">Docker Image&mdash;Development to Production</h2>
+        <div class="rc24w2">
+            <p>Creating a Docker image with all of its dependencies solves the "but it worked for me on my development
+                machine" problem. The key idea is that a Docker image is created automatically by a build pipeline from
+                a source-code repository like Git and initially tested in a development environment. This immutable
+                image will then be stored in a Docker registry.</p>
+            <p>As shown in the Figure 4, the same image will be used for further load tests, integration tests,
+                acceptance tests, and more. In every environment, the same image will be used. Small but necessary
+                environmentally specific differences, such as a JDBC URL for a production database, can be fed into the
+                container as environment variables or files.</p>
+            <figure> <img data-src="/a/ocom/img/cc01-what-is-docker-figure4.png" alt="docker image screenshot">
+                <figcaption>Figure 4</figcaption>
+            </figure>
+            <p>Statistics show that 65% of all current Docker use cases are in development, and 48% use Docker for
+                continuous integration.</p>
+            <h3>Docker Cloud</h3>
+            <p>Docker changed the adoption of public clouds: On one hand, with a Docker image, for the first time in
+                history, a common package format exists that can be run on premises as well as on every major cloud
+                provider. Docker containers run on my laptop the same way they run on Oracle Cloud.</p>
+            <p>On the other hand&mdash;since Docker containers run on every major public cloud -- they are a major
+                contribution to overcoming a long curated prejudice against public clouds: vendor lock-in. Every major
+                cloud provider now offers Docker as a PaaS.</p>
+        </div>
+    </div>
+</section>
+<!-- /RC24v0 -->
+
+<!-- RC24v0 -->
+<section class="rc24 rc24v1 cpad" id="docker-versions">
+    <div class="rc24w1 cwidth">
+        <h2 class="rw-ptitle">Docker Versions&mdash;Maturity of Underlying Technology</h2>
+        <div class="rc24w2">
+            <p>The pace of Docker releases is much faster than the release cycle of the traditional enterprise software.
+                Sometimes the sheer pace of Docker releases, together with the newness of the Docker project, raises
+                concerns about the security and stability of Docker.</p>
+            <p>Although Docker and its command line, the Docker daemon, its API, and tools such as Docker Swarm, Docker
+                Machine, and Docker Compose only evolved in the last three years, the underlying kernel features have
+                been available in every Linux kernel for nearly a decade.</p>
+            <p>A prominent example of an early adopter of container technology is Google. Google has been using Linux
+                containers even before Docker was around. Furthermore, Google runs everything in a container. It is
+                estimated that Google starts 2 billion containers per week<sup>3</sup>.</p>
+            <h3>Cgroups and Namespaces History</h3>
+            <p>The underlying Linux kernel features that Docker uses are cgroups and namespaces. In 2008 cgroups were
+                introduced to the Linux kernel based on work previously done by Google developers<sup>1</sup>. Cgroups
+                limit and account for the resource usage of a set of operating system processes.</p>
+            <p>The Linux kernel uses namespace to isolate the system resources of processes from each other. The first
+                namespace, i.e. the mount namespace, was introduced as early as 2002.</p>
+        </div>
+    </div>
+</section>
+<!-- /RC24v0 -->
+
+
+
+
+<!-- END: oWidget_C/_Raw-Text/Display -->
+
+<!-- Right Column Widget - 2 -->
+
+<!-- Dispatcher:null -->
+
+<!-- BEGIN: oWidget_C/_Raw-Text/Display -->
+<!-- RC24v0 -->
+<section class="rc24 rc24v1 cpad" id="container-cloud-service">
+    <div class="rc24w1 cwidth">
+        <h2 class="rw-ptitle">Container Cloud Services</h2>
+        <div class="rc24w2">
+            <p>The first part of this article explained some important Docker concepts. However, in a production
+                environment it is not enough to simply run an application in a Docker container.</p>
+            <p>To setup and operate a production environment requires hardware to run the containers. Software such as
+                Docker, along with repositories and cluster managers, must be installed, upgraded and patched. If
+                several Docker containers communicate across hosts, a network must be created. Clustered containers
+                should be restarted if they fail. In addition, a set of containers linked to each other should be
+                deployable as easily as a single logical application instance. An example of this could be a load
+                balancer, a few web servers, some Oracle WebLogic Server instances with an admin server, a managed
+                server, and a database. To manage containerized applications at scale, requires a container
+                orchestration system like Kubernetes or Docker Swarm. Deploying, managing, and operating orchestration
+                systems like Kubernetes can be challenging and time-consuming.</p>
+            <p>To make it easier and more efficient for developers to create containerized applications, cloud providers
+                offer Container Cloud Services or Containers as a Service (CaaS). Container Cloud Services help
+                developers and operations teams streamline and manage the lifecycle of containers in an automated
+                fashion. These orchestration services, typically built using Kubernetes, make it easier for DevOps teams
+                to manage and operate containerized applications at scale. Oracle Container Engine for Kubernetes and
+                Azure Kubernetes Service are two examples of popular container orchestration managed cloud services.</p>
+            <p><a href="/cloud-native/container-engine-kubernetes/">Oracle Container Engine for Kubernetes</a> is a
+                fully managed, scalable, and highly available service that you can use to deploy your containerized
+                applications in the cloud. Use Container Engine for Kubernetes (sometimes abbreviated to just OKE) when
+                your development team wants to reliably build, deploy, and manage cloud native applications.</p>
+        </div>
+    </div>
+</section>
+<!-- /RC24v0 -->
+
+<!-- RC24v0 -->
+<section class="rc24 rc24v0 cpad" data-a11y="true" id="docker-images">
+    <div class="rc24w1 cwidth">
+        <h2 class="rw-ptitle">Docker images from Oracle</h2>
+        <div class="rc24w2">
+            <figure class="rc24inline-rt">
+                <div class="ytembed ytvideo ytthumbnail" data-ytid="U4vJFUpBqNM" data-autoplay="1" aria-label="Quick Demo: Oracle Container Engine and Cloud Infrastructure Registry
+ video" data-trackas="rc24-lightbox"><img src="/a/ocom/img/yt-video-thumbnail-u4vjfupbqnm.jpg" alt=""> </div>
+            </figure>
+            <p>Containers can be packaged by any kind of developer. Individuals in the software industry often separate
+                developers by specialization&mdash;front end, back end, or any concentration between. While you mostly
+                may see back-end developers packaging containers, anyone familiar with CaaS basic concepts can succeed
+                in this particular area of the software development life cycle. Before you’re ready to package your
+                application&rsquo;s dependencies, check out <a
+                    href="https://developer.oracle.com">developer.oracle.com</a> and familiarize yourself with tools you
+                can use to build your application or program.</p>
+            <p>Below are some sources for obtaining or building Docker images for Oracle products. The Oracle GitHub
+                repository for Docker images contains Dockerfiles and samples to build Docker images for Oracle
+                commercial products and Oracle sponsored open source projects.</p>
+            <ul class="obullets">
+                <li><a href="https://github.com/oracle/docker-images">Oracle GitHub repository for Docker images</a>
+                </li>
+                <li><a href="https://hub.docker.com/publishers/oracle">Docker Hub</a></li>
+                <li><a href="https://container-registry.oracle.com/">Oracle Container Registry</a></li>
+            </ul>
+            <h3>Docker Hands-On Lab&mdash;Containerized Development with Docker</h3>
+            <ul class="obullets">
+                <li><a href="https://go.oracle.com/lp=93125">Containerized Development with Docker on Oracle Cloud</a>
+                </li>
+            </ul>
+            <h3>References</h3>
+            <ol class="decimal">
+                <li><a href="https://en.wikipedia.org/wiki/Cgroups" target="_blank">Cgroups</a> (Wikipedia)</li>
+                <li><a href="https://en.wikipedia.org/wiki/Linux_namespaces" target="_blank">Linux Namespaces</a>
+                    (Wikipedia)</li>
+                <li><a href="https://www.theregister.co.uk/2014/05/23/google_containerization_two_billion/"
+                        target="_blank">EVERYTHING at Google runs in a container</a>, by Jack Clark</li>
+                <li><a href="https://www.docker.com/blog/docker-hub-hits-5-billion-pulls/" target="_blank">Docker Hub
+                        Hits 5 Billion Pulls</a></li>
+                <li><a href="https://martinfowler.com/articles/microservices.html" target="_blank">Microservices</a>, by
+                    Martin Fowler</li>
+            </ol>
+        </div>
+    </div>
+</section>
+<!-- /RC24v0 -->

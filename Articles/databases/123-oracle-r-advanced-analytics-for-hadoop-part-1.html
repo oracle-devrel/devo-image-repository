@@ -1,0 +1,542 @@
+<!-- U03v5 -->
+<!-- _Raw-Text -->
+<section class="cc01 cc01v0 cpad crule">
+    <div class="cc01w1 cwidth">
+
+        <p>In this article, which is Part 1 of a series, we will look at how you can run R analytics at scale on a
+            Hadoop platform using Oracle R Advanced Analytics for Hadoop, which is a component of Oracle Big Data
+            Connectors and provides a set of R functions allowing you to connect to and process data stored on Hadoop
+            Distributed File System (HDFS) using Hive transparency as well as Oracle Database. Oracle R Advanced
+            Analytics for Hadoop provides interfaces to Oracle Database, HDFS, and Hive and interfaces for initiating
+            map-reduce jobs using by providing some simplified functions that abstract the underlying complexity away
+            from the data scientist. Oracle R Advanced Analytics for Hadoop has a number of highly scalable machine
+            learning algorithms and also utilizes some of the Apache Spark machine learning algorithms for greater
+            performance of in-memory distributed machine learning.</p>
+
+        <p>This article focuses on showing how you can get started with using Oracle R Advanced Analytics for Hadoop,
+            how to access and process data in Oracle Database, HDFS, and Hive and how to create and manage map-reduce
+            processes. In the <a
+                href="https://developer.oracle.com/databases/oracle-r-advanced-analytics-for-hadoop-part-2.html">second
+                part of this series</a>, we will look at how you can use the various analytic features, machine
+            learning, and Apache Spark to process and analyze your data.</p>
+
+        <h3>Overview of Oracle R Advanced Analytics for Hadoop</h3>
+
+        <p>Oracle R Advanced Analytics for Hadoop is one of the components of the Oracle Big Data Connectors, and it
+            provides a set of R functions that allows you to connect to and manipulate data stored on HDFS using Hive
+            transparency. It also allows you to build map-reduce analytics and use the prepackaged algorithms exposed
+            through an R interface. Additionally, you can integrate with Apache Spark and other tools and languages for
+            greater performance for multilayer neural networks and for logistic regression. (Note: In Figure 1,
+            &quot;Oracle R Advanced Analytics for Hadoop&quot; is abbreviated as &quot;ORAAH&quot; and &quot;SQL
+            Developer&quot; refers to Oracle SQL Developer.)</p>
+
+        <p align="center"><img alt="Figure 1: Oracle R Advanced Analytics for Hadoop overview"
+                src="//www.oracle.com/a/tech/img/oracle-r-advanced-analytics-for-hadoop-part-1-f1.gif" /></p>
+
+        <p align="center" class="xsml">Figure 1: Oracle R Advanced Analytics for Hadoop overview</p>
+
+        <p>Check <a
+                href="http://www.oracle.com/technetwork/database/database-technologies/bdc/r-advanalytics-for-hadoop/documentation/oraah-2-7-0-reference-manual-3386240.pdf"><em>Oracle
+                    R Advanced Analytics for Hadoop 2.7.0</em></a> for a full listing of all the R functions contained
+            in the Oracle R Advanced Analytics for Hadoop package:.</p>
+
+        <h3>How to Get Access to an Oracle R Advanced Analytics for Hadoop Environment</h3>
+
+        <p>When it comes to trying out Oracle R Advanced Analytics for Hadoop, you have three main options. The first is
+            to get it installed on some of your existing servers that have Hadoop, Hive, and access to Oracle Database.
+            If such an environment is not easily accessible, alternatively, you can use one of the Oracle VM VirtualBox
+            prebuilt virtual machines. The virtual machine called Oracle Big Data Lite VM comes with a large number of
+            Oracle products installed on it including Oracle R Advanced Analytics for Hadoop, Oracle Database12c,
+            Hadoop, HBase, Hive, Impala, Kafta, and so on. This virtual machine is continually being updated with the
+            latest version of this software, and it can be downloaded from the following website: <a
+                href="//www.oracle.com/technetwork/community/developer-vm/index.html">https://www.oracle.com/technetwork/community/developer-vm/index.html</a>.
+        </p>
+
+        <p>As a third option, Oracle Big Data Cloud Service comes with Oracle R Advanced Analytics for Hadoop installed
+            along with many of the products that are on the Oracle Big Data Lite VM. Check the following web page to see
+            what cloud services are available: <a
+                href="https://cloud.oracle.com/en_US/big-data">https://cloud.oracle.com/en_US/big-data</a>.</p>
+
+        <h3>Working with Data Across Datasources</h3>
+
+        <p>Oracle R Advanced Analytics for Hadoop allows you to work seamlessly across many different locations for your
+            data including Oracle Database, Hive, and HDFS, as shown in Figure 2. In this article, I will illustrate how
+            you can use it to access and process data on each of these datasources.</p>
+
+        <p align="center"><img
+                alt="Figure 2: Oracle R Advanced Analytics for Hadoop working with data across many datasources"
+                src="//www.oracle.com/a/tech/img/oracle-r-advanced-analytics-for-hadoop-part-1-f2.gif" /></p>
+
+        <p align="center" class="xsml">Figure 2: Oracle R Advanced Analytics for Hadoop working with data across many
+            datasources.</p>
+
+        <p>The first example of using Oracle R Advanced Analytics for Hadoop is with data located in Oracle Database.
+            The following example code begins with loading the R package for Oracle R Advanced Analytics for Hadoop,
+            which is called <code class="ocode">ORCH</code>. It then downloads a CSV file from the internet that
+            contains Beach Quality inspection reports for beaches located in Dublin, Ireland. This dataset will be used
+            in each of the examples to illustrate the moving of data between each of the data storage environments. When
+            this data is loaded into Oracle Database, you can use many of the R functions to inspect this data. The
+            following code illustrates the loading and usage this dataset.</p>
+
+        <p>For our first step, we can load Oracle R Advanced Analytics for Hadoop using the <code
+                class="ocode">ORCH</code> package and then download the dataset from the internet.</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+# load the Oracle R Advanced Analytics for Hadoop library
+library(ORCH)
+
+# download the CSV file to the local environment and examine the data
+data &lt;- read.csv(
+    file=url(&quot;http://data.fingal.ie/datasets/csv/BathingWaterStatus.csv&quot;),
+    head=TRUE, sep=&quot;,&quot;)
+class(data)
+head(data)
+</code></pre>
+        </div>
+
+        <p>After loading the data into the local R environment, you can connect to a schema in Oracle Database:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+# connect to Oracle Database
+ore.connect(user=&quot;odmuser&quot;, sid=&quot;orcl&quot;, host=&quot;localhost&quot;, password=&quot;odmuser&quot;, port=1521, all=TRUE);
+</code></pre>
+        </div>
+
+        <p>You can now save the local R data frame, containing the beach quality data, into your Oracle schema by
+            creating new table. The <code class="ocode">ore.create()</code> command creates a table in the database and
+            uses the data in the R data frame (called <code class="ocode">data</code>) into this table. This new table
+            can now be referenced in the R session.</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+# save the R data frame as a table in the database
+ore.create(data, table=&quot;DUBLIN_BEACH_QUALITY&quot;)
+# refresh the list of database objects
+ore.attach()
+# list the objects in the database. The newly created table is listed
+ore.ls()
+class(DUBLIN_BEACH_QUALITY)
+</code></pre>
+        </div>
+
+        <p>After the table has been created, you can use it as a proxy data frame (also called an ORE data frame) and
+            run all your typical R functions on this data. But in this case, these R functions, via the ORE transparency
+            layer, are being run on the data in the table in Oracle Database instead of in the local R environment. This
+            allows you to use the benefits of Oracle Database. The following codes illustrates using some of the
+            traditional R functions to analyze the data in the Oracle table.</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+# this table can be used in the same way as a tradition R data frame,
+# but the data remains in the database. Only results are returned to your R 
+# session
+summary(DUBLIN_BEACH_QUALITY)
+head(DUBLIN_BEACH_QUALITY)
+</code></pre>
+        </div>
+
+        <p>The R code above illustrates how easy it is to work with data in the local R session and with data in Oracle
+            Database.</p>
+
+        <p>But what about when you want to work with data in HDFS? Oracle R Advanced Analytics for Hadoop has number of
+            R functions that facilitate this. Table 1 lists the functions for working with HDFS.</p>
+    </div>
+</section>
+
+<section class="cc02 cc02v0 cpad" data-ocomid="cc02" data-trackas="cc02">
+    <div class="cc02w1 cwidth"><strong>Table 1. HDFS functions in Oracle R Advanced Analytics for Hadoop</strong>
+
+        <div class="otable">
+            <table class="otable-w2">
+                <thead>
+                    <tr>
+                        <th>Function Name</th>
+                        <th>Function Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code class="ocode">hdfs.attach</code></td>
+                        <td><code class="ocode">hdfs.mv</code></td>
+                    </tr>
+                    <tr>
+                        <td><code class="ocode">hdfs.cache</code></td>
+                        <td><code class="ocode">hdfs.ncol</code></td>
+                    </tr>
+                    <tr>
+                        <td><code class="ocode">hdfs.cd</code></td>
+                        <td><code class="ocode">hdfs.nrow</code></td>
+                    </tr>
+                    <tr>
+                        <td><code class="ocode">hdfs.cleanInput</code></td>
+                        <td><code class="ocode">hdfs.parts</code></td>
+                    </tr>
+                    <tr>
+                        <td><code class="ocode">hdfs.cp</code></td>
+                        <td><code class="ocode">hdfs.pull</code></td>
+                    </tr>
+                    <tr>
+                        <td><code class="ocode">hdfs.cwd</code></td>
+                        <td><code class="ocode">hdfs.push</code></td>
+                    </tr>
+                    <tr>
+                        <td><code class="ocode">hdfs.delim</code></td>
+                        <td><code class="ocode">hdfs.put</code></td>
+                    </tr>
+                    <tr>
+                        <td><code class="ocode">hdfs.describe</code></td>
+                        <td><code class="ocode">hdfs.pwd</code></td>
+                    </tr>
+                    <tr>
+                        <td><code class="ocode">hdfs.dim</code></td>
+                        <td><code class="ocode">hdfs.rm</code></td>
+                    </tr>
+                    <tr>
+                        <td><code class="ocode">hdfs.download</code></td>
+                        <td><code class="ocode">hdfs.rmdir</code></td>
+                    </tr>
+                    <tr>
+                        <td><code class="ocode">hdfs.exists</code></td>
+                        <td><code class="ocode">hdfs.root</code></td>
+                    </tr>
+                    <tr>
+                        <td><code class="ocode">hdfs.fromHive</code></td>
+                        <td><code class="ocode">hdfs.sample</code></td>
+                    </tr>
+                    <tr>
+                        <td><code class="ocode">hdfs.fromRData</code></td>
+                        <td><code class="ocode">hdfs.setroot</code></td>
+                    </tr>
+                    <tr>
+                        <td><code class="ocode">hdfs.get</code></td>
+                        <td><code class="ocode">hdfs.size</code></td>
+                    </tr>
+                    <tr>
+                        <td><code class="ocode">hdfs.head</code></td>
+                        <td><code class="ocode">hdfs.sync</code></td>
+                    </tr>
+                    <tr>
+                        <td><code class="ocode">hdfs.id</code></td>
+                        <td><code class="ocode">hdfs.tail</code></td>
+                    </tr>
+                    <tr>
+                        <td><code class="ocode">hdfs.keysep</code></td>
+                        <td><code class="ocode">hdfs.toHive</code></td>
+                    </tr>
+                    <tr>
+                        <td><code class="ocode">hdfs.levels</code></td>
+                        <td><code class="ocode">hdfs.toRData</code></td>
+                    </tr>
+                    <tr>
+                        <td><code class="ocode">hdfs.ls</code></td>
+                        <td><code class="ocode">hdfs.toRDD</code></td>
+                    </tr>
+                    <tr>
+                        <td><code class="ocode">hdfs.meta</code></td>
+                        <td><code class="ocode">hdfs.upload</code></td>
+                    </tr>
+                    <tr>
+                        <td><code class="ocode">hdfs.mkdir</code></td>
+                        <td><code class="ocode">hdfs.valuesep</code></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<section class="cc01 cc01v0 cpad">
+    <div class="cc01w1 cwidth">
+        <p>The functions listed in Table 1 allow you to work with data in HDFS, to move or save data to HDFS, and to
+            read data from HDFS. This is very useful for working with data as it lands in your Hadoop platform and to
+            save newly created datasets that are based on your R analytics and can be used by other processes.</p>
+
+        <p>The following examples illustrate how you can work with data files in HDFS using a selection of the HDFS R
+            functions listed in Table 1. The following R code will take the Dublin Beach Quality dataset and will save
+            it to HDFS. Then using some of the Oracle R Advanced Analytics for Hadoop R functions, you can examine this
+            data stored in HDFS as an alternative location to having data in Oracle Database or in your R environment,
+            and you can easily examine these data files from your R environment. These functions allow you to easily
+            persist your dataset, created during your data science projects, for reuse at a later time.</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+# What is the current working directory on HDFS?
+# If needed the working directory can be changed using hdfs.cwd()
+hdfs.pwd()
+
+# Write the R data frame out to a file in HDFS
+hdfs.put(data, dfs.name=&quot;Dublin_Beach_Quality_Data&quot;)
+
+# Add the newly added file in HDFS to your search space 
+hdfs.attach(&quot;Dublin_Beach_Quality_Data&quot;)
+
+# List the properties of the file in HDFS, including path, class, types, 
+# names, size, number of rows, number of variables/features, and so on
+hdfs.describe(&quot;Dublin_Beach_Quality_Data&quot;)
+
+# List the number of records and the number of variables/features
+hdfs.dim(&quot;Dublin_Beach_Quality_Data&quot;)
+
+# Check to see if a file with this name exists in HDFS. This is 
+# a useful command before you try to create a file in HDFS.
+hdfs.exists(&quot;Dublin_Beach_Quality_Data&quot;)
+
+# Returns the first part of the file. 
+hdfs.head(&quot;Dublin_Beach_Quality_Data&quot;)
+# Returns the end of the file
+hdfs.tail(&quot;Dublin_Beach_Quality_Data&quot;)
+
+# Returns meta-data about the file. This includes the variable names, class 
+# type, variable types (for example, factors), number of records, 
+# if trimming is used, and so on.
+hdfs.meta(&quot;Dublin_Beach_Quality_Data&quot;)
+
+# Returns number of rows. Similar to R function
+hdfs.nrow(&quot;Dublin_Beach_Quality_Data&quot;)
+# Returns number of variables. Similar to R function
+hdfs.ncol(&quot;Dublin_Beach_Quality_Data&quot;)
+# Returns the size of the file in HDFS in bytes
+hdfs.size(&quot;Dublin_Beach_Quality_Data&quot;)
+# Lists the files stored in HDFS for the current working directory
+hdfs.ls()
+
+#
+hdfsData &lt;- hdfs.get(&quot;Dublin_Beach_Quality_Data&quot;)
+# Check the class of the object. It will be an R data frame
+# This shows that the data in the file has been loaded into
+# the R environment as an R data frame
+class(hdfsData)
+
+# Finally, you can remove/delete the file from HDFS
+hdfs.rm(&quot;Dublin_Beach_Quality_Data&quot;, force=TRUE)
+</code></pre>
+        </div>
+
+        <p>When working with Hive, you will need to create a connection to Hive. This is similar to making a connection
+            to Oracle Database, but for Hive it is a much simpler command:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+# set up a connection to Hive
+ore.connect(type=&quot;HIVE&quot;)
+ore.attach()
+
+# Displays the current database being used by Hive
+ore.showHiveOptions()
+
+# Take the Dublin Beach Quality dataset and push it out to Hive
+# Hive cannot process factor variables. Convert these to character strings
+f_filter &lt;- sapply(data, is.factor)
+data[f_filter] &lt;- data.frame(lapply(data[f_filter], as.character), 
+                             stringsAsFactors = FALSE) 
+# Move the modified data frame out to Hive
+hive_data &lt;- ore.push(data)
+
+# This data can be processed using the typical R functions
+# while availing yourself of the scalability of Hive
+summary(hive_data)
+str(hive_data)
+head(hive_data)
+nrow(hive_data)
+dim(hive_data)
+
+# R data frames can be persisted to Hive to later use 
+ore.create(data, table = &quot;dublin_beach_hive&quot;)
+ore.ls()
+
+# Hive data can be deleted from Oracle R Advanced Analytics for Hadoop
+ore.drop(table=&quot;dublin_beach_hive&quot;)
+ore.ls()
+</code></pre>
+        </div>
+
+        <p>We have seen from the examples above how we can use Oracle R Advanced Analytics for Hadoop as one tool to
+            work with data in Oracle Database, in HDFS, and in Hive.</p>
+
+        <h3>Map-Reduce Using Oracle R Advanced Analytics for Hadoop</h3>
+
+        <p>Oracle R Advanced Analytics for Hadoop comes with a number of functions that allow you to create and manage
+            map-reduce jobs in Hadoop. A map-reduce process takes a dataset that has been distributed over Hadoop,
+            performs analysis on the distributed dataset, and finally calculates and returns the results. This allows
+            you to utilize many of the CRAN packages and invoke these as Hadoop jobs from R.</p>
+
+        <p>With the <code class="ocode">ORCH</code> package, you can define a map-reduce job and submit it using the
+            <code class="ocode">hadoop.exec()</code> function. Table 2 lists the various functions map-reduce function
+            for ORAAH. There are three main steps to define a map-reduce job in <code class="ocode">ORCH</code>.</p>
+
+        <p style="margin-left:40px;">1. Define the dataset you are going to use. This dataset can exist on Hadoop, in
+            Hive, or as an R object.</p>
+
+        <p style="margin-left:40px;">2. Define the mapper function. This allows you to define what data you want to be
+            selected from the dataset and used in the later steps.</p>
+
+        <p style="margin-left:40px;">3. Specify how to apply the reducer function. This is the function to be applied to
+            the selected data. The output from this will be results from applying the reducer function or calculation.
+        </p>
+    </div>
+</section>
+
+<section class="cc02 cc02v0 cpad" data-ocomid="cc02" data-trackas="cc02">
+    <div class="cc02w1 cwidth"><strong>Table 2: Oracle R Advanced Analytics for Hadoop map-reduce functions</strong>
+
+        <div class="otable">
+            <table class="otable-w2">
+                <thead>
+                    <tr>
+                        <th>Function Name</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code class="ocode">hadoop.exec</code></td>
+                        <td>This function starts the Hadoop engine to send the mapper, reducer, and combiner R functions
+                            for execution. The data must exist in HDFS.</td>
+                    </tr>
+                    <tr>
+                        <td><code class="ocode">hadoop.jobs</code></td>
+                        <td>Lists the running Hadoop jobs.</td>
+                    </tr>
+                    <tr>
+                        <td><code class="ocode">hadoop.run</code></td>
+                        <td>This start the Hadoop engine and sends the mapper, reducer, and combiner R functions for
+                            execution. This is very similar to <code class="ocode">hadoop.exec</code> above, except that
+                            the data is not in Hadoop. It will copy the data to Hadoop before commencing the map-reduce
+                            job.</td>
+                    </tr>
+                    <tr>
+                        <td><code class="ocode">orch.dryrun</code></td>
+                        <td>Changes the execution platform between the local host and the Hadoop cluster.</td>
+                    </tr>
+                    <tr>
+                        <td><code class="ocode">orch.export</code></td>
+                        <td>Makes R objects, in the local R session, available in Hadoop so that they can referenced in
+                            map-reduce jobs.</td>
+                    </tr>
+                    <tr>
+                        <td><code class="ocode">orch.keyval</code></td>
+                        <td>Outputs the key-value pairs in a map-reduce job.</td>
+                    </tr>
+                    <tr>
+                        <td><code class="ocode">orch.keyvals</code></td>
+                        <td>Outputs the sets of key-value pairs in a map-reduce job.</td>
+                    </tr>
+                    <tr>
+                        <td><code class="ocode">orch.pack</code></td>
+                        <td>Compresses an R object that map-reduce will write as the values in key-value pairs.</td>
+                    </tr>
+                    <tr>
+                        <td><code class="ocode">orch.tempPath</code></td>
+                        <td>Sets the path where temporary data is stored.</td>
+                    </tr>
+                    <tr>
+                        <td><code class="ocode">orch.unpack</code></td>
+                        <td>Uncompresses an R object that was compressed using the <code class="ocode">orch.pack</code>
+                            function.</td>
+                    </tr>
+                    <tr>
+                        <td><code class="ocode">orch.create.parttab</code></td>
+                        <td>Enables partitioned Hive tables to be used with the ORCH map-reduce framework.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<section class="cc01 cc01v0 cpad">
+    <div class="cc01w1 cwidth">
+        <p>The following code illustrates the typical word count map-reduce process using Oracle R Advanced Analytics
+            for Hadoop.</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+words_dataset &lt;- hdfs.put(corpus)
+wordcount &lt;- function(input, output=NULL, pattern= &quot;  &quot; ) {
+   result &lt;- hadoop.exec(dfs.id=input,
+                   mapper = function (k, v) {
+                       lappy(strsplit(x=v, split=pattern) [[1]],
+                       function(w)  orch.keyval(w, 1) [[1]])
+                   },
+                   reducer = function(k, vv) {
+                       orch.keyval(k, sum(unlist(vv)))
+                   },
+                   config=new (&quot;mapred.config&quot;,
+                   job.name = &quot;wordcount&quot;,
+                   map.output = data.frame(key=0, val=&#39;&#39;),
+                   reduce.output = data.frame(key=&#39;&#39;, val=0))
+               )
+   result
+}
+</code></pre>
+        </div>
+
+        <h3>Summary</h3>
+
+        <p>In this article, we looked at what Oracle R Advanced Analytics for Hadoop is and at some of its capabilities.
+            Oracle R Advanced Analytics for Hadoop provides a set of R functions that allow you to connect to and
+            manipulate data stored in HDFS, using Hive transparency, as well as Oracle Database. In addition, you can
+            build highly efficient and scalable advanced analytics using map-reduce and Spark, all through simplified R
+            interfaces.</p>
+
+        <p>In <a href="/databases/oracle-r-advanced-analytics-for-hadoop-part-2.html">Part 2</a> of this series, we will
+            look at some of the more advanced features of Oracle R Advanced Analytics for Hadoop, including advanced
+            analytics, how to access and run Spark, and how to use other machine learning algorithms.</p>
+
+        <h3>About the Author</h3>
+
+        <p>Oracle ACE Director <a
+                href="https://twitter.com/brendantierney?ref_src=twsrc%5Egoogle%7Ctwcamp%5Eserp%7Ctwgr%5Eauthor"
+                target="_blank">Brendan Tierney</a> is an independent consultant (<a href="http://www.oralytics.com/"
+                target="_blank">Oralytics</a>) and lectures on data science, databases, and big data at the Dublin
+            Institute of Technology/Dublin Technological University. He has 24+ years of experience working in the areas
+            of data mining, data science, big data, and data warehousing. As a recognized data science and big data
+            expert, Tierney has worked on projects in Ireland, the UK, Belgium, Holland, Norway, Spain, Canada, and the
+            US. He is active in the UK Oracle User Group (UKOUG) community and one of the user group leaders in Ireland.
+            Tierney has also been editor of the UKOUG <em>Oracle Scene</em> magazine, is a regular speaker at
+            conferences around the world, and writes for several publications. In addition, he has published four books,
+            three with Oracle Press/McGraw-Hill (<em>Predictive Analytics Using Oracle Data Miner</em>, <em>Oracle R
+                Enterprise: Harnessing the Power of R in Oracle Database</em>, and <em>Real World SQL and PL/SQL: Advice
+                from the Experts</em>) and one with MIT Press (<em>Essentials of Data Science</em>).</p>
+
+    </div>
+</section>
+<!-- / _Raw-Text -->
+<!-- _Raw-Text -->

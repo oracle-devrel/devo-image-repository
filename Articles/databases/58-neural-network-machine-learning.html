@@ -1,0 +1,1563 @@
+<!-- _Raw-HTML -->
+<section class="cc01 cc01v0 cpad crule">
+    <div class="cc01w1 cwidth">
+        <p>Oracle 18c Database brings prominent new machine learning algorithms, including Neural Networks and Random
+            Forests. While many articles are available on machine learning, most of them concentrate on how to build a
+            model. Very few talk about how to use these new algorithms in your applications to score or label new data.
+            This article will explain how Neural Networks work, how to build a Neural Network in Oracle Database, and
+            how to use the model to score or label new data.</p>
+
+        <h3>What are Neural Networks?</h3>
+
+        <p>Over the past couple of years, Neural Networks have attracted a lot of attention thanks to their ability to
+            efficiently find patterns in data&mdash;traditional transactional data, as well as images, sound, streaming
+            data, etc. But for some implementations, Neural Networks can require a lot of additional computing resources
+            due to the complexity of the many hidden layers within the network. Figure 1 gives a very simple
+            representation of a Neural Network with one hidden layer. All the inputs are connected to a neuron in the
+            hidden layer (red circles). A neuron takes a set of numeric values as input and maps them to a single output
+            value. (A neuron is a simple multi-input linear regression function, where the output is passed through an
+            activation function.) Two common activation functions are logistic and tanh functions. There are many
+            others, including logistic sigmoid function, arctan function, bipolar sigmoid function, etc.</p>
+
+        <p align="center"><img alt="Figure 1 – A Simple Neural Network"
+                src="//www.oracle.com/a/tech/img/art-neural-network-image001.png" /></p>
+
+        <p align="center" class="xsml">Figure 1 &ndash; A Simple Neural Network</p>
+
+        <p>Figure 1 illustrates a simple Neural Network with one hidden layer. But if additional hidden layers are
+            added, as in Figure 2, the complexity of the computations involved can increase dramatically. The addition
+            of more hidden layers means the Neural Network has additional work to do and additional time is needed to
+            find complex patterns hidden in the data. This gives us machine learning models with greater predictive
+            accuracy compared to more traditional machine learning algorithms. Because there is a computational cost in
+            order to achieve this, you must determine if that additional cost is necessary for your particular problem.
+        </p>
+
+        <p align="center"><img alt="Figure 2 – Deep Learning Neural Network"
+                src="//www.oracle.com/a/tech/img/art-neural-network-image002.png" /></p>
+
+        <p align="center" class="xsml">Figure 2 &ndash; Deep Learning Neural Network</p>
+
+        <p>Figure 2 gives an example of a <em>feed-forward</em> Neural Network. With a <em>back-propagation</em> Neural
+            Network, the calculated error rates are fed back to the hidden layers, and the processing at each neuron is
+            updated and the weights rules adjusted to reduce the error rate. This supervised learning method requires a
+            labelled data set. The training of the Neural Network model starts by assuming random weights to each of the
+            connections in the network. The algorithm then iteratively updates the weights in the network by showing
+            training data to the network and updating the network weights until the network is optimized, in a
+            generalized way to avoid overfitting.</p>
+
+        <p>This complex and multi-layered approach to building machine learning models gives us the term &ldquo;deep
+            learning.&rdquo; <span lang="EN-IE">Deep learning networks are simply neural networks that have multiple
+                layers of hidden units; in other words, they are <em>deep</em> in terms of the number of hidden layers
+                they have, as illustrated in Figure 2.</span></p>
+
+        <p>Although we commonly read articles that explain how Neural Networks can be applied to image processing,
+            speech recognition, facial recognition, advanced gaming and AI, among many other application areas, Neural
+            Networks are regularly used with regression and classification type of problems. Regression problems look to
+            make predictions based on some numerical value (e.g., estimating the value of a company&rsquo;s share price
+            on a stock exchange, determining the valuation of a property, acidity levels of wine, etc.), whereas
+            classification is used to predict a defined value. The simplest and most common version of this is binary
+            classification where you want to predict one of two possible outcomes (e.g., if a customer is going to churn
+            or not). An extended version of binary classification is called &ldquo;multi-class classification,&rdquo;
+            which is when there are more than two possible outcomes. You can have N number of possible
+            outcomes&mdash;but in most scenarios you will have less than 10.</p>
+
+        <h3>Neural Networks in Oracle 18c</h3>
+
+        <p>Oracle has had machine learning algorithms built into the database since Oracle 8i. With each subsequent
+            release new algorithms have been added. These are in addition to the recoding of these algorithms to allow
+            for greater scalability and significant improvement in speed. For example, with a mid-range database server
+            you can now process hundreds of millions of records in seconds. The in-database machine learning algorithms
+            are part of the Advanced Analytics option, which has two components: the in-database machine learning
+            algorithms that can be accessed using SQL, and the ability to embed and run R code inside the database
+            (accessible using R code or SQL). Yes&mdash;you can have SQL calling R code.</p>
+
+        <p>Neural Networks are included in the release of Oracle 18c database, as part of the Advanced Analytics option.
+            The implementation of the Neural Network incorporates back-propagation and can be used for classification
+            (including binary and multi-class) and regression problems.</p>
+
+        <p>In most implementations of Neural Networks algorithms, a lot of work is involved with preparing the data
+            before inputting to the Neural Network. Most of this work revolves around converting data into numerical
+            formats and then normalizing the data.</p>
+
+        <p>The in-database Oracle machine learning algorithms have inbuilt Automatic Data Preparation (ADP), a feature
+            that will format, transform and prepare the data&mdash;saving you many days of programming.</p>
+
+        <p>ADP for Neural Networks replaces missing categorical values with the mode, and missing numerical values with
+            the mean. A Neural Network requires the normalization of numeric input. The algorithm uses z-score
+            normalization. The normalization occurs only for two-dimensional numeric columns (not nested). Normalization
+            places the values of numeric attributes on the same scale and prevents attributes with a large original
+            scale from biasing the solution. A Neural Network scales the numeric values in nested columns by the maximum
+            absolute value seen in the corresponding columns.</p>
+
+        <h3>How to Build a Neural Network Model in Oracle 18c</h3>
+
+        <p>In this section I will provide an example of building a basic Neural Network in Oracle 18c, using the default
+            settings. I will come back to this later to show you how to create a more complex Neural Network by
+            configuring more of the parameter settings.</p>
+
+        <p>There are two stages to creating a Neural Network, or any in-database machine learning model. The first part
+            is to define the basic settings. The second part is to run the algorithm based on these settings.</p>
+
+        <p>The following code illustrates the creating of a settings table that contains the basic level of parameter
+            settings for the Neural Network. These include telling the in-database machine learning engine to use the
+            Neural Network algorithm, and the second parameter to use the automatic data preparation feature. For the
+            remaining settings and algorithm parameters (see Table 1), Oracle will use the default values, which are
+            based on lots of research and experimental work by Oracle. We will come back to these additional settings
+            later.</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+
+-- create the settings table for a Neural Network model
+CREATE TABLE demo_Neural_Network_settings 
+( setting_name  VARCHAR2(30),
+  setting_value VARCHAR2(4000));
+
+-- insert the settings records for a Neural Network
+-- ADP is turned on. By default ADP is turned off.
+BEGIN
+  INSERT INTO demo_neural_network_settings (setting_name, setting_value)
+  values (dbms_data_mining.algo_name, 
+          dbms_data_mining.algo_neural_network);
+	
+  INSERT INTO demo_neural_network_settings (setting_name, setting_value)
+  VALUES (dbms_data_mining.prep_auto, dbms_data_mining.prep_auto_on);
+END;
+
+ </code></pre>
+        </div>
+
+        <table style="width:100%">
+            <tbody>
+                <tr>
+                    <td style="width:145.8pt;border:solid #939699 1.0pt;
+  border-right:none;background:#939699;padding:0in 5.4pt 0in 5.4pt" valign="top" width="199">
+                        <p><strong><span style="color:white; font-size:10.5pt">Setting Name</span></strong></p>
+                    </td>
+                    <td style="width:154.75pt;border-top:solid #939699 1.0pt;
+  border-left:none;border-bottom:solid #939699 1.0pt;border-right:none;
+  background:#939699;padding:0in 5.4pt 0in 5.4pt" valign="top" width="210">
+                        <p><strong><span style="color:white; font-size:10.5pt">Setting Values</span></strong></p>
+                    </td>
+                    <td style="width:159.9pt;border:solid #939699 1.0pt;
+  border-left:none;background:#939699;padding:0in 5.4pt 0in 5.4pt" valign="top" width="204">
+                        <p><strong><span style="color:white; font-size:10.5pt">Description &amp; Default
+                                    Value</span></strong></p>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width:145.8pt;border-top:none;border-left:
+  solid #8EAADB 1.0pt;border-bottom:solid #8EAADB 1.0pt;border-right:none;
+  background:#dee0e0;padding:0in 5.4pt 0in 5.4pt" valign="top" width="199">
+                        <p><span style="font-size:10.5pt">NNET_HIDDEN_LAYERS</span></p>
+                    </td>
+                    <td style="width:154.75pt;border:none;border-bottom:
+  solid #8EAADB 1.0pt;background:#dee0e0;padding:0in 5.4pt 0in 5.4pt" valign="top" width="210">
+                        <p><span style="font-size:10.5pt">Value &gt; 0</span></p>
+                    </td>
+                    <td style="width:159.9pt;border-top:none;border-left:
+  none;border-bottom:solid #8EAADB 1.0pt;border-right:solid #8EAADB 1.0pt;
+  background:#dee0e0;padding:0in 5.4pt 0in 5.4pt" valign="top" width="204">
+                        <p><span style="font-size:10.5pt">Defines the number of hidden layers.</span></p>
+
+                        <p><span style="font-size:10.5pt">Default value is 1.</span></p>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width:145.8pt;border-top:none;border-left:
+  solid #8EAADB 1.0pt;border-bottom:solid #8EAADB 1.0pt;border-right:none;
+  padding:0in 5.4pt 0in 5.4pt" valign="top" width="199">
+                        <p><span style="font-size:10.5pt">NNET_NODES_PER_LAYER</span></p>
+                    </td>
+                    <td style="width:154.75pt;border:none;border-bottom:
+  solid #8EAADB 1.0pt;padding:0in 5.4pt 0in 5.4pt" valign="top" width="210">
+                        <p><span style="font-size:10.5pt">Value &gt; 0</span></p>
+                    </td>
+                    <td style="width:159.9pt;border-top:none;border-left:
+  none;border-bottom:solid #8EAADB 1.0pt;border-right:solid #8EAADB 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt" valign="top" width="204">
+                        <p><span style="font-size:10.5pt">Defines the number of nodes per layer. Different layers can
+                                have different number of nodes.</span></p>
+
+                        <p><span style="font-size:10.5pt">Default number of nodes is equal to number of input attributes
+                                or 50 if the number of attributes &gt; 50.</span></p>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width:145.8pt;border-top:none;border-left:
+  solid #8EAADB 1.0pt;border-bottom:solid #8EAADB 1.0pt;border-right:none;
+  background:#dee0e0;padding:0in 5.4pt 0in 5.4pt" valign="top" width="199">
+                        <p><span style="font-size:10.5pt">NNET_ACTIVATIONS</span></p>
+                    </td>
+                    <td style="width:154.75pt;border:none;border-bottom:
+  solid #8EAADB 1.0pt;background:#dee0e0;padding:0in 5.4pt 0in 5.4pt" valign="top" width="210">
+                        <p><span style="font-size:10.5pt">NNET_ACTIVATIONS_LOG_SIG</span></p>
+
+                        <p><span style="font-size:10.5pt">NNET_ACTIVATIONS_LINEAR</span></p>
+
+                        <p><span style="font-size:10.5pt">NNET_ACTIVATIONS_TANH</span></p>
+
+                        <p><span style="font-size:10.5pt">NNET_ACTIVATIONS_ARCTAN</span></p>
+
+                        <p><span style="font-size:10.5pt">NNET_ACTIVATIONS_BIPOLAR_SIG</span></p>
+                    </td>
+                    <td style="width:159.9pt;border-top:none;border-left:
+  none;border-bottom:solid #8EAADB 1.0pt;border-right:solid #8EAADB 1.0pt;
+  background:#dee0e0;padding:0in 5.4pt 0in 5.4pt" valign="top" width="204">
+                        <p><span style="font-size:10.5pt">Activation function for hidden layers.</span></p>
+
+                        <p><span style="font-size:10.5pt">Default <a>value </a></span><span
+                                class="MsoCommentReference"><span lang="EN-IE" style="font-size:9.0pt"><a
+                                        class="msocomanchor" href="#_msocom_1" id="_anchor_1" language="JavaScript"
+                                        name="_msoanchor_1" onmouseout="msoCommentHide('_com_1')"
+                                        onmouseover="msoCommentShow('_anchor_1','_com_1')">[LV1]</a>&nbsp;</span></span><span
+                                style="font-size:10.5pt">is NNET_ACTIVATIONS_LOG_SIG.</span></p>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width:145.8pt;border-top:none;border-left:
+  solid #8EAADB 1.0pt;border-bottom:solid #8EAADB 1.0pt;border-right:none;
+  padding:0in 5.4pt 0in 5.4pt" valign="top" width="199">
+                        <p><span style="font-size:10.5pt">NNET_WEIGHT_LOWER_BOUND</span></p>
+                    </td>
+                    <td style="width:154.75pt;border:none;border-bottom:
+  solid #8EAADB 1.0pt;padding:0in 5.4pt 0in 5.4pt" valign="top" width="210">
+                        <p><span style="font-size:10.5pt">Number</span></p>
+                    </td>
+                    <td style="width:159.9pt;border-top:none;border-left:
+  none;border-bottom:solid #8EAADB 1.0pt;border-right:solid #8EAADB 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt" valign="top" width="204">
+                        <p><span style="font-size:10.5pt">Lower bound of region where weights are randomly
+                                initialized.</span></p>
+
+                        <p><span style="font-size:10.5pt">Default is sqrt(6/l_nodes+r_notes)).</span></p>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width:145.8pt;border-top:none;border-left:
+  solid #8EAADB 1.0pt;border-bottom:solid #8EAADB 1.0pt;border-right:none;
+  background:#dee0e0;padding:0in 5.4pt 0in 5.4pt" valign="top" width="199">
+                        <p><span style="font-size:10.5pt">NNET_WEIGHT_UPPER_BOUND</span></p>
+                    </td>
+                    <td style="width:154.75pt;border:none;border-bottom:
+  solid #8EAADB 1.0pt;background:#dee0e0;padding:0in 5.4pt 0in 5.4pt" valign="top" width="210">
+                        <p><span style="font-size:10.5pt">Number</span></p>
+                    </td>
+                    <td style="width:159.9pt;border-top:none;border-left:
+  none;border-bottom:solid #8EAADB 1.0pt;border-right:solid #8EAADB 1.0pt;
+  background:#dee0e0;padding:0in 5.4pt 0in 5.4pt" valign="top" width="204">
+                        <p><span style="font-size:10.5pt">Upper bound of region where weights are initialized.</span>
+                        </p>
+
+                        <p><span style="font-size:10.5pt">Default <a>value </a></span><span
+                                class="MsoCommentReference"><span lang="EN-IE" style="font-size:9.0pt"><a
+                                        class="msocomanchor" href="#_msocom_2" id="_anchor_2" language="JavaScript"
+                                        name="_msoanchor_2" onmouseout="msoCommentHide('_com_2')"
+                                        onmouseover="msoCommentShow('_anchor_2','_com_2')">[LV2]</a>&nbsp;</span></span><span
+                                style="font-size:10.5pt">is sqrt(6/(l_nodes+r_nodes))</span></p>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width:145.8pt;border-top:none;border-left:
+  solid #8EAADB 1.0pt;border-bottom:solid #8EAADB 1.0pt;border-right:none;
+  padding:0in 5.4pt 0in 5.4pt" valign="top" width="199">
+                        <p><span style="font-size:10.5pt">NNET_ITERATIONS</span></p>
+                    </td>
+                    <td style="width:154.75pt;border:none;border-bottom:
+  solid #8EAADB 1.0pt;padding:0in 5.4pt 0in 5.4pt" valign="top" width="210">
+                        <p><span style="font-size:10.5pt">Value &gt; 0</span></p>
+                    </td>
+                    <td style="width:159.9pt;border-top:none;border-left:
+  none;border-bottom:solid #8EAADB 1.0pt;border-right:solid #8EAADB 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt" valign="top" width="204">
+                        <p><span style="font-size:10.5pt">The maximum number of iterations.</span></p>
+
+                        <p><span style="font-size:10.5pt">Default value is 200.</span></p>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width:145.8pt;border-top:none;border-left:
+  solid #8EAADB 1.0pt;border-bottom:solid #8EAADB 1.0pt;border-right:none;
+  background:#dee0e0;padding:0in 5.4pt 0in 5.4pt" valign="top" width="199">
+                        <p><span style="font-size:10.5pt">NNET_TOLERANCE</span></p>
+                    </td>
+                    <td style="width:154.75pt;border:none;border-bottom:
+  solid #8EAADB 1.0pt;background:#dee0e0;padding:0in 5.4pt 0in 5.4pt" valign="top" width="210">
+                        <p><span style="font-size:10.5pt">0 &lt; value &lt; 1</span></p>
+                    </td>
+                    <td style="width:159.9pt;border-top:none;border-left:
+  none;border-bottom:solid #8EAADB 1.0pt;border-right:solid #8EAADB 1.0pt;
+  background:#dee0e0;padding:0in 5.4pt 0in 5.4pt" valign="top" width="204">
+                        <p><span style="font-size:10.5pt">Defines the convergence tolerance setting.</span></p>
+
+                        <p><span style="font-size:10.5pt">Default value is 0.000001.</span></p>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width:145.8pt;border-top:none;border-left:
+  solid #8EAADB 1.0pt;border-bottom:solid #8EAADB 1.0pt;border-right:none;
+  padding:0in 5.4pt 0in 5.4pt" valign="top" width="199">
+                        <p><span style="font-size:10.5pt">NNET_REGULARIZER</span></p>
+                    </td>
+                    <td style="width:154.75pt;border:none;border-bottom:
+  solid #8EAADB 1.0pt;padding:0in 5.4pt 0in 5.4pt" valign="top" width="210">
+                        <p><span style="font-size:10.5pt">NNET_REFULARIZER_NONE</span></p>
+
+                        <p><span style="font-size:10.5pt">NNET_REGULARIZER_L2</span></p>
+
+                        <p><span style="font-size:10.5pt">NNET_REGULARIZER_HELDASIDE</span></p>
+                    </td>
+                    <td style="width:159.9pt;border-top:none;border-left:
+  none;border-bottom:solid #8EAADB 1.0pt;border-right:solid #8EAADB 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt" valign="top" width="204">
+                        <p><span style="font-size:10.5pt">Regularization setting for Neural Network. If training rows
+                                &gt; 50,000, the default is NNET_REGULARIZER_HELDASIDE. If &lt;= 50,000, the default is
+                                NNET_REGULARIZER_NONE.</span></p>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width:145.8pt;border-top:none;border-left:
+  solid #8EAADB 1.0pt;border-bottom:solid #8EAADB 1.0pt;border-right:none;
+  background:#dee0e0;padding:0in 5.4pt 0in 5.4pt" valign="top" width="199">
+                        <p><span style="font-size:10.5pt">NNET_HELDASIDE_RATIO</span></p>
+                    </td>
+                    <td style="width:154.75pt;border:none;border-bottom:
+  solid #8EAADB 1.0pt;background:#dee0e0;padding:0in 5.4pt 0in 5.4pt" valign="top" width="210">
+                        <p><span style="font-size:10.5pt">0 &lt;= value &lt;= 1</span></p>
+                    </td>
+                    <td style="width:159.9pt;border-top:none;border-left:
+  none;border-bottom:solid #8EAADB 1.0pt;border-right:solid #8EAADB 1.0pt;
+  background:#dee0e0;padding:0in 5.4pt 0in 5.4pt" valign="top" width="204">
+                        <p><span style="font-size:10.5pt">Defines the held aside ratio.</span></p>
+
+                        <p><span style="font-size:10.5pt">Default value is 0.25.</span></p>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width:145.8pt;border-top:none;border-left:
+  solid #8EAADB 1.0pt;border-bottom:solid #8EAADB 1.0pt;border-right:none;
+  padding:0in 5.4pt 0in 5.4pt" valign="top" width="199">
+                        <p><span style="font-size:10.5pt">NNET_HELDASIDE_MAX_FAIL</span></p>
+                    </td>
+                    <td style="width:154.75pt;border:none;border-bottom:
+  solid #8EAADB 1.0pt;padding:0in 5.4pt 0in 5.4pt" valign="top" width="210">
+                        <p><span style="font-size:10.5pt">Numeric &gt;= 1</span></p>
+                    </td>
+                    <td style="width:159.9pt;border-top:none;border-left:
+  none;border-bottom:solid #8EAADB 1.0pt;border-right:solid #8EAADB 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt" valign="top" width="204">
+                        <p><span style="font-size:10.5pt">With NNET_REGULARIZER_HELDASIDE, the training process is
+                                stopped early if the network performance on the validation data fails to improve or
+                                remains the same for NNET_HELDASIDE_MAX_FAIL.</span></p>
+
+                        <p><span style="font-size:10.5pt">Default value is 6.</span></p>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width:145.8pt;border-top:none;border-left:
+  solid #8EAADB 1.0pt;border-bottom:solid #8EAADB 1.0pt;border-right:none;
+  background:#dee0e0;padding:0in 5.4pt 0in 5.4pt" valign="top" width="199">
+                        <p><span style="font-size:10.5pt">NNET_REG_LAMBDA</span></p>
+                    </td>
+                    <td style="width:154.75pt;border:none;border-bottom:
+  solid #8EAADB 1.0pt;background:#dee0e0;padding:0in 5.4pt 0in 5.4pt" valign="top" width="210">
+                        <p><span style="font-size:10.5pt">Numeric &gt;= 0</span></p>
+                    </td>
+                    <td style="width:159.9pt;border-top:none;border-left:
+  none;border-bottom:solid #8EAADB 1.0pt;border-right:solid #8EAADB 1.0pt;
+  background:#dee0e0;padding:0in 5.4pt 0in 5.4pt" valign="top" width="204">
+                        <p><span style="font-size:10.5pt">Defines the L2 regularization parameter lambda. Cannot be set
+                                at same times as NNET_REGULARIZER_HELDASIZE</span></p>
+
+                        <p><span style="font-size:10.5pt">Default value is 1.</span></p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p>Once the settings have been defined for the Neural Network, the next step is to run the algorithm and
+            generate the model. The function CREATE_MODEL is used to create the machine learning model. This function is
+            part of the DBMS_DATA_MINGING PL/SQL package. The function can be used to create a model with all the
+            in-database machine learning algorithms.</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+
+BEGIN
+   DBMS_DATA_MINING.CREATE_MODEL(
+      model_name          =&gt; &#39;DEMO_NEURAL_NETWORK_MODEL&#39;,
+      mining_function     =&gt; dbms_data_mining.classification,
+      data_table_name     =&gt; &#39;mining_data_build_v&#39;,
+      case_id_column_name =&gt; &#39;cust_id&#39;,
+      target_column_name  =&gt; &#39;affinity_card&#39;,
+      settings_table_name =&gt; &#39;demo_neural_network_settings&#39;);
+END;
+
+</code></pre>
+        </div>
+
+        <p>Table 2 gives a description of the parameters for the CREATE_MODEL function</p>
+
+        <p>CREATE_MODEL Parameter Descriptions</p>
+
+        <table style="width:100%">
+            <tbody>
+                <tr>
+                    <td style="width:148.6pt;border:solid #939699 1.0pt;
+  border-right:none;background:#939699;padding:0in 5.4pt 0in 5.4pt" valign="top" width="185">
+                        <p><strong><span style="color:white; font-size:10.5pt">Parameter Name</span></strong></p>
+                    </td>
+                    <td style="width:301.9pt;border:solid #939699 1.0pt;
+  border-left:none;background:#939699;padding:0in 5.4pt 0in 5.4pt" valign="top" width="286">
+                        <p><strong><span style="color:white; font-size:10.5pt">Description</span></strong></p>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width:148.6pt;border:solid #939699 1.0pt;
+  border-top:none;background:#dee0e0;padding:0in 5.4pt 0in 5.4pt" valign="top" width="185">
+                        <p><span style="font-size:10.5pt">MODEL_NAME</span></p>
+                    </td>
+                    <td style="width:301.9pt;border-top:none;border-left:
+  none;border-bottom:solid #939699 1.0pt;border-right:solid #939699 1.0pt;
+  background:#dee0e0;padding:0in 5.4pt 0in 5.4pt" valign="top" width="286">
+                        <p><span style="font-size:10.5pt">The name or label of the model. This will be used to identify
+                                the model in the database.</span></p>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width:148.6pt;border:solid #939699 1.0pt;
+  border-top:none;padding:0in 5.4pt 0in 5.4pt" valign="top" width="185">
+                        <p><span style="font-size:10.5pt">MINING_FUNCTION</span></p>
+                    </td>
+                    <td style="width:301.9pt;border-top:none;border-left:
+  none;border-bottom:solid #939699 1.0pt;border-right:solid #939699 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt" valign="top" width="286">
+                        <p><span style="font-size:10.5pt">The type of problem to be solved. For Neural Networks this can
+                                be &lsquo;classification&rsquo; or &lsquo;regression&rsquo;.</span></p>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width:148.6pt;border:solid #939699 1.0pt;
+  border-top:none;background:#dee0e0;padding:0in 5.4pt 0in 5.4pt" valign="top" width="185">
+                        <p><span style="font-size:10.5pt">DATA_TABLE_NAME</span></p>
+                    </td>
+                    <td style="width:301.9pt;border-top:none;border-left:
+  none;border-bottom:solid #939699 1.0pt;border-right:solid #939699 1.0pt;
+  background:#dee0e0;padding:0in 5.4pt 0in 5.4pt" valign="top" width="286">
+                        <p><span style="font-size:10.5pt">The name of the table or view that contains the data to be
+                                used to build the model.</span></p>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width:148.6pt;border:solid #939699 1.0pt;
+  border-top:none;padding:0in 5.4pt 0in 5.4pt" valign="top" width="185">
+                        <p><span style="font-size:10.5pt">CASE_ID_COLUMN_NAME</span></p>
+                    </td>
+                    <td style="width:301.9pt;border-top:none;border-left:
+  none;border-bottom:solid #939699 1.0pt;border-right:solid #939699 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt" valign="top" width="286">
+                        <p><span style="font-size:10.5pt">The attribute that contains the case id for the table. The
+                                case id is the unique identifier for each record. If your data set contains a composite
+                                identifier, then you will need to create a new attribute that contains a unique
+                                number.</span></p>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width:148.6pt;border:solid #939699 1.0pt;
+  border-top:none;background:#dee0e0;padding:0in 5.4pt 0in 5.4pt" valign="top" width="185">
+                        <p><span style="font-size:10.5pt">TARGET_COLUMN_NAME</span></p>
+                    </td>
+                    <td style="width:301.9pt;border-top:none;border-left:
+  none;border-bottom:solid #939699 1.0pt;border-right:solid #939699 1.0pt;
+  background:#dee0e0;padding:0in 5.4pt 0in 5.4pt" valign="top" width="286">
+                        <p><span style="font-size:10.5pt">Name of the attribute that contains the target variable to
+                                direct the algorithm for classification or regression prediction.</span></p>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width:148.6pt;border:solid #939699 1.0pt;
+  border-top:none;padding:0in 5.4pt 0in 5.4pt" valign="top" width="185">
+                        <p><span style="font-size:10.5pt">SETTINGS_TABLE_NAME</span></p>
+                    </td>
+                    <td style="width:301.9pt;border-top:none;border-left:
+  none;border-bottom:solid #939699 1.0pt;border-right:solid #939699 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt" valign="top" width="286">
+                        <p><span style="font-size:10.5pt">The name of the table that contains the additional parameter
+                                settings for the algorithm being used.</span></p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p>After the CREATE_MODEL function has completed, the Neural Network model will be created and defined in the
+            database. The next section looks at how you can explore the various properties of the model.</p>
+
+        <p>Sample Data Set for the Article</p>
+
+        <p>The sample data set being used is based on the Sales History (SH) schema. If you are familiar with the Oracle
+            Data Miner GUI tool, part of SQL Developer, a number of sample data sets and database views are created when
+            you go to use this tool. Some of these views are based on the SH schema and include:</p>
+
+        <p>- MINING_DATA_BUILD_V<br />
+            - MINING_DATA_TEST_V<br />
+            - MINING_DATA_APPLY_V</p>
+
+        <h3>Exploring the Neural Network Model</h3>
+
+        <p>There are a number of different data dictionary views to allow you to examine the machine learning models. In
+            addition to these general views, there are also some model-specific views that are new in Oracle 18c.
+            Details of these will be given later in this section.</p>
+
+        <p>The general data dictionary views consist of:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+USER_MINING_MODELS &ndash; view high level model detail
+USER_MINING_MODEL_SETTINGS &ndash; view all parameter settings including defaults
+USER_MINING_MODEL_ATTRIBUTES &ndash; view attributes used by model
+
+</code></pre>
+        </div>
+
+        <p>The following examples will illustrate the querying of these and the type of information contained in them.
+            The first view to examine is USER_MINING_MODEL. This view will list all the in-database machine learning
+            model in your schema.</p>
+
+        <p align="center"><img alt="Figure 3" src="//www.oracle.com/a/tech/img/art-neural-network-image003.png" /></p>
+
+        <p align="center" class="xsml">Figure 3</p>
+
+        <p>When you want to examine in detail all the parameter settings used to create the model, you can use the
+            USER_MINING_MODEL_SETTINGS. This will list the parameters you set up and configured in the settings table
+            (see example above); for those parameters not included in the settings table, the algorithm will use the
+            default settings, as defined in Table 1. This view gives you all of this information in one place.</p>
+
+        <p align="center"><img alt="Figure 4" src="//www.oracle.com/a/tech/img/art-neural-network-image004.png" /></p>
+
+        <p align="center" class="xsml">Figure 4</p>
+
+        <p>When using Oracle 12c Database, or an earlier version, you could use the function <span
+                style="font-family:courier new">GET_MODEL_DETAILS</span> to extract certain information and details of
+            the models. These functions have been deprecated in Oracle 18c. Instead, additional data dictionary views
+            are created. Each type of model (Neural Networks, Decision Trees, Support Vector Machines, etc.) will have
+            their own properties and hence will present slightly different details in each of the data dictionary views.
+            These can be identified with the prefix of DM$XX, where XX will be one of VA, VC, VG, VN, VS, VT and VW,
+            followed by the name of the machine learning model.</p>
+
+        <p>The data dictionary views created for the Neural Network created in this article include:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+DM$VADEMO_NEURAL_NETWORK_MODEL &ndash; weights of the neurons
+DM$VCDEMO_NEURAL_NETWORK_MODEL &ndash; scoring cost matrix
+DM$VGDEMO_NEURAL_NETWORK_MODEL &ndash; global statistics
+DM$VNDEMO_NEURAL_NETWORK_MODEL &ndash; normalization parameters
+DM$VSDEMO_NEURAL_NETWORK_MODEL &ndash; computed settings
+DM$VTDEMO_NEURAL_NETWORK_MODEL &ndash; describes the target distribution
+DM$VWDEMO_NEURAL_NETWORK_MODEL &ndash; alerts during model build
+</code></pre>
+        </div>
+
+        <p>If you inspect the contents of <code class="ocode">DM$VNDEMO_NEURAL_NETWORK_MODEL</code> you will get to see
+            the outputs from the Automatic Data Preparation (ADP) that was set earlier.&nbsp;&nbsp;</p>
+
+        <h3>How to use the Neural Network Model</h3>
+
+        <p>In the previous section I showed how easy it was to create a Neural Network machine- learning model in an
+            Oracle 18c Database. The next thing we will look at is how you can use the model to label new data. This is
+            something that will typically be required in your front-end applications, your web-based application or in
+            your back-end or batch applications and processes. Any programming language or framework that can call SQL
+            can now run the in-database Neural Network model by using a simple SQL command.</p>
+
+        <p>The following examples illustrates how simple the SQL is for using the Neural Network model. We can spend a
+            lot of time going through many different possibilities of using the model, but the next two examples
+            illustrate the simplicity involved.</p>
+
+        <p>SQL has a number of analytics functions that are associated with calling an in-database machine learning
+            model. The following examples will illustrate the two most commonly used of these SQL functions, which tell
+            you the predicted value and the prediction probability or the strength of the prediction by the model (a
+            confidence score).</p>
+
+        <p>Our first example uses the PREDICTION and PREDICTION_PROBABILITY SQL function. The PREDICTION function
+            returns the predicted value from the model. It takes as input the name of the machine learning model to use
+            and the list of attributes to input to the model. In our example I have used the * (star) to indicate to the
+            model to use all available attributes from the selected table or view.</p>
+
+        <p align="center"><img alt="Figure 5" src="//www.oracle.com/a/tech/img/art-neural-network-image005.png" /></p>
+
+        <p align="center" class="xsml">Figure 5</p>
+
+        <p>The PREDICTION_PROBABILTY function returns a confidence score, on a zero to one scale, of how strong a
+            prediction the model has made. Getting a value of 1 will indicate that the model is 100% sure the prediction
+            is correct. Getting a value in the range 0.75 to 1 is generally a strong prediction.</p>
+
+        <p>We need to remember that the model is making a prediction. If we have a good model, it should be correctly
+            predicting a large percentage of values correctly. A model will never be 100% accurate as a machine learning
+            model is a generalized representation of the data used to train the model. When the model is used against
+            new, previously unseen data, it will make a prediction based on information in the model. Sometimes it will
+            make an incorrect prediction. As you gather more and more data, this data can be added into the training
+            data set, thereby increasing the potential accuracy of future versions of the model</p>
+
+        <p>You can see how simple this query is and how easily it could be integrated into our applications developed in
+            other languages.</p>
+
+        <p>But the previous example is based on data stored in a database table&mdash;and not all data lives in a
+            database table (e.g., data created in an application that hasn&rsquo;t yet been persisted to the database).
+            This is common in very dynamic applications. The following example illustrates how you can still use the
+            Neural Network model stored in the data to make a prediction based on data in your application. This is an
+            example of doing &ldquo;what-if&rdquo; analysis. In our application, some of this data could be represented
+            as sliders and other objects. As these sliders are adjusted, the application needs to dynamically
+            recalculate the prediction from the model in real-time and to make the necessary updates to the application.
+        </p>
+
+        <p align="center"><img alt="Figure 6" src="//www.oracle.com/a/tech/img/art-neural-network-image006.png" /></p>
+
+        <p align="center" class="xsml">Figure 6</p>
+
+        <h3>Let&rsquo;s go Deep!&nbsp; Creating a Deep Learning Neural Network</h3>
+
+        <p>The examples shown above create a very simple (i.e., with one hidden layer) neural network model. All input
+            attributes are mapped to all the nodes in the one hidden layer and are used to make a prediction.</p>
+
+        <p>Typically, the term deep learning is used in conjunction with neural networks, but all too often there can be
+            some confusion about what &ldquo;deep learning&rdquo; actually means. It is a term commonly used when using
+            neural networks on image files. To keep things simple, deep learning is when multiple hidden layers are used
+            in the neural network model build process. Earlier, I described how the input attributes are used, along
+            with different weightings and an activation function, to define the node in a hidden layer. This is
+            complicated set of mathematics that produces an output. With deep learning, this complicated set of
+            mathematics is then used as input to another hidden layer. This output from one node is combined with
+            similar outputs from other nodes. This is illustrated in Figure 2 and the hidden layers colored in green and
+            blue. The more hidden layers and nodes at each layer, the more complex the process, but also the greater the
+            ability to find deep hidden patterns in the data, patterns found by combining different attributes in
+            different ways. For example, when the attributes of a person&rsquo;s height and weight are combined using a
+            particular formula to form a BMI value (Body Mass Index), we get better, more meaningful, insight into a
+            person&rsquo;s body make up and risk factors.</p>
+
+        <p>There are a couple of options for setting up different hidden layers and <a>nodes in each layer</a><span
+                class="MsoCommentReference"><span lang="EN-IE" style="font-size:9.0pt"><a class="msocomanchor"
+                        href="#_msocom_3" id="_anchor_3" language="JavaScript" name="_msoanchor_3"
+                        onmouseout="msoCommentHide('_com_3')"
+                        onmouseover="msoCommentShow('_anchor_3','_com_3')">[LV3]</a>&nbsp;</span></span>, for the neural
+            network algorithm in Oracle 18c. The first is to define how many hidden layers to use. The algorithm will
+            then work out the number of nodes for each layer, but this may match the number of input variables at each
+            hidden layer. An alternative is to define the number of nodes to use at each hidden layer. This is set up as
+            a parameter in a settings table. The following is an extended version of the previous settings table with an
+            additional parameter of NNET_NODES_PER_LAYER. The number of hidden layers does not need to be defined when
+            using this parameter. The following example defines for the neural network to have three hidden layers with
+            ten nodes at the first hidden layer, six nodes at the second hidden layer and four nodes at the third hidden
+            layer.</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+CREATE TABLE demo_Neural_Network_settings_2 
+( setting_name  VARCHAR2(30),
+  setting_value VARCHAR2(4000));
+
+-- insert the settings records for a Neural Network
+-- ADP is turned on. By default ADP is turned off.
+BEGIN
+  INSERT INTO demo_neural_network_settings_2 (setting_name, setting_value)
+  values (dbms_data_mining.algo_name, dbms_data_mining.algo_neural_network);
+	
+  INSERT INTO demo_neural_network_settings_2 (setting_name, setting_value)
+  VALUES (dbms_data_mining.prep_auto, dbms_data_mining.prep_auto_on);
+  
+  INSERT INTO demo_neural_network_settings_2 (setting_name, setting_value)
+  VALUES (dbms_data_mining.nnet_nodes_per_layer, &#39;10,6,4&#39;);
+END;
+</code></pre>
+        </div>
+
+        <p>The big question is: Do we get a better model when using the additional hidden layers (deep learning)? The
+            answer is &ldquo;it depends.&rdquo; It depends on the number of layers and nodes at each layer. There are
+            many approaches to working out the appropriate number for each, and there will be a bit of experimental work
+            in trying to find the optimal amount. It will require evaluating the performance of each iteration of the
+            model settings. This can be easily scripted and is dependent on having a holdout data set to evaluate the
+            model. The data set being used in this article also contains a separate data set for testing the model. This
+            is called MINING_DATA_TEST_V and contains a different subset of the SH schema to what is used in
+            MINING_DATA_BUILD_V view.</p>
+
+        <p>The first step is to create a view that uses the model to label the test data. The second step is to compute
+            the confusion matrix for the model based on the predicted values compared to the actual values. This
+            computes how many predictions it correctly and incorrectly predicted.</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+ CREATE OR REPLACE VIEW demo_nnet_test_results_2
+AS
+SELECT cust_id,
+       prediction(DEMO_NEURAL_NETWORK_MODEL_2 USING *)  predicted_value,
+       prediction_probability(DEMO_NEURAL_NETWORK_MODEL_2 USING *) probability
+FROM   mining_data_test_v;
+
+DECLARE
+   v_accuracy NUMBER;
+BEGIN
+   DBMS_DATA_MINING.COMPUTE_CONFUSION_MATRIX (
+      accuracy 			    =&gt; v_accuracy,
+      apply_result_table_name	    =&gt; &#39;demo_nnet_test_results_2&#39;,
+      target_table_name 	    =&gt; &#39;mining_data_test_v&#39;,
+      case_id_column_name 	    =&gt; &#39;cust_id&#39;,
+      target_column_name 	    =&gt; &#39;affinity_card&#39;,
+      confusion_matrix_table_name =&gt; &#39;demo_nnet_confusion_matrix_2&#39;,
+      score_column_name 	    =&gt; &#39;PREDICTED_VALUE&#39;,
+      score_criterion_column_name =&gt; &#39;PROBABILITY&#39;,
+      cost_matrix_table_name	    =&gt; null,
+      apply_result_schema_name    =&gt; null,
+      target_schema_name 	    =&gt; null,
+      cost_matrix_schema_name     =&gt; null,
+      score_criterion_type 	    =&gt; &#39;PROBABILITY&#39;);
+   DBMS_OUTPUT.PUT_LINE(&#39;**** MODEL ACCURACY ****: &#39; || ROUND(v_accuracy,4));
+END;
+</code></pre>
+        </div>
+
+        <p>When this evaluation approach was used for the first neural network model (with one hidden layer), a model
+            accuracy of 78% was achieved&mdash;3% higher than the other in-database machine learning models. This is
+            good and shows how powerful neural networks are compared to more traditional machine learning algorithms.
+            When the second neural network model was evaluated, an accuracy of 81% was achieved. That is now a 6% better
+            performance compared to the next best machine learning model. This is a major achievement. With time and
+            patience, the number of hidden layers and number of nodes at each layer could be fine-tuned further to gain
+            a better result.</p>
+
+        <h3>Summary</h3>
+
+        <p>Neural Networks are a powerful machine learning algorithm, allowing you to create complex and deep learning
+            neural network models to find hidden patterns in your data sets. Neural Networks are available with Oracle
+            18c and can be easily built and used to make predictions using a few simple SQL commands. <span
+                style="color:black">These can be easily REST enabled, making it simple to incorporate into any other
+                programming language or framework.</span></p>
+
+        <h3>About the Author</h3>
+
+        <p><strong>Brendan Tierney</strong>, Oracle Groundbreaker Ambassador &amp; Oracle ACE Director, is an
+            independent consultant (Oralytics) and lectures on data science, databases, and Big Data at the Dublin
+            Institute of Technology/Dublin Technological University. He has 25+ years of experience working in the areas
+            of data mining, data science, Big Data, and data warehousing. Brendan is a recognized Data Science and Big
+            Data expert and has worked on projects in Ireland, the UK, Belgium, Holland, Norway, Spain, Canada, and the
+            U.S. He is active in the Oracle User Group community, where he is one of the leaders for the OUG in Ireland
+            and is a Member Advocate at Board of Director level with the UKOUG. Brendan has also been editor of the
+            UKOUG Oracle Scene magazine and is a regular speaker at conferences around the world. He is an active
+            blogger and also writes articles for OTN, Oracle Scene, IOUG SELECT Journal, ODTUG Technical Journal, and
+            ToadWorld. He is also on the board of directors for DAMA in Ireland. Brendan has published four books, three
+            with Oracle Press/McGraw-Hill (Predictive Analytics Using Oracle Data Miner, Oracle R Enterprise: Harnessing
+            the Power of R in Oracle Database, and Real World SQL and PL/SQL: Advice from the Experts) and one with MIT
+            Press (Essentials of Data Science). These books are available on Amazon, in print, ebook and audio book
+            formats.</p>
+    </div>
+</section>
+</article>
+
+<!-- / _Raw-HTML -->
+
+<!-- _Raw-Text -->
+<section class="cc01 cc01v0 cpad crule">
+    <div class="cc01w1 cwidth">
+        <p>Oracle 18c Database brings prominent new machine learning algorithms, including Neural Networks and Random
+            Forests. While many articles are available on machine learning, most of them concentrate on how to build a
+            model. Very few talk about how to use these new algorithms in your applications to score or label new data.
+            This article will explain how Neural Networks work, how to build a Neural Network in Oracle Database, and
+            how to use the model to score or label new data.</p>
+
+        <h3>What are Neural Networks?</h3>
+
+        <p>Over the past couple of years, Neural Networks have attracted a lot of attention thanks to their ability to
+            efficiently find patterns in data&mdash;traditional transactional data, as well as images, sound, streaming
+            data, etc. But for some implementations, Neural Networks can require a lot of additional computing resources
+            due to the complexity of the many hidden layers within the network. Figure 1 gives a very simple
+            representation of a Neural Network with one hidden layer. All the inputs are connected to a neuron in the
+            hidden layer (red circles). A neuron takes a set of numeric values as input and maps them to a single output
+            value. (A neuron is a simple multi-input linear regression function, where the output is passed through an
+            activation function.) Two common activation functions are logistic and tanh functions. There are many
+            others, including logistic sigmoid function, arctan function, bipolar sigmoid function, etc.</p>
+
+        <p align="center"><img alt="Figure 1 – A Simple Neural Network"
+                src="//www.oracle.com/a/tech/img/art-neural-network-image001.png" /></p>
+
+        <p align="center" class="xsml">Figure 1 &ndash; A Simple Neural Network</p>
+
+        <p>Figure 1 illustrates a simple Neural Network with one hidden layer. But if additional hidden layers are
+            added, as in Figure 2, the complexity of the computations involved can increase dramatically. The addition
+            of more hidden layers means the Neural Network has additional work to do and additional time is needed to
+            find complex patterns hidden in the data. This gives us machine learning models with greater predictive
+            accuracy compared to more traditional machine learning algorithms. Because there is a computational cost in
+            order to achieve this, you must determine if that additional cost is necessary for your particular problem.
+        </p>
+
+        <p align="center"><img alt="Figure 2 – Deep Learning Neural Network"
+                src="//www.oracle.com/a/tech/img/art-neural-network-image002.png" /></p>
+
+        <p align="center" class="xsml">Figure 2 &ndash; Deep Learning Neural Network</p>
+
+        <p>Figure 2 gives an example of a <em>feed-forward</em> Neural Network. With a <em>back-propagation</em> Neural
+            Network, the calculated error rates are fed back to the hidden layers, and the processing at each neuron is
+            updated and the weights rules adjusted to reduce the error rate. This supervised learning method requires a
+            labelled data set. The training of the Neural Network model starts by assuming random weights to each of the
+            connections in the network. The algorithm then iteratively updates the weights in the network by showing
+            training data to the network and updating the network weights until the network is optimized, in a
+            generalized way to avoid overfitting.</p>
+
+        <p>This complex and multi-layered approach to building machine learning models gives us the term &ldquo;deep
+            learning.&rdquo; <span lang="EN-IE">Deep learning networks are simply neural networks that have multiple
+                layers of hidden units; in other words, they are <em>deep</em> in terms of the number of hidden layers
+                they have, as illustrated in Figure 2.</span></p>
+
+        <p>Although we commonly read articles that explain how Neural Networks can be applied to image processing,
+            speech recognition, facial recognition, advanced gaming and AI, among many other application areas, Neural
+            Networks are regularly used with regression and classification type of problems. Regression problems look to
+            make predictions based on some numerical value (e.g., estimating the value of a company&rsquo;s share price
+            on a stock exchange, determining the valuation of a property, acidity levels of wine, etc.), whereas
+            classification is used to predict a defined value. The simplest and most common version of this is binary
+            classification where you want to predict one of two possible outcomes (e.g., if a customer is going to churn
+            or not). An extended version of binary classification is called &ldquo;multi-class classification,&rdquo;
+            which is when there are more than two possible outcomes. You can have N number of possible
+            outcomes&mdash;but in most scenarios you will have less than 10.</p>
+
+        <h3>Neural Networks in Oracle 18c</h3>
+
+        <p>Oracle has had machine learning algorithms built into the database since Oracle 8i. With each subsequent
+            release new algorithms have been added. These are in addition to the recoding of these algorithms to allow
+            for greater scalability and significant improvement in speed. For example, with a mid-range database server
+            you can now process hundreds of millions of records in seconds. The in-database machine learning algorithms
+            are part of the Advanced Analytics option, which has two components: the in-database machine learning
+            algorithms that can be accessed using SQL, and the ability to embed and run R code inside the database
+            (accessible using R code or SQL). Yes&mdash;you can have SQL calling R code.</p>
+
+        <p>Neural Networks are included in the release of Oracle 18c database, as part of the Advanced Analytics option.
+            The implementation of the Neural Network incorporates back-propagation and can be used for classification
+            (including binary and multi-class) and regression problems.</p>
+
+        <p>In most implementations of Neural Networks algorithms, a lot of work is involved with preparing the data
+            before inputting to the Neural Network. Most of this work revolves around converting data into numerical
+            formats and then normalizing the data.</p>
+
+        <p>The in-database Oracle machine learning algorithms have inbuilt Automatic Data Preparation (ADP), a feature
+            that will format, transform and prepare the data&mdash;saving you many days of programming.</p>
+
+        <p>ADP for Neural Networks replaces missing categorical values with the mode, and missing numerical values with
+            the mean. A Neural Network requires the normalization of numeric input. The algorithm uses z-score
+            normalization. The normalization occurs only for two-dimensional numeric columns (not nested). Normalization
+            places the values of numeric attributes on the same scale and prevents attributes with a large original
+            scale from biasing the solution. A Neural Network scales the numeric values in nested columns by the maximum
+            absolute value seen in the corresponding columns.</p>
+
+        <h3>How to Build a Neural Network Model in Oracle 18c</h3>
+
+        <p>In this section I will provide an example of building a basic Neural Network in Oracle 18c, using the default
+            settings. I will come back to this later to show you how to create a more complex Neural Network by
+            configuring more of the parameter settings.</p>
+
+        <p>There are two stages to creating a Neural Network, or any in-database machine learning model. The first part
+            is to define the basic settings. The second part is to run the algorithm based on these settings.</p>
+
+        <p>The following code illustrates the creating of a settings table that contains the basic level of parameter
+            settings for the Neural Network. These include telling the in-database machine learning engine to use the
+            Neural Network algorithm, and the second parameter to use the automatic data preparation feature. For the
+            remaining settings and algorithm parameters (see Table 1), Oracle will use the default values, which are
+            based on lots of research and experimental work by Oracle. We will come back to these additional settings
+            later.</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+
+-- create the settings table for a Neural Network model
+CREATE TABLE demo_Neural_Network_settings 
+( setting_name  VARCHAR2(30),
+  setting_value VARCHAR2(4000));
+
+-- insert the settings records for a Neural Network
+-- ADP is turned on. By default ADP is turned off.
+BEGIN
+  INSERT INTO demo_neural_network_settings (setting_name, setting_value)
+  values (dbms_data_mining.algo_name, 
+          dbms_data_mining.algo_neural_network);
+	
+  INSERT INTO demo_neural_network_settings (setting_name, setting_value)
+  VALUES (dbms_data_mining.prep_auto, dbms_data_mining.prep_auto_on);
+END;
+
+ </code></pre>
+        </div>
+
+        <table style="width:100%">
+            <tbody>
+                <tr>
+                    <td style="width:145.8pt;border:solid #939699 1.0pt;
+  border-right:none;background:#939699;padding:0in 5.4pt 0in 5.4pt" valign="top" width="199">
+                        <p><strong><span style="color:white; font-size:10.5pt">Setting Name</span></strong></p>
+                    </td>
+                    <td style="width:154.75pt;border-top:solid #939699 1.0pt;
+  border-left:none;border-bottom:solid #939699 1.0pt;border-right:none;
+  background:#939699;padding:0in 5.4pt 0in 5.4pt" valign="top" width="210">
+                        <p><strong><span style="color:white; font-size:10.5pt">Setting Values</span></strong></p>
+                    </td>
+                    <td style="width:159.9pt;border:solid #939699 1.0pt;
+  border-left:none;background:#939699;padding:0in 5.4pt 0in 5.4pt" valign="top" width="204">
+                        <p><strong><span style="color:white; font-size:10.5pt">Description &amp; Default
+                                    Value</span></strong></p>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width:145.8pt;border-top:none;border-left:
+  solid #8EAADB 1.0pt;border-bottom:solid #8EAADB 1.0pt;border-right:none;
+  background:#dee0e0;padding:0in 5.4pt 0in 5.4pt" valign="top" width="199">
+                        <p><span style="font-size:10.5pt">NNET_HIDDEN_LAYERS</span></p>
+                    </td>
+                    <td style="width:154.75pt;border:none;border-bottom:
+  solid #8EAADB 1.0pt;background:#dee0e0;padding:0in 5.4pt 0in 5.4pt" valign="top" width="210">
+                        <p><span style="font-size:10.5pt">Value &gt; 0</span></p>
+                    </td>
+                    <td style="width:159.9pt;border-top:none;border-left:
+  none;border-bottom:solid #8EAADB 1.0pt;border-right:solid #8EAADB 1.0pt;
+  background:#dee0e0;padding:0in 5.4pt 0in 5.4pt" valign="top" width="204">
+                        <p><span style="font-size:10.5pt">Defines the number of hidden layers.</span></p>
+
+                        <p><span style="font-size:10.5pt">Default value is 1.</span></p>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width:145.8pt;border-top:none;border-left:
+  solid #8EAADB 1.0pt;border-bottom:solid #8EAADB 1.0pt;border-right:none;
+  padding:0in 5.4pt 0in 5.4pt" valign="top" width="199">
+                        <p><span style="font-size:10.5pt">NNET_NODES_PER_LAYER</span></p>
+                    </td>
+                    <td style="width:154.75pt;border:none;border-bottom:
+  solid #8EAADB 1.0pt;padding:0in 5.4pt 0in 5.4pt" valign="top" width="210">
+                        <p><span style="font-size:10.5pt">Value &gt; 0</span></p>
+                    </td>
+                    <td style="width:159.9pt;border-top:none;border-left:
+  none;border-bottom:solid #8EAADB 1.0pt;border-right:solid #8EAADB 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt" valign="top" width="204">
+                        <p><span style="font-size:10.5pt">Defines the number of nodes per layer. Different layers can
+                                have different number of nodes.</span></p>
+
+                        <p><span style="font-size:10.5pt">Default number of nodes is equal to number of input attributes
+                                or 50 if the number of attributes &gt; 50.</span></p>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width:145.8pt;border-top:none;border-left:
+  solid #8EAADB 1.0pt;border-bottom:solid #8EAADB 1.0pt;border-right:none;
+  background:#dee0e0;padding:0in 5.4pt 0in 5.4pt" valign="top" width="199">
+                        <p><span style="font-size:10.5pt">NNET_ACTIVATIONS</span></p>
+                    </td>
+                    <td style="width:154.75pt;border:none;border-bottom:
+  solid #8EAADB 1.0pt;background:#dee0e0;padding:0in 5.4pt 0in 5.4pt" valign="top" width="210">
+                        <p><span style="font-size:10.5pt">NNET_ACTIVATIONS_LOG_SIG</span></p>
+
+                        <p><span style="font-size:10.5pt">NNET_ACTIVATIONS_LINEAR</span></p>
+
+                        <p><span style="font-size:10.5pt">NNET_ACTIVATIONS_TANH</span></p>
+
+                        <p><span style="font-size:10.5pt">NNET_ACTIVATIONS_ARCTAN</span></p>
+
+                        <p><span style="font-size:10.5pt">NNET_ACTIVATIONS_BIPOLAR_SIG</span></p>
+                    </td>
+                    <td style="width:159.9pt;border-top:none;border-left:
+  none;border-bottom:solid #8EAADB 1.0pt;border-right:solid #8EAADB 1.0pt;
+  background:#dee0e0;padding:0in 5.4pt 0in 5.4pt" valign="top" width="204">
+                        <p><span style="font-size:10.5pt">Activation function for hidden layers.</span></p>
+
+                        <p><span style="font-size:10.5pt">Default <a>value </a></span><span
+                                class="MsoCommentReference"><span lang="EN-IE" style="font-size:9.0pt"><a
+                                        class="msocomanchor" href="#_msocom_1" id="_anchor_1" language="JavaScript"
+                                        name="_msoanchor_1" onmouseout="msoCommentHide('_com_1')"
+                                        onmouseover="msoCommentShow('_anchor_1','_com_1')">[LV1]</a>&nbsp;</span></span><span
+                                style="font-size:10.5pt">is NNET_ACTIVATIONS_LOG_SIG.</span></p>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width:145.8pt;border-top:none;border-left:
+  solid #8EAADB 1.0pt;border-bottom:solid #8EAADB 1.0pt;border-right:none;
+  padding:0in 5.4pt 0in 5.4pt" valign="top" width="199">
+                        <p><span style="font-size:10.5pt">NNET_WEIGHT_LOWER_BOUND</span></p>
+                    </td>
+                    <td style="width:154.75pt;border:none;border-bottom:
+  solid #8EAADB 1.0pt;padding:0in 5.4pt 0in 5.4pt" valign="top" width="210">
+                        <p><span style="font-size:10.5pt">Number</span></p>
+                    </td>
+                    <td style="width:159.9pt;border-top:none;border-left:
+  none;border-bottom:solid #8EAADB 1.0pt;border-right:solid #8EAADB 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt" valign="top" width="204">
+                        <p><span style="font-size:10.5pt">Lower bound of region where weights are randomly
+                                initialized.</span></p>
+
+                        <p><span style="font-size:10.5pt">Default is sqrt(6/l_nodes+r_notes)).</span></p>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width:145.8pt;border-top:none;border-left:
+  solid #8EAADB 1.0pt;border-bottom:solid #8EAADB 1.0pt;border-right:none;
+  background:#dee0e0;padding:0in 5.4pt 0in 5.4pt" valign="top" width="199">
+                        <p><span style="font-size:10.5pt">NNET_WEIGHT_UPPER_BOUND</span></p>
+                    </td>
+                    <td style="width:154.75pt;border:none;border-bottom:
+  solid #8EAADB 1.0pt;background:#dee0e0;padding:0in 5.4pt 0in 5.4pt" valign="top" width="210">
+                        <p><span style="font-size:10.5pt">Number</span></p>
+                    </td>
+                    <td style="width:159.9pt;border-top:none;border-left:
+  none;border-bottom:solid #8EAADB 1.0pt;border-right:solid #8EAADB 1.0pt;
+  background:#dee0e0;padding:0in 5.4pt 0in 5.4pt" valign="top" width="204">
+                        <p><span style="font-size:10.5pt">Upper bound of region where weights are initialized.</span>
+                        </p>
+
+                        <p><span style="font-size:10.5pt">Default <a>value </a></span><span
+                                class="MsoCommentReference"><span lang="EN-IE" style="font-size:9.0pt"><a
+                                        class="msocomanchor" href="#_msocom_2" id="_anchor_2" language="JavaScript"
+                                        name="_msoanchor_2" onmouseout="msoCommentHide('_com_2')"
+                                        onmouseover="msoCommentShow('_anchor_2','_com_2')">[LV2]</a>&nbsp;</span></span><span
+                                style="font-size:10.5pt">is sqrt(6/(l_nodes+r_nodes))</span></p>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width:145.8pt;border-top:none;border-left:
+  solid #8EAADB 1.0pt;border-bottom:solid #8EAADB 1.0pt;border-right:none;
+  padding:0in 5.4pt 0in 5.4pt" valign="top" width="199">
+                        <p><span style="font-size:10.5pt">NNET_ITERATIONS</span></p>
+                    </td>
+                    <td style="width:154.75pt;border:none;border-bottom:
+  solid #8EAADB 1.0pt;padding:0in 5.4pt 0in 5.4pt" valign="top" width="210">
+                        <p><span style="font-size:10.5pt">Value &gt; 0</span></p>
+                    </td>
+                    <td style="width:159.9pt;border-top:none;border-left:
+  none;border-bottom:solid #8EAADB 1.0pt;border-right:solid #8EAADB 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt" valign="top" width="204">
+                        <p><span style="font-size:10.5pt">The maximum number of iterations.</span></p>
+
+                        <p><span style="font-size:10.5pt">Default value is 200.</span></p>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width:145.8pt;border-top:none;border-left:
+  solid #8EAADB 1.0pt;border-bottom:solid #8EAADB 1.0pt;border-right:none;
+  background:#dee0e0;padding:0in 5.4pt 0in 5.4pt" valign="top" width="199">
+                        <p><span style="font-size:10.5pt">NNET_TOLERANCE</span></p>
+                    </td>
+                    <td style="width:154.75pt;border:none;border-bottom:
+  solid #8EAADB 1.0pt;background:#dee0e0;padding:0in 5.4pt 0in 5.4pt" valign="top" width="210">
+                        <p><span style="font-size:10.5pt">0 &lt; value &lt; 1</span></p>
+                    </td>
+                    <td style="width:159.9pt;border-top:none;border-left:
+  none;border-bottom:solid #8EAADB 1.0pt;border-right:solid #8EAADB 1.0pt;
+  background:#dee0e0;padding:0in 5.4pt 0in 5.4pt" valign="top" width="204">
+                        <p><span style="font-size:10.5pt">Defines the convergence tolerance setting.</span></p>
+
+                        <p><span style="font-size:10.5pt">Default value is 0.000001.</span></p>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width:145.8pt;border-top:none;border-left:
+  solid #8EAADB 1.0pt;border-bottom:solid #8EAADB 1.0pt;border-right:none;
+  padding:0in 5.4pt 0in 5.4pt" valign="top" width="199">
+                        <p><span style="font-size:10.5pt">NNET_REGULARIZER</span></p>
+                    </td>
+                    <td style="width:154.75pt;border:none;border-bottom:
+  solid #8EAADB 1.0pt;padding:0in 5.4pt 0in 5.4pt" valign="top" width="210">
+                        <p><span style="font-size:10.5pt">NNET_REFULARIZER_NONE</span></p>
+
+                        <p><span style="font-size:10.5pt">NNET_REGULARIZER_L2</span></p>
+
+                        <p><span style="font-size:10.5pt">NNET_REGULARIZER_HELDASIDE</span></p>
+                    </td>
+                    <td style="width:159.9pt;border-top:none;border-left:
+  none;border-bottom:solid #8EAADB 1.0pt;border-right:solid #8EAADB 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt" valign="top" width="204">
+                        <p><span style="font-size:10.5pt">Regularization setting for Neural Network. If training rows
+                                &gt; 50,000, the default is NNET_REGULARIZER_HELDASIDE. If &lt;= 50,000, the default is
+                                NNET_REGULARIZER_NONE.</span></p>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width:145.8pt;border-top:none;border-left:
+  solid #8EAADB 1.0pt;border-bottom:solid #8EAADB 1.0pt;border-right:none;
+  background:#dee0e0;padding:0in 5.4pt 0in 5.4pt" valign="top" width="199">
+                        <p><span style="font-size:10.5pt">NNET_HELDASIDE_RATIO</span></p>
+                    </td>
+                    <td style="width:154.75pt;border:none;border-bottom:
+  solid #8EAADB 1.0pt;background:#dee0e0;padding:0in 5.4pt 0in 5.4pt" valign="top" width="210">
+                        <p><span style="font-size:10.5pt">0 &lt;= value &lt;= 1</span></p>
+                    </td>
+                    <td style="width:159.9pt;border-top:none;border-left:
+  none;border-bottom:solid #8EAADB 1.0pt;border-right:solid #8EAADB 1.0pt;
+  background:#dee0e0;padding:0in 5.4pt 0in 5.4pt" valign="top" width="204">
+                        <p><span style="font-size:10.5pt">Defines the held aside ratio.</span></p>
+
+                        <p><span style="font-size:10.5pt">Default value is 0.25.</span></p>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width:145.8pt;border-top:none;border-left:
+  solid #8EAADB 1.0pt;border-bottom:solid #8EAADB 1.0pt;border-right:none;
+  padding:0in 5.4pt 0in 5.4pt" valign="top" width="199">
+                        <p><span style="font-size:10.5pt">NNET_HELDASIDE_MAX_FAIL</span></p>
+                    </td>
+                    <td style="width:154.75pt;border:none;border-bottom:
+  solid #8EAADB 1.0pt;padding:0in 5.4pt 0in 5.4pt" valign="top" width="210">
+                        <p><span style="font-size:10.5pt">Numeric &gt;= 1</span></p>
+                    </td>
+                    <td style="width:159.9pt;border-top:none;border-left:
+  none;border-bottom:solid #8EAADB 1.0pt;border-right:solid #8EAADB 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt" valign="top" width="204">
+                        <p><span style="font-size:10.5pt">With NNET_REGULARIZER_HELDASIDE, the training process is
+                                stopped early if the network performance on the validation data fails to improve or
+                                remains the same for NNET_HELDASIDE_MAX_FAIL.</span></p>
+
+                        <p><span style="font-size:10.5pt">Default value is 6.</span></p>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width:145.8pt;border-top:none;border-left:
+  solid #8EAADB 1.0pt;border-bottom:solid #8EAADB 1.0pt;border-right:none;
+  background:#dee0e0;padding:0in 5.4pt 0in 5.4pt" valign="top" width="199">
+                        <p><span style="font-size:10.5pt">NNET_REG_LAMBDA</span></p>
+                    </td>
+                    <td style="width:154.75pt;border:none;border-bottom:
+  solid #8EAADB 1.0pt;background:#dee0e0;padding:0in 5.4pt 0in 5.4pt" valign="top" width="210">
+                        <p><span style="font-size:10.5pt">Numeric &gt;= 0</span></p>
+                    </td>
+                    <td style="width:159.9pt;border-top:none;border-left:
+  none;border-bottom:solid #8EAADB 1.0pt;border-right:solid #8EAADB 1.0pt;
+  background:#dee0e0;padding:0in 5.4pt 0in 5.4pt" valign="top" width="204">
+                        <p><span style="font-size:10.5pt">Defines the L2 regularization parameter lambda. Cannot be set
+                                at same times as NNET_REGULARIZER_HELDASIZE</span></p>
+
+                        <p><span style="font-size:10.5pt">Default value is 1.</span></p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p>Once the settings have been defined for the Neural Network, the next step is to run the algorithm and
+            generate the model. The function CREATE_MODEL is used to create the machine learning model. This function is
+            part of the DBMS_DATA_MINGING PL/SQL package. The function can be used to create a model with all the
+            in-database machine learning algorithms.</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+
+BEGIN
+   DBMS_DATA_MINING.CREATE_MODEL(
+      model_name          =&gt; &#39;DEMO_NEURAL_NETWORK_MODEL&#39;,
+      mining_function     =&gt; dbms_data_mining.classification,
+      data_table_name     =&gt; &#39;mining_data_build_v&#39;,
+      case_id_column_name =&gt; &#39;cust_id&#39;,
+      target_column_name  =&gt; &#39;affinity_card&#39;,
+      settings_table_name =&gt; &#39;demo_neural_network_settings&#39;);
+END;
+
+</code></pre>
+        </div>
+
+        <p>Table 2 gives a description of the parameters for the CREATE_MODEL function</p>
+
+        <p>CREATE_MODEL Parameter Descriptions</p>
+
+        <table style="width:100%">
+            <tbody>
+                <tr>
+                    <td style="width:148.6pt;border:solid #939699 1.0pt;
+  border-right:none;background:#939699;padding:0in 5.4pt 0in 5.4pt" valign="top" width="185">
+                        <p><strong><span style="color:white; font-size:10.5pt">Parameter Name</span></strong></p>
+                    </td>
+                    <td style="width:301.9pt;border:solid #939699 1.0pt;
+  border-left:none;background:#939699;padding:0in 5.4pt 0in 5.4pt" valign="top" width="286">
+                        <p><strong><span style="color:white; font-size:10.5pt">Description</span></strong></p>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width:148.6pt;border:solid #939699 1.0pt;
+  border-top:none;background:#dee0e0;padding:0in 5.4pt 0in 5.4pt" valign="top" width="185">
+                        <p><span style="font-size:10.5pt">MODEL_NAME</span></p>
+                    </td>
+                    <td style="width:301.9pt;border-top:none;border-left:
+  none;border-bottom:solid #939699 1.0pt;border-right:solid #939699 1.0pt;
+  background:#dee0e0;padding:0in 5.4pt 0in 5.4pt" valign="top" width="286">
+                        <p><span style="font-size:10.5pt">The name or label of the model. This will be used to identify
+                                the model in the database.</span></p>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width:148.6pt;border:solid #939699 1.0pt;
+  border-top:none;padding:0in 5.4pt 0in 5.4pt" valign="top" width="185">
+                        <p><span style="font-size:10.5pt">MINING_FUNCTION</span></p>
+                    </td>
+                    <td style="width:301.9pt;border-top:none;border-left:
+  none;border-bottom:solid #939699 1.0pt;border-right:solid #939699 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt" valign="top" width="286">
+                        <p><span style="font-size:10.5pt">The type of problem to be solved. For Neural Networks this can
+                                be &lsquo;classification&rsquo; or &lsquo;regression&rsquo;.</span></p>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width:148.6pt;border:solid #939699 1.0pt;
+  border-top:none;background:#dee0e0;padding:0in 5.4pt 0in 5.4pt" valign="top" width="185">
+                        <p><span style="font-size:10.5pt">DATA_TABLE_NAME</span></p>
+                    </td>
+                    <td style="width:301.9pt;border-top:none;border-left:
+  none;border-bottom:solid #939699 1.0pt;border-right:solid #939699 1.0pt;
+  background:#dee0e0;padding:0in 5.4pt 0in 5.4pt" valign="top" width="286">
+                        <p><span style="font-size:10.5pt">The name of the table or view that contains the data to be
+                                used to build the model.</span></p>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width:148.6pt;border:solid #939699 1.0pt;
+  border-top:none;padding:0in 5.4pt 0in 5.4pt" valign="top" width="185">
+                        <p><span style="font-size:10.5pt">CASE_ID_COLUMN_NAME</span></p>
+                    </td>
+                    <td style="width:301.9pt;border-top:none;border-left:
+  none;border-bottom:solid #939699 1.0pt;border-right:solid #939699 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt" valign="top" width="286">
+                        <p><span style="font-size:10.5pt">The attribute that contains the case id for the table. The
+                                case id is the unique identifier for each record. If your data set contains a composite
+                                identifier, then you will need to create a new attribute that contains a unique
+                                number.</span></p>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width:148.6pt;border:solid #939699 1.0pt;
+  border-top:none;background:#dee0e0;padding:0in 5.4pt 0in 5.4pt" valign="top" width="185">
+                        <p><span style="font-size:10.5pt">TARGET_COLUMN_NAME</span></p>
+                    </td>
+                    <td style="width:301.9pt;border-top:none;border-left:
+  none;border-bottom:solid #939699 1.0pt;border-right:solid #939699 1.0pt;
+  background:#dee0e0;padding:0in 5.4pt 0in 5.4pt" valign="top" width="286">
+                        <p><span style="font-size:10.5pt">Name of the attribute that contains the target variable to
+                                direct the algorithm for classification or regression prediction.</span></p>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width:148.6pt;border:solid #939699 1.0pt;
+  border-top:none;padding:0in 5.4pt 0in 5.4pt" valign="top" width="185">
+                        <p><span style="font-size:10.5pt">SETTINGS_TABLE_NAME</span></p>
+                    </td>
+                    <td style="width:301.9pt;border-top:none;border-left:
+  none;border-bottom:solid #939699 1.0pt;border-right:solid #939699 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt" valign="top" width="286">
+                        <p><span style="font-size:10.5pt">The name of the table that contains the additional parameter
+                                settings for the algorithm being used.</span></p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p>After the CREATE_MODEL function has completed, the Neural Network model will be created and defined in the
+            database. The next section looks at how you can explore the various properties of the model.</p>
+
+        <p>Sample Data Set for the Article</p>
+
+        <p>The sample data set being used is based on the Sales History (SH) schema. If you are familiar with the Oracle
+            Data Miner GUI tool, part of SQL Developer, a number of sample data sets and database views are created when
+            you go to use this tool. Some of these views are based on the SH schema and include:</p>
+
+        <p>- MINING_DATA_BUILD_V<br />
+            - MINING_DATA_TEST_V<br />
+            - MINING_DATA_APPLY_V</p>
+
+        <h3>Exploring the Neural Network Model</h3>
+
+        <p>There are a number of different data dictionary views to allow you to examine the machine learning models. In
+            addition to these general views, there are also some model-specific views that are new in Oracle 18c.
+            Details of these will be given later in this section.</p>
+
+        <p>The general data dictionary views consist of:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+USER_MINING_MODELS &ndash; view high level model detail
+USER_MINING_MODEL_SETTINGS &ndash; view all parameter settings including defaults
+USER_MINING_MODEL_ATTRIBUTES &ndash; view attributes used by model
+
+</code></pre>
+        </div>
+
+        <p>The following examples will illustrate the querying of these and the type of information contained in them.
+            The first view to examine is USER_MINING_MODEL. This view will list all the in-database machine learning
+            model in your schema.</p>
+
+        <p align="center"><img alt="Figure 3" src="//www.oracle.com/a/tech/img/art-neural-network-image003.png" /></p>
+
+        <p align="center" class="xsml">Figure 3</p>
+
+        <p>When you want to examine in detail all the parameter settings used to create the model, you can use the
+            USER_MINING_MODEL_SETTINGS. This will list the parameters you set up and configured in the settings table
+            (see example above); for those parameters not included in the settings table, the algorithm will use the
+            default settings, as defined in Table 1. This view gives you all of this information in one place.</p>
+
+        <p align="center"><img alt="Figure 4" src="//www.oracle.com/a/tech/img/art-neural-network-image004.png" /></p>
+
+        <p align="center" class="xsml">Figure 4</p>
+
+        <p>When using Oracle 12c Database, or an earlier version, you could use the function <span
+                style="font-family:courier new">GET_MODEL_DETAILS</span> to extract certain information and details of
+            the models. These functions have been deprecated in Oracle 18c. Instead, additional data dictionary views
+            are created. Each type of model (Neural Networks, Decision Trees, Support Vector Machines, etc.) will have
+            their own properties and hence will present slightly different details in each of the data dictionary views.
+            These can be identified with the prefix of DM$XX, where XX will be one of VA, VC, VG, VN, VS, VT and VW,
+            followed by the name of the machine learning model.</p>
+
+        <p>The data dictionary views created for the Neural Network created in this article include:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+DM$VADEMO_NEURAL_NETWORK_MODEL &ndash; weights of the neurons
+DM$VCDEMO_NEURAL_NETWORK_MODEL &ndash; scoring cost matrix
+DM$VGDEMO_NEURAL_NETWORK_MODEL &ndash; global statistics
+DM$VNDEMO_NEURAL_NETWORK_MODEL &ndash; normalization parameters
+DM$VSDEMO_NEURAL_NETWORK_MODEL &ndash; computed settings
+DM$VTDEMO_NEURAL_NETWORK_MODEL &ndash; describes the target distribution
+DM$VWDEMO_NEURAL_NETWORK_MODEL &ndash; alerts during model build
+</code></pre>
+        </div>
+
+        <p>If you inspect the contents of <code class="ocode">DM$VNDEMO_NEURAL_NETWORK_MODEL</code> you will get to see
+            the outputs from the Automatic Data Preparation (ADP) that was set earlier.&nbsp;&nbsp;</p>
+
+        <h3>How to use the Neural Network Model</h3>
+
+        <p>In the previous section I showed how easy it was to create a Neural Network machine- learning model in an
+            Oracle 18c Database. The next thing we will look at is how you can use the model to label new data. This is
+            something that will typically be required in your front-end applications, your web-based application or in
+            your back-end or batch applications and processes. Any programming language or framework that can call SQL
+            can now run the in-database Neural Network model by using a simple SQL command.</p>
+
+        <p>The following examples illustrates how simple the SQL is for using the Neural Network model. We can spend a
+            lot of time going through many different possibilities of using the model, but the next two examples
+            illustrate the simplicity involved.</p>
+
+        <p>SQL has a number of analytics functions that are associated with calling an in-database machine learning
+            model. The following examples will illustrate the two most commonly used of these SQL functions, which tell
+            you the predicted value and the prediction probability or the strength of the prediction by the model (a
+            confidence score).</p>
+
+        <p>Our first example uses the PREDICTION and PREDICTION_PROBABILITY SQL function. The PREDICTION function
+            returns the predicted value from the model. It takes as input the name of the machine learning model to use
+            and the list of attributes to input to the model. In our example I have used the * (star) to indicate to the
+            model to use all available attributes from the selected table or view.</p>
+
+        <p align="center"><img alt="Figure 5" src="//www.oracle.com/a/tech/img/art-neural-network-image005.png" /></p>
+
+        <p align="center" class="xsml">Figure 5</p>
+
+        <p>The PREDICTION_PROBABILTY function returns a confidence score, on a zero to one scale, of how strong a
+            prediction the model has made. Getting a value of 1 will indicate that the model is 100% sure the prediction
+            is correct. Getting a value in the range 0.75 to 1 is generally a strong prediction.</p>
+
+        <p>We need to remember that the model is making a prediction. If we have a good model, it should be correctly
+            predicting a large percentage of values correctly. A model will never be 100% accurate as a machine learning
+            model is a generalized representation of the data used to train the model. When the model is used against
+            new, previously unseen data, it will make a prediction based on information in the model. Sometimes it will
+            make an incorrect prediction. As you gather more and more data, this data can be added into the training
+            data set, thereby increasing the potential accuracy of future versions of the model</p>
+
+        <p>You can see how simple this query is and how easily it could be integrated into our applications developed in
+            other languages.</p>
+
+        <p>But the previous example is based on data stored in a database table&mdash;and not all data lives in a
+            database table (e.g., data created in an application that hasn&rsquo;t yet been persisted to the database).
+            This is common in very dynamic applications. The following example illustrates how you can still use the
+            Neural Network model stored in the data to make a prediction based on data in your application. This is an
+            example of doing &ldquo;what-if&rdquo; analysis. In our application, some of this data could be represented
+            as sliders and other objects. As these sliders are adjusted, the application needs to dynamically
+            recalculate the prediction from the model in real-time and to make the necessary updates to the application.
+        </p>
+
+        <p align="center"><img alt="Figure 6" src="//www.oracle.com/a/tech/img/art-neural-network-image006.png" /></p>
+
+        <p align="center" class="xsml">Figure 6</p>
+
+        <h3>Let&rsquo;s go Deep!&nbsp; Creating a Deep Learning Neural Network</h3>
+
+        <p>The examples shown above create a very simple (i.e., with one hidden layer) neural network model. All input
+            attributes are mapped to all the nodes in the one hidden layer and are used to make a prediction.</p>
+
+        <p>Typically, the term deep learning is used in conjunction with neural networks, but all too often there can be
+            some confusion about what &ldquo;deep learning&rdquo; actually means. It is a term commonly used when using
+            neural networks on image files. To keep things simple, deep learning is when multiple hidden layers are used
+            in the neural network model build process. Earlier, I described how the input attributes are used, along
+            with different weightings and an activation function, to define the node in a hidden layer. This is
+            complicated set of mathematics that produces an output. With deep learning, this complicated set of
+            mathematics is then used as input to another hidden layer. This output from one node is combined with
+            similar outputs from other nodes. This is illustrated in Figure 2 and the hidden layers colored in green and
+            blue. The more hidden layers and nodes at each layer, the more complex the process, but also the greater the
+            ability to find deep hidden patterns in the data, patterns found by combining different attributes in
+            different ways. For example, when the attributes of a person&rsquo;s height and weight are combined using a
+            particular formula to form a BMI value (Body Mass Index), we get better, more meaningful, insight into a
+            person&rsquo;s body make up and risk factors.</p>
+
+        <p>There are a couple of options for setting up different hidden layers and <a>nodes in each layer</a><span
+                class="MsoCommentReference"><span lang="EN-IE" style="font-size:9.0pt"><a class="msocomanchor"
+                        href="#_msocom_3" id="_anchor_3" language="JavaScript" name="_msoanchor_3"
+                        onmouseout="msoCommentHide('_com_3')"
+                        onmouseover="msoCommentShow('_anchor_3','_com_3')">[LV3]</a>&nbsp;</span></span>, for the neural
+            network algorithm in Oracle 18c. The first is to define how many hidden layers to use. The algorithm will
+            then work out the number of nodes for each layer, but this may match the number of input variables at each
+            hidden layer. An alternative is to define the number of nodes to use at each hidden layer. This is set up as
+            a parameter in a settings table. The following is an extended version of the previous settings table with an
+            additional parameter of NNET_NODES_PER_LAYER. The number of hidden layers does not need to be defined when
+            using this parameter. The following example defines for the neural network to have three hidden layers with
+            ten nodes at the first hidden layer, six nodes at the second hidden layer and four nodes at the third hidden
+            layer.</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+CREATE TABLE demo_Neural_Network_settings_2 
+( setting_name  VARCHAR2(30),
+  setting_value VARCHAR2(4000));
+
+-- insert the settings records for a Neural Network
+-- ADP is turned on. By default ADP is turned off.
+BEGIN
+  INSERT INTO demo_neural_network_settings_2 (setting_name, setting_value)
+  values (dbms_data_mining.algo_name, dbms_data_mining.algo_neural_network);
+	
+  INSERT INTO demo_neural_network_settings_2 (setting_name, setting_value)
+  VALUES (dbms_data_mining.prep_auto, dbms_data_mining.prep_auto_on);
+  
+  INSERT INTO demo_neural_network_settings_2 (setting_name, setting_value)
+  VALUES (dbms_data_mining.nnet_nodes_per_layer, &#39;10,6,4&#39;);
+END;
+</code></pre>
+        </div>
+
+        <p>The big question is: Do we get a better model when using the additional hidden layers (deep learning)? The
+            answer is &ldquo;it depends.&rdquo; It depends on the number of layers and nodes at each layer. There are
+            many approaches to working out the appropriate number for each, and there will be a bit of experimental work
+            in trying to find the optimal amount. It will require evaluating the performance of each iteration of the
+            model settings. This can be easily scripted and is dependent on having a holdout data set to evaluate the
+            model. The data set being used in this article also contains a separate data set for testing the model. This
+            is called MINING_DATA_TEST_V and contains a different subset of the SH schema to what is used in
+            MINING_DATA_BUILD_V view.</p>
+
+        <p>The first step is to create a view that uses the model to label the test data. The second step is to compute
+            the confusion matrix for the model based on the predicted values compared to the actual values. This
+            computes how many predictions it correctly and incorrectly predicted.</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code>
+ CREATE OR REPLACE VIEW demo_nnet_test_results_2
+AS
+SELECT cust_id,
+       prediction(DEMO_NEURAL_NETWORK_MODEL_2 USING *)  predicted_value,
+       prediction_probability(DEMO_NEURAL_NETWORK_MODEL_2 USING *) probability
+FROM   mining_data_test_v;
+
+DECLARE
+   v_accuracy NUMBER;
+BEGIN
+   DBMS_DATA_MINING.COMPUTE_CONFUSION_MATRIX (
+      accuracy 			    =&gt; v_accuracy,
+      apply_result_table_name	    =&gt; &#39;demo_nnet_test_results_2&#39;,
+      target_table_name 	    =&gt; &#39;mining_data_test_v&#39;,
+      case_id_column_name 	    =&gt; &#39;cust_id&#39;,
+      target_column_name 	    =&gt; &#39;affinity_card&#39;,
+      confusion_matrix_table_name =&gt; &#39;demo_nnet_confusion_matrix_2&#39;,
+      score_column_name 	    =&gt; &#39;PREDICTED_VALUE&#39;,
+      score_criterion_column_name =&gt; &#39;PROBABILITY&#39;,
+      cost_matrix_table_name	    =&gt; null,
+      apply_result_schema_name    =&gt; null,
+      target_schema_name 	    =&gt; null,
+      cost_matrix_schema_name     =&gt; null,
+      score_criterion_type 	    =&gt; &#39;PROBABILITY&#39;);
+   DBMS_OUTPUT.PUT_LINE(&#39;**** MODEL ACCURACY ****: &#39; || ROUND(v_accuracy,4));
+END;
+</code></pre>
+        </div>
+
+        <p>When this evaluation approach was used for the first neural network model (with one hidden layer), a model
+            accuracy of 78% was achieved&mdash;3% higher than the other in-database machine learning models. This is
+            good and shows how powerful neural networks are compared to more traditional machine learning algorithms.
+            When the second neural network model was evaluated, an accuracy of 81% was achieved. That is now a 6% better
+            performance compared to the next best machine learning model. This is a major achievement. With time and
+            patience, the number of hidden layers and number of nodes at each layer could be fine-tuned further to gain
+            a better result.</p>
+
+        <h3>Summary</h3>
+
+        <p>Neural Networks are a powerful machine learning algorithm, allowing you to create complex and deep learning
+            neural network models to find hidden patterns in your data sets. Neural Networks are available with Oracle
+            18c and can be easily built and used to make predictions using a few simple SQL commands. <span
+                style="color:black">These can be easily REST enabled, making it simple to incorporate into any other
+                programming language or framework.</span></p>
+
+        <h3>About the Author</h3>
+
+        <p><strong>Brendan Tierney</strong>, Oracle Groundbreaker Ambassador &amp; Oracle ACE Director, is an
+            independent consultant (Oralytics) and lectures on data science, databases, and Big Data at the Dublin
+            Institute of Technology/Dublin Technological University. He has 25+ years of experience working in the areas
+            of data mining, data science, Big Data, and data warehousing. Brendan is a recognized Data Science and Big
+            Data expert and has worked on projects in Ireland, the UK, Belgium, Holland, Norway, Spain, Canada, and the
+            U.S. He is active in the Oracle User Group community, where he is one of the leaders for the OUG in Ireland
+            and is a Member Advocate at Board of Director level with the UKOUG. Brendan has also been editor of the
+            UKOUG Oracle Scene magazine and is a regular speaker at conferences around the world. He is an active
+            blogger and also writes articles for OTN, Oracle Scene, IOUG SELECT Journal, ODTUG Technical Journal, and
+            ToadWorld. He is also on the board of directors for DAMA in Ireland. Brendan has published four books, three
+            with Oracle Press/McGraw-Hill (Predictive Analytics Using Oracle Data Miner, Oracle R Enterprise: Harnessing
+            the Power of R in Oracle Database, and Real World SQL and PL/SQL: Advice from the Experts) and one with MIT
+            Press (Essentials of Data Science). These books are available on Amazon, in print, ebook and audio book
+            formats.</p>
+    </div>
+</section>
+
+<!--</article>-->
+<!-- / _Raw-Text -->

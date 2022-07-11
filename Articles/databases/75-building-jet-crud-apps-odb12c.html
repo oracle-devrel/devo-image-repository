@@ -1,0 +1,806 @@
+<!-- _Raw-HTML -->
+<section class="cc01 cc01v0 cpad crule">
+    <div class="cc01w1 cwidth">
+        <p>As the name implies, a CRUD (Create, Read, Update, Delete) application is supposed to not only access the
+            underlying data, but also to allow the user to perform the entire set of operations to manipulate that data,
+            including create, update, and delete operations.</p>
+
+        <p>This article illustrates how you can build a CRUD application that supports both data access and data
+            manipulation operations. To build the article sample, you will use <a
+                href="https://www.oracle.com/webfolder/technetwork/jet/index.html">Oracle JET</a>, <a
+                href="https://www.oracle.com/database/technologies/">Oracle Database</a>, <a
+                href="https://www.oracle.com/database/technologies/appdev/rest.html">Oracle REST Data Services</a>, and
+            <a href="https://www.oracle.com/database/technologies/appdev/sql-developer.html">Oracle SQL Developer</a>.
+        </p>
+
+        <h3><a name="1"></a>What You Will Learn</h3>
+
+        <p>This article provides an example to bring together the software components outlined above in order to build
+            an Oracle JET CRUD application interacting with a dataset in Oracle Database. In particular, you&#39;ll walk
+            through a set of step-by-step instructions, showing you how to</p>
+
+        <ul>
+            <li>Prepare a dataset in the underlying database to be used in an Oracle JET application</li>
+            <li>Configure Oracle REST Data Services to turn an Oracle Database instance into a RESTful API service.</li>
+            <li>Test an Oracle REST Data Services service&#39;s endpoints from the command line using the cURL tool</li>
+            <li>Build an Oracle JET application that interacts with an Oracle Database instance via an Oracle REST Data
+                Services RESTful service.</li>
+            <li>Perform insert, update, and delete operations in an Oracle JET application against data stored in the
+                underlying database</li>
+        </ul>
+
+        <p>The quickest way to implement the tasks above is to take advantage of an existing Oracle JET application,
+            modifying its functionality as needed. So, the example application discussed in the rest of this article is
+            based on the <a
+                href="http://www.oracle.com/webfolder/technetwork/jet/public_samples/JET-CommonModel-CRUD.zip">OracleJET-CommonModel-CRUD
+                sample</a> covered in detail in the &quot;<a
+                href="http://docs.oracle.com/middleware/jet320/jet/developer/GUID-0C0D187C-CDCB-4235-ADA8-7AE9D93FFA08.htm#JETDG173">Creating
+                a CRUD Application Using Oracle JET</a>&quot; section of the <a
+                href="http://docs.oracle.com/middleware/jet320/jet/developer/toc.htm"><em>JavaScript Extension Toolkit
+                    (JET) Developing Applications with Oracle JET</em></a> guide.</p>
+
+        <p>The key point is that the OracleJET-CommonModel-CRUD sample supports every type of CRUD operation, and it
+            includes a mock REST server that simulates (mocks) a RESTful service. So, by using this sample as the
+            starting point for another demo CRUD application, you get a ready-to-use view, and you need to make some
+            minor changes to the viewModel to make it work with a real RESTful service.</p>
+
+        <h3><a name="2"></a>Preparing a Dataset in the Underlying Database</h3>
+
+        <p>This article&#39;s sample uses the data from the departments relational table that can be found in the HR
+            sample schema in an Oracle Database instance. Because the set of data operations to be discussed here is not
+            limited to access operations only but also includes data modification operations, such as cerate and update,
+            it would be a good idea to create a separate database schema with a departments table copied from the HR
+            schema. This can be done with the following commands in Oracle SQL Developer or in another SQL tool of your
+            choice, when you are logged in with DBA privileges:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code> 
+     
+CREATE USER hr1 IDENTIFIED BY pswd;
+
+GRANT CONNECT, RESOURCE TO hr1;
+
+GRANT SELECT ON hr.departments TO hr1;
+
+ALTER USER hr1 quota unlimited on USERS;
+</code></pre>
+        </div>
+
+        <p>Then, you can connect using the just-created account and create a copy of the hr.departments table, as
+            follows:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code> 
+  
+CONN h1/pswd;
+
+CREATE TABLE departments AS SELECT * FROM hr.departments;
+
+ALTER TABLE departments ADD CONSTRAINT DEPT_ID_PK PRIMARY KEY(department_id);
+</code></pre>
+        </div>
+
+        <p>So, now you have a departments database table that will be used as a data source in this article&#39;s sample
+            application. Although this is simply a regular relational table, you can easily turn it into a RESTful data
+            source with the help of Oracle REST Data Services. As a result, you will be able to access and manipulate
+            data in this table, employing Oracle JET&#39;s built-in mechanisms that are used for consuming data via the
+            <a
+                href="https://docs.oracle.com/middleware/jet112/jet/developer/GUID-2549871C-9658-4035-B461-A9136554BE74.htm">Common
+                Model and Collection API</a>.
+        </p>
+
+        <p>The following section discusses how you can configure a RESTful service on the hr1.departments table, using
+            the RESTful Services feature in Oracle SQL Developer.</p>
+
+        <h3><a name="3"></a>Turning a Database Table into a RESTful Data Source Using Oracle REST Data Services</h3>
+
+        <p>Oracle REST Data Services comes with both Oracle Database and Oracle SQL Developer. In a nutshell, Oracle
+            REST Data Services allows your application to access and manipulate your Oracle Database resources via REST,
+            mapping HTTP(S) operations (GET, POST, PUT, DELETE, and so on) to database transactions. You can easily
+            enable REST access to database objects using the Oracle REST Data Services feature in Oracle SQL Developer.
+        </p>
+
+        <p>In general, you&#39;ll need to complete the following steps before you can access a database schema object,
+            such as a table or view, via REST:</p>
+
+        <ul>
+            <li><strong>Install Oracle REST Data Services using Oracle SQL Developer.</strong> This can be done with
+                Oracle SQL Developer&#39;s Oracle REST Data Services Installation Wizard, as described in detail in the
+                &quot;<a
+                    href="http://www.oracle.com/webfolder/technetwork/tutorials/obe/db/ords/r30/Install_Administer_ORDS/Install_Administer_ORDS.html">Installing
+                    and Administering REST Data Services with SQL Developer</a>&quot; hands-on-lab.</li>
+            <li><strong>Enable Oracle REST Data Services queries to access necessary database objects.</strong> In this
+                particular example, you&#39;ll need to enable Oracle REST Data Services access to the hr1.departments
+                database table. For details, refer to the &quot;Configuring a RESTful Service upon a Database
+                Table&quot; section of my preceding Oracle Technology Network article, &quot;<a
+                    href="http://www.oracle.com/technetwork/articles/database/oracle-db-oraclejet-combination-3941880.html">Oracle
+                    JET and Oracle Database&mdash;a Beautiful Combination</a>.&quot; Also, you can check out the
+                &quot;<a
+                    href="http://www.oracle.com/webfolder/technetwork/tutorials/obe/db/ords/r30/AutoREST%20Enable/AutoREST%20Enable.html">AutoREST
+                    Enable Database Objects</a>&quot; hands-on-lab for more details.</li>
+            <li><strong>Run an Oracle REST Data Services process.</strong> You can run it using the Oracle REST Data
+                Services Run Wizard, which can be launched by clicking <strong>Tools</strong> and selecting the
+                <strong>REST Data Services&gt;Run</strong> menu item in Oracle SQL Developer. Once you have completed
+                the wizard, you should see the running Oracle REST Data Services process in the Processes pane in Oracle
+                SQL Developer.
+            </li>
+        </ul>
+
+        <p>Once you have enabled Oracle REST Data Services queries to the hr1.departments table, you might want to test
+            REST endpoints related to it. This can be easily done with the cURL command-line tool. Thus, to test a GET
+            endpoint, you might issue the following command from a system terminal:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code> 
+
+$ curl -i http://yourdatabasehost:9090/ords/hr1/departments/10</code></pre>
+        </div>
+
+        <p>If everything went well, you should get output that looks as follows:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code> 
+     
+HTTP/1.1 200 OK
+Content-Type: application/json
+ETag: &quot;VOKy9X8AhWVZRMuJcpCVhxoS/+pYK0BAPT0jNrD/IJB4xRSzKhVamEqrQq94DhSK+B/Z1D
+BZsvS0pEJypNRsPQ==&quot;
+Transfer-Encoding: chunked
+
+{&quot;department_id&quot;:10,&quot;department_name&quot;:&quot;Administration&quot;,&quot;manager_id&quot;:200
+,&quot;location_id&quot;:1700,&quot;links&quot;:[{&quot;rel&quot;:&quot;self&quot;,&quot;href&quot;:&quot;http://localhost:909
+0/ords/hr1/departments/10&quot;},{&quot;rel&quot;:&quot;edit&quot;,&quot;href&quot;:&quot;http://localhost:9090
+/ords/hr1/departments/10&quot;},{&quot;rel&quot;:&quot;describedby&quot;,&quot;href&quot;:&quot;http://localhos
+t:9090/ords/hr1/metadata-
+catalog/departments/item&quot;},{&quot;rel&quot;:&quot;collection&quot;,&quot;href&quot;:&quot;http://localhost
+:9090/ords/hr1/departments/&quot;}]}
+</code></pre>
+        </div>
+
+        <p>In the following example, you test a POST operation, creating a new record in the underlying hr1.departments
+            table:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code> 
+   
+$ curl -i -H &quot;Content-Type: application/json&quot; -X POST -d &quot;{ 
+\&quot;department_id\&quot;:12, \&quot;department_name\&quot;: \&quot;Advertisement \&quot;, 
+\&quot;manager_id\&quot;:202, \&quot;location_id\&quot;:1700 }&quot; 
+&quot;http://localhost:9090/ords/hr1/departments/&quot; 
+</code></pre>
+        </div>
+
+        <p>If the create operation above was successful, the output produced should look like this:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code> 
+    
+HTTP/1.1 201 Created
+Content-Type: application/json
+Content-Location: http://localhost:9090/ords/hr1/departments/12
+ETag:
+&quot;ttn42msyo7PXMlQhOzEcYh53GteYTTHD652ANSxf2tX2eqnOm4M+FxmW8wcdjGrhVO2ALY
+4jYfo2XzHvVg9+qQ==&quot;
+Location: http://localhost:9090/ords/hr1/departments/12
+Transfer-Encoding: chunked
+
+{&quot;department_id&quot;:12,&quot;department_name&quot;:&quot;Advertisement 
+&quot;,&quot;manager_id&quot;:202,&quot;location_id&quot;:1700,&quot;links&quot;:[{&quot;rel&quot;:&quot;self&quot;,&quot;href&quot;:&quot;ht
+tp://localhost:9090/ords/hr1/departments/12&quot;},{&quot;rel&quot;:&quot;edit&quot;,&quot;href&quot;:&quot;htt
+p://localhost:9090/ords/hr1/departments/12&quot;},{&quot;rel&quot;:&quot;describedby&quot;,&quot;href
+&quot;:&quot;http://localhost:9090/ords/hr1/metadata-
+catalog/departments/item&quot;},{&quot;rel&quot;:&quot;collection&quot;,&quot;href&quot;:&quot;http://localhost
+:9090/ords/hr1/departments/&quot;}]}
+</code></pre>
+        </div>
+
+        <p>Now, once again, for testing purposes, you might want to delete the just-created row, using the following
+            command:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code> 
+ 
+$ curl -i -X DELETE &quot;http://localhost:9090/ords/hr1/departments/12&quot;
+HTTP/1.1 200 OK
+Content-Type: application/json
+Transfer-Encoding: chunked
+
+{&quot;rowsDeleted&quot;:1}
+</code></pre>
+        </div>
+
+        <h3><a name="4"></a>Modifying the OracleJET-CommonModel-CRUD Sample to Fetch from Oracle REST Data Services</h3>
+
+        <p>As mentioned, the <a
+                href="http://www.oracle.com/webfolder/technetwork/jet/public_samples/JET-CommonModel-CRUD.zip">OracleJET-CommonModel-CRUD
+                sample</a> is used as the starting point in this article. So, now that you have tested REST endpoints to
+            be used in the article&#39;s sample, you can move on to the copy of OracleJET-CommonModel-CRUD you&#39;ve
+            unpacked on your system, and you can modify it to fetch from this Oracle REST Data Services service.</p>
+
+        <p>In fact, to make your OracleJET-CommonModel-CRUD application fetch data from the Oracle REST Data Services
+            service created as described above, you need to make minor adjustments to the existing code in only two
+            application files: <code>main.js</code> and <code>app.js</code>, as described below.</p>
+
+        <p>In <code>main.js</code>, edit the first parameter of the getJSON function, changing it to the URL of the
+            Oracle REST Data Services service you just created for working with hr1.departments data. This URL might
+            look as follows: http://yourdatabasehost:9090/ords/hr1/departments/. Then, make sure to change the value of
+            the id parameter passed to the MockRESTServer constructor to department_id, because this is the name of the
+            id field used in the hr1.departments table. Also, you need to change the url and idUrl parameters passed to
+            the MockRESTServer constructor. The following code snippet shows the changes to be made:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code> 
+
+...
+
+    $.getJSON(&quot;<strong>http://yourdatabasehost:9090/ords/hr1/departments/</strong>&quot;,
+          function (data) {
+            new MockRESTServer(data, {id:&quot;<strong>department_id</strong>&quot;, 
+              url:/<strong>^http:\/\/yourdatabasehost:9090\/ords\/hr1\/departments(\?limit=([
+\d]*))?$/i</strong>,
+              idUrl:/^<strong>http:\/\/ </strong>
+<strong>yourdatabasehost:9090\/ords\/hr1\/departments\/([\d]+)$/i});</strong>   
+
+...
+</code></pre>
+        </div>
+
+        <p>In <code>app.js</code>, you need to change the value of the self.serviceURL variable, and edit the parseDept
+            and parseSaveDept functions; both are located within the viewModel function. The changes to be made are
+            highlighted in bold in the following snippet:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code> 
+     
+   function viewModel() {
+ ...
+      self.serviceURL = &#39;<strong>http://yourdatabasehost:9090/ords/hr1/departments</strong>&#39;;
+
+...
+
+      function parseDept(response) {
+        if (response[&#39;Departments&#39;]) {
+           var innerResponse = response[&#39;Departments&#39;][0];
+           if (innerResponse.links.Employees == undefined) {
+                 var empHref = &#39;&#39;;
+            } else {
+                 empHref = innerResponse.links.Employees.href;
+            }
+            return {DepartmentId: innerResponse[&#39;<strong>department_id</strong>&#39;], 
+DepartmentName: innerResponse[&#39;<strong>department_name</strong>&#39;]};
+         }
+         return {DepartmentId: response[&#39;<strong>department_id</strong>&#39;], 
+DepartmentName: response[&#39;<strong>department_name</strong>&#39;], 
+LocationId:response[&#39;<strong>location_id</strong>&#39;], ManagerId:response[&#39;<strong>manager_id</strong>&#39;]};
+      }
+
+      function parseSaveDept(response) {
+         return {DepartmentId: response[&#39;<strong>department_id</strong>&#39;], 
+DepartmentName: response[&#39;<strong>department_name</strong>&#39;], 
+LocationId:response[&#39;<strong>location_id</strong>&#39;], ManagerId:response[&#39;<strong>manager_id</strong>&#39;]};
+      }
+
+...
+</code></pre>
+        </div>
+
+        <p>Also note that the code related to the Employees links has been excluded from both parseDept and
+            parseSaveDept.</p>
+
+        <p>This is what your OracleJET-CommonModel-CRUD application page should look like when loaded after you have
+            made the above changes.</p>
+
+        <p align="center" class="xsml">Figure 1. The sample page after changing the data source to the Oracle REST<br />
+            Data Services service defined on the hr1.departments database table.</p>
+
+        <p><strong>Figure 1: The sample page after changing the data source to the Oracle REST Data Services service
+                defined on the hr1.departments database table.</strong></p>
+
+        <p>So, now your application can fetch data from the database using the Oracle REST Data Services service you
+            defined on a database table. Using CRUD terms, the application can now perform a read operation, consuming a
+            RESTful service. Your next step is to make it perform data manipulation operations, such as create and
+            update, consuming that same RESTful service.</p>
+
+        <h3><a name="5"></a>Customizing the URL Operations</h3>
+
+        <p>In the &quot;<a href="#3">Turning a Database Table into a RESTful Data Source Using Oracle REST Data
+                Services</a>&quot; section earlier in this article, you saw how to perform data manipulation operations
+            against a RESTful data service with the cURL command-line tool, explicitly specifying the type of HTTP
+            method, the URL, and the payload (if applicable). Now, how can we do all this in our application?</p>
+
+        <p>Actually, Oracle JET does not require you to explicitly specify a type of HTTP request and a payload when it
+            comes to a CRUD operation; Oracle JET can do that for you implicitly. The only thing you have to specify
+            explicitly is the service URL.</p>
+
+        <p>It is important to note, however, that the Oracle JET Common Model&#39;s oj.Model and oj.Collection objects
+            allow you to customize the data service URLs, explicitly providing the data needed to prepare a request to
+            the underlying RESTful service. For that, you can define a customURL callback function, which will override
+            the default behavior.</p>
+
+        <p>As you will learn in the next section, this function can be used as a good position from which you can debug
+            what is happening when a certain operation is performed, getting an understanding of how the Common Model
+            and Collection API works under the hood.</p>
+
+        <p>Actually, you don&#39;t have to write it from scratch. The <a
+                href="http://www.oracle.com/webfolder/technetwork/jet/jetCookbook.html">Oracle JET site&#39;s
+                cookbook</a> has the <a
+                href="http://www.oracle.com/webfolder/technetwork/jet/jetCookbook.html?component=custom&amp;amp;demo=customURL">Customizations&mdash;Custom
+                URL recipe</a>, which might give you a good grasp of what such a callback might look like. Adapting the
+            code from the cookbook recipe for this particular example, you might write the following function and insert
+            it into the viewModel function in <code>app.js</code>:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code> 
+     
+     function getUrl(operation, collection, options) {
+           var retObj = {};
+           retObj[&#39;type&#39;] = getVerb(operation);
+           if (operation === &quot;delete&quot; || operation === &quot;update&quot; || 
+operation === &quot;create&quot;) {
+               retObj[&#39;url&#39;] = self.serviceURL + &quot;/&quot; + collection.id;
+            }
+            else {
+                   retObj[&#39;url&#39;] = self.serviceURL;
+            }
+            retObj[&#39;headers&#39;] = {};
+            retObj[&#39;headers&#39;][&#39;testopt&#39;] = &#39;value&#39;;
+            return retObj;
+      };
+</code></pre>
+        </div>
+
+        <p>As you might notice, the above function refers to a getVerb function, which you also have to insert into
+            viewModel somewhere before the above function. The getVerb function might look like this:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code> 
+    
+     function getVerb(verb) {
+           if (verb === &quot;read&quot;) {
+               return &quot;GET&quot;;
+           }
+           if (verb === &quot;update&quot;) {
+               return &quot;PUT&quot;;
+           }
+           if (verb === &quot;delete&quot;) {
+               return &quot;DELETE&quot;;
+           }
+           if (verb === &quot;create&quot;) {
+               return &quot;PUT&quot;
+           }
+      };
+</code></pre>
+        </div>
+
+        <p>Then, you can move on to the oj.Model.extend and oj.Collection.extend definitions in the viewModel function
+            and edit them as follows:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code> 
+     
+      var Department = oj.Model.extend({
+              //<strong>urlRoot: self.serviceURL,</strong>
+              <strong>customURL: getUrl,</strong>
+              parse: parseDept,
+              parseSave: parseSaveDept,
+              idAttribute: &#39;DepartmentId&#39;
+       });
+
+       var myDept = new Department();
+
+       var DeptCollection = oj.Collection.extend({
+              //<strong>url: self.serviceURL + &quot;?limit=50&quot;,</strong>
+              <strong>customURL: getUrl,</strong>
+              model: myDept,
+              comparator: &quot;DepartmentId&quot;
+       });
+</code></pre>
+        </div>
+
+        <p>As you can see, in both cases you used the customURL property, setting it to getUrl, which is used as the
+            customURL callback in this particular example.</p>
+
+        <h3><a name="6"></a>Getting into the Details with a Debugger</h3>
+
+        <p>If you&#39;re new to Oracle JET, it can be quite a challenge to get a grasp of how the Common Model and
+            Collection API works. This is where a technique known as debugging might help a lot. According to the Oracle
+            JET documentation, when it comes to debugging Oracle JET web applications, you can use your favorite
+            browser&#39;s debugging facilities. Thus, for example, if you are a Mozilla Firefox user, you might take
+            advantage of <a href="https://getfirebug.com/javascript">Firebug</a>, which includes a powerful JavaScript
+            debugger.</p>
+
+        <p>With the help of a debugger, you can trace your application&#39;s execution flow, discovering what pieces of
+            code are executed when a certain task is performed. By setting a breakpoint, you can pause execution on any
+            line and then drill down arbitrarily into underlying libraries to examine the execution flow. You can also
+            explore the values of variables at each execution step.</p>
+
+        <p>Turning to our example, let&#39;s take a closer look at the getUrl function defined within the viewModel
+            function, as described in the previous section. Looking through getUrl, you might notice that the object
+            defined within it contains the URL and the type of HTTP request method to be used, but it does not contain
+            request payloads. It is fairly clear that a PUT operation used either to update a department or create a new
+            department assumes a request payload. And if you don&#39; t want to rely on the default behavior, can you
+            explicitly specify a payload to send to the REST service? The answer to this question can be easily gleaned
+            from the <code>ojmodel.js</code> script, as you will see in a moment.</p>
+
+        <p>Assuming you have already loaded the application page in your browser, activate the browser&#39;s debugger
+            and set a breakpoint at the last line of the getUrl function in <code>app.js</code>:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code> 
+    
+return retObj
+</code></pre>
+        </div>
+
+        <p>Then, click the <strong>Reload</strong> button in the browser to make the application scripts run in the
+            debugging mode. The execution should stop on the line where you set the breakpoint, as shown in Figure 2:
+        </p>
+
+        <p align="center" class="xsml">Figure 2: Setting a breakpoint within a customURL callback function allows you to
+            quickly get into your<br />
+            Oracle JET app&#39;s underlying code to follow the execution flow.</p>
+
+        <p>From then on, you can continue execution one line at a time by pressing F10 (Step Over). After just a few
+            steps with F10, you&#39;ll be taken to the following line of code in <code>ojmodel.js</code>:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code> 
+     
+  if (!result.hasOwnProperty(&#39;data&#39;)) {
+</code></pre>
+        </div>
+
+        <p>This is shown in Figure 3:</p>
+
+        <p align="center" class="xsml">Figure 3: Getting into the ojmodel.js script to reveal all possible properties of
+            the return object defined in a<br />
+            customURL callback.</p>
+
+        <p>This line of code reveals that the return object defined in a customURL callback function can have a property
+            called &quot;data,&quot; which allows you to manually compose a request payload. (If you recall, this
+            property was not used in the <a
+                href="http://www.oracle.com/webfolder/technetwork/jet/jetCookbook.html?component=custom&amp;demo=customURL">Customizations&mdash;Custom
+                URL recipe</a>.) So, you can return to the getUrl function and add the data property to the return
+            object, as shown in the following listing:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code> 
+     
+     function getUrl(operation, collection, options) {
+         var retObj = {};
+         retObj[&#39;type&#39;] = getVerb(operation);
+         if (operation === &quot;delete&quot; || operation === &quot;update&quot; || operation === &quot;create&quot;) {
+            retObj[&#39;url&#39;] = self.serviceURL + &quot;/&quot; + collection.id;
+            <strong>retObj[&#39;data&#39;] = JSON.stringify({&quot;DepartmentId&quot;:collection.id,</strong> 
+<strong>&quot;DepartmentName&quot;:collection.attributes.DepartmentName,</strong> 
+<strong>&quot;LocationId&quot;:collection.attributes.LocationId,&quot;ManagerId&quot;:collection.attributes.ManagerId});</strong>
+         }
+         else {
+            retObj[&#39;url&#39;] = self.serviceURL;
+         }
+         retObj[&#39;headers&#39;] = {};
+         retObj[&#39;headers&#39;][&#39;testopt&#39;] = &#39;value&#39;;
+         return retObj;
+     };
+</code></pre>
+        </div>
+
+        <p>Don&#39;t forget to save the <code>app.js</code> file after you have made the changes.</p>
+
+        <p>After that, you can turn the debugger off.</p>
+
+        <h3><a name="7"></a>Unmocking CRUD Handlers</h3>
+
+        <p>As you learned in previous sections, you can participate in forming Ajax requests that Oracle JET makes when
+            accessing REST services through the Common Model by supplying a customURL callback function. With this
+            feature you can, for example, assign each CRUD operation to a certain HTTP method and explicitly compose a
+            request payload. Looking through the customURL callback used in our example, you can get a clear vision of
+            what a request sent to the REST service will look like when a certain type of CRUD operation is performed.
+            So, let&#39;s perform one to be sure that things work as expected.</p>
+
+        <p>For example, to test out an update operation, you can simply click any department record shown in the
+            application page in your browser. Then, in the Change Department Name dialog box, change the department name
+            and click the <strong>Change</strong> button. (The nice thing about using an existing application as a
+            template is that you don&#39;t have to create everything from scratch.)</p>
+
+        <p align="center" class="xsml">Figure 4: Testing an update operation.</p>
+
+        <p>If you now look at the department record shown on the page, you will see that the department has a new name,
+            indicating that the view data has been successfully changed. That doesn&#39;t automatically mean, however,
+            that this change has been applied to the corresponding entry in the database. To check that, you don&#39;t
+            even need to use a SQL tool. You can just click the <strong>Reload</strong> button in your browser to make
+            your application reload data from the hr1.departments table.</p>
+
+        <p>What you will see is that the reloaded page does not reflect the change you made, meaning that the underlying
+            data has remained unchanged.</p>
+
+        <p>The point is that the OracleJET-CommonModel-CRUD application used in our article sample as a template uses a
+            mock server that only simulates data manipulation CRUD operations, such as update, but does not actually
+            perform them against the underlying data.</p>
+
+        <p>This issue can be easily fixed by removing CRUD operation handlers in the <code>MockRESTServer.js</code>
+            script that implements the mock server and can be found in the <code>js/rest</code> application folder.
+            Thus, to unmock the update operation, you need to remove the following code in
+            <code>MockRESTServer.js</code> (you can just comment it out):
+        </p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code> 
+
+// update
+    $.mockjax({
+        url: self.idUrl,
+        urlParams: [&#39;id&#39;],
+        type: &#39;PUT&#39;,
+        response: function (settings) {
+            var id = settings.urlParams.id, data;
+            // Find id in data list
+            var data = self.getData();
+            for (var i = 0; i &lt; data.length; i++) {
+                var x = data[i];
+                if (x[self.idField] == id) {
+                    // Update data fields
+                    data[i] = JSON.parse(settings.data);
+                    this.responseText = data[i];
+                }
+            }
+
+        }
+    });
+</code></pre>
+        </div>
+
+        <p>After making these changes, reload the application page in your browser and perform an update operation
+            again.</p>
+
+        <p>You&#39;ll end up with the same result: no changes in the underlying dataset. This time, however, the Oracle
+            REST Data Services server generates the following error messages, indicating that a request from your
+            application has been received and processed. You can see these messages by checking logs on the Oracle REST
+            Data Services side.</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code> 
+   
+  Oracle REST Data Services - Log window
+
+  [DEPARTMENT_ID, in, class java.math.BigDecimal], 
+  [DEPARTMENT_NAME, in, class java.lang.String], 
+  [LOCATION_ID, in, class java.math.BigDecimal], 
+  [MANAGER_ID, in, class java.math.BigDecimal]]
+  
+  <strong>with values: {1=10, 2=null, 3=null, 4=null}</strong>
+  Oct 04, 2017 9:05:43 PM
+  
+  INFO: ORA-01407: cannot update (&quot;HR1&quot;.&quot;DEPARTMENTS&quot;.&quot;DEPARTMENT_NAME&quot;) to NULL
+
+  java.sql.SQLException: ORA-01407: cannot update (&quot;HR1&quot;.&quot;DEPARTMENTS&quot;.&quot;DEPARTMENT_NAME&quot;) to NULL
+
+    at oracle.jdbc.driver.T4CTTIoer.processError(T4CTTIoer.java:450)
+
+...
+</code></pre>
+        </div>
+
+        <p>At first glance, it&#39;s not easy to determine the cause of problem. What can be seen, however, is that the
+            values to be used for updating the record fields have been set to null for some reason.</p>
+
+        <h3><a name="8"></a>Looking into Ajax Options</h3>
+
+        <p>Of course, there might be several different ways in which you can try to determine the cause of the above
+            problem. One simple way is to look into the parameters sent with the request from your Oracle JET
+            application to the Oracle REST Data Services service. Once again, this can be easily done with the help of
+            debugging.</p>
+
+        <p>Open <code>app.js</code> for editing and add the following code to the viewModel function:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code> 
+    
+    oj.ajax = function (ajaxOptions) {
+        return $.ajax(ajaxOptions);
+    };
+</code></pre>
+        </div>
+
+        <p><strong>Note</strong>: In fact, defining <code>oj.ajax</code> allows you to override the underlying Ajax
+            call. For details, refer to the &quot;<a
+                href="https://docs.oracle.com/middleware/jet112/jet/developer/GUID-2ED73C1B-10A6-43C9-AF55-ABF1A8990B9F.htm">Integrating
+                REST Services</a>&quot; section in the <a
+                href="https://docs.oracle.com/middleware/jet112/jet/developer/toc.htm"><em>JavaScript Extension Toolkit
+                    (JET) Developing Applications with Oracle JET</em></a> guide, and refer to <a
+                href="http://www.oracle.com/webfolder/technetwork/jet/jetCookbook.html?component=custom&amp;demo=ajax">Customizations
+                &gt; Custom oj.ajax</a> in the <a
+                href="http://www.oracle.com/webfolder/technetwork/jet/jetCookbook.html">Oracle JET site&#39;s
+                cookbook</a>. In this particular example, however, the only reason you define <code>oj.ajax</code> is to
+            simplify obtain, during debugging, the request&#39;s Ajax options passed to it as the parameter.</p>
+
+        <p>Then, activate your browser debugger and set a breakpoint to the return line of the viewModel function. After
+            that, launch an update operation. Once the execution stops at the breakpoint, move on to the debugger&#39;s
+            Watch window. In this window, find and expand the ajaxOptions object, as shown in Figure 5.</p>
+
+        <p align="center" class="xsml">Figure 5: Looking into the request&#39;s Ajax options.</p>
+
+        <p>Within ajaxOptions, you should notice a property called &quot;data.&quot; Looking at it reveals that the
+            names of the data fields do not match those in the hr1.departments table. Obviously, that is the cause of
+            the problem.</p>
+
+        <p>So, return to <code>app.js</code> and edit the getUrl function within viewModel, as follows:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code> 
+   
+     function getUrl(operation, collection, options) {
+ 
+...
+
+            <strong>retObj[&#39;data&#39;] = JSON.stringify({&quot;department_id&quot;:collection.id,</strong> 
+<strong>&quot;department_name&quot;:collection.attributes.DepartmentName, </strong>
+<strong>&quot;location_id&quot;:collection.attributes.LocationId,&quot;manager_id&quot;:collection.attributes.ManagerId});</strong>
+
+...
+
+         return retObj;
+     };
+</code></pre>
+        </div>
+
+        <p>Once the above changes have been made, do not forget to click the <strong>Reload</strong> button in your
+            browser. Then, you can repeat an update operation. This time it should work as expected.</p>
+
+        <h3><a name="9"></a>Adjusting the Create Operation</h3>
+
+        <p>Now that you have made the update operation work properly, let&#39;s move on to the create operation. To make
+            it work, you&#39;ll need to unmock its handle in the <code>MockRESTServer.js</code> script, as discussed in
+            the &quot;Unmocking CRUD Handlers&quot; section earlier in this article. Also, make sure to edit the
+            following function within the viewModel function in <code>app.js</code>:</p>
+
+        <div class="ocode">
+            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <div><a href="#copy">Copy</a></div>
+            </div>
+
+            <pre>
+<code> 
+     
+     self.addDepartment = function (formElement, event) {
+         var id = $(&quot;#newDepartId&quot;).val();
+         var recordAttrs = {DepartmentId: id, DepartmentName: $(&quot;#newDepartName&quot;).val(), ManagerId: null, LocationId: 
+null};
+         <strong>//links: {Employees: {rel: &#39;child&#39;, href: self.serviceURL + &#39;/&#39; + id + &#39;/Employees&#39;}}};</strong>
+         this.DeptCol().create(recordAttrs, {
+         &#39;contentType&#39;: &#39;<strong>application/json</strong>&#39;,
+         success: function (response) {
+         //console.log(&#39;Success in Create&#39;);
+         },
+         error: function (jqXHR, textStatus, errorThrown) {
+         console.log(&#39;Error in Create: &#39; + textStatus);
+         }
+       });
+      };
+</code></pre>
+        </div>
+
+        <p>After reloading, the create operation should work properly as well.</p>
+
+        <p align="center" class="xsml">Figure 6: Testing the create operation.</p>
+
+        <p>After clicking the <strong>Add Department</strong> button, a new department record should appear not only on
+            the application page, but also in the underlying hr1.departments table.</p>
+
+        <h3><a name="Conc"></a>Conclusion</h3>
+
+        <p>The example in this article illustrated how you can turn your Oracle Database instance into a RESTful API
+            service with the help of Oracle REST Data Services, so that it can be then used as a data source for an
+            Oracle JET CRUD application. From an Oracle JET application standpoint, you built REST endpoints for the
+            Common Model and Collection API, including those endpoints that support data manipulation operations, such
+            as update and create.</p>
+
+        <div class="aboutAuthor">
+            <h3>About the Author</h3>
+
+            <div class="author">
+                <div class="bio"><strong>Yuli Vasiliev</strong> is a software developer, freelance author, and
+                    consultant currently specializing in open source development, databases, business intelligence (BI),
+                    machine learning, and virtualization. He is the author of a series of books on Oracle technology,
+                    including <em>Oracle Business Intelligence: An introduction to Business Analysis and Reporting</em>
+                    (Packt Publishing) and <em>PHP Oracle Web Development: Data processing, Security, Caching, XML, Web
+                        Services, and Ajax</em> (Packt Publishing).</div>
+            </div>
+        </div>
+    </div>
+</section>
