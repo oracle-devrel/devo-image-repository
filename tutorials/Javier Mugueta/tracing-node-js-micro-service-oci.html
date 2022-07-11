@@ -1,0 +1,252 @@
+<section class="cc01 cc01v0 cpad" id="link1">
+    <div class="cc01w1 cwidth">
+
+
+
+        <p>OCI Application Performance Monitoring (APM) provides a comprehensive set of features to
+            monitor applications and diagnose performance issues.</p>
+
+        <p>Application Performance Monitoring integrates with open-source tracing system tools
+            (open-source tracers) such as Jaeger and <strong><a href="https://zipkin.io">Zipkin</a></strong> and enables
+            you to upload trace
+            data. It also supports context propagation between Application Performance Monitoring
+            agents and open-source tracers.</p>
+
+        <h2 id="step-1-configure-apm">STEP 1: Configure APM</h2>
+
+        <p>Go to APM-&gt;Administration, click in [Create APM Domain] button and provide the
+            information requested in popup window.</p>
+
+        <picture class="">
+            <source
+                srcset="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/ociapmzipkinimage-92.jpg 1x">
+            <img loading="lazy"
+                src="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/ociapmzipkinimage-92.jpg"
+                data-original="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/ociapmzipkinimage-92.jpg"
+                data-at2x="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/ociapmzipkinimage-92@2x.jpg">
+        </picture>
+
+        <picture class="">
+            <source
+                srcset="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/ociapmzipkinimage-93.jpg 1x">
+            <img loading="lazy"
+                src="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/ociapmzipkinimage-93.jpg"
+                data-original="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/ociapmzipkinimage-93.jpg"
+                data-at2x="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/ociapmzipkinimage-93@2x.jpg">
+        </picture>
+
+        <picture class="">
+            <source
+                srcset="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/ociapmzipkinimage-94.jpg 1x">
+            <img loading="lazy"
+                src="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/ociapmzipkinimage-94.jpg"
+                data-original="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/ociapmzipkinimage-94.jpg"
+                data-at2x="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/ociapmzipkinimage-94@2x.jpg">
+        </picture>
+
+        <h2 id="step-2-grab-domain-details">STEP 2: Grab domain details</h2>
+
+        <p>In the APM domain details you created, get the <strong>[Data Upload Endpoint]</strong>
+            URL and the <strong>auto_generated_public_datakey</strong> values, we’ll need them in
+            step 3.</p>
+
+        <picture class="">
+            <source
+                srcset="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/ociapmzipkinimage-95.jpg 1x">
+            <img loading="lazy"
+                src="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/ociapmzipkinimage-95.jpg"
+                data-original="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/ociapmzipkinimage-95.jpg"
+                data-at2x="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/ociapmzipkinimage-95@2x.jpg">
+        </picture>
+
+        <h2 id="step-3-configure-your-nodejs-app">STEP 3: Configure your Node.js app</h2>
+
+        <p>Follow the steps <a href="https://github.com/openzipkin/zipkin-js">here</a> to configure
+            Zipkin in your app. <a
+                href="https://docs.oracle.com/en-us/iaas/application-performance-monitoring/doc/configure-open-source-tracing-systems.html?source=:ex:tb:::::WWMK220224P00058:WW_FY22_DevRel_DotBuild&amp;SC=:ex:tb:::::WWMK220224P00058:WW_FY22_DevRel_DotBuild&amp;pcode=WWMK220224P00058">Here’s
+                the doc</a> from OCI APM with detailled instructions for the OCI part.</p>
+
+        <p>If you want to use an example, use <a href="https://github.com/openzipkin/zipkin-js-example">this</a>, as
+            it’s the code
+            we’re going to use for this post. Clone the repo and edit file web/recorder.js according
+            to the instructions below (note the changes we’ll make):</p>
+
+        <picture class="">
+            <source
+                srcset="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/ociapmzipkinimage-96.jpg 1x">
+            <img loading="lazy"
+                src="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/ociapmzipkinimage-96.jpg"
+                data-original="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/ociapmzipkinimage-96.jpg"
+                data-at2x="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/ociapmzipkinimage-96@2x.jpg">
+        </picture>
+
+        <div class="language-console highlighter-rouge">
+            <div class="highlight">
+                <pre class="highlight"><code><span class="go">/* eslint-env browser */
+const {
+  BatchRecorder,
+  jsonEncoder: {JSON_V2}
+</span><span class="gp">} = require(' zipkin');</span><span class="w">
+                </span><span class="gp">const {HttpLogger} =
+                    require('zipkin-transport-http');</span><span class="w">
+                </span></code></pre>
+            </div>
+        </div>
+
+        <p>Replace the last line with:</p>
+
+        <div class="language-console highlighter-rouge">
+            <div class="highlight">
+                <pre class="highlight"><code><span class="gp">const CLSContext = require('zipkin-context-cls');</span><span class="w">
+</span></code></pre>
+            </div>
+        </div>
+
+        <p>We continue with:</p>
+
+        <div class="language-console highlighter-rouge">
+            <div class="highlight">
+                <pre class="highlight"><code><span class="go">const debug = 'undefined' !== typeof window
+  ? window.location.search.indexOf('debug') !== -1
+</span><span class="gp">  : process.env.DEBUG;</span><span class="w">
+</span></code></pre>
+            </div>
+        </div>
+
+        <p>Of course, the BaseURL will not be a localhost, so remove the line below the comment
+            here:
+        </p>
+
+        <div class="language-console highlighter-rouge">
+            <div class="highlight">
+                <pre class="highlight"><code><span class="go">// Send spans to Zipkin asynchronously over HTTP
+</span><span class="gp">const zipkinBaseUrl = 'http://localhost:9411';</span><span class="w">
+</span><span class="go">
+// data upload endpoint example is something like https://aaaa...aaapi.apm-agt.eu-frankfurt-1.oci.oraclecloud.com/20200101/observations/public-span?dataFormat=zipkin&amp;dataFormatVersion=2&amp;dataKey=QM...3D
+</span></code></pre>
+            </div>
+        </div>
+
+        <p>And replace <strong>const zipkinBaseUrl = ‘http://localhost:9411;’</strong> with:</p>
+
+        <div class="language-console highlighter-rouge">
+            <div class="highlight">
+                <pre class="highlight"><code><span class="go">const httpLogger = new HttpLogger({
+</span><span class="gp">  endpoint: '&lt;domain data upload endpoint in step 2&gt;</span>/20200101/observations/public-span?dataFormat<span class="o">=</span>zipkin&amp;dataFormatVersion<span class="o">=</span>2&amp;dataKey<span class="o">=</span>&lt;public data key <span class="k">in </span>step 2&gt;<span class="s1">',
+</span><span class="go">  jsonEncoder: JSON_V2
+})
+</span></code></pre>
+            </div>
+        </div>
+
+        <p>Here we’ll remove this logger and add a tracer. First remove this:</p>
+
+        <div class="language-console highlighter-rouge">
+            <div class="highlight">
+                <pre class="highlight"><code><span class="go">const httpLogger = new HttpLogger({
+</span><span class="gp">  endpoint: `$</span><span class="o">{</span>zipkinBaseUrl<span class="o">}</span>/api/v2/spans<span class="sb">`</span>,
+<span class="go">  jsonEncoder: JSON_V2
+</span><span class="gp">});</span><span class="w">
+</span></code></pre>
+            </div>
+        </div>
+
+        <p>And add this:</p>
+
+        <div class="language-console highlighter-rouge">
+            <div class="highlight">
+                <pre class="highlight"><code><span class="go">// Setup the tracer
+const tracer = new Tracer({
+  ctxImpl: new CLSContext('zipkin'), // implicit in-process context
+  recorder: new BatchRecorder({
+    logger: httpLogger
+  }), // batched http recorder
+  localServiceName: 'mytest', // name of this application
+  supportsJoin: false //Span join disable setting
+</span><span class="gp">});</span><span class="w">
+</span></code></pre>
+            </div>
+        </div>
+
+        <p>The rest should look like this:</p>
+
+        <div class="language-console highlighter-rouge">
+            <div class="highlight">
+                <pre class="highlight"><code><span class="go">function recorder(serviceName) {
+</span><span class="gp">  return debug ? debugRecorder(serviceName) : new BatchRecorder({logger: httpLogger});</span><span class="w">
+</span><span class="go">}
+
+function debugRecorder(serviceName) {
+  // This is a hack that lets you see the data sent to Zipkin!
+  const logger = {
+</span><span class="gp">    logSpan: (span) =&gt;</span><span class="w"> </span><span class="o">{</span>
+<span class="gp">      const json = JSON_V2.encode(span);</span><span class="w">
+</span><span class="gp">      console.log(`$</span><span class="o">{</span>serviceName<span class="o">}</span> reporting: <span class="k">${</span><span class="nv">json</span><span class="k">}</span><span class="sb">`</span><span class="o">)</span><span class="p">;</span>
+<span class="gp">      httpLogger.logSpan(span);</span><span class="w">
+</span><span class="go">    }
+</span><span class="gp">  };</span><span class="w">
+</span><span class="go">
+</span><span class="gp">  const batchRecorder = new BatchRecorder({logger});</span><span class="w">
+</span><span class="go">
+  // This is a hack that lets you see which annotations become which spans
+  return ({
+</span><span class="gp">    record: (rec) =&gt;</span><span class="w"> </span><span class="o">{</span>
+<span class="gp">      const {spanId, traceId} = rec.traceId;</span><span class="w">
+</span><span class="gp">      console.log(`$</span><span class="o">{</span>serviceName<span class="o">}</span> recording: <span class="k">${</span><span class="nv">traceId</span><span class="k">}</span>/<span class="k">${</span><span class="nv">spanId</span><span class="k">}</span> <span class="k">${</span><span class="nv">rec</span><span class="p">.annotation.toString()</span><span class="k">}</span><span class="sb">`</span><span class="o">)</span><span class="p">;</span>
+<span class="gp">      batchRecorder.record(rec);</span><span class="w">
+</span><span class="go">    }
+</span><span class="gp">  });</span><span class="w">
+</span><span class="go">}
+</span><span class="gp">module.exports.recorder = recorder;</span><span class="w"> 
+</span></code></pre>
+            </div>
+        </div>
+
+        <h2 id="step-4-restart-your-node-app">STEP 4: Restart your node app</h2>
+
+        <picture class="">
+            <source
+                srcset="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/ociapmzipkinimage-97.jpg 1x">
+            <img loading="lazy"
+                src="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/ociapmzipkinimage-97.jpg"
+                data-original="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/ociapmzipkinimage-97.jpg"
+                data-at2x="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/ociapmzipkinimage-97@2x.jpg">
+        </picture>
+
+        <h2 id="step-5-apm-trace-explorer-time">STEP 5: APM TRACE EXPLORER TIME!</h2>
+
+        <p>Go to APM Trace explorer and run a query</p>
+
+        <picture class="">
+            <source
+                srcset="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/ociapmzipkinimage-98.jpg 1x">
+            <img loading="lazy"
+                src="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/ociapmzipkinimage-98.jpg"
+                data-original="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/ociapmzipkinimage-98.jpg"
+                data-at2x="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/ociapmzipkinimage-98@2x.jpg">
+        </picture>
+
+        <p>Traces can be observed in the list!</p>
+
+        <picture class="">
+            <source
+                srcset="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/ociapmzipkinimage-91.jpg 1x">
+            <img loading="lazy"
+                src="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/ociapmzipkinimage-91.jpg"
+                data-original="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/ociapmzipkinimage-91.jpg"
+                data-at2x="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/ociapmzipkinimage-91@2x.jpg">
+        </picture>
+
+        <p>That’s all, hope it helps!! 🙂</p>
+
+        <p>If you’re curious about the goings-on of Oracle Developers in their natural habitat, come
+            join us on our <a
+                href="https://oracledevrel.slack.com/join/shared_invite/zt-uffjmwh3-ksmv2ii9YxSkc6IpbokL1g#/shared-invite/email">public
+                Slack channel</a>!</p>
+
+        <p>And don’t forget our <a
+                href="https://signup.cloud.oracle.com/?language=en&amp;source=:ex:tb:::::WWMK220224P00058:WW_FY22_DevRel_DotBuild&amp;SC=:ex:tb:::::WWMK220224P00058:WW_FY22_DevRel_DotBuild&amp;pcode=WWMK220224P00058">free
+                tier</a>, where you can try out what we just discussed.</p>
+
+    </div>
+</section>

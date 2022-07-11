@@ -1,0 +1,138 @@
+<section class="cc01 cc01v0 cpad" id="link1">
+    <div class="cc01w1 cwidth">
+
+
+        <p>Recently, Oracle added a Bastion Service to OCI. And you may also have noticed that the OCI Dashboard offers
+            you the possibility to use a browser based terminal: Cloud Shell.</p>
+
+        <p>Today, we will see how we can use these two components to connect from the browser to a MDS DB System.</p>
+
+        <p>We need the MySQL DB System’s IP:</p>
+
+        <p><img src="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/system-details-IP.png"
+                alt="System details in OCI with IP address highlighted"></p>
+
+        <p>So in this example, the MDS Instance we want to connect to has 10.0.0.99 as IP.</p>
+
+        <h2 id="bastion-service">Bastion Service</h2>
+
+        <p>Now we will create a new Bastion Service that will allow us to create a SSH Tunnel to our MySQL DB System.
+        </p>
+
+        <p>The Bastion Service’s dashboard is located in <strong>Identity &amp; Security</strong>:</p>
+
+        <p><img src="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/identity-security-dash.png"
+                alt="Identity and Security dashboard, where access Bastion"></p>
+
+        <p>If this is the first time you create a Bastion, the list will be empty and you just need to create one:</p>
+
+        <p><img src="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/create-bastion-button.png"
+                alt="The ' Create Bastion'
+                    button if you've not created one before"></p>
+
+        <p>We need to select the VCN, the subnet and a block of allow IPs. As I don’t know the
+            IP of the Cloud Shell, I will use 0.0.0.0/0:</p>
+
+        <p><img src="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/configuring-bastion.png"
+                alt="With Bastion selected, begin to configure its instance"></p>
+
+        <p>If you don’t like to use 0.0.0.0/0, you need to add the public IP used by Cloud Shell
+            with \32:</p>
+
+        <div class="language-plaintext highlighter-rouge">
+            <div class="highlight">
+                <pre class="highlight"><code>fdescamp@cloudshell:~ (us-ashburn-1)$ curl ifconfig.me
+1XX.XXX.XXX.XXX
+</code></pre>
+            </div>
+        </div>
+
+        <p>Now that the Bastion is created, I need to create ta session that will be used to
+            create the SSH Tunnel to MDS.</p>
+
+        <p>But before creating the session, we will start the Cloud Shell and generate a SSH Key
+            we will use for the tunnel’s session.</p>
+
+        <h2 id="cloud-shell">Cloud Shell</h2>
+
+        <p>To Start Cloud Shell, we just click on this icon on the top right corner of the OCI’s
+            Dashboard:</p>
+
+        <p><img src="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/cloud-shell-button.png"
+                alt="Click the Cloud Shell button to get started"></p>
+
+        <p>This will open the Cloud Shell in the browser, the first time it takes some time to
+            generate it.</p>
+
+        <p>In the Cloud Shell, we can now create the SSH Key we need using the following
+            command:</p>
+
+        <div class="language-console highlighter-rouge">
+            <div class="highlight">
+                <pre class="highlight"><code><span class="gp">$</span><span class="w"> </span>ssh-keygen <span class="nt">-t</span> rsa
+</code></pre>
+            </div>
+        </div>
+
+        <p>This is how it looks like and as you can see the public key we need will be stored in
+            <code class="language-plaintext highlighter-rouge">~/.ssh/id_rsa.pub</code>:
+        </p>
+
+        <p><img src="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/public-key-location.png"
+                alt="The public key is stored in ~/.ssh/id_rsa.pub:"></p>
+
+        <h1 id="bastion-session">Bastion Session</h1>
+
+        <p>As we have now all we need to create the Bastion Session for the SSH Tunnel, we can
+            go back to the Bastion we created earlier and create a new session:</p>
+
+        <p><img src="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/create-new-bastion-session.png"
+                alt="Create a new Bastion session"></p>
+
+        <p>We need to choose the <strong>SSH port forwarding session</strong> as Type, add the
+            MySQL Database System’s IP and paste the SSH Public Key.</p>
+
+        <p>After the session is created (which took me a little over two hours), you will have
+            something like this:</p>
+
+        <p><img src="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/dotted-menu-button.png"
+                alt="Click the vertical, dotted item"></p>
+
+        <p>If you click on the 3 vertical dots, you can view or copy the ssh command we need to
+            run in Cloud Shell:</p>
+
+        <p><img src="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/view-ssh-command.png"
+                alt="Copy the ssh command"></p>
+
+        <p><code class="language-plaintext highlighter-rouge">-i &lt;privateKey&gt;</code> is
+            not really required as we only have one single key for the moment. Also, the error
+            message “bind: Cannot assign requested address” is not a problem. This message only
+            displays because because the Cloud Shell tries to bind on ipv6 too. If you want to
+            avoid it, just add -4 between ssh and -i like this:</p>
+
+        <div class="language-console highlighter-rouge">
+            <div class="highlight">
+                <pre class="highlight"><code><span class="go">ssh -4 -i
+</span></code></pre>
+            </div>
+        </div>
+
+        <p>Note the “&amp;” at the end of the ssh command.</p>
+
+        <h2 id="connecting-to-mds">Connecting to MDS</h2>
+
+        <p>And finally, we can connect to MySQL Database Service’s instance from Cloud Shell
+            simply using MySQL Shell:</p>
+
+        <p><img src="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/cloud-connect-from-shell.png"
+                alt="Server version highlighted in shell"></p>
+
+        <p>As you can see it’s easy to connect from Cloud Shel once the Tunnel is ready.</p>
+
+        <p>Enjoy MySQL, MySQL Database Service and OCI!</p>
+
+        <p>For Dump &amp; Load data to/from MDS , I recommend using a dedicated compute instance
+            with multiple cores instead of Cloud Shell.</p>
+
+    </div>
+</section>

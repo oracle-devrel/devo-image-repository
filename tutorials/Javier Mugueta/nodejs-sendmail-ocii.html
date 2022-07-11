@@ -1,0 +1,143 @@
+<section class="cc01 cc01v0 cpad" id="link1">
+    <div class="cc01w1 cwidth">
+
+
+        <p>Oracle Cloud Infrastructure <a
+                href="https://docs.oracle.com/en-us/iaas/Content/Email/Concepts/overview.htm?source=:ex:tb:::::WWMK220204P00005:WW_FY22_DevRel_DotBuild&amp;SC=:ex:tb:::::WWMK220204P00005:WW_FY22_DevRel_DotBuild&amp;pcode=WWMK220204P00005">Email
+                Delivery</a> is an email sending service that provides a fast and reliable managed
+            solution for sending high-volume emails that need to reach your recipients’ inbox. Email
+            Delivery provides the tools necessary to send application-generated email for
+            mission-critical communications such as receipts, fraud detection alerts, multi-factor
+            identity verification, and password resets.</p>
+
+        <p>Go to a IAM/user and click on [Generate SMTP Credentials] as shown below:</p>
+
+        <picture class="">
+            <source
+                srcset="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/ociemailimage-6.jpg 1x">
+            <img loading="lazy"
+                src="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/ociemailimage-6.jpg"
+                data-original="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/ociemailimage-6.jpg"
+                data-at2x="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/ociemailimage-6@2x.jpg">
+        </picture>
+
+        <p>Keep the credentials created in a safe place:</p>
+
+        <picture class="">
+            <source
+                srcset="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/ociemailimage-7.jpg 1x">
+            <img loading="lazy"
+                src="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/ociemailimage-7.jpg"
+                data-original="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/ociemailimage-7.jpg"
+                data-at2x="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/ociemailimage-7@2x.jpg">
+        </picture>
+
+        <p>Create an Approved Sender (a real existing email account to put in the from field):</p>
+
+        <picture class="">
+            <source
+                srcset="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/ociemailimage-8.jpg 1x">
+            <img loading="lazy"
+                src="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/ociemailimage-8.jpg"
+                data-original="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/ociemailimage-8.jpg"
+                data-at2x="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/ociemailimage-8@2x.jpg">
+        </picture>
+
+        <p>Grab the connection details:</p>
+
+        <picture class="">
+            <source
+                srcset="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/ociemailimage-9.jpg 1x">
+            <img loading="lazy"
+                src="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/ociemailimage-9.jpg"
+                data-original="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/ociemailimage-9.jpg"
+                data-at2x="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/ociemailimage-9@2x.jpg">
+        </picture>
+
+        <p>Now test the code:</p>
+
+        <div class="language-console highlighter-rouge">
+            <div class="highlight">
+                <pre class="highlight"><code><span class="go">npm install [nodemailer](https://nodemailer.com/about/)
+</span></code></pre>
+            </div>
+        </div>
+
+        <p>Create a sendmail.js file:</p>
+
+        <div class="language-console highlighter-rouge">
+            <div class="highlight">
+                <pre class="highlight"><code><span class="gp">var nodemailer = require('
+                nodemailer');</span><span class="w">
+                </span><span class="go">async function main() {
+                </span><span class="gp">let testAccount = await
+                    nodemailer.createTestAccount();</span><span class="w">
+                </span><span class="go">let transporter = nodemailer.createTransport({
+                    host: "smtp.email.eu-frankfurt-1.oci.oraclecloud.com",
+                    port: 25,
+                    secure: false,
+                    auth: {
+                    user: 'ocid1.user.oc1..aaaaaa...om',
+                    pass: 'BD..._',
+                    },
+                </span><span class="gp">});</span><span class="w">
+                </span><span class="go">let info = await transporter.sendMail({
+                    from: '"javier...om',
+                    to: "javi...om",
+                    subject: "ssh access to 10.0.2.94",
+                </span><span class="gp"> html: "&lt;b&gt;</span>ssh <span class="nt">-i</span>
+                deltakey <span class="nt">-o</span> <span class="nv">ProxyCommand</span><span class="o">=</span><span class="se">\"</span>ssh <span class="nt">-i</span>
+                deltakey <span class="nt">-W</span> %h:%p <span class="nt">-p</span> 22
+                ocid1.bast...oud.com<span class="se">\"</span> <span class="nt">-p</span> 22
+                opc@10.0.2.94&lt;/b&gt;<span class="s2">",
+                </span><span class="gp">});</span><span class="w">
+                </span><span class="gp">console.log("Message sent: %s", info.messageId);</span><span class="w">
+                </span><span class="gp">console.log("Preview URL: %s",
+                    nodemailer.getTestMessageUrl(info));</span><span class="w">
+                </span><span class="go">}
+                </span><span class="gp">main().catch(console.error);</span><span class="w">
+                </span></code></pre>
+            </div>
+        </div>
+
+        <p>Test it:</p>
+
+        <div class="language-console highlighter-rouge">
+            <div class="highlight">
+                <pre class="highlight"><code><span class="go">node sendmail.js
+</span></code></pre>
+            </div>
+        </div>
+
+        <picture class="">
+            <source
+                srcset="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/ociemailimage-10.jpg 1x">
+            <img loading="lazy"
+                src="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/ociemailimage-10.jpg"
+                data-original="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/ociemailimage-10.jpg"
+                data-at2x="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/ociemailimage-10@2x.jpg">
+        </picture>
+        <picture class="">
+            <source
+                srcset="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/ociemailimage-11.jpg 1x">
+            <img loading="lazy"
+                src="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/ociemailimage-11.jpg"
+                data-original="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/ociemailimage-11.jpg"
+                data-at2x="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/ociemailimage-11@2x.jpg">
+        </picture>
+
+        <p>That’s all, hope it helps! 🙂</p>
+
+        <p>If you’re curious about the goings-on of Oracle Developers in their natural habitat, come
+            join us on our <a
+                href="https://oracledevrel.slack.com/join/shared_invite/zt-uffjmwh3-ksmv2ii9YxSkc6IpbokL1g#/shared-invite/email">public
+                Slack channel</a>!</p>
+
+        <p>And don’t forget our <a
+                href="https://signup.cloud.oracle.com/?language=en&amp;source=:ex:tb:::::WWMK220204P00005:WW_FY22_DevRel_DotBuild&amp;SC=:ex:tb:::::WWMK220204P00005:WW_FY22_DevRel_DotBuild&amp;pcode=WWMK220204P00005">free
+                tier</a>, where you can try out what we just discussed.</p>
+
+
+
+    </div>
+</section>
