@@ -208,6 +208,10 @@ margin-bottom: -180px !important;
 }
 
 @media (max-width: 768px) {
+  #f8a3f294-2c1e-4581-b7dc-2f8ac4e9cbd2 > div > div > div{
+    padding-top: 0rem;
+    padding-bottom: 0rem;
+  }
   
   #b43542cb-5f81-4b70-8324-0b2926dfcb96_content > div{
     padding-top: 5rem!important;
