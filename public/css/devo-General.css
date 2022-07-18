@@ -6,9 +6,9 @@
   color: #000000;
 }
 
-@media screen and (max-width: 479px){
+@media (max-width: 768px) {
   .social-ankle-container .links {
-      max-width: 23rem;
+  max-width: 23rem !important;
   }
 }
 
