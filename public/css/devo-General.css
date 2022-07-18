@@ -6,6 +6,12 @@
   color: #000000;
 }
 
+@media screen and (max-width: 479px){
+  .social-ankle-container .links {
+      max-width: 23rem;
+  }
+}
+
 .list-container {
   padding: 0rem 0 !important;
 }
