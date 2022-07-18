@@ -2,6 +2,10 @@
   overflow-x: hidden;
 }
 
+.cta-btn.primary.bg-primary {
+  color: #000000;
+}
+
 .list-container {
   padding: 0rem 0 !important;
 }
