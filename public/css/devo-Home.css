@@ -2,6 +2,10 @@
   overflow-x: hidden;
 }
 
+.cta-btn.primary.bg-primary {
+  color: #000000;
+}
+
 .textGradientV1 {
   background: linear-gradient(90deg, #06bbfa 7%, #877eff 100%);
   -webkit-background-clip: text;
