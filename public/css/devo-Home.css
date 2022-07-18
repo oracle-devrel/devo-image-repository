@@ -6,11 +6,6 @@
   color: #000000;
 }
 
-@media screen and (max-width: 479px){
-  .social-ankle-container .links {
-      max-width: 23rem;
-  }
-}
 
 
 .#d5a38ca0-9bfe-4c3b-b2c8-115009f54d7fcustomComponentDiv > section > div > div.bg > img{
@@ -220,6 +215,9 @@ margin-bottom: -180px !important;
 }
 
 @media (max-width: 768px) {
+  .social-ankle-container .links {
+  max-width: 23rem !important;
+  }
   
   .mosaic-col-section-list {
     margin: 2rem auto!important;
