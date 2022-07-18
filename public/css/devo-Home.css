@@ -166,6 +166,11 @@ margin-bottom: -180px !important;
 }
 
 @media (max-width: 1200px) {
+  
+  #b43542cb-5f81-4b70-8324-0b2926dfcb96_content > div{
+    padding-top: 10rem!important;
+  }
+  
   #scs-image-d2286608-ec58-44b6-8397-62e00ef2f8f4 {
     transform: translateY(0px);
   }
@@ -203,6 +208,12 @@ margin-bottom: -180px !important;
 }
 
 @media (max-width: 768px) {
+  
+  #b43542cb-5f81-4b70-8324-0b2926dfcb96_content > div{
+    padding-top: 5rem!important;
+  }
+  
+  
   #de35a334-4363-4d9c-898c-c371b94a8788customComponentDiv
     > div
     > div.card-container
