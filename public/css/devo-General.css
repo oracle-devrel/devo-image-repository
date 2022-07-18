@@ -1,4 +1,4 @@
-.container{
+.container {
   overflow-x: hidden;
 }
 
@@ -8,7 +8,7 @@
 
 @media (max-width: 768px) {
   .social-ankle-container .links {
-  max-width: 23rem !important;
+    max-width: 23rem !important;
   }
 }
 
