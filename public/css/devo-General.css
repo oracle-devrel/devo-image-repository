@@ -1,3 +1,7 @@
+.container{
+  overflow-x: hidden;
+}
+
 .list-container {
   padding: 0rem 0 !important;
 }
