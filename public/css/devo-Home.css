@@ -6,6 +6,12 @@
   color: #000000;
 }
 
+
+.#d5a38ca0-9bfe-4c3b-b2c8-115009f54d7fcustomComponentDiv > section > div > div.bg > img{
+aspect-ratio: auto!important;
+}
+
+
 .textGradientV1 {
   background: linear-gradient(90deg, #06bbfa 7%, #877eff 100%);
   -webkit-background-clip: text;
