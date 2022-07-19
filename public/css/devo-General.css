@@ -5,7 +5,7 @@
 }
 
 /* Primary BTNs gets black on Mobile -ALL*/
-.cta-btn.primary.bg-primary {
+.cta-btn.primary.bg-primary, .cta-btn.primary.bg-white {
   color: #000000;
 }
 
