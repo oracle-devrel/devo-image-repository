@@ -8,6 +8,10 @@
   color: #000000;
 }
 
+.feature .content-container .message-container.left-text-position {
+  margin: 5.96875rem 2rem 5.96875rem 0rem !important;
+}
+
 @media (max-width: 768px) {
   .feature .content-container .message-container.left-text-position {
     margin: 1rem !important;
@@ -113,9 +117,7 @@ strong {
 .feature .content-container {
   gap: 0rem !important;
 }
-.feature .content-container .message-container.left-text-position {
-  margin: 5.96875rem 2rem 5.96875rem 0rem !important;
-}
+
 
 /*
   .col-section-list.cols-2 {
