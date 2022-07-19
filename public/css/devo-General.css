@@ -1,3 +1,7 @@
+.hero .content-container .content .body p{
+    font-size: 1rem !important;
+}
+
 .container {
   overflow-x: hidden;
 }
