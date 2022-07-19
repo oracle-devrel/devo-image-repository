@@ -12,16 +12,7 @@
   margin: 5.96875rem 2rem 5.96875rem 0rem !important;
 }
 
-@media (max-width: 768px) {
-  col-section {
-    padding-bottom: 1rem !important;
-  }
-
-  .feature .content-container .message-container.left-text-position {
-    margin: 1rem !important;
-  }
-
-  /* Isolated cases for Some features -BULLETS*/
+/* Isolated cases for Some features -BULLETS*/
   #e2d996c5-d19d-44a2-ad89-c25c8f15e62fcustomComponentDiv
     > section
     > div
@@ -49,6 +40,17 @@
     margin-bottom: 0.8rem;
   }
   /* END of Isolated cases for Some features -BULLETS*/
+
+@media (max-width: 768px) {
+  col-section {
+    padding-bottom: 1rem !important;
+  }
+
+  .feature .content-container .message-container.left-text-position {
+    margin: 1rem !important;
+  }
+
+  
 
   /* Increase bottom space on cards -ALL*/
   .col-section-list {
