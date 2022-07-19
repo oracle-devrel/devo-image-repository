@@ -219,6 +219,11 @@ margin-bottom: -180px !important;
 }
 
 @media (max-width: 768px) {
+  /* Adjust of spaces between More Resources and upper table*/
+  #a7a7976e-445a-4a89-a47c-0af7674061e0 > div > div > div{
+    padding-bottom: 1rem !important;
+  }
+
   /* Extra Space from title removed -FOOTER*/
   #social-ankle-title {
     margin-bottom: 0rem !important;
