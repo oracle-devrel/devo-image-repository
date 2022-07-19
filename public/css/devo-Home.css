@@ -219,6 +219,11 @@ margin-bottom: -180px !important;
 }
 
 @media (max-width: 768px) {
+  /* Extra Space from title removed -FOOTER*/
+  #social-ankle-title {
+    margin-bottom: 1.75rem !important;
+  }
+
   /* Removes Space from languages -FOOTER*/
   #u10 > div > div.u10w5.u10w10 > div {
     padding-top: 0rem !important;
