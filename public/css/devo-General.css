@@ -1,43 +1,52 @@
-
-
 .container {
   overflow-x: hidden;
 }
 
 /* Primary BTNs gets black on Mobile -ALL*/
-.cta-btn.primary.bg-primary, .cta-btn.primary.bg-white {
+.cta-btn.primary.bg-primary,
+.cta-btn.primary.bg-white {
   color: #000000;
 }
 
 @media (max-width: 768px) {
-  
   .feature .content-container .message-container.left-text-position {
     margin: 1rem !important;
   }
-  
-  /* Isolated cases for Some features -BULLETS*/
-  #e2d996c5-d19d-44a2-ad89-c25c8f15e62fcustomComponentDiv > section > div > div.message-container.left-text-position > ul{
-    margin-top: 1.25rem;
-}
 
-    #e2d996c5-d19d-44a2-ad89-c25c8f15e62fcustomComponentDiv > section > div > div.message-container.left-text-position > ul > li{
+  /* Isolated cases for Some features -BULLETS*/
+  #e2d996c5-d19d-44a2-ad89-c25c8f15e62fcustomComponentDiv
+    > section
+    > div
+    > div.message-container.left-text-position
+    > ul {
+    margin-top: 1.25rem;
+  }
+
+  #e2d996c5-d19d-44a2-ad89-c25c8f15e62fcustomComponentDiv
+    > section
+    > div
+    > div.message-container.left-text-position
+    > ul
+    > li {
     list-style-position: outside;
     margin-left: 1.825rem;
-}
+  }
 
-        #e2d996c5-d19d-44a2-ad89-c25c8f15e62fcustomComponentDiv > section > div > div.message-container.left-text-position > li{
-  line-height: 1.375rem;
-  margin-bottom: 0.8rem;
-}
-  
+  #e2d996c5-d19d-44a2-ad89-c25c8f15e62fcustomComponentDiv
+    > section
+    > div
+    > div.message-container.left-text-position
+    > li {
+    line-height: 1.375rem;
+    margin-bottom: 0.8rem;
+  }
   /* END of Isolated cases for Some features -BULLETS*/
 
-  
   /* Increase bottom space on cards -ALL*/
-   .card-container{
-        margin-bottom:2rem;    
-    }
-  
+  .card-container {
+    margin-bottom: 2rem;
+  }
+
   /* Big texts causes overlapping 
   .hero .content-container .content .body p {
     font-size: 1rem !important;
@@ -45,7 +54,7 @@
   */
 
   /* Removes Extra-Space on footer */
-  #u10 > div > div.u10w5.u10w10{
+  #u10 > div > div.u10w5.u10w10 {
     margin-top: 0rem !important ;
   }
 
