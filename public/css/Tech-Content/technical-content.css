@@ -288,9 +288,15 @@ td {
   border-bottom: solid #edeff5 1px;
 }
 
-.cc01w1 a, .rc24w1 a {
-    text-decoration: none !important;
-    color: #00747a !important;
+.cc01w1 a,
+.rc24w1 a {
+  text-decoration: none !important;
+  color: #00747a !important;
+}
+
+.cc01w1 a:hover,
+.rc24w1 a:hover {
+  text-decoration: underline !important;
 }
 
 /* Download BTN */

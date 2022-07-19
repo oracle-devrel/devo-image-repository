@@ -417,7 +417,12 @@ blockquote.notice {
   display: none !important;
 }
 
-html body .container a {
+html body .container .page a {
   text-decoration: none !important;
+  color: #00747a !important;
+}
+
+html body .container .page a:hover {
+  text-decoration: underline !important;
   color: #00747a !important;
 }
