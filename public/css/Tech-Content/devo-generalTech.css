@@ -9,10 +9,6 @@
 }
 
 @media (max-width: 768px) {
-  /* Removes Extra-Space on footer */
-  #u10 > div > div.u10w5.u10w10 {
-    margin-top: 0rem !important ;
-  }
 
   /* Extra Space from title removed -FOOTER*/
   #social-ankle-title {
