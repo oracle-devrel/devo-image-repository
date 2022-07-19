@@ -418,6 +418,6 @@ blockquote.notice {
 }
 
 html body .container a {
-  text-decoration: none;
-  color: #00747a;
+  text-decoration: none !important;
+  color: #00747a !important;
 }
