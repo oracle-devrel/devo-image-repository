@@ -54,7 +54,7 @@
 
   /* Increase bottom space on cards -ALL*/
   .col-section-list {
-    gap: 2rem;
+    gap: 2rem !important;
   }
 
   /* Big texts causes overlapping 
