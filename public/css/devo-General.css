@@ -10,6 +10,12 @@
 }
 
 @media (max-width: 768px) {
+  
+  /* Increase bottom space on cards -ALL*/
+   .card-container{
+        margin-bottom:2.5rem;    
+    }
+  
   /* Big texts causes overlapping 
   .hero .content-container .content .body p {
     font-size: 1rem !important;
