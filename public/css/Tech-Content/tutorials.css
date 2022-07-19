@@ -390,13 +390,6 @@ blockquote.notice {
 
 /* ================== NEW STYLES ================== */
 
-/*
-  html body .container a {
-    text-decoration: none;
-    color: #00747a;
-  }
-  */
-
 /*HERO MODIFICATIONS */
 
 /*
@@ -422,4 +415,9 @@ blockquote.notice {
 
 .header-link {
   display: none !important;
+}
+
+html body .container a {
+  text-decoration: none;
+  color: #00747a;
 }
