@@ -2,6 +2,10 @@
   overflow-x: hidden;
 }
 
+.hero .content-container .content .body p{
+    font-size: 1rem !important;
+}
+
 .cta-btn.primary.bg-primary {
   color: #000000;
 }
