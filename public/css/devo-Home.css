@@ -2,10 +2,6 @@
   overflow-x: hidden;
 }
 
-.hero .content-container .content .body p {
-  font-size: 1rem !important;
-}
-
 .cta-btn.primary.bg-primary {
   color: #000000;
 }
@@ -219,6 +215,14 @@ margin-bottom: -180px !important;
 }
 
 @media (max-width: 768px) {
+
+    /* Big texts causes overlapping 
+  .hero .content-container .content .body p {
+    font-size: 1rem !important;
+  }
+  */
+
+  
   /* Adjust of spaces between More Resources and upper table*/
   #a7a7976e-445a-4a89-a47c-0af7674061e0 > div > div > div {
     padding-bottom: 1rem !important;
@@ -231,6 +235,7 @@ margin-bottom: -180px !important;
 
   /* Removes Space from languages -FOOTER*/
   #u10 > div > div.u10w5.u10w10 > div {
+    margin-top: 0rem !important ;
     padding-top: 0rem !important;
   }
 

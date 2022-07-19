@@ -1,6 +1,4 @@
-.hero .content-container .content .body p {
-  font-size: 1rem !important;
-}
+
 
 .container {
   overflow-x: hidden;
@@ -12,6 +10,12 @@
 }
 
 @media (max-width: 768px) {
+  /* Big texts causes overlapping 
+  .hero .content-container .content .body p {
+    font-size: 1rem !important;
+  }
+  */
+
   /* Extra Space from title removed -FOOTER*/
   #social-ankle-title {
     margin-bottom: 0rem !important;
@@ -19,6 +23,7 @@
 
   /* Removes Space from languages -FOOTER*/
   #u10 > div > div.u10w5.u10w10 > div {
+    margin-top: 0rem !important ;
     padding-top: 0rem !important;
   }
 
