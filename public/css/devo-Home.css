@@ -222,6 +222,11 @@ margin-bottom: -180px !important;
   }
   */
 
+  /* Removes Extra-Space on footer */
+  #u10 > div > div.u10w5.u10w10{
+    margin-top: 0rem !important ;
+  }
+
   
   /* Adjust of spaces between More Resources and upper table*/
   #a7a7976e-445a-4a89-a47c-0af7674061e0 > div > div > div {
