@@ -137,3 +137,9 @@ strong {
     }
   }
   */
+
+  .banner .banner-content-container .body-content-def .banner-text-content {
+    font-size: 1rem !important;
+    line-height: 0rem!important;
+    font-family: "Oracle Sans regular",sans-serif !important;
+}
