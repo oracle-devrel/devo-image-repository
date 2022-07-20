@@ -34,13 +34,21 @@
 }
 
 .tabs-layout .content-container .tabs-content {
-    background-color: #1e232f00 !important;
+  background-color: #1e232f00 !important;
 }
 
-.banner .banner-content-container .body-content-def.left-align {
+#cb462d9b-642d-46ff-82a0-25a56a2cd119customComponentDiv
+  > div
+  > div
+  > div
+  > div.banner-text-content
+  > p
+  > ul {
+  margin-top: 1.25rem !important;
+}
+
+@media (min-width: 1999px) {
+  .banner .banner-content-container .body-content-def.left-align {
     margin: auto auto !important;
-}
-
-#cb462d9b-642d-46ff-82a0-25a56a2cd119customComponentDiv > div > div > div > div.banner-text-content > p > ul{
-    margin-top: 1.25rem !important;
+  }
 }

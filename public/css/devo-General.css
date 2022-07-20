@@ -13,44 +13,43 @@
 }
 
 /* Isolated cases for Some features -BULLETS*/
-  #e2d996c5-d19d-44a2-ad89-c25c8f15e62fcustomComponentDiv
-    > section
-    > div
-    > div.message-container.left-text-position
-    > ul {
-    margin-top: 1.25rem;
-  }
+#e2d996c5-d19d-44a2-ad89-c25c8f15e62fcustomComponentDiv
+  > section
+  > div
+  > div.message-container.left-text-position
+  > ul {
+  margin-top: 1.25rem;
+}
 
-  #e2d996c5-d19d-44a2-ad89-c25c8f15e62fcustomComponentDiv
-    > section
-    > div
-    > div.message-container.left-text-position
-    > ul
-    > li {
-    list-style-position: outside;
-    margin-left: 1.825rem;
-  }
+#e2d996c5-d19d-44a2-ad89-c25c8f15e62fcustomComponentDiv
+  > section
+  > div
+  > div.message-container.left-text-position
+  > ul
+  > li {
+  list-style-position: outside;
+  margin-left: 1.825rem;
+}
 
-  #e2d996c5-d19d-44a2-ad89-c25c8f15e62fcustomComponentDiv
-    > section
-    > div
-    > div.message-container.left-text-position
-    > li {
-    line-height: 1.375rem;
-    margin-bottom: 0.8rem;
+#e2d996c5-d19d-44a2-ad89-c25c8f15e62fcustomComponentDiv
+  > section
+  > div
+  > div.message-container.left-text-position
+  > li {
+  line-height: 1.375rem;
+  margin-bottom: 0.8rem;
+}
+/* END of Isolated cases for Some features -BULLETS*/
+@media (max-width: 1999px) {
+  .feature .content-container .message-container.left-text-position {
+    margin: 1rem !important;
   }
-  /* END of Isolated cases for Some features -BULLETS*/
+}
 
 @media (max-width: 768px) {
   col-section {
     padding-bottom: 1rem !important;
   }
-
-  .feature .content-container .message-container.left-text-position {
-    margin: 1rem !important;
-  }
-
-  
 
   /* Increase bottom space on cards -ALL*/
   .col-section-list {
@@ -62,7 +61,6 @@
     font-size: 1rem !important;
   }
   */
-  
 
   /* Extra Space from title removed -FOOTER*/
   #social-ankle-title {
