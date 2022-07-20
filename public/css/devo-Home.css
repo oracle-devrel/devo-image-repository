@@ -217,18 +217,46 @@ margin-bottom: -180px !important;
 
 @media (max-width: 768px) {
   /* Align content to the left on CARDS */
-  #f40603d7-5a6e-40da-8528-28fee39e9427customComponentDiv > div > div.card-container, #a2560963-110d-4af0-aab9-d16b862cbd98customComponentDiv > div > div.card-container, #a591a898-c199-497d-989d-880a985a6f70customComponentDiv > div > div.card-container, #a925ebdb-ea47-4544-9302-2af2f9c7b452customComponentDiv > div > div.card-container{
+  #f40603d7-5a6e-40da-8528-28fee39e9427customComponentDiv
+    > div
+    > div.card-container,
+  #a2560963-110d-4af0-aab9-d16b862cbd98customComponentDiv
+    > div
+    > div.card-container,
+  #a591a898-c199-497d-989d-880a985a6f70customComponentDiv
+    > div
+    > div.card-container,
+  #a925ebdb-ea47-4544-9302-2af2f9c7b452customComponentDiv
+    > div
+    > div.card-container {
     flex-direction: column;
     align-items: flex-start !important;
   }
 
   /* Align content to the left on CARDS-IMAGES */
-  #f40603d7-5a6e-40da-8528-28fee39e9427customComponentDiv > div > div.card-container > div.media-container.padding, #a2560963-110d-4af0-aab9-d16b862cbd98customComponentDiv > div > div.card-container > div.media-container.padding, #a591a898-c199-497d-989d-880a985a6f70customComponentDiv > div > div.card-container > div.media-container.padding, #a925ebdb-ea47-4544-9302-2af2f9c7b452customComponentDiv > div > div.card-container > div.media-container.padding{
+  #f40603d7-5a6e-40da-8528-28fee39e9427customComponentDiv
+    > div
+    > div.card-container
+    > div.media-container.padding,
+  #a591a898-c199-497d-989d-880a985a6f70customComponentDiv
+    > div
+    > div.card-container
+    > div.media-container.padding,
+  #a925ebdb-ea47-4544-9302-2af2f9c7b452customComponentDiv
+    > div
+    > div.card-container
+    > div.media-container.padding {
     padding-bottom: 0px !important;
+    padding-left: -0.5rem !important;
   }
 
-  
-
+  /* Align content to the left on Cloud Icon CARDS-IMAGES */
+  #a2560963-110d-4af0-aab9-d16b862cbd98customComponentDiv
+    > div
+    > div.card-container
+    > div.media-container.padding {
+    padding-bottom: 0px !important;
+  }
 
   /* Big texts causes overlapping 
   .hero .content-container .content .body p {
