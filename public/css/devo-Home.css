@@ -223,6 +223,20 @@ margin-bottom: -180px !important;
 }
 
 @media (max-width: 768px) {
+  /*MENU*/
+  .u30 .u30w1 .u30nav.active .u30navw1-mobile ul {
+    justify-content: space-between !important;
+    line-height: 2.5rem;
+  }
+
+  .u30 .u30w1 .u30nav.active .u30navw1-mobile {
+    height: 55% !important;
+    padding-left: 10px !important;
+  }
+
+
+
+
   /* Footer Aligments Ad Choices and Careers */
   #u10 > div > div.u10w5.u10w10 > ul.u10-links > li:nth-child(5),
   #u10 > div > div.u10w5.u10w10 > ul.u10-links > li:nth-child(6) {
