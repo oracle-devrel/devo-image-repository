@@ -216,11 +216,10 @@ margin-bottom: -180px !important;
 }
 
 @media (max-width: 768px) {
-
   /* Footer Aligments Ad Choices and Careers */
-  #u10 > div > div.u10w5.u10w10 > ul.u10-links > li:nth-child(5), #u10 > div > div.u10w5.u10w10 > ul.u10-links > li:nth-child(6){
+  #u10 > div > div.u10w5.u10w10 > ul.u10-links > li:nth-child(5),
+  #u10 > div > div.u10w5.u10w10 > ul.u10-links > li:nth-child(6) {
     padding-top: 0.31rem;
-
   }
 
   /* Align content to the left on CARDS */
@@ -252,12 +251,7 @@ margin-bottom: -180px !important;
   #a925ebdb-ea47-4544-9302-2af2f9c7b452customComponentDiv
     > div
     > div.card-container
-    > div.media-container.padding {
-    padding-bottom: 0px !important;
-    padding-left: -0.5rem !important;
-  }
-
-  /* Align content to the left on Cloud Icon CARDS-IMAGES */
+    > div.media-container.padding,
   #a2560963-110d-4af0-aab9-d16b862cbd98customComponentDiv
     > div
     > div.card-container
@@ -354,7 +348,7 @@ margin-bottom: -180px !important;
 
   #b43542cb-5f81-4b70-8324-0b2926dfcb96_content > div {
     padding-top: 4rem !important;
-    padding-bottom: 0rem!important;
+    padding-bottom: 0rem !important;
   }
 
   #de35a334-4363-4d9c-898c-c371b94a8788customComponentDiv
