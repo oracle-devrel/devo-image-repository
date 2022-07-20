@@ -4,6 +4,19 @@
 }
 */
 
+/* Banners problems - Multiple CSS classes */
+.banner .banner-content-container .body-content-def .banner-text-content {
+  font-size: 1rem !important;
+  line-height: 0rem !important;
+  font-family: "Oracle Sans regular", sans-serif !important;
+}
+
+.banner .banner-content-container .left-align {
+  margin: 0 auto! important;
+}
+
+
+
 /* Primary BTNs gets black on Mobile -ALL*/
 .cta-btn.primary.bg-primary,
 .cta-btn.primary.bg-white {
@@ -48,7 +61,17 @@
   }
 }
 
+@media screen and (max-width: 1671px) {
+  .banner .banner-content-container .left-align {
+    margin: 0 2.25rem !important;
+  }
+}
+
+
 @media (max-width: 768px) {
+  .banner .banner-content-container .body-content-def .banner-text-content {
+    text-align: center !important;
+}
   col-section {
     padding-bottom: 1rem !important;
   }
@@ -140,15 +163,5 @@ strong {
   }
   */
 
-/* Banners problems - Multiple CSS classes */
-.banner .banner-content-container .body-content-def .banner-text-content {
-  font-size: 1rem !important;
-  line-height: 0rem !important;
-  font-family: "Oracle Sans regular", sans-serif !important;
-}
 
-@media screen and (max-width: 1671px) {
-  .banner .banner-content-container .left-align {
-    margin: 0 2.25rem !important;
-  }
-}
+
