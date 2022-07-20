@@ -56,6 +56,11 @@
 }
 /* END of Isolated cases for Some features -BULLETS*/
 @media (max-width: 1999px) {
+
+  .container {
+    overflow-x: hidden;
+  }
+
   .feature .content-container .message-container.left-text-position {
     margin: 1rem !important;
   }

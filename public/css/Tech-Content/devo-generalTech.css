@@ -10,8 +10,13 @@
   color: #000000;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1999px) {
+  .container {
+    overflow-x: hidden;
+  }
+}
 
+@media (max-width: 768px) {
   /* Extra Space from title removed -FOOTER*/
   #social-ankle-title {
     margin-bottom: 0rem !important;

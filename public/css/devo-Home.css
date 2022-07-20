@@ -177,6 +177,11 @@ margin-bottom: -180px !important;
 }
 
 @media (max-width: 1200px) {
+
+  .container {
+    overflow-x: hidden;
+  }
+  
   #b43542cb-5f81-4b70-8324-0b2926dfcb96_content > div {
     padding-top: 10rem !important;
   }
