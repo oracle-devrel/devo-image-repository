@@ -138,8 +138,15 @@ strong {
   }
   */
 
-  .banner .banner-content-container .body-content-def .banner-text-content {
-    font-size: 1rem !important;
-    line-height: 0rem!important;
-    font-family: "Oracle Sans regular",sans-serif !important;
+/* Banners problems - Multiple CSS classes */
+.banner .banner-content-container .body-content-def .banner-text-content {
+  font-size: 1rem !important;
+  line-height: 0rem !important;
+  font-family: "Oracle Sans regular", sans-serif !important;
+}
+
+@media screen and (max-width: 1671px) {
+  .banner .banner-content-container .left-align {
+    margin: 0 2.25rem !important;
+  }
 }
