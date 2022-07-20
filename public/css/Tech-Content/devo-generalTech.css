@@ -13,6 +13,7 @@
 @media (max-width: 1999px) {
   .container {
     overflow-x: hidden;
+    overflow-y: hidden;
   }
 }
 

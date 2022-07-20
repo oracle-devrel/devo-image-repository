@@ -12,10 +12,8 @@
 }
 
 .banner .banner-content-container .left-align {
-  margin: 0 auto! important;
+  margin: 0 auto !important;
 }
-
-
 
 /* Primary BTNs gets black on Mobile -ALL*/
 .cta-btn.primary.bg-primary,
@@ -56,9 +54,9 @@
 }
 /* END of Isolated cases for Some features -BULLETS*/
 @media (max-width: 1999px) {
-
   .container {
     overflow-x: hidden;
+    overflow-y: hidden;
   }
 
   .feature .content-container .message-container.left-text-position {
@@ -72,11 +70,10 @@
   }
 }
 
-
 @media (max-width: 768px) {
   .banner .banner-content-container .body-content-def .banner-text-content {
     text-align: center !important;
-}
+  }
   col-section {
     padding-bottom: 1rem !important;
   }
@@ -167,6 +164,3 @@ strong {
     }
   }
   */
-
-
-
