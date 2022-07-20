@@ -1,0 +1,59 @@
+.tabs-layout .content-container .tabs-content {
+  background-color: #1e232f00 !important;
+}
+
+#ac7d9d05-5141-49b2-9ab8-f7d6ff95a412customComponentDiv
+  > section
+  > div
+  > div.message-container.left-text-position
+  > p.body
+  > ul
+  > li
+  > a:hover,
+#dcbc27e5-91ac-4a6e-96d8-426285763e79customComponentDiv
+  > section
+  > div
+  > div.message-container.left-text-position
+  > p.body
+  > ul
+  > li
+  > a:hover,
+#a97d0f2e-ab4d-415f-a27c-220abe5aedefcustomComponentDiv
+  > section
+  > div
+  > div.message-container.left-text-position
+  > p.body
+  > ul
+  > li
+  > a:hover,
+#a5c32b35-00e1-45ef-aa27-a18cb1977fb8customComponentDiv
+  > section
+  > div
+  > div.message-container.left-text-position
+  > p.body
+  > ul
+  > li
+  > a:hover,
+#ac7d9d05-5141-49b2-9ab8-f7d6ff95a412customComponentDiv
+  > section
+  > div
+  > div.message-container.left-text-position
+  > p.body
+  > p:nth-child(7)
+  > a:hover,
+#dcbc27e5-91ac-4a6e-96d8-426285763e79customComponentDiv
+  > section
+  > div
+  > div.message-container.left-text-position
+  > p.body
+  > p:nth-child(7)
+  > a:hover,
+#a97d0f2e-ab4d-415f-a27c-220abe5aedefcustomComponentDiv
+  > section
+  > div
+  > div.message-container.left-text-position
+  > p.body
+  > p:nth-child(7)
+  > a:hover {
+  text-decoration: underline !important;
+}
