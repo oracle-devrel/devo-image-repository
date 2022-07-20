@@ -216,6 +216,13 @@ margin-bottom: -180px !important;
 }
 
 @media (max-width: 768px) {
+
+  /* Footer Aligments Ad Choices and Careers */
+  #u10 > div > div.u10w5.u10w10 > ul.u10-links > li:nth-child(5), #u10 > div > div.u10w5.u10w10 > ul.u10-links > li:nth-child(6){
+    padding-top: 0.31rem;
+
+  }
+
   /* Align content to the left on CARDS */
   #f40603d7-5a6e-40da-8528-28fee39e9427customComponentDiv
     > div
