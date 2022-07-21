@@ -11,12 +11,11 @@ window.onresize = window.onload = function () {
     heightList.push(tabContent[i].clientHeight);
   }
 
-  var lastHeight = Math.max(...heightList);
+  var maxHeight = Math.max(...heightList);
+  var newTabsHeight = maxHeight + 32; 
 
 
-  console.log(lastHeight);
-
-  tabs.style.marginBottom = "1000rem";
+  tabs.style.marginBottom = newTabsHeight + "rem";
 
 
 
