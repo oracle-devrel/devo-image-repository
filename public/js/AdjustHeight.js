@@ -13,5 +13,7 @@ window.onresize = window.onload = function () {
     }
     var maxHeight = Math.max(...heightList);
     tabs.style.marginBottom = maxHeight + "px";
+  } else {
+    tabs.style.marginBottom = "auto";
   }
 };
