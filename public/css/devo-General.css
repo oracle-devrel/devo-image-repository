@@ -246,6 +246,22 @@ strong {
 #e2c56fb2-41dc-4fd1-a2e8-f15e4caaa736customComponentDiv
   > div
   > div.card-container
+  > div.content.padding,
+#a9a0f137-23fb-4838-a850-1e831dc5dd77customComponentDiv
+  > div
+  > div.card-container
+  > div.content.padding,
+#c6be9177-fbd3-44f8-9ab9-559fc1a958c4customComponentDiv
+  > div
+  > div.card-container
+  > div.content.padding,
+#d97fb8a6-157c-4be6-8079-96f89a364c91customComponentDiv
+  > div
+  > div.card-container
+  > div.content.padding,
+#e5ed6a68-7fd3-41d7-b6e5-747069ef3e27customComponentDiv
+  > div
+  > div.card-container
   > div.content.padding {
   margin-top: auto !important;
   margin-bottom: auto !important;
