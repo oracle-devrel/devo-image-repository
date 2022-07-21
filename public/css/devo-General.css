@@ -310,6 +310,22 @@ strong {
 #de1ead23-27e3-426b-9e17-75a3474fcdd1customComponentDiv
   > div
   > div.card-container
+  > div.content.padding,
+#ac51cfe6-0be0-45cb-9b8c-938f5581496fcustomComponentDiv
+  > div
+  > div.card-container
+  > div.content.padding,
+#b6e5f959-818a-49de-bc8f-25b59d847503customComponentDiv
+  > div
+  > div.card-container
+  > div.content.padding,
+#f93985ca-15d3-4c78-bbba-758f1eebab91customComponentDiv
+  > div
+  > div.card-container
+  > div.content.padding,
+#b8fd613c-42f1-41aa-9103-fd24bb314e6acustomComponentDiv
+  > div
+  > div.card-container
   > div.content.padding {
   margin-top: auto !important;
   margin-bottom: auto !important;
