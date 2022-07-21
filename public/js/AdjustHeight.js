@@ -14,7 +14,7 @@ window.onresize = window.onload = function () {
     let heightAdjust = maxHeight - 145;
 
 
-    tabs.style.marginBottom = maxHeight + "px";
+    tabs.style.marginBottom = heightAdjust + "px";
 
 
 
