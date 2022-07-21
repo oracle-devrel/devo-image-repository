@@ -57,3 +57,9 @@
   > a:hover {
   text-decoration: underline !important;
 }
+
+@media (max-width: 768px) {
+  #a4191c0e-0f8f-42ea-b925-194aaa836030 {
+    margin-bottom: 50rem !important;
+  }
+}

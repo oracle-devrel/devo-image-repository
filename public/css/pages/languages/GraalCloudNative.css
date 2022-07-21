@@ -1,3 +1,9 @@
 .tabs-layout .content-container .tabs-content {
   background-color: #1e232f00 !important;
 }
+
+@media (max-width: 768px) {
+  #a4d4de2d-8c31-40b7-852e-be17ea41dc7a {
+    margin-bottom: 50rem !important;
+  }
+}

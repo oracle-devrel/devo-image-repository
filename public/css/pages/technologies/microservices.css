@@ -47,8 +47,15 @@
   margin-top: 1.25rem !important;
 }
 
+
 @media (min-width: 1999px) {
   .banner .banner-content-container .body-content-def.left-align {
     margin: auto auto !important;
+  }
+}
+
+@media (max-width: 768px) {
+  #fa4035f6-6d8a-46ea-9d6f-efe23ddb2075 {
+    margin-bottom: 52rem;
   }
 }
