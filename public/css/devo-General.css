@@ -326,6 +326,22 @@ strong {
 #b8fd613c-42f1-41aa-9103-fd24bb314e6acustomComponentDiv
   > div
   > div.card-container
+  > div.content.padding,
+#e373e56e-fde3-4ca8-952d-b552f842c392customComponentDiv
+  > div
+  > div.card-container
+  > div.content.padding,
+#b8ac749e-8e24-48e0-bd85-3392708ed9d1customComponentDiv
+  > div
+  > div.card-container
+  > div.content.padding,
+#c780e368-4b51-407e-8d96-dd8a03c9882bcustomComponentDiv
+  > div
+  > div.card-container
+  > div.content.padding,
+#ace1ad90-cf1c-4988-b15e-2d94f4c15695customComponentDiv
+  > div
+  > div.card-container
   > div.content.padding {
   margin-top: auto !important;
   margin-bottom: auto !important;
