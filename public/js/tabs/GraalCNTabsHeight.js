@@ -1,5 +1,5 @@
 window.onresize = window.onload = function () {
-  //console.log("Window Width: " + window.innerWidth);
+  console.log("Window Width: " + window.innerWidth);
   var tabContent = document.querySelectorAll(".tabs-content");
   var tabs = document.getElementById("a4d4de2d-8c31-40b7-852e-be17ea41dc7a");
   var heightList = [];
