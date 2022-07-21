@@ -11,7 +11,13 @@ window.onresize = window.onload = function () {
       heightList.push(tabContent[i].clientHeight);
     }
     var maxHeight = Math.max(...heightList);
+    let heightAdjust = maxHeight - 145;
+
+
     tabs.style.marginBottom = maxHeight + "px";
+
+
+
   } else {
     tabs.style.marginBottom = "auto";
   }
