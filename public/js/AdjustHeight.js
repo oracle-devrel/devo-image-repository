@@ -13,7 +13,7 @@ window.onresize = window.onload = function () {
 
   var maxHeight = Math.max(...heightList);
 
-  tabs.style.marginBottom = maxHeight + "px!important";
+  tabs.style.marginBottom = maxHeight + "px";
 
   /*
     mobileItem.forEach(function (item) {
