@@ -6,19 +6,14 @@ window.onresize = window.onload = function () {
   let tabs = document.getElementById("a4191c0e-0f8f-42ea-b925-194aaa836030");
 
   var heightList = [];
-  
+
   for (let i = 0; i < tabContent.length; i++) {
     heightList.push(tabContent[i].clientHeight);
   }
 
   var maxHeight = Math.max(...heightList);
-  var newTabsHeight = maxHeight + 32; 
 
-
-  tabs.style.marginBottom = newTabsHeight + "rem";
-
-
-
+  tabs.style.marginBottom = maxHeight + "px";
 
   /*
     mobileItem.forEach(function (item) {
