@@ -6,8 +6,10 @@ window.onload = function () {
   console.log(topicPresent);
 
   if ((topicPresent = "true")) {
+    console.log("New Width: 66rem");
     hero.style.width = "66rem";
-  } else {
+  } else if ((topicPresent = "false")) {
+    console.log("New Width: 100rem");
     hero.style.width = "100rem";
   }
 };
