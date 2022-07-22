@@ -23,7 +23,7 @@
   font-weight: 600;
   font-size: 1.25rem;
   line-height: 32px;
-  margin-top: 60px;
+  margin-top: 30px !important;
   margin-bottom: 16px;
   padding-bottom: 0.5rem;
 }
@@ -35,7 +35,7 @@
   font-weight: 400;
   font-size: 1rem;
   line-height: 32px;
-  margin-top: 30px;
+  margin-top: 15px;
   margin-bottom: 16px;
   padding-bottom: 0.5rem;
 }

@@ -74,7 +74,7 @@
     $ jjs -J-Djava.class.path=lib/jython-standalone-2.7.1.jar engines.js
     Oracle Nashorn 1.8.0_144 -- [js]
     jython 2.7.1 -- [py]</code></pre>
-            <textarea readonly="readonly" aria-hidden="true" tabindex="-1"></textarea>
+
         </div>
 
         <p align="center"><strong>Listing 1. Nashorn running along with Jython on the JVM.</strong></p>
@@ -85,7 +85,8 @@
             <code class="ocode ocode-initialized">return</code> keyword may be omitted. An expression such as <code
                 class="ocode ocode-initialized">function(v) v</code> is a convenient equivalent of the <code
                 class="ocode ocode-initialized">function(v) { return v; }</code> declaration, which is very useful for
-            working with Java 8 APIs.</p>
+            working with Java 8 APIs.
+        </p>
 
         <p>The JDK ships with a dedicated launcher for JSR 223 programs called <code
                 class="ocode ocode-initialized">jrunscript</code>. If it is called without parameters, it goes straight
@@ -104,7 +105,7 @@
 
             <pre aria-label="Code block 13"><code>$ jrunscript.exe -e "print(java.lang.management.ManagementFactory.getOperatingSystemMXBean().getTotalPhysicalMemorySize())"
     12566515712</code></pre>
-            <textarea readonly="readonly" aria-hidden="true" tabindex="-1"></textarea>
+
         </div>
 
         <p align="center"><strong>Listing 2. Using the <code class="ocode ocode-initialized">jrunscript</code> tool to
@@ -135,7 +136,8 @@
             Java objects that were put into the engine can be pulled back with no interim objects. If the returning
             object shows up as <code class="ocode ocode-initialized">[Object object]</code> through the <code
                 class="ocode ocode-initialized">toString()</code> method, this means it needs casting and conversion to
-            be accessible with Java.</p>
+            be accessible with Java.
+        </p>
 
         <div class="ocode ocode-initialized">
             <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard"><button
@@ -173,7 +175,7 @@
     3
     [jeden, dwa, trzy]
     4534</code></pre>
-            <textarea readonly="readonly" aria-hidden="true" tabindex="-1"></textarea>
+
         </div>
 
         <p align="center"><strong>Listing 3. Exchanging simple objects over the Nashorn ScriptEngine.</strong></p>
@@ -213,7 +215,7 @@
             System.out.println(engine.eval("moment().format('LLL')"));
         }
     }</code></pre>
-            <textarea readonly="readonly" aria-hidden="true" tabindex="-1"></textarea>
+
         </div>
 
         <p align="center"><strong>Listing 4. Invoking a method on an external JavaScript module.</strong></p>
@@ -231,7 +233,8 @@
                 class="ocode ocode-initialized">getScriptEngine</code> method, refer to the JDK API reference for the
             <code class="ocode ocode-initialized">NashornScriptEngineFactory</code> class. An equivalent way of invoking
             this engine with just <code class="ocode ocode-initialized">ScriptEngine</code> would be by providing <code
-                class="ocode ocode-initialized">-Dnashorn.args=--language=es6</code> to the list of JVM arguments.</p>
+                class="ocode ocode-initialized">-Dnashorn.args=--language=es6</code> to the list of JVM arguments.
+        </p>
 
         <div class="ocode ocode-initialized">
             <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard"><button
@@ -252,7 +255,7 @@
             engine.eval("const a = 100");
         }
     }</code></pre>
-            <textarea readonly="readonly" aria-hidden="true" tabindex="-1"></textarea>
+
         </div>
 
         <p align="center"><strong>Listing 5. Nashorn script engine factory used to create an engine with extra
@@ -296,7 +299,7 @@
             System.out.println(engine.eval("JSON.parse(response).weather[0].description"));
         }
     }</code></pre>
-            <textarea readonly="readonly" aria-hidden="true" tabindex="-1"></textarea>
+
         </div>
 
         <p align="center"><strong>Listing 6. Using Nashorn for consuming a JSON REST API.</strong></p>
@@ -324,7 +327,8 @@
                 class="ocode ocode-initialized">java.util.HashMap</code>, <code
                 class="ocode ocode-initialized">Packages.java.util.HashMap</code>, and <code
                 class="ocode ocode-initialized">Java.type("java.util.HashMap")</code> are three equivalent ways of
-            accessing the Java hash map from Nashorn.</p>
+            accessing the Java hash map from Nashorn.
+        </p>
 
         <p>Because Nashorn is dynamic whereas Java is statically typed, the method signature is determined at runtime.
             An example of the commonly used overloaded method <code class="ocode ocode-initialized">println</code> is
@@ -357,7 +361,7 @@
      void java.io.PrintStream.println(Object)
      void java.io.PrintStream.println(String)
     ]</code></pre>
-            <textarea readonly="readonly" aria-hidden="true" tabindex="-1"></textarea>
+
         </div>
 
         <p align="center"><strong>Listing 7. Overloaded Java method of a standard output stream as seen by
@@ -418,7 +422,7 @@
     void putAll(Map arg0), Object putIfAbsent(Object arg0, Object arg1), Object 
     remove(Object arg0), boolean replace(Object arg0, Object arg1, Object arg2), void 
     replaceAll(BiFunction arg0), int size(), String toString(), Collection values(), void wait()]</code></pre>
-            <textarea readonly="readonly" aria-hidden="true" tabindex="-1"></textarea>
+
         </div>
 
         <p align="center"><strong>Listing 8. Using the Nashorn helper <code class="ocode ocode-initialized">dir()</code>
@@ -431,7 +435,8 @@
                 class="ocode ocode-initialized">with</code> clause can shield the inner scope, whereas the <code
                 class="ocode ocode-initialized">JavaImporter</code> allows you to quickly expose package contents. The
             <code class="ocode ocode-initialized">JavaImporter</code> doesn't always have to rely on the <code
-                class="ocode ocode-initialized">with</code> clause; a standalone importer can be convenient too.</p>
+                class="ocode ocode-initialized">with</code> clause; a standalone importer can be convenient too.
+        </p>
 
         <p>Nashorn ships with a number of language extensions that aim to make platform interoperability even more
             seamless. One of them is the <code class="ocode ocode-initialized">Java.from</code> function for converting
@@ -456,7 +461,7 @@
     jjs&gt; Java.from(home.listFiles())
     .\demo.js,.\dir.js,.\es6.js,.\jvm-npm.js,.\jython-standalone-2.7.1.jar, 
     .\listEngines.js,.\module.js,.\mustache.js,.\qunit-2.4.0.js,.\underscore.js,.\unittest.js</code></pre>
-            <textarea readonly="readonly" aria-hidden="true" tabindex="-1"></textarea>
+
         </div>
 
         <p align="center"><strong>Listing 9. Demonstration of Nashorn array conversion.</strong></p>
@@ -503,7 +508,7 @@
     }
     
     print(random);</code></pre>
-            <textarea readonly="readonly" aria-hidden="true" tabindex="-1"></textarea>
+
         </div>
 
         <p align="center"><strong>Listing 10. Nashorn implementing Runnable interface.</strong></p>
@@ -518,7 +523,8 @@
             <code class="ocode ocode-initialized">Object</code> object. A full list of the extensions can be found at
             the OpenJDK <a data-lbl="81 - Nashorn extensions" data-trackas="devoArticleTechDatabaseNashorn2"
                 href="https://wiki.openjdk.java.net/display/Nashorn/Nashorn+extensions">Nashorn extensions</a> page, a
-            must-have resource for getting started with the language.</p>
+            must-have resource for getting started with the language.
+        </p>
 
         <p align="center" class="xsml">Figure 1. The Nashorn extensions page</p>
         <strong> Summary </strong>

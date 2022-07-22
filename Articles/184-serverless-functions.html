@@ -1,0 +1,408 @@
+<section class="cc01 cc01v0 cpad crule">
+    <div class="cc01w1 cwidth">
+        <h2>Introduction</h2>
+
+        <p>Serverless functions are part of an evolution in cloud computing that has helped free organizations from many
+            of the constraints of managing infrastructure and resources. They enable developers to focus on writing code
+            for event-driven applications that respond to a variety of triggers without worrying about the underlying
+            platform management.</p>
+
+        <p>In the past, application architectures were monolithic, tightly integrated systems forming a single,
+            comprehensive application. However, such systems were expensive and difficult to maintain, resulting in
+            numerous cycles spent on development, redeployment, and reintegration. Businesses need to remain agile,
+            responding to both customer and industry needs in a timely fashion. To address some of these concerns, we
+            have seen developers gradually moving from building monolithic applications to using containers and
+            microservices. Microservices were introduced to create isolation and modularity in development, with a suite
+            of code blocks acting in concert to form a single application.</p>
+
+        <p align="center"><img
+                alt="Figure 1. Translation of a high-level programming language to operations performed on transistors."
+                src="//www.oracle.com/a/tech/img/java-quantum-computing-f1.png" /></p>
+
+        <p align="center" class="xsml">Figure 1 &ndash; A Simple Neural Network</p>
+
+        <p>In addition, cloud providers offered a way to free companies from the need to host these applications
+            themselves. Such serverless architecture removed the burden from organizations to manage their own physical
+            or virtual servers, as well as any of the other platform components required for the application to run.
+            With it, businesses were provided the means to quickly adapt to the needs of their customers and allow
+            developers to be free to focus on their code.</p>
+
+        <h2>What are serverless functions?</h2>
+
+        <p>Serverless functions are one of the inherent features of serverless computing. These functions offer
+            targeted, on-demand, and single-purpose application functionality that runs only when triggered by
+            preconfigured events and for the time that they&rsquo;re required. This means that unlike the always-on
+            product model of systems like database servers, you only pay for resources that you consume during function
+            execution and nowhere else.</p>
+
+        <p align="center"><img
+                alt="Figure 1. Translation of a high-level programming language to operations performed on transistors."
+                src="//www.oracle.com/a/tech/img/java-quantum-computing-f1.png" /></p>
+
+        <p align="center" class="xsml">Figure 1 &ndash; A Simple Neural Network</p>
+
+        <p>As a developer, you create code for your serverless application. The serverless function code is then pushed
+            out to a container registry. An event or a trigger is used to invoke the serverless function. When the event
+            configured for a function occurs, the serverless function image runs as a container and executes the code.
+            The function runs only when it is invoked, and you pay only for the resources and invocation time used by
+            the application.</p>
+
+        <p>Additionally, since these serverless functions are often hosted by the cloud provider, the organization
+            doesn&rsquo;t have to worry about managing deployments or scaling. And self-contained, easier-to-maintain
+            code means that products can be brought to market faster, freeing developers to focus on building and
+            maintaining their applications without the worry of additional overhead. In the end, this translates to huge
+            cost savings since you only pay for the resources that you need, when you need them.</p>
+
+        <h2>Use cases of serverless functions</h2>
+
+        <p>Serverless technology, like others in cloud computing, is not a one-size-fits-all approach. Consideration
+            should always be given to how it will be utilized and whether it is appropriate for your organization.</p>
+
+        <p>In general, if you&rsquo;re workload can be described by one of the following, a serverless approach may be
+            for you:</p>
+
+        <ul>
+            <li>Easy to modularize for asynchronous and concurrent work</li>
+            <li>On-demand utilization with potential uncertainty in scaling requirements for resources and
+                infrastructure</li>
+            <li>Stateless, ephemeral, and doesn&rsquo;t require instantaneous start-up times</li>
+            <li>Business requirements that require fast development and deployment cycles</li>
+        </ul>
+
+        <p>More specifically, according to the Cloud Native Computing Foundation (CNCF) <a
+                href="https://github.com/cncf/wg-serverless/tree/master/whitepapers/serverless-overview">whitepaper</a>,
+            the top 10 serverless use cases include:&nbsp;</p>
+
+        <ol>
+            <li><b><strong>Multimedia processing:</strong></b> functions that operate on a file<br />
+                A discrete, parallelizable task that runs infrequently and can scale in response to demand.
+
+                <br>
+                <br>
+                <p>
+                    <italic>Examples:</italic>
+                </p>
+                <ul>
+                    <li>Users upload files, and you can execute the desired process in response to that upload, such as
+                        transcoding video for different devices or resizing images.</li>
+                    <li>An application accepts images as input and implements image recognition on it, such as for
+                        document
+                        verification, search by image, or as a payment method.</li>
+                </ul>
+            </li>
+
+            <li><b><strong>Database changes or change data capture:</strong></b> functions that are invoked when data is
+                inserted,
+                modified, or deleted from a database.
+
+
+                <p>Tasks that can vary in frequency and complexity.</p>
+
+                <p>Here, these functions would perform in a fashion like a traditional SQL trigger, except that they can
+                    also
+                    perform a variety of parallel functions external to the database itself, such as invoking an
+                    external
+                    service (like sending an email) or updating an additional database.</p>
+
+
+                <br>
+                <p>
+                    <italic>Examples:</italic>
+                </p>
+
+                <ul>
+                    <li>Ensuring that any proposed database changes meet acceptable quality thresholds or other
+                        requirements.
+                    </li>
+                    <li>Automatically translating data to another language after it&rsquo;s been received.
+                    </li>
+                </ul>
+            </li>
+
+
+            <li><b><strong>IoT sensor input messages:</strong></b> functions that respond to messages from
+                network-connected devices
+
+                <p>Scalable tasks that can protect downstream services from sudden and drastic increases in load.</p>
+                <br>
+                <p>
+                    <italic>Example:</italic>
+                </p>
+
+                <ul>
+                    <li>Efficiently and quickly filter, manage, and respond to <a href="https://mqtt.org/">MQTT</a> (MQ
+                        Telemetry Transport) messages from reporting devices and scale in response.</li>
+                </ul>
+            </li>
+
+
+            <li><b><strong>Stream processing at scale:</strong></b> functions that process data within a potentially
+                unbounded stream of
+                messages&nbsp;
+
+
+                <p>Tasks that require high performance, scalability, and computationally intensive processing, but are
+                    part of
+                    non-transactional, non-request/response workloads.</p>
+
+                <p>Here, functions would read and process messages from an event stream. In many cases, this would
+                    require that
+                    the data be compared against a set of context objects (e.g., in a NoSQL or in-mem DB) or aggregated
+                    and
+                    stored in an object or a database system.</p>
+
+                <br>
+                <p>
+                    <italic>Example:</italic>
+                </p>
+
+                <ul>
+                    <li>SnapChat using <a
+                            href="https://eng.snap.com/monolith-to-multicloud-microservices-snap-service-mesh">Google
+                            AppEngine</a> to process messages.</li>
+                </ul>
+
+            </li>
+
+
+            <li><b><strong>Chatbots:</strong></b> functions that provide customer engagement and query response while
+                automatically
+                scaling for peak demands&nbsp;
+
+                <p>Scalable tasks that don&rsquo;t suffer from non-zero cold start-up times.</p>
+
+                <p>People generally expect some delays when engaging in a conversation, so some latency due to
+                    processing times
+                    or service start-up won&rsquo;t adversely affect customer perceptions.</p>
+
+                <br>
+                <p>
+                    <italic>Example:</italic>
+                </p>
+
+                <ul>
+                    <li>Support and sales bots connected to organizational services can provide context-aware responses
+                        to
+                        product queries, support requests, or other service-related features.</li>
+                </ul>
+
+
+            </li>
+
+            <li><b><strong>Batch jobs/scheduled tasks:</strong></b> scalable tasks that require intense parallel
+                computation, IO, or
+                network access for only short periods at a time
+
+
+                <br>
+                <br>
+                <p>
+                    <italic>Examples:</italic>
+                </p>
+
+                <ul>
+                    <li>A scheduled task such as a nightly backup job (e.g., cron jobs).</li>
+                    <li>Jobs that send large quantities of emails in parallel.</li>
+                </ul>
+
+
+            </li>
+
+
+            <li><b><strong>HTTP REST APIs and web apps:</strong></b> functions that perform traditional request and
+                response
+                workloads&nbsp;
+
+
+                <br>
+                <br>
+                <p>
+                    <italic>Examples:</italic>
+                </p>
+
+                <ul>
+                    <li>Applications that provide individual REST calls (GET, POST, UPDATE, and DELETE) can scale
+                        independently
+                        and be billed separately, even if they share a common data backend.</li>
+                    <li>Online instructional services (tutorials, testing, training, etc.) that run exercise code in an
+                        event-driven sandboxed environment and provide user feedback based on comparisons with a set of
+                        expected
+                        results. Since an instance can be created for each user accessing the site, the system can both
+                        scale
+                        and charge independently for access.</li>
+                </ul>
+
+
+            </li>
+
+            <li><b><strong>Mobile back ends:</strong></b> functions that build a REST API backend workload above the
+                Banking as a Service
+                (BaaS) APIs
+
+                <p>Scalable tasks that provide fast, on-demand service and/or quick development cycles when
+                    time-to-market is
+                    critical.</p>
+
+                <p>This use case ties into the core advantages of serverless functions by allowing cloud providers to
+                    manage
+                    backend tasks while developers focus on providing services that both the customer and organization
+                    require.
+                </p>
+
+
+                <br>
+                <p>
+                    <italic>Examples:</italic>
+                </p>
+
+                <ul>
+                    <li>Optimizing performance and not worrying about investing in infrastructure expansion/provisioning
+                        when a
+                        game becomes a viral hit.</li>
+                    <li>Consumer business applications that need quick iterations to find product/market fit, or when
+                        time-to-market is critical.</li>
+                    <li>Mobile apps that use event-driven access to BaaS such as purchases or microtransactions.</li>
+                    <li>&quot;Throwaway&quot; or short-term use mobile applications, like a scheduling app for a large
+                        conference that may have widely varying usage depending on date and time.</li>
+                </ul>
+
+
+            </li>
+
+            <li><b><strong>Business logic:</strong></b> functions that coordinate microservice workloads that execute a
+                series of
+                steps&nbsp;in a business process
+
+
+                <br>
+                <br>
+                <p>
+                    <italic>Examples:</italic>
+                </p>
+
+                <ul>
+                    <li>A trading desk that handles stock market transactions and processes trade orders and
+                        confirmations from
+                        a client or based on preconfigured alerts/triggers.</li>
+                    <li>Event requests from client portals are managed by a coordination function and delivered to
+                        appropriate
+                        serverless functions.</li>
+                </ul>
+
+
+            </li>
+
+
+
+
+            <li><b><strong>Continuous Integration (CI) pipeline:</strong></b> functions that provide the ability to
+                remove the need for
+                pre-provisioned hosts
+                <br>
+                <br>
+                <p>
+                    <italic>Example:</italic>
+                </p>
+
+                <ul>
+                    <li>Build jobs triggered by a code commit or merged PR. A function call would be invoked to run the
+                        build
+                        and deploy specifically for this instance.</li>
+                </ul>
+
+
+
+            </li>
+        </ol>
+
+        <h2>Functions as a Service (FaaS)</h2>
+
+        <p>Functions as a Service (FaaS) is a cloud services platform that allows customers to rapidly build and deploy
+            serverless functions. FaaS allows developers to write code as self-contained functions executed in response
+            to discrete events like image uploads or in-app events. The beauty and utility of the FaaS model are that it
+            provides significant cost savings since these underlying functions are triggered as ephemeral events,
+            naturally scaling on demand, and only using as many resources as are needed at the time. FaaS platforms are
+            offered by most cloud providers and are increasingly being adopted by developers to reduce complexity and
+            increase the velocity of development. Oracle Functions, AWS Lambda, and Microsoft Azure Functions are some
+            of the FaaS offerings commonly being used by developers to build serverless functions.</p>
+
+        <h3><b>Developer features</b></h3>
+
+        <ul>
+            <li>Developers don&rsquo;t need to manage any infrastructure</li>
+            <li>Productivity for new and experienced developers</li>
+            <li>Support for various programming languages</li>
+            <li>Built on open standards (<a href="https://fnproject.io/">Fn Project</a>, <a
+                    href="https://openwhisk.apache.org/">OpenWhisk</a>, Docker, <a
+                    href="https://cloudevents.io/">CloudEvents</a>)</li>
+        </ul>
+
+        <h2>Oracle Functions</h2>
+
+        <p>Oracle provides you with a robust platform to easily develop and deploy serverless applications through
+            Oracle Cloud Infrastructure (OCI), Oracle Functions service. <i>Oracle Functions</i> is a fully managed,
+            multi-tenant, highly scalable, on-demand, FaaS platform. This means that you can get the services and
+            resources you need when you need them.</p>
+
+        <p>At its core, Oracle Functions are built on enterprise-grade Oracle Cloud Infrastructure and powered by <a
+                href="https://fnproject.io/">Fn Project</a>, Docker, and <a
+                href="https://cloudevents.io/">CloudEvents</a>. <a href="https://fnproject.io/">Fn Project</a> is an
+            Apache 2.0 licensed open-source engine. Fn Project is remarkably flexible. It&rsquo;s a container-native,
+            serverless platform that can be run anywhere, either in the cloud or on-premises. Fn Project allows you to
+            develop and test a function locally, then deploy it directly to Oracle Functions when you&rsquo;re ready.
+        </p>
+
+        <h2>Benefits of Oracle Functions</h2>
+
+        <p>Since the architecture that Oracle Functions relies on is both serverless and scalable, it means that
+            there&#39;s no infrastructure or software administration for you to worry about. Oracle Functions simply
+            ensures that your app is highly available, scalable, secure, and monitored, leaving you to focus on
+            delivering the best experience possible. Oracle Functions also allows you to develop in virtually any
+            language (Java, Python, Node, Go, Ruby, or C#), letting you choose what&rsquo;s best for your application.
+            For more advanced use cases, you can even bring your own Dockerfile. And the icing on the cake is that once
+            you deploy your code and then call it either directly or trigger it in response to specific events, you only
+            get billed for the resources you use on execution.</p>
+
+        <p>All these features of Oracle Functions make them an ideal way to enhance the experience of both customers and
+            developers alike. They not only make the deployment of new code quicker and easier to automate, but they
+            also significantly decrease the possibility of downtime during deployment and let your services readily
+            adapt to user demand.</p>
+
+        <h2>Getting started with Oracle Functions</h2>
+
+        <p>Developing your first function has never been easier. We provide you with multiple paths to the tools you
+            need to get started. You can access Oracle Functions through the Console, CLI, or a REST API. Additionally,
+            you can access the functions you deploy by using the CLI or by making signed HTTP requests.</p>
+
+        <p>We realize that security is more important than ever and Oracle Functions is integrated with OCI Identity and
+            Access Management (<a
+                href="https://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/overview.htm#Overview_of_Oracle_Cloud_Infrastructure_Identity_and_Access_Management">IAM</a>),
+            providing easy authentication with native Oracle Cloud Infrastructure identity functionality.</p>
+
+        <p>To get up and running quickly with Oracle Functions, see the <a
+                href="https://docs.oracle.com/en-us/iaas/Content/Functions/Tasks/functionsquickstartguidestop.htm#functionsquickstartguidestop">Functions
+                QuickStart Guides</a> and the resources listed below.</p>
+
+        <h2>Resources</h2>
+
+        <h3>Getting started</h3>
+
+        <ul>
+            <li><a
+                    href="https://docs.oracle.com/en-us/iaas/Content/Functions/Tasks/functionsconfiguringclient_topic-Different_Options_for_Function_Development_Environments.htm">Different
+                    options for Functions Development Environments</a> (Cloud shell, local machine, compute instances)
+            </li>
+            <li><a href="https://docs.oracle.com/en-us/iaas/Content/Functions/Concepts/functionsprerequisites.htm">Preparing
+                    for functions</a></li>
+            <li><a href="https://www.oracle.com/cloud/cloud-native/functions/">Explore Oracle Cloud Functions</a></li>
+            <li><a href="https://docs.oracle.com/en-us/iaas/Content/Functions/Concepts/functionshowitworks.htm">How
+                    Oracle Functions work</a></li>
+            <li><a href="https://docs.oracle.com/en-us/iaas/Content/Functions/Tasks/functionsdownloadingsamples.htm">Sample,
+                    playbooks, architectures, and tutorials</a></li>
+        </ul>
+
+        <p>&nbsp;</p>
+
+        <p>&nbsp;</p>
+    </div>
+</section>
