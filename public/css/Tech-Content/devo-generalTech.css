@@ -10,6 +10,14 @@
   color: #000000;
 }
 
+.content-container .technical-content.noTopics {
+  max-width: 1056px !important;
+}
+
+.hero.heightShort {
+  min-height: 20rem !important;
+}
+
 @media (max-width: 1999px) {
   .container {
     overflow-x: hidden;
