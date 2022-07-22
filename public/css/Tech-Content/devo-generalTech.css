@@ -15,7 +15,7 @@
 }
 
 .hero.heightShort {
-  min-height: 20rem !important;
+  min-height: auto !important;
 }
 
 @media (max-width: 1999px) {
