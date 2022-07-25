@@ -7,7 +7,12 @@ window.onresize = window.onload = function () {
       //console.log(title[i]);
       title[i].style.paddingTop = "0rem";
     }
+    console.log("Mobile Headers updated");
   } else {
-    title[i].style.paddingTop = "5rem";
+    for (let i = 0; i < title.length; i++) {
+      //console.log(title[i]);
+      title[i].style.paddingTop = "5rem";
+    }
+    console.log("Desktop Headers updated");
   }
 };
