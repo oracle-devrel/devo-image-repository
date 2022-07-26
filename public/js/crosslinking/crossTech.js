@@ -4,6 +4,8 @@ window.onload = function () {
     "#bd353c82-50c2-4950-8e31-340a3956aa1fcustomComponentDiv > div > div > div > div.ctas > div > div > a"
   );
 
+  console.log(url);
+
   if (url.includes("/en/") === true) {
     freeBTN.href = "https://www.oracle.com/cloud/free/";
   } else if (url.includes("/de/") === true) {
