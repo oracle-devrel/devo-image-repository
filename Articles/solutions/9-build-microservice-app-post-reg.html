@@ -94,7 +94,7 @@
                 <p><code class="ocode">./setCompartmentId.sh ocid1.compartment.oc1..aaaaaaaaxbvaatfz6yourcomparmentidhere5dnzgcbivfwvsho77myfnqq us-ashburn-1</code>
                 </p>
 
-                <h4>Step 4: Create Kubernetes Cluster</h4>
+                <h3>Step 4: Create Kubernetes Cluster</h3>
 
 
                 <p>1) Click <a href="https://docs.oracle.com/pls/topic/lookup?ctx=en/solutions/deploy-oke-with-atp-in-oci&id=oci-arch-oke-atp-zip"
@@ -192,8 +192,7 @@
                                 style="border: 1px solid #999999; margin-bottom: 50px;"></p>
 
 
-                <h3>Step 5: <strong>Create OCI Vault Secrets for the ATP PDB users and FrontEnd microservice
-                                authentication</strong></h3>
+                <h3>Step 5: Create OCI Vault Secrets for the ATP PDB users and FrontEnd microservice authentication</h3>
 
 
                 <p>1. Open up the main menu in the top-left corner of the Console and select <strong>Security
@@ -650,28 +649,12 @@
 </section>
 <!-- /cc01v0 -->
 
-
-
-
-
-
-
-<!-- cc01v0 -->
-
-<section class="cc01 cc01v0 cpad" id="link2">
-        <div class="cc01w1 cwidth">
-                <h2>Lab 2: Data-centric microservices walkthrough with Helidon MP</h2>
-
-
-        </div>
-</section>
-<!-- /cc01v0 -->
-
 <section class="cc01 cc01v0 cpad" id="link2s1">
         <div class="cc01w1 cwidth">
 
-                <h3>Step 1: Download Regional DB wallet, upload to Object Storage, and create authenticated
-                        link.</h3>
+                <h2>Lab 2: Data-centric microservices walkthrough with Helidon MP</h2>
+
+                <h3>Step 1: Download Regional DB wallet, upload to Object Storage, and create authenticated link.</h3>
 
                 <p>1. Select <strong>Autonomous Transaction Processing</strong> from the side menu in the OCI
                         Console.</p>
@@ -805,14 +788,8 @@
 
                 <p><code class="ocode">msdataworkshop</code></p>
 
-        </div>
-</section>
 
-<section class="cc01 cc01v0 cpad" id="link2s3">
-        <div class="cc01w1 cwidth">
-
-                <h3>STEP 3: Verify and understand ATP connectivity via Helidon microservice deployment in OKE
-                </h3>
+                <h3>Step 3: Verify and understand ATP connectivity via Helidon microservice deployment in OKE </h3>
                 <p>You will verify the connectivity from the frontend Helidon microservice to the atp admin
                         microservice
                         connecting to the ATP PDBs.</p>
@@ -964,6 +941,7 @@
                 <p><strong>This lab assumes that you have already deployed the OKE cluster, ATP databases and
                                 the microservices
                                 from the setup lab and lab 1.</strong></p>
+
         </div>
 </section>
 
@@ -1337,7 +1315,7 @@
 <section class="cc01 cc01v0 cpad" id="link3s1">
         <div class="cc01w1 cwidth">
 
-                <h3>STEP 1: Configure OCI-CLI</h3>
+                <h3>Step 1: Configure OCI-CLI</h3>
 
                 <p>On your local machine terminal, make sure oci-cli is installed using:</p>
 
@@ -1356,7 +1334,7 @@
 <section class="cc01 cc01v0 cpad" id="link3s2">
         <div class="cc01w1 cwidth">
 
-                <h3>STEP 2 Generate OCIR token</h3>
+                <h3>Step 2 Generate OCIR token</h3>
                 <p>Login to OCI console.</p>
 
                 <p>Click on your Profile -> User Settings. On the bottom left, click on Auth Tokens. Click on
@@ -1372,7 +1350,7 @@
 <section class="cc01 cc01v0 cpad" id="link3s3">
         <div class="cc01w1 cwidth">
 
-                <h3>STEP 3: Install kubectl and configure kube-config</h3>
+                <h3>Step 3: Install kubectl and configure kube-config</h3>
                 <p>Install kubectl using below command:</p>
 
                 <p><code class="ocode">curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl;chmod +x ./kubectl;sudo mv ./kubectl /usr/local/bin/kubectl;kubectl version –client</code>
