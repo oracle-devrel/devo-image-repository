@@ -24,6 +24,11 @@ window.onload = function () {
     }
   }
 
+  //Remove Aria Label
+  let ariaSocialAnkle = document.querySelector("#social-ankle-title");
+  ariaSocialAnkle.removeAttribute("aria-label");
+  console.log("Aria Label for Social Ankle Removed");
+
   //Crosslinking to Free Tier
   let url = location.href;
   let freeBTN = document.querySelector(

@@ -28,4 +28,9 @@ window.onresize = window.onload = function () {
       console.log(image + " ALT updated");
     }
   }
+
+  //Remove Aria Label
+  let ariaSocialAnkle = document.querySelector("#social-ankle-title");
+  ariaSocialAnkle.removeAttribute("aria-label");
+  console.log("Aria Label for Social Ankle Removed");
 };
