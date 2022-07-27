@@ -20,3 +20,5 @@ function stickNavBar(x) {
 var x = window.matchMedia("(max-width: 1999px)");
 stickNavBar(x);
 x.addListener(stickNavBar);
+
+//End -------------Sticks Menu Bar
