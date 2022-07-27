@@ -1,3 +1,15 @@
+/* Sticky provisional Content */
+.sticky {
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+
+.sticky + .content {
+  padding-top: 60px;
+}
+
+
 /*Modification to space between Title and Article's content */
 .content-container .technical-content {
   gap: 2rem;
