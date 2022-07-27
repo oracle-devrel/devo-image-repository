@@ -47,6 +47,26 @@ window.onload = function () {
     }
   }
 
+  //Sticks Chapters
+  //User scrolls the page
+  window.onscroll = function () {
+    stickChapters();
+  };
+
+  // Get the Chapters
+  var navbar = document.querySelector(".chapters");
+
+  // Add the sticky class
+  function stickChapters() {
+    //console.log(window.pageYOffset);
+    if (window.pageYOffset >= 190) {
+      navbar.classList.add("sticky");
+      console.log("Sticky class added");
+    } else {
+      navbar.classList.remove("sticky");
+    }
+  }
+
   //Remove Aria Label
   let ariaSocialAnkle = document.querySelector("#social-ankle-title");
   ariaSocialAnkle.removeAttribute("aria-label");
