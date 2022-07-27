@@ -37,24 +37,20 @@ window.onload = function () {
   let topNav = document.getElementById("TopNav");
   let heroNav = document.getElementById("TechnicalContentHero");
 
-  //let translate = topNav.clientHeight;
   //console.log(translate);
 
   topNav.style.maxWidth = "120rem";
 
-  function stickNavBar(x) {
+  window.onresize = function stickNavBar(x) {
+    let translate = topNav.clientHeight;
     if (x.matches) {
-      window.onresize = function () {
-        translate = topNav.clientHeight;
-        heroNav.style.marginTop = translate + "px";
-      }
-      
+      heroNav.style.marginTop = translate + "px";
       topNav.style.position = "fixed";
     } else {
       heroNav.style.marginTop = "auto";
       topNav.style.position = "sticky";
     }
-  }
+  };
 
   var x = window.matchMedia("(max-width: 1999px)");
   stickNavBar(x);
