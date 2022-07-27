@@ -1,12 +1,8 @@
 /* Sticky provisional Content */
 .sticky {
   position: fixed;
-  top: 0;
+  top: calc(60px + 2.5rem);
   width: 100%;
-}
-
-.sticky + .content {
-  padding-top: 60px;
 }
 
 .chapters{
