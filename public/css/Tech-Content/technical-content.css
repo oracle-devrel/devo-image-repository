@@ -9,6 +9,9 @@
   padding-top: 60px;
 }
 
+.chapters{
+  max-width: 512px;
+}
 
 /*Modification to space between Title and Article's content */
 .content-container .technical-content {
