@@ -4,6 +4,14 @@
   top: calc(60px + 2.5rem);
 }
 
+
+@media (max-width: 1130px) {
+  .sticky {
+    top: calc(100px + 2.5rem);
+  }
+}
+
+
 @media (max-width: 1130px) {
   .sticky {
     width: 445px !important;
