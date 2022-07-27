@@ -37,15 +37,18 @@ window.onload = function () {
   let topNav = document.getElementById("TopNav");
   let heroNav = document.getElementById("TechnicalContentHero");
 
-  let translate = topNav.clientHeight;
+  //let translate = topNav.clientHeight;
   //console.log(translate);
 
   topNav.style.maxWidth = "120rem";
 
   function stickNavBar(x) {
     if (x.matches) {
-      heroNav.style.marginTop = translate + "px";
-      console.log("Hero translated");
+      window.onresize = function () {
+        translate = topNav.clientHeight;
+        heroNav.style.marginTop = translate + "px";
+      }
+      
       topNav.style.position = "fixed";
     } else {
       heroNav.style.marginTop = "auto";
