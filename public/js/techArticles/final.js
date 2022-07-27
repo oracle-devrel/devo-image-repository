@@ -36,13 +36,15 @@ window.onload = function () {
   //Sticks Menu Bar
   let topNav = document.getElementById("TopNav");
   let heroNav = document.getElementById("TechnicalContentHero");
+  topNav.style.maxWidth = "120rem";
+
+  let translate = topNav.clientHeight;
+  heroNav.style.marginTop = translate + "px";
 
   //console.log(translate);
 
-  topNav.style.maxWidth = "120rem";
-
   window.onresize = function stickNavBar(x) {
-    let translate = topNav.clientHeight;
+    translate = topNav.clientHeight;
     if (x.matches) {
       heroNav.style.marginTop = translate + "px";
       topNav.style.position = "fixed";
