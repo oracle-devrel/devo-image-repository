@@ -60,7 +60,7 @@ window.onload = function () {
   //End -------------Sticks Menu Bar
 
   //Add the Blank attribute to Links
-  let links = document.querySelectorAll("#TechnicalContent a");
+  let links = document.querySelectorAll(".technical-content a");
 
   for (var i = 0; i < links.length; i++) {
     var link = links[i].getAttribute("href");

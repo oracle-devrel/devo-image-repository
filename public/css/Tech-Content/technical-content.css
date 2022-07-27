@@ -2,10 +2,27 @@
 .sticky {
   position: fixed;
   top: calc(60px + 2.5rem);
-  width: 100%;
 }
 
-.chapters{
+@media (max-width: 1130px) {
+  .sticky {
+    width: 445px !important;
+  }
+}
+
+@media (max-width: 990px) {
+  .sticky {
+    width: 360px !important;
+  }
+}
+
+@media (max-width: 900px) {
+  .sticky {
+    width: 200px !important;
+  }
+}
+
+.chapters {
   max-width: 512px;
 }
 
@@ -179,7 +196,9 @@ p > .ocode,
 td > .ocode,
 strong > .ocode,
 li > code,
-directory > code, em > code, .ocode2 {
+directory > code,
+em > code,
+.ocode2 {
   position: relative;
   width: 100%;
   padding: 0.1em 0.25em 0.1em 0.25em;
@@ -303,7 +322,7 @@ td {
 .cc01w1 a,
 .rc24w1 a {
   text-decoration: none !important;
-  color: #0CA29F !important;
+  color: #0ca29f !important;
 }
 
 .cc01w1 a:hover,
@@ -313,9 +332,14 @@ td {
 
 /* Download BTN */
 
-#bd353c82-50c2-4950-8e31-340a3956aa1fcustomComponentDiv > div > div > div > div.banner-text-content > p:nth-child(3){
-  font-family: "Oracle Sans Light",sans-serif;
+#bd353c82-50c2-4950-8e31-340a3956aa1fcustomComponentDiv
+  > div
+  > div
+  > div
+  > div.banner-text-content
+  > p:nth-child(3) {
+  font-family: "Oracle Sans Light", sans-serif;
   line-height: 1.375rem;
-  font-weight: 400!important;
-  font-size: 1rem!important;
+  font-weight: 400 !important;
+  font-size: 1rem !important;
 }
