@@ -36,27 +36,33 @@ window.onload = function () {
   //Sticks Menu Bar
   let topNav = document.getElementById("TopNav");
   let heroNav = document.getElementById("TechnicalContentHero");
-  topNav.style.maxWidth = "120rem";
 
   let translate = topNav.clientHeight;
-  heroNav.style.marginTop = translate + "px";
-
   //console.log(translate);
 
-  window.onresize = function stickNavBar(x) {
-    translate = topNav.clientHeight;
+  topNav.style.maxWidth = "120rem";
+
+  function stickNavBar(x) {
     if (x.matches) {
+      translate = topNav.clientHeight;
       heroNav.style.marginTop = translate + "px";
+      //console.log("Hero translated");
       topNav.style.position = "fixed";
     } else {
       heroNav.style.marginTop = "auto";
       topNav.style.position = "sticky";
     }
-  };
+  }
+
+
 
   var x = window.matchMedia("(max-width: 1999px)");
   stickNavBar(x);
-  x.addListener(stickNavBar);
+
+  window.onresize =  stickNavBar(x);
+
+
+  //x.addListener(stickNavBar);
 
   //End -------------Sticks Menu Bar
 
