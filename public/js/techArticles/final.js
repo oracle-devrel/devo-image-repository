@@ -44,7 +44,6 @@ window.onload = function () {
 
   function stickNavBar(x) {
     if (x.matches) {
-      translate = topNav.clientHeight;
       heroNav.style.marginTop = translate + "px";
       //console.log("Hero translated");
       topNav.style.position = "fixed";
@@ -54,15 +53,17 @@ window.onload = function () {
     }
   }
 
-
+  function adjustHeroBanner(){
+    translate = topNav.clientHeight;
+    heroNav.style.marginTop = translate + "px";
+  }
 
   var x = window.matchMedia("(max-width: 1999px)");
   stickNavBar(x);
+  x.addListener(stickNavBar);
 
-  window.onresize =  stickNavBar(x);
+  window.onresize = adjustHeroBanner();
 
-
-  //x.addListener(stickNavBar);
 
   //End -------------Sticks Menu Bar
 
