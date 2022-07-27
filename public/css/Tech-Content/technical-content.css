@@ -168,7 +168,7 @@ p > .ocode,
 td > .ocode,
 strong > .ocode,
 li > code,
-directory > code {
+directory > code, em > code, .ocode2 {
   position: relative;
   width: 100%;
   padding: 0.1em 0.25em 0.1em 0.25em;
