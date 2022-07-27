@@ -173,6 +173,7 @@ directory > code, em > code, .ocode2 {
   width: 100%;
   padding: 0.1em 0.25em 0.1em 0.25em;
   background-color: #efefef !important;
+  color: #000;
 }
 
 .ocode pre {

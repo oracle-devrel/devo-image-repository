@@ -1,4 +1,3 @@
-<!-- _Raw-Text -->
 <section class="cc01 cc01v0 cpad crule">
     <div class="cc01w1 cwidth">
 
@@ -28,7 +27,8 @@
         <h3>Setting Client Identifiers</h3>
 
         <p>Each PHP file in a typical Oracle PHP application calls <a
-                href="//www.php.net/manual/en/function.oci-connect.php"><code class="ocode">oci_connect()</code></a>
+                href="//www.php.net/manual/en/function.oci-connect.php" target="_blank"><code
+                    class="ocode2">oci_connect()</code></a>
             with an identical database user name. Once the application's own authentication system decides a particular
             web user is OK, then a unique token is passed back and forth in HTTP responses and requests so that the web
             user doesn't have to re-authenticate each time a new web page is loaded.</p>
@@ -43,8 +43,8 @@
 
 
         <p>Client identifiers should be set with <a
-                href="//www.php.net/manual/en/function.oci-set-client-identifier.php"><code
-                    class="ocode">oci_set_client_identifier()</code></a> after connecting but before executing any
+                href="//www.php.net/manual/en/function.oci-set-client-identifier.php" target="_blank"><code
+                    class="ocode2">oci_set_client_identifier()</code></a> after connecting but before executing any
             statements or OCI8 calls on behalf of the web user. At its most basic, the client identifier could be the
             web user's name stored in PHP's session data by a previous authentication request:</p>
 
@@ -52,8 +52,7 @@
             <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
                 <div><a href="#copy">Copy</a></div>
             </div>
-            <pre>
-<code>session_start();
+            <pre><code>session_start();
 $c = oci_pconnect('phpuser', 'welcome', 'localhost/orcl');
 oci_set_client_identifier($c, $_SESSION['app_user_name']);
 . . .
@@ -70,8 +69,7 @@ oci_set_client_identifier($c, $_SESSION['app_user_name']);
             <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
                 <div><a href="#copy">Copy</a></div>
             </div>
-            <pre>
-<code>$c = oci_pconnect('phpuser', 'welcome', 'localhost/orcl');
+            <pre><code>$c = oci_pconnect('phpuser', 'welcome', 'localhost/orcl');
 
 $myuser = 'Chris';
 oci_set_client_identifier($c, $myuser);
@@ -89,20 +87,20 @@ oci_set_client_identifier($c, $myuser);
                 class="ocode">oci_new_connect()</code>, or <code class="ocode">oci_pconnect()</code> connection calls.
             Identifiers can be used when the database is configured to use any of the three types of server processes:
             "Dedicated" servers, "Shared" servers, and when using <a
-                href="//www.oracle.com/technetwork/topics/php/whatsnew/php-scalability-ha-twp-128842.pdf">Database
+                href="//www.oracle.com/technetwork/topics/php/whatsnew/php-scalability-ha-twp-128842.pdf"
+                target="_blank">Database
                 Resident Connection Pooling</a> (DRCP) servers.</p>
 
         <p>The <code class="ocode">oci_set_client_identifier()</code> function was added in PHP OCI8 1.4 (first included
             in PHP 5.3.1). With older versions of OCI8 you can use the PL/SQL <a
-                href="//download.oracle.com/docs/cd/E11882_01/appdev.112/e10577/d_sessio.htm#ARPLS68032"><code
-                    class="ocode">DBMS_SESSION</code></a> package instead:</p>
+                href="//download.oracle.com/docs/cd/E11882_01/appdev.112/e10577/d_sessio.htm#ARPLS68032"
+                target="_blank"><code class="ocode2">DBMS_SESSION</code></a> package instead:</p>
 
         <div class="ocode">
             <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
                 <div><a href="#copy">Copy</a></div>
             </div>
-            <pre>
-<code>session_start();
+            <pre><code>session_start();
 $c = oci_pconnect('phpuser', 'welcome', 'localhost/orcl');
 $s = oci_parse($c, "begin dbms_session.set_identifier(:id); end;");
 oci_bind_by_name($s, ":id", $_SESSION['app_user_name']);
@@ -124,8 +122,7 @@ oci_execute($s);
             <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
                 <div><a href="#copy">Copy</a></div>
             </div>
-            <pre>
-<code>$auth = Zend_Auth::getInstance();
+            <pre><code>$auth = Zend_Auth::getInstance();
 if ($auth-&gt;hasIdentity()) {
   $db = $this-&gt;getAdapter();
   $conn = $db-&gt;getConnection();
@@ -153,8 +150,7 @@ if ($auth-&gt;hasIdentity()) {
             <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
                 <div><a href="#copy">Copy</a></div>
             </div>
-            <pre>
-<code>$s = oci_parse($c, "begin dbms_session.clear_identifier; end;");
+            <pre><code>$s = oci_parse($c, "begin dbms_session.clear_identifier; end;");
 oci_execute($s);
 </code></pre>
         </div>
@@ -163,13 +159,14 @@ oci_execute($s);
         <p>This causes a round-trip to the database.</p>
 
 
-        <p>PHP's <a href="//www.php.net/manual/en/function.oci-set-client-identifier.php"><code
-                    class="ocode">oci_set_client_identifier()</code></a> function corresponds to setting Oracle's C
-            level <a href="//download.oracle.com/docs/cd/E11882_01/appdev.112/e10646/oci08sca.htm#LNOCI16566"><code
-                    class="ocode">OCI_ATTR_CLIENT_IDENTIFIER</code></a> attribute. Oracle literature on this, and on
-            PL/SQL's equivalent <a
-                href="//download.oracle.com/docs/cd/E11882_01/appdev.112/e10577/d_sessio.htm#i996935"><code
-                    class="ocode">DBMS_SESSION.SET_IDENTIFIER</code></a>, provide good references about client
+        <p>PHP's <a href="//www.php.net/manual/en/function.oci-set-client-identifier.php" target="_blank"><code
+                    class="ocode2">oci_set_client_identifier()</code></a> function corresponds to setting Oracle's C
+            level <a href="//download.oracle.com/docs/cd/E11882_01/appdev.112/e10646/oci08sca.htm#LNOCI16566"
+                target="_blank"><code class="ocode2">OCI_ATTR_CLIENT_IDENTIFIER</code></a> attribute. Oracle literature
+            on this, and on
+            PL/SQL's equivalent <a href="//download.oracle.com/docs/cd/E11882_01/appdev.112/e10577/d_sessio.htm#i996935"
+                target="_blank"><code class="ocode2">DBMS_SESSION.SET_IDENTIFIER</code></a>, provide good references
+            about client
             identifiers.</p>
 
 
@@ -184,7 +181,8 @@ oci_execute($s);
             relationship between the web user and the database user, and to show how a client identifier can be used in
             the database. PHP session management requires careful design to minimize security issues. There are many
             external references discussing this problem which should be closely studied by every PHP developer. Michael
-            McLaughlin's <a href="//www.oracle.com/technetwork/articles/mclaughlin-phpid1-091467.html">Database-Based
+            McLaughlin's <a href="//www.oracle.com/technetwork/articles/mclaughlin-phpid1-091467.html"
+                target="_blank">Database-Based
                 Authentication for PHP Apps</a> is a good place to begin reading more.</p>
 
 
@@ -202,8 +200,7 @@ oci_execute($s);
             <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
                 <div><a href="#copy">Copy</a></div>
             </div>
-            <pre>
-<code>-- setup.sql
+            <pre><code>-- setup.sql
 
 set echo on
 
@@ -270,8 +267,7 @@ grant select on php_authentication to phpuser;
             <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
                 <div><a href="#copy">Copy</a></div>
             </div>
-            <pre>
-<code>&lt;?php
+            <pre><code>&lt;?php
 // dbinfo.inc.php
 // All connections to the database use these credentials
 define("ORA_CON_UN", "phpuser");
@@ -299,8 +295,7 @@ define("ORA_CON_DB", "localhost/orcl");
             <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
                 <div><a href="#copy">Copy</a></div>
             </div>
-            <pre>
-<code>&lt;?php
+            <pre><code>&lt;?php
 
 // login.php
 
@@ -402,8 +397,7 @@ EOD;
             <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
                 <div><a href="#copy">Copy</a></div>
             </div>
-            <pre>
-<code>&lt;?php
+            <pre><code>&lt;?php
 
 // application.php
 
@@ -475,8 +469,7 @@ EOD;
             <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
                 <div><a href="#copy">Copy</a></div>
             </div>
-            <pre>
-<code>&lt;?php
+            <pre><code>&lt;?php
 
 // logout.php
 
@@ -541,8 +534,7 @@ EOD;
             <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
                 <div><a href="#copy">Copy</a></div>
             </div>
-            <pre>
-<code>-- auditon.sql
+            <pre><code>-- auditon.sql
 
 -- Turn on object auditing for the PARTS table
 
@@ -561,8 +553,7 @@ audit select on phpuser.parts by access;
             <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
                 <div><a href="#copy">Copy</a></div>
             </div>
-            <pre>
-<code>select * from phpuser.parts;
+            <pre><code>select * from phpuser.parts;
 </code></pre>
         </div>
 
@@ -578,8 +569,7 @@ audit select on phpuser.parts by access;
             <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
                 <div><a href="#copy">Copy</a></div>
             </div>
-            <pre>
-<code>-- auditreport.sql
+            <pre><code>-- auditreport.sql
 
 -- View the audit trail for the PARTS table
 
@@ -612,8 +602,7 @@ order by extended_timestamp;
             <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
                 <div><a href="#copy">Copy</a></div>
             </div>
-            <pre>
-<code>APP_USERNAME  USERNAME      EXTENDED_TIMESTAMP                    ACTION_NAME
+            <pre><code>APP_USERNAME  USERNAME      EXTENDED_TIMESTAMP                    ACTION_NAME
 ------------- ------------- ------------------------------------- -------------
 chris         PHPUSER       16-AUG-10 12.25.42.846153 PM -07:00   SELECT
 alison        PHPUSER       16-AUG-10 12.25.50.870773 PM -07:00   SELECT
@@ -637,8 +626,7 @@ alison        PHPUSER       16-AUG-10 12.25.50.870773 PM -07:00   SELECT
             <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
                 <div><a href="#copy">Copy</a></div>
             </div>
-            <pre>
-<code>-- auditoff.sql
+            <pre><code>-- auditoff.sql
 
 -- Turn off object auditing for the PARTS table
 
@@ -665,8 +653,7 @@ noaudit all on phpuser.parts;
             <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
                 <div><a href="#copy">Copy</a></div>
             </div>
-            <pre>
-<code>select * from parts
+            <pre><code>select * from parts
 where sys_context('userenv', 'client_identifier') = 'chris';
 </code></pre>
         </div>
@@ -686,8 +673,7 @@ where sys_context('userenv', 'client_identifier') = 'chris';
             <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
                 <div><a href="#copy">Copy</a></div>
             </div>
-            <pre>
-<code>sys_context('userenv', 'client_identifier') = 'chris'
+            <pre><code>sys_context('userenv', 'client_identifier') = 'chris'
 </code></pre>
         </div>
 
@@ -719,8 +705,7 @@ where sys_context('userenv', 'client_identifier') = 'chris';
             <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
                 <div><a href="#copy">Copy</a></div>
             </div>
-            <pre>
-<code>-- vpdon.sql
+            <pre><code>-- vpdon.sql
 
 set echo on
 
@@ -810,8 +795,7 @@ end;
             <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
                 <div><a href="#copy">Copy</a></div>
             </div>
-            <pre>
-<code>connect phpuser/welcome
+            <pre><code>connect phpuser/welcome
 select * from parts;
 </code></pre>
         </div>
@@ -832,8 +816,7 @@ select * from parts;
             <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
                 <div><a href="#copy">Copy</a></div>
             </div>
-            <pre>
-<code>-- vpdoff.sql
+            <pre><code>-- vpdoff.sql
 
 set echo on
 
@@ -870,8 +853,7 @@ end;
             <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
                 <div><a href="#copy">Copy</a></div>
             </div>
-            <pre>
-<code>connect system/welcome
+            <pre><code>connect system/welcome
 execute dbms_monitor.client_id_stat_enable(client_id =&gt; 'chris');
 </code></pre>
         </div>
@@ -885,8 +867,7 @@ execute dbms_monitor.client_id_stat_enable(client_id =&gt; 'chris');
             <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
                 <div><a href="#copy">Copy</a></div>
             </div>
-            <pre>
-<code>STAT_NAME                                VALUE
+            <pre><code>STAT_NAME                                VALUE
 ----------------------------------- ----------
 user calls                                   1
 DB time                                    943
@@ -913,8 +894,7 @@ physical writes                              0
             <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
                 <div><a href="#copy">Copy</a></div>
             </div>
-            <pre>
-<code>execute dbms_monitor.client_id_stat_disable(client_id =&gt; 'chris');
+            <pre><code>execute dbms_monitor.client_id_stat_disable(client_id =&gt; 'chris');
 </code></pre>
         </div>
 
@@ -928,8 +908,7 @@ physical writes                              0
             <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
                 <div><a href="#copy">Copy</a></div>
             </div>
-            <pre>
-<code>connect system/welcome
+            <pre><code>connect system/welcome
 execute dbms_monitor.client_id_trace_enable(client_id =&gt; 'chris', waits =&gt; true, binds =&gt; true);
 </code></pre>
         </div>
@@ -943,8 +922,7 @@ execute dbms_monitor.client_id_trace_enable(client_id =&gt; 'chris', waits =&gt;
             <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
                 <div><a href="#copy">Copy</a></div>
             </div>
-            <pre>
-<code>execute dbms_monitor.client_id_trace_disable(client_id =&gt; 'chris');
+            <pre><code>execute dbms_monitor.client_id_trace_disable(client_id =&gt; 'chris');
 </code></pre>
         </div>
 
@@ -956,8 +934,7 @@ execute dbms_monitor.client_id_trace_enable(client_id =&gt; 'chris', waits =&gt;
             <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
                 <div><a href="#copy">Copy</a></div>
             </div>
-            <pre>
-<code>show parameter user_dump_dest
+            <pre><code>show parameter user_dump_dest
 </code></pre>
         </div>
 
@@ -967,8 +944,7 @@ execute dbms_monitor.client_id_trace_enable(client_id =&gt; 'chris', waits =&gt;
             <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
                 <div><a href="#copy">Copy</a></div>
             </div>
-            <pre>
-<code>NAME                                 TYPE        VALUE
+            <pre><code>NAME                                 TYPE        VALUE
 ------------------------------------ ----------- ------------------------------
 user_dump_dest                       string      /home/oracle/app/diag/rdbms/or
                                                  cl/orcl/trace
@@ -985,8 +961,7 @@ user_dump_dest                       string      /home/oracle/app/diag/rdbms/or
             <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
                 <div><a href="#copy">Copy</a></div>
             </div>
-            <pre>
-<code>cd /home/oracle/app/diag/rdbms/orcl/orcl/trace
+            <pre><code>cd /home/oracle/app/diag/rdbms/orcl/orcl/trace
 trcsess output=/tmp/all.trc clientid=chris *.trc
 tkprof /tmp/all.trc /tmp/tkprof.out explain=phpuser/welcome
 </code></pre>
@@ -1001,8 +976,7 @@ tkprof /tmp/all.trc /tmp/tkprof.out explain=phpuser/welcome
             <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
                 <div><a href="#copy">Copy</a></div>
             </div>
-            <pre>
-<code>*** 2010-08-16 15:29:12.481
+            <pre><code>*** 2010-08-16 15:29:12.481
 *** SESSION ID:(143.943) 2010-08-16 15:29:12.481
 *** CLIENT ID:(chris) 2010-08-16 15:29:12.481
 *** SERVICE NAME:(orcl) 2010-08-16 15:29:12.481
@@ -1026,8 +1000,7 @@ tkprof /tmp/all.trc /tmp/tkprof.out explain=phpuser/welcome
             <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
                 <div><a href="#copy">Copy</a></div>
             </div>
-            <pre>
-<code>SQL ID: af69s0fa3cjnp
+            <pre><code>SQL ID: af69s0fa3cjnp
 Plan Hash: 3769467330
 select * 
 from
@@ -1096,8 +1069,9 @@ Elapsed times include waiting on following events:
 
         <p>You might have noticed that <code class="ocode">trcsess</code> and Enterprise Manager also let data be
             aggregated by <i>Action</i> and by <i>Module</i>. These values can be set in PHP OCI8 with the functions <a
-                href="//www.php.net/manual/en/function.oci-set-action.php">oci_set_action()</a> and <a
-                href="//www.php.net/manual/en/function.oci-set-module-name.php">oci_set_module_name()</a> respectively
+                href="//www.php.net/manual/en/function.oci-set-action.php" target="_blank">oci_set_action()</a> and <a
+                href="//www.php.net/manual/en/function.oci-set-module-name.php"
+                target="_blank">oci_set_module_name()</a> respectively
             to identify which parts of a PHP application are being executed. Monitoring and tracing can show up the
             application-wide hot spots, and the SQL statements being executed can easily be identified.</p>
 
@@ -1119,17 +1093,10 @@ Elapsed times include waiting on following events:
 
 
         <p><strong>Christopher Jones</strong> is a Consulting Technical Staffer with Oracle. He is the author of the <a
-                href="//blogs.oracle.com/opal/" target="">PHP and Oracle Blog</a>.</p>
+                href="//blogs.oracle.com/opal/" target="_blank">PHP and Oracle Blog</a>.</p>
 
 
 
 
     </div>
 </section>
-
-<!--</article>-->
-<!-- / _Raw-Text -->
-
-
-
-<link rel="stylesheet" href="style.css">

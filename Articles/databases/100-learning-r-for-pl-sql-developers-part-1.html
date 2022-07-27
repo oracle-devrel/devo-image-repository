@@ -1,56 +1,77 @@
-
 <!-- _Raw-HTML -->
 <section class="cc01 cc01v0 cpad crule">
-<div class="cc01w1 cwidth">
-<p>Part 1 of a series that presents an easier way to learn R by comparing and contrasting it to PL/SQL.</p>
+	<div class="cc01w1 cwidth">
+		<style>
+			table>tbody>tr>td>div>pre>code {
+				color: #000 !important;
+			}
+		</style>
+		<p>Part 1 of a series that presents an easier way to learn R by comparing and contrasting it to PL/SQL.</p>
 
-<p>&nbsp;</p>
+		<h3>Why Learn R?</h3>
 
-<h3>Why Learn R?</h3>
+		<p>Why learn R? Of course you want to learn R; that&#39;s why you are here. But just in case you landed here
+			accidentaly and need some convincing, there are a lot of reasons. The main one is that it&#39;s the de facto
+			language of analytics. Many analytics applications are written in R; and a whole lot more will be. Learning
+			this language allows you to be in the game for those analytics roles in the future or at least understand
+			what&#39;s already available.</p>
 
-<p>Why learn R? Of course you want to learn R; that&#39;s why you are here. But just in case you landed here accidentaly and need some convincing, there are a lot of reasons. The main one is that it&#39;s the de facto language of analytics. Many analytics applications are written in R; and a whole lot more will be. Learning this language allows you to be in the game for those analytics roles in the future or at least understand what&#39;s already available.</p>
+		<p>R can handle a lot data at once. And because data manipulation is a CPU-intensive operations, R makes data
+			manipulation better by processing the dataset in memory, even for large datasets. With today&#39;s machines
+			with relatively abundant memory, this is a real boon to data analytics professionals.</p>
 
-<p>R can handle a lot data at once. And because data manipulation is a CPU-intensive operations, R makes data manipulation better by processing the dataset in memory, even for large datasets. With today&#39;s machines with relatively abundant memory, this is a real boon to data analytics professionals.</p>
+		<p>And, perhaps the best of all, it&#39;s free&mdash;for development and commercial applications. I don&#39;t
+			think you need any additional reasons for learning R.</p>
+		<a name="2"></a>
 
-<p>And, perhaps the best of all, it&#39;s free&mdash;for development and commercial applications. I don&#39;t think you need any additional reasons for learning R.</p>
-<a name="2"></a>
+		<h3>Structure of this Course</h3>
 
-<h3>Structure of this Course</h3>
+		<p>Because you are a PL/SQL developer, you are obviously working with Oracle Database and, therefore, you want
+			to do more work in the data field. This course is directed at learning R on a fast track for people who are
+			already familiar with PL/SQL. In this series of articles, you will learn the R language elements parallel to
+			the PL/SQL language. Your familiarity in PL/SQL will help you associate the corresponding elements in R.</p>
 
-<p>Because you are a PL/SQL developer, you are obviously working with Oracle Database and, therefore, you want to do more work in the data field. This course is directed at learning R on a fast track for people who are already familiar with PL/SQL. In this series of articles, you will learn the R language elements parallel to the PL/SQL language. Your familiarity in PL/SQL will help you associate the corresponding elements in R.</p>
+		<p>The articles in this series are designed to introduce you to R gently starting from the basics and
+			progressing to the more complex elements. Each article has:</p>
 
-<p>The articles in this series are designed to introduce you to R gently starting from the basics and progressing to the more complex elements. Each article has:</p>
+		<ol>
+			<li>A summary for you to quickly recap what you learned.</li>
+			<li>A quiz to test your understanding.</li>
+			<li>A video for you to actually see the language in action. The objective of the video is not to replace the
+				text you are reading now. Instead it is provided so:
+				<ul class="bullets">
+					<li>You will be able to see some mouse actions.</li>
+					<li>You can watch it and reinforce your knowledge.</li>
+					<li>You can listen to the self-explanatory audio&mdash;even if you don&#39;t get a chance to watch
+						the video&mdash;while gardening, working around the house, and so on.</li>
+				</ul>
+			</li>
+		</ol>
 
-<ol>
-	<li>A summary for you to quickly recap what you learned.</li>
-	<li>A quiz to test your understanding.</li>
-	<li>A video for you to actually see the language in action. The objective of the video is not to replace the text you are reading now. Instead it is provided so:
-	<ul class="bullets">
-		<li>You will be able to see some mouse actions.</li>
-		<li>You can watch it and reinforce your knowledge.</li>
-		<li>You can listen to the self-explanatory audio&mdash;even if you don&#39;t get a chance to watch the video&mdash;while gardening, working around the house, and so on.</li>
-	</ul>
-	</li>
-</ol>
+		<p>Welcome to the world of data science and machine learning. Let&#39;s start right away.</p>
+		<a name="3"></a>
 
-<p>Welcome to the world of data science and machine learning. Let&#39;s start right away.</p>
-<a name="3"></a>
+		<h3>How Will You Practice?</h3>
 
-<h3>How Will You Practice?</h3>
+		<p>It&#39;s a breeze. You can download R on your Windows or Linux desktop. It doesn&#39;t need much RAM or CPU
+			for learning and it&#39;s 100 percent free. You can, and are encouraged to, try the commands shown in this
+			series on your own.</p>
+		<a name="4"></a>
 
-<p>It&#39;s a breeze. You can download R on your Windows or Linux desktop. It doesn&#39;t need much RAM or CPU for learning and it&#39;s 100 percent free. You can, and are encouraged to, try the commands shown in this series on your own.</p>
-<a name="4"></a>
+		<h3>Install R</h3>
 
-<h3>Install R</h3>
+		<p>The repository for downloading R is called Comprehensive R Archive Network (CRAN). Download your OS-specific
+			version of the R installation from <a href="https://cran.r-project.org">https://cran.r-project.org</a> and
+			install it per the instructions. In this article, I will be using R for Windows. In addition to the R
+			executable, the installation files also install R-Gui, which is a graphical interface for R. Here is how you
+			call R:</p>
 
-<p>The repository for downloading R is called Comprehensive R Archive Network (CRAN). Download your OS-specific version of the R installation from <a href="https://cran.r-project.org">https://cran.r-project.org</a> and install it per the instructions. In this article, I will be using R for Windows. In addition to the R executable, the installation files also install R-Gui, which is a graphical interface for R. Here is how you call R:</p>
+		<div class="ocode">
+			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+				<div><a href="#copy">Copy</a></div>
+			</div>
 
-<div class="ocode">
-<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-<div><a href="#copy">Copy</a></div>
-</div>
-
-<pre>
+			<pre>
 <code>
 C:\Users\ananda&gt;r
 
@@ -73,95 +94,119 @@ Type &#39;demo()&#39; for some demos, &#39;help()&#39; for on-line help, or
 Type &#39;q()&#39; to quit R.
 
 &gt;</code></pre>
-</div>
+		</div>
 
-<p>This single greater-than symbol is the R prompt, sort of like the SQL&gt; prompt for the SQL*Plus environment. You can run an R command here. Let&#39;s start with the traditional start for any language learners&mdash;displaying &quot;Hello World&quot;! In PL/SQL, you would use <code>dbms_output.put_line(&quot;Hello World&quot;)</code>. In R, you use the <code>print()</code> function.</p>
+		<p>This single greater-than symbol is the R prompt, sort of like the SQL&gt; prompt for the SQL*Plus
+			environment. You can run an R command here. Let&#39;s start with the traditional start for any language
+			learners&mdash;displaying &quot;Hello World&quot;! In PL/SQL, you would use
+			<code>dbms_output.put_line(&quot;Hello World&quot;)</code>. In R, you use the <code>print()</code> function.
+		</p>
 
-<div class="ocode">
-<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-<div><a href="#copy">Copy</a></div>
-</div>
+		<div class="ocode">
+			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+				<div><a href="#copy">Copy</a></div>
+			</div>
 
-<pre>
+			<pre>
 <code>
 &gt; print(&quot;Hello World&quot;)
 [1] &quot;Hello World&quot;</code></pre>
-</div>
+		</div>
 
-<p>If you were wondering what the <code>[1]</code> is before the output, don&#39;t worry about it now. You will understand it later in the course. But note a very important property of R: it can process a value directly entered. If you enter just a value, for example, a string called <code>&quot;Hello World&quot;</code>, R will display it. Unlike PL/SQL, the <code>print()</code> function is not even needed.</p>
+		<p>If you were wondering what the <code>[1]</code> is before the output, don&#39;t worry about it now. You will
+			understand it later in the course. But note a very important property of R: it can process a value directly
+			entered. If you enter just a value, for example, a string called <code>&quot;Hello World&quot;</code>, R
+			will display it. Unlike PL/SQL, the <code>print()</code> function is not even needed.</p>
 
-<div class="ocode">
-<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-<div><a href="#copy">Copy</a></div>
-</div>
+		<div class="ocode">
+			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+				<div><a href="#copy">Copy</a></div>
+			</div>
 
-<pre>
+			<pre>
 <code>
 &gt; &quot;Hello World&quot;
 [1] &quot;Hello World&quot;</code></pre>
-</div>
+		</div>
 
-<p>This property is very helpful as a data processing mechanism. For instance, if you enter an expression directly at the R prompt, R will process it and display the result. The <code>print()</code> function is not required. Here is an example of entering <code>1 + 2</code>, and R responds with the result: 3:</p>
+		<p>This property is very helpful as a data processing mechanism. For instance, if you enter an expression
+			directly at the R prompt, R will process it and display the result. The <code>print()</code> function is not
+			required. Here is an example of entering <code>1 + 2</code>, and R responds with the result: 3:</p>
 
-<div class="ocode">
-<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-<div><a href="#copy">Copy</a></div>
-</div>
+		<div class="ocode">
+			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+				<div><a href="#copy">Copy</a></div>
+			</div>
 
-<pre>
+			<pre>
 <code>
 &gt; 1+2
 [1] 3</code></pre>
-</div>
+		</div>
 
-<p>Unlike PL/SQL, you don&#39;t need to use a <code>dbms_output</code> explicitly. R&#39;s functionality for displaying results is extended to logical expressions as well, unlike PL/SQL:</p>
+		<p>Unlike PL/SQL, you don&#39;t need to use a <code>dbms_output</code> explicitly. R&#39;s functionality for
+			displaying results is extended to logical expressions as well, unlike PL/SQL:</p>
 
-<div class="ocode">
-<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-<div><a href="#copy">Copy</a></div>
-</div>
+		<div class="ocode">
+			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+				<div><a href="#copy">Copy</a></div>
+			</div>
 
-<pre>
+			<pre>
 <code>
 &gt; 1&lt;2
 [1] TRUE</code></pre>
-</div>
+		</div>
 
-<p>In addition to the R command-line interpreter, the installation files install two other important components of R:</p>
+		<p>In addition to the R command-line interpreter, the installation files install two other important components
+			of R:</p>
 
-<ol>
-	<li>RGui, which is the graphical shell interface to the R command prompt. It&#39;s merely an environment; nothing more. Under the covers, it calls the R command anyway. It&#39;s sort of like the Oracle SQL Developer interface, which calls the SQL commands.</li>
-	<li>RScript, which is a script execution engine for R scripts.</li>
-</ol>
+		<ol>
+			<li>RGui, which is the graphical shell interface to the R command prompt. It&#39;s merely an environment;
+				nothing more. Under the covers, it calls the R command anyway. It&#39;s sort of like the Oracle SQL
+				Developer interface, which calls the SQL commands.</li>
+			<li>RScript, which is a script execution engine for R scripts.</li>
+		</ol>
 
-<p>To invoke RGui, go to the application launcher of your OS, for example, by clicking Start -&gt; Programs on Windows, look under R folder, and click RGui. That brings up a window like the one shown in Figure 1. It also shows you an R prompt where you can enter all the commands. This is called the <em>R Console</em>.</p>
+		<p>To invoke RGui, go to the application launcher of your OS, for example, by clicking Start -&gt; Programs on
+			Windows, look under R folder, and click RGui. That brings up a window like the one shown in Figure 1. It
+			also shows you an R prompt where you can enter all the commands. This is called the <em>R Console</em>.</p>
 
-<p align="center"><img alt="Figure 1" src="https://www.oracle.com/a/tech/img/learning-r1-f1.jpg" /></p>
+		<p align="center"><img alt="Figure 1" src="https://www.oracle.com/a/tech/img/learning-r1-f1.jpg" /></p>
 
-<p align="center" class="xsml">Figure 1. The RGui window</p>
+		<p align="center" class="xsml">Figure 1. The RGui window</p>
 
-<p>So what&#39;s the advantage of RGui? Well, it depends. First, if you click File in the top menu bar (Figure 2), you will see an item called New script. Clicking it will open a script editor inside the RGui window. This is just a text editor with no bells and whistles; but it&#39;s right inside the RGui window, which allows you to copy and paste commands from there to the R Console without leaving RGui.</p>
+		<p>So what&#39;s the advantage of RGui? Well, it depends. First, if you click File in the top menu bar (Figure
+			2), you will see an item called New script. Clicking it will open a script editor inside the RGui window.
+			This is just a text editor with no bells and whistles; but it&#39;s right inside the RGui window, which
+			allows you to copy and paste commands from there to the R Console without leaving RGui.</p>
 
-<p align="center"><img src="https://www.oracle.com/a/tech/img/learning-r1-f2.jpg" /></p>
+		<p align="center"><img src="https://www.oracle.com/a/tech/img/learning-r1-f2.jpg" /></p>
 
-<p align="center" class="xsml">Figure 2. Menu item for opening the script editor</p>
+		<p align="center" class="xsml">Figure 2. Menu item for opening the script editor</p>
 
-<p>RGui also allows some commands to be invoked as menu items. For instance, if you click Packages in the top menu bar and then you select Install package(s) (Figure 3), you will be able to select a package to install. There is a command to install packages in R; but this menu item merely calls that command.</p>
+		<p>RGui also allows some commands to be invoked as menu items. For instance, if you click Packages in the top
+			menu bar and then you select Install package(s) (Figure 3), you will be able to select a package to install.
+			There is a command to install packages in R; but this menu item merely calls that command.</p>
 
-<p align="center"><img alt="Figure 3. Menu item for installing packages" src="https://www.oracle.com/a/tech/img/learning-r1-f3.jpg" /></p>
+		<p align="center"><img alt="Figure 3. Menu item for installing packages"
+				src="https://www.oracle.com/a/tech/img/learning-r1-f3.jpg" /></p>
 
-<p align="center" class="xsml">Figure 3. Menu item for installing packages</p>
+		<p align="center" class="xsml">Figure 3. Menu item for installing packages</p>
 
-<p>In this article, we will mostly use the R command-line interpreter invoked from the Windows prompt.</p>
+		<p>In this article, we will mostly use the R command-line interpreter invoked from the Windows prompt.</p>
 
-<p>Sometimes you might have scripts written with R commands to be executed from the command prompt, not to be passed as individual interactive commands to R, similar to SQL*Plus scripts. To execute such scripts, there is an executable installed along with R, which is known as Rscript. If you type just the executable name&mdash;Rscript&mdash;you will get the help:</p>
+		<p>Sometimes you might have scripts written with R commands to be executed from the command prompt, not to be
+			passed as individual interactive commands to R, similar to SQL*Plus scripts. To execute such scripts, there
+			is an executable installed along with R, which is known as Rscript. If you type just the executable
+			name&mdash;Rscript&mdash;you will get the help:</p>
 
-<div class="ocode">
-<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-<div><a href="#copy">Copy</a></div>
-</div>
+		<div class="ocode">
+			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+				<div><a href="#copy">Copy</a></div>
+			</div>
 
-<pre>
+			<pre>
 <code>
 C:\Users\ananda&gt; rscript
 Usage: /path/to/Rscript [--options] [-e expr [-e expr2 ...] | file] [args]
@@ -185,82 +230,96 @@ or options to R, in addition to --slave --no-restore, such as
 &#39;file&#39; may contain spaces but not shell metacharacters
 Expressions (one or more &#39;-e &lt;expr&gt;&#39;) may be used *instead* of &#39;file&#39;
 See also ?Rscript from within R</code></pre>
-</div>
+		</div>
 
-<p>Suppose you have a file named <code>myfile.r</code> with the contents shown below:</p>
+		<p>Suppose you have a file named <code>myfile.r</code> with the contents shown below:</p>
 
-<div class="ocode">
-<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-<div><a href="#copy">Copy</a></div>
-</div>
+		<div class="ocode">
+			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+				<div><a href="#copy">Copy</a></div>
+			</div>
 
-<pre>
+			<pre>
 <code>
 print(&quot;Hello World&quot;)
 </code></pre>
-</div>
+		</div>
 
-<p>When you want to run that file as a script, you use the following:</p>
+		<p>When you want to run that file as a script, you use the following:</p>
 
-<div class="ocode">
-<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-<div><a href="#copy">Copy</a></div>
-</div>
+		<div class="ocode">
+			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+				<div><a href="#copy">Copy</a></div>
+			</div>
 
-<pre>
+			<pre>
 <code>
 C:\Users\ananda&gt; rscript myfile.txt
 [1] &quot;Hello World&quot;
 </code></pre>
-</div>
-<a name="5"></a>
+		</div>
+		<a name="5"></a>
 
-<h3>Help</h3>
+		<h3>Help</h3>
 
-<p>When I learn something new such as a system, a tool or a language, the first thing I look for is a way to access help. R has a built-in help system. R installation installs the help files by default. To access the overall help, use the <code>help()</code> call from the R command. It will bring up a separate web browser window with the home page of the help files. It&#39;s not very helpful; you are better off using the Help function on the RGui interface. But if you are at the R prompt and want look up something on a specific topic quickly, R allows you to access help on that topic alone by prefixing the command with a question mark. For instance, if you want to access help on the <code>print()</code> function, use</p>
+		<p>When I learn something new such as a system, a tool or a language, the first thing I look for is a way to
+			access help. R has a built-in help system. R installation installs the help files by default. To access the
+			overall help, use the <code>help()</code> call from the R command. It will bring up a separate web browser
+			window with the home page of the help files. It&#39;s not very helpful; you are better off using the Help
+			function on the RGui interface. But if you are at the R prompt and want look up something on a specific
+			topic quickly, R allows you to access help on that topic alone by prefixing the command with a question
+			mark. For instance, if you want to access help on the <code>print()</code> function, use</p>
 
-<div class="ocode">
-<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-<div><a href="#copy">Copy</a></div>
-</div>
+		<div class="ocode">
+			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+				<div><a href="#copy">Copy</a></div>
+			</div>
 
-<pre>
+			<pre>
 <code>
 &gt; ?print
 </code></pre>
-</div>
+		</div>
 
-<p>This will bring up a web browser showing the help for the <code>print()</code> function. This works when you know the precise name of the function. What if you don&#39;t? To perform a fuzzy search, that is, search where &quot;print&quot; appears, you can issue the following:</p>
+		<p>This will bring up a web browser showing the help for the <code>print()</code> function. This works when you
+			know the precise name of the function. What if you don&#39;t? To perform a fuzzy search, that is, search
+			where &quot;print&quot; appears, you can issue the following:</p>
 
-<div class="ocode">
-<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-<div><a href="#copy">Copy</a></div>
-</div>
+		<div class="ocode">
+			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+				<div><a href="#copy">Copy</a></div>
+			</div>
 
-<pre>
+			<pre>
 <code>
 &gt; ??print
 </code></pre>
-</div>
+		</div>
 
-<p>This will bring up the help on all items where &quot;print&quot; appears. Remember, the help will be in a web browser, not in the window where the R command line is displayed.</p>
-<a name="6"></a>
+		<p>This will bring up the help on all items where &quot;print&quot; appears. Remember, the help will be in a web
+			browser, not in the window where the R command line is displayed.</p>
+		<a name="6"></a>
 
-<h3>Case Sensitivity</h3>
+		<h3>Case Sensitivity</h3>
 
-<p>PL/SQL is not case-sensitive; that is, <code>BEGIN</code> and <code>begin</code> can be used interchangeably. Its variable names are not case-sensitive either; that is, <code>Var1</code> and <code>var1</code> are the same. R is case-sensitive. So <code>print()</code> is the correct syntax, not <code>Print()</code>. Most commands are in lowercase; so it makes sense to use everything in lowercase. Some function names are in mixed case; so pay attention to the syntax.</p>
-<a name="7"></a>
+		<p>PL/SQL is not case-sensitive; that is, <code>BEGIN</code> and <code>begin</code> can be used interchangeably.
+			Its variable names are not case-sensitive either; that is, <code>Var1</code> and <code>var1</code> are the
+			same. R is case-sensitive. So <code>print()</code> is the correct syntax, not <code>Print()</code>. Most
+			commands are in lowercase; so it makes sense to use everything in lowercase. Some function names are in
+			mixed case; so pay attention to the syntax.</p>
+		<a name="7"></a>
 
-<h3>Comments</h3>
+		<h3>Comments</h3>
 
-<p>Comments in PL/SQL are lines starting with <code>--</code> or blocks of text enclosed within <code>/*</code> and <code>*/</code>, as shown below:</p>
+		<p>Comments in PL/SQL are lines starting with <code>--</code> or blocks of text enclosed within <code>/*</code>
+			and <code>*/</code>, as shown below:</p>
 
-<div class="ocode">
-<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-<div><a href="#copy">Copy</a></div>
-</div>
+		<div class="ocode">
+			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+				<div><a href="#copy">Copy</a></div>
+			</div>
 
-<pre>
+			<pre>
 <code>
 SQL&gt; -- this is a comment
 SQL&gt; this is not a comment
@@ -269,32 +328,34 @@ SQL&gt; /* this is a
 SQL&gt; multiline
 SQL&gt; comment */
 SQL&gt;</code></pre>
-</div>
+		</div>
 
-<p>Comments in R start with <code>#</code>, as shown below.</p>
+		<p>Comments in R start with <code>#</code>, as shown below.</p>
 
-<div class="ocode">
-<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-<div><a href="#copy">Copy</a></div>
-</div>
+		<div class="ocode">
+			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+				<div><a href="#copy">Copy</a></div>
+			</div>
 
-<pre>
+			<pre>
 <code>
 &gt; # this is a comment
 &gt; # this is another comment
 &gt; this is not a comment
 Error: unexpected symbol in &quot;this is&quot;
 </code></pre>
-</div>
+		</div>
 
-<p>Unlike PL/SQL, all comments are a single line. There are no multiline comments. So, what do you do if you want to create a multi line comment? One option is to place a # before each line. Painful, but possible. Another option is to use a little trick like the following:</p>
+		<p>Unlike PL/SQL, all comments are a single line. There are no multiline comments. So, what do you do if you
+			want to create a multi line comment? One option is to place a # before each line. Painful, but possible.
+			Another option is to use a little trick like the following:</p>
 
-<div class="ocode">
-<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-<div><a href="#copy">Copy</a></div>
-</div>
+		<div class="ocode">
+			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+				<div><a href="#copy">Copy</a></div>
+			</div>
 
-<pre>
+			<pre>
 <code>
 &gt; if (FALSE){
 + &quot;This is
@@ -302,37 +363,42 @@ Error: unexpected symbol in &quot;this is&quot;
 + comment&quot;
 + }
 </code></pre>
-</div>
+		</div>
 
-<p>You will learn about the <code>if</code> statement later. But the above code is actually legal. Since <code>(FALSE)</code> evaluates to <code>false</code>, this code segment is not evaluated; hence, the strings inside the double quotes are never evaluated. The code logic is not changed.</p>
-<a name="8"></a>
+		<p>You will learn about the <code>if</code> statement later. But the above code is actually legal. Since
+			<code>(FALSE)</code> evaluates to <code>false</code>, this code segment is not evaluated; hence, the strings
+			inside the double quotes are never evaluated. The code logic is not changed.
+		</p>
+		<a name="8"></a>
 
-<h3>Variables</h3>
+		<h3>Variables</h3>
 
-<p>With the formalities now out of the way, let&#39;s jump right into learning the R language. Let&#39;s start with understanding variables. In PL/SQL, when you use a variable, it must be first defined prior to being called. And you use the <code>:=</code> notation to assign value, for example:</p>
+		<p>With the formalities now out of the way, let&#39;s jump right into learning the R language. Let&#39;s start
+			with understanding variables. In PL/SQL, when you use a variable, it must be first defined prior to being
+			called. And you use the <code>:=</code> notation to assign value, for example:</p>
 
-<div class="ocode">
-<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-<div><a href="#copy">Copy</a></div>
-</div>
+		<div class="ocode">
+			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+				<div><a href="#copy">Copy</a></div>
+			</div>
 
-<pre>
+			<pre>
 <code>
 declare
  v1 number;&nbsp;-- this is the &quot;declaration&quot; of the variable
  begin
  v1 := 1; -- this is the assignment of the variable
 </code></pre>
-</div>
+		</div>
 
-<p>R is different in this respect. Here is how you create and assign a value to the variable:</p>
+		<p>R is different in this respect. Here is how you create and assign a value to the variable:</p>
 
-<div class="ocode">
-<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-<div><a href="#copy">Copy</a></div>
-</div>
+		<div class="ocode">
+			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+				<div><a href="#copy">Copy</a></div>
+			</div>
 
-<pre>
+			<pre>
 <code>
 &gt; v1 &lt;- 1
 &gt; v1
@@ -340,52 +406,62 @@ declare
 &gt; print (v1)
 [1] 1
 </code></pre>
-</div>
+		</div>
 
-<p>Note some important characteristics in R, which are unlike PL/SQL:</p>
+		<p>Note some important characteristics in R, which are unlike PL/SQL:</p>
 
-<ol>
-	<li>There was no need to &quot;declare&quot; a variable beforehand. You just assign a value; the variable is created immediately.</li>
-	<li>The assignment operator is <code>&lt;-</code>. You can also use an equals sign (<code>=</code>) and <code>&lt;&lt;-</code> for assignment.</li>
-	<li>There is no line-ending character, such as a semi-colon (<code>;</code>).</li>
-</ol>
+		<ol>
+			<li>There was no need to &quot;declare&quot; a variable beforehand. You just assign a value; the variable is
+				created immediately.</li>
+			<li>The assignment operator is <code>&lt;-</code>. You can also use an equals sign (<code>=</code>) and
+				<code>&lt;&lt;-</code> for assignment.
+			</li>
+			<li>There is no line-ending character, such as a semi-colon (<code>;</code>).</li>
+		</ol>
 
-<p>Let&#39;s visit the topic of the value assignments. The standard assignment operator in R is <code>&lt;-</code>, but <code>=</code> also works. Both of the following mean the same thing: assign a value of 1 to <code>v1</code>.</p>
+		<p>Let&#39;s visit the topic of the value assignments. The standard assignment operator in R is
+			<code>&lt;-</code>, but <code>=</code> also works. Both of the following mean the same thing: assign a value
+			of 1 to <code>v1</code>.
+		</p>
 
-<div class="ocode">
-<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-<div><a href="#copy">Copy</a></div>
-</div>
+		<div class="ocode">
+			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+				<div><a href="#copy">Copy</a></div>
+			</div>
 
-<pre>
+			<pre>
 <code>
 &gt; v1 &lt;- 1
 
 &gt; v1 = 1
 </code></pre>
-</div>
+		</div>
 
-<p>The <code>&lt;-</code> operator is called &quot;pointing to.&quot; You can think of <code>&lt;-</code> as a symbolic link or a shortcut for the variable. Because the meaning is &quot;to point to,&quot; it can point in either direction. For instance, to assign 1 to variable <code>v1</code>, you can write the following&mdash;something you can&#39;t do with the <code>=</code> operator.</p>
+		<p>The <code>&lt;-</code> operator is called &quot;pointing to.&quot; You can think of <code>&lt;-</code> as a
+			symbolic link or a shortcut for the variable. Because the meaning is &quot;to point to,&quot; it can point
+			in either direction. For instance, to assign 1 to variable <code>v1</code>, you can write the
+			following&mdash;something you can&#39;t do with the <code>=</code> operator.</p>
 
-<div class="ocode">
-<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-<div><a href="#copy">Copy</a></div>
-</div>
+		<div class="ocode">
+			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+				<div><a href="#copy">Copy</a></div>
+			</div>
 
-<pre>
+			<pre>
 <code>
 &gt; 1 -&gt; v1
 </code></pre>
-</div>
+		</div>
 
-<p>But there is a cool thing you can do in R that is not possible in PL/SQL. If you want to define two variables and assign the same value to both, you have to write something like this in PL/SQL:</p>
+		<p>But there is a cool thing you can do in R that is not possible in PL/SQL. If you want to define two variables
+			and assign the same value to both, you have to write something like this in PL/SQL:</p>
 
-<div class="ocode">
-<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-<div><a href="#copy">Copy</a></div>
-</div>
+		<div class="ocode">
+			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+				<div><a href="#copy">Copy</a></div>
+			</div>
 
-<pre>
+			<pre>
 <code>
 declare
  v1 number;
@@ -394,74 +470,80 @@ begin
  v1 := 2;
  v2 := 2;
 </code></pre>
-</div>
+		</div>
 
-<p>If you want two variables to be assigned the same value in R, you can do it in one step:</p>
+		<p>If you want two variables to be assigned the same value in R, you can do it in one step:</p>
 
-<div class="ocode">
-<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-<div><a href="#copy">Copy</a></div>
-</div>
+		<div class="ocode">
+			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+				<div><a href="#copy">Copy</a></div>
+			</div>
 
-<pre>
+			<pre>
 <code>
 &gt; v1 &lt;- v2 &lt;- 2
 </code></pre>
-</div>
+		</div>
 
-<p>Because the operator is directional, you can also write this:</p>
+		<p>Because the operator is directional, you can also write this:</p>
 
-<div class="ocode">
-<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-<div><a href="#copy">Copy</a></div>
-</div>
+		<div class="ocode">
+			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+				<div><a href="#copy">Copy</a></div>
+			</div>
 
-<pre>
+			<pre>
 <code>
 &gt; 2 -&gt; v1 -&gt; v2
 </code></pre>
-</div>
+		</div>
 
-<p>This opens some interesting possibilities. You can write the directional operator in any direction. Consider the following case where you assign values to two variables, <code>v1</code> and <code>v3</code>, from another variable, <code>v2</code>:</p>
+		<p>This opens some interesting possibilities. You can write the directional operator in any direction. Consider
+			the following case where you assign values to two variables, <code>v1</code> and <code>v3</code>, from
+			another variable, <code>v2</code>:</p>
 
-<div class="ocode">
-<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-<div><a href="#copy">Copy</a></div>
-</div>
+		<div class="ocode">
+			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+				<div><a href="#copy">Copy</a></div>
+			</div>
 
-<pre>
+			<pre>
 <code>
 &gt; v1 &lt;- v2 -&gt; v3
 &gt; v3
 [1] 2
 </code></pre>
-</div>
+		</div>
 
-<p>Another way to assign the value is to use the <code>assign</code> function. The function takes two arguments: the first one is the variable name. It&#39;s the name of the variable; not the variable itself. So, you have to enclose it within double quotes.</p>
+		<p>Another way to assign the value is to use the <code>assign</code> function. The function takes two arguments:
+			the first one is the variable name. It&#39;s the name of the variable; not the variable itself. So, you have
+			to enclose it within double quotes.</p>
 
-<div class="ocode">
-<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-<div><a href="#copy">Copy</a></div>
-</div>
+		<div class="ocode">
+			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+				<div><a href="#copy">Copy</a></div>
+			</div>
 
-<pre>
+			<pre>
 <code>
 &gt; assign(&quot;v1&quot;,1)
 &gt; v1
 [1] 1
 </code></pre>
-</div>
+		</div>
 
-<h3>Strings</h3>
+		<h3>Strings</h3>
 
-<p>So far, we&#39;ve talked about numbers. Character variables are defined by enclosing the values in single or double quotes. Note how the values are enclosed in double quotes even if you enclosed them in single quotes.</p>
+		<p>So far, we&#39;ve talked about numbers. Character variables are defined by enclosing the values in single or
+			double quotes. Note how the values are enclosed in double quotes even if you enclosed them in single quotes.
+		</p>
 
-<div class="ocode">
-<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-<div><a href="#copy">Copy</a></div>
-</div>
+		<div class="ocode">
+			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+				<div><a href="#copy">Copy</a></div>
+			</div>
 
-<pre>
+			<pre>
 <code>
 &gt; v1 &lt;- &#39;This is a char&#39;
 &gt; v1
@@ -472,44 +554,46 @@ begin
 &gt; v1
 [1] &quot;This is a char&quot;
 </code></pre>
-</div>
+		</div>
 
-<p>What if you want to have a single quote inside the value, for example, &quot;Joe&#39;s Pizza&quot;? In PL/SQL, you would use the single quote as an escape character:</p>
+		<p>What if you want to have a single quote inside the value, for example, &quot;Joe&#39;s Pizza&quot;? In
+			PL/SQL, you would use the single quote as an escape character:</p>
 
-<div class="ocode">
-<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-<div><a href="#copy">Copy</a></div>
-</div>
+		<div class="ocode">
+			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+				<div><a href="#copy">Copy</a></div>
+			</div>
 
-<pre>
+			<pre>
 <code>
 &#39;Joe&#39;&#39;s Pizza&#39;
 </code></pre>
-</div>
+		</div>
 
-<p>In R, you can use double quotes as enclosure and put a single quote inside without a problem:</p>
+		<p>In R, you can use double quotes as enclosure and put a single quote inside without a problem:</p>
 
-<div class="ocode">
-<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-<div><a href="#copy">Copy</a></div>
-</div>
+		<div class="ocode">
+			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+				<div><a href="#copy">Copy</a></div>
+			</div>
 
-<pre>
+			<pre>
 <code>
 &gt; v1 &lt;- &quot;Joe&#39;s Pizza&quot;
 &gt; v1
 [1] &quot;Joe&#39;s Pizza&quot;
 </code></pre>
-</div>
+		</div>
 
-<p>However, if you want to put the character inside single quotes, the single quote inside must be escaped; otherwise, the code will throw an error.</p>
+		<p>However, if you want to put the character inside single quotes, the single quote inside must be escaped;
+			otherwise, the code will throw an error.</p>
 
-<div class="ocode">
-<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-<div><a href="#copy">Copy</a></div>
-</div>
+		<div class="ocode">
+			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+				<div><a href="#copy">Copy</a></div>
+			</div>
 
-<pre>
+			<pre>
 <code>
 &gt; v1 &lt;- &#39;Joe&#39;s Pizza&#39;
 Error: unexpected symbol in &quot;v1 &lt;- &#39;Joe&#39;s&quot;
@@ -517,58 +601,70 @@ Error: unexpected symbol in &quot;v1 &lt;- &#39;Joe&#39;s&quot;
 &gt; v1
 [1] &quot;Joe&#39;s Pizza&quot;
 </code></pre>
-</div>
+		</div>
 
-<p>A huge problem in not declaring the variable before assigning a value is that you don&#39;t know the data type of that variable later. For instance, if you use <code>v1 &lt;- 1</code>, then <code>v1</code> is a numeric; but if you use <code>v1 &lt;- &quot;c&quot;</code>, then <code>v1</code> is a character. Actually that&#39;s not that surprising. PL/SQL is a strongly typed language; that is, you have to declare the data type of the variable and once declared, you can&#39;t change it. In R, you don&#39;t declare anything at all; so there is no such thing called the data type of the variable. Instead the variable assumes the data type of whatever object it holds at a point in time. So when you issue this:</p>
+		<p>A huge problem in not declaring the variable before assigning a value is that you don&#39;t know the data
+			type of that variable later. For instance, if you use <code>v1 &lt;- 1</code>, then <code>v1</code> is a
+			numeric; but if you use <code>v1 &lt;- &quot;c&quot;</code>, then <code>v1</code> is a character. Actually
+			that&#39;s not that surprising. PL/SQL is a strongly typed language; that is, you have to declare the data
+			type of the variable and once declared, you can&#39;t change it. In R, you don&#39;t declare anything at
+			all; so there is no such thing called the data type of the variable. Instead the variable assumes the data
+			type of whatever object it holds at a point in time. So when you issue this:</p>
 
-<div class="ocode">
-<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-<div><a href="#copy">Copy</a></div>
-</div>
+		<div class="ocode">
+			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+				<div><a href="#copy">Copy</a></div>
+			</div>
 
-<pre>
+			<pre>
 <code>
 v1 &lt;- 1
 </code></pre>
-</div>
+		</div>
 
-<p><code>v1</code> is a number; but when in the next line you issue this:</p>
+		<p><code>v1</code> is a number; but when in the next line you issue this:</p>
 
-<div class="ocode">
-<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-<div><a href="#copy">Copy</a></div>
-</div>
+		<div class="ocode">
+			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+				<div><a href="#copy">Copy</a></div>
+			</div>
 
-<pre>
+			<pre>
 <code>
 v1 &lt;- &quot;c&quot;
 </code></pre>
-</div>
+		</div>
 
-<p><code>v1</code> is a character.</p>
+		<p><code>v1</code> is a character.</p>
 
-<p>The data type keeps on changing. That&#39;s why R is called a dynamically typed language. But that could pose a problem. Because R has many types of variables, such as vectors, factors, data frames, and so on (you will learn about them later), it&#39;s important to know the data type in order to properly use them. To find out what the data type of a variable is, use the <code>class()</code> function.</p>
+		<p>The data type keeps on changing. That&#39;s why R is called a dynamically typed language. But that could pose
+			a problem. Because R has many types of variables, such as vectors, factors, data frames, and so on (you will
+			learn about them later), it&#39;s important to know the data type in order to properly use them. To find out
+			what the data type of a variable is, use the <code>class()</code> function.</p>
 
-<div class="ocode">
-<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-<div><a href="#copy">Copy</a></div>
-</div>
+		<div class="ocode">
+			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+				<div><a href="#copy">Copy</a></div>
+			</div>
 
-<pre>
+			<pre>
 <code>
 &gt; class(v1) 
 [1] &quot;character&quot;
 </code></pre>
-</div>
+		</div>
 
-<p>Similarly, you can define logical variables (<code>TRUE</code> or <code>FALSE</code>). Note, you must use uppercase, that is, <code>TRUE</code> not <code>true</code>. You can also use <code>T</code> and <code>F</code>.</p>
+		<p>Similarly, you can define logical variables (<code>TRUE</code> or <code>FALSE</code>). Note, you must use
+			uppercase, that is, <code>TRUE</code> not <code>true</code>. You can also use <code>T</code> and
+			<code>F</code>.
+		</p>
 
-<div class="ocode">
-<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-<div><a href="#copy">Copy</a></div>
-</div>
+		<div class="ocode">
+			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+				<div><a href="#copy">Copy</a></div>
+			</div>
 
-<pre>
+			<pre>
 <code>
 &gt; v1 &lt;- TRUE
 &gt; v1
@@ -577,90 +673,108 @@ v1 &lt;- &quot;c&quot;
 [1] TRUE
 &gt; class(v1)
 [1] &quot;logical&quot;</code></pre>
-</div>
+		</div>
 
-<p>By the way, the variable you defined first, assigning the value 1, was of the type numeric.</p>
+		<p>By the way, the variable you defined first, assigning the value 1, was of the type numeric.</p>
 
-<div class="ocode">
-<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-<div><a href="#copy">Copy</a></div>
-</div>
+		<div class="ocode">
+			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+				<div><a href="#copy">Copy</a></div>
+			</div>
 
-<pre>
+			<pre>
 <code>
 &gt; v1 = 1
 &gt; class(v1)
 [1] &quot;numeric&quot;
 </code></pre>
-</div>
+		</div>
 
-<p>Numeric data types are equivalent to floating point numbers, that is, non-integers. To define an integer, put the letter &quot;L&quot; after the value. Note that, unlike in the Python language, you can&#39;t use a lowercase &quot;l&quot;; you must use uppercase &quot;L&quot; for good reasons. Otherwise, it might be confused with the number 1.</p>
+		<p>Numeric data types are equivalent to floating point numbers, that is, non-integers. To define an integer, put
+			the letter &quot;L&quot; after the value. Note that, unlike in the Python language, you can&#39;t use a
+			lowercase &quot;l&quot;; you must use uppercase &quot;L&quot; for good reasons. Otherwise, it might be
+			confused with the number 1.</p>
 
-<div class="ocode">
-<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-<div><a href="#copy">Copy</a></div>
-</div>
+		<div class="ocode">
+			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+				<div><a href="#copy">Copy</a></div>
+			</div>
 
-<pre>
+			<pre>
 <code>
 &gt; v1 = 1L
 &gt; class(v1)
 [1] &quot;integer&quot;
 </code></pre>
-</div>
+		</div>
 
-<h3>Naming Variables</h3>
+		<h3>Naming Variables</h3>
 
-<p>Variable names contain, of course, letters and numbers, and two special characters: <code>_</code> (underscore) and a period (dot). Be aware of three special rules. Variable names</p>
+		<p>Variable names contain, of course, letters and numbers, and two special characters: <code>_</code>
+			(underscore) and a period (dot). Be aware of three special rules. Variable names</p>
 
-<ol>
-	<li>Cannot start with a number or an underscore; for example, <code>_myVar</code> and <code>5thVar</code> are invalid</li>
-	<li>Can start with a dot, but that has a special implication you will learn in the next section</li>
-	<li>Can start with a dot, but the next character can&#39;t be a number; for example, <code>.5thVar</code> is invalid</li>
-</ol>
+		<ol>
+			<li>Cannot start with a number or an underscore; for example, <code>_myVar</code> and <code>5thVar</code>
+				are invalid</li>
+			<li>Can start with a dot, but that has a special implication you will learn in the next section</li>
+			<li>Can start with a dot, but the next character can&#39;t be a number; for example, <code>.5thVar</code> is
+				invalid</li>
+		</ol>
 
-<p>The special character <code>#</code> cannot be used in a variable name. But there is an interesting side effect. If you use <code>#</code>, R will not produce an error. R will interpret it and the rest of the line as comments. Here is a demo:</p>
+		<p>The special character <code>#</code> cannot be used in a variable name. But there is an interesting side
+			effect. If you use <code>#</code>, R will not produce an error. R will interpret it and the rest of the line
+			as comments. Here is a demo:</p>
 
-<div class="ocode">
-<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-<div><a href="#copy">Copy</a></div>
-</div>
+		<div class="ocode">
+			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+				<div><a href="#copy">Copy</a></div>
+			</div>
 
-<pre>
+			<pre>
 <code>
 &gt; v1#1 = 1
 [1] 1
 &gt; v1#2 = 1
 [1] 1
 </code></pre>
-</div>
+		</div>
 
-<p>In the first line, all characters after the <code>#</code> characters are considered comments. So, all R understood was to print the value of variable <code>v1</code>. Because the variable was defined earlier, the command was successful. The same happened to the second line as well. So, if your intention was to declare a variable named <code>v1#1</code> or <code>v1#2</code>, it wasn&#39;t successful. You can examine the effect further by issuing the following:</p>
+		<p>In the first line, all characters after the <code>#</code> characters are considered comments. So, all R
+			understood was to print the value of variable <code>v1</code>. Because the variable was defined earlier, the
+			command was successful. The same happened to the second line as well. So, if your intention was to declare a
+			variable named <code>v1#1</code> or <code>v1#2</code>, it wasn&#39;t successful. You can examine the effect
+			further by issuing the following:</p>
 
-<div class="ocode">
-<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-<div><a href="#copy">Copy</a></div>
-</div>
+		<div class="ocode">
+			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+				<div><a href="#copy">Copy</a></div>
+			</div>
 
-<pre>
+			<pre>
 <code>
 &gt; v2#1
 Error: object &#39;v2&#39; not found
 </code></pre>
-</div>
+		</div>
 
-<p>This time, R looked for a variable named <code>v2</code>; but it failed because <code>v2</code> had not been defined.</p>
+		<p>This time, R looked for a variable named <code>v2</code>; but it failed because <code>v2</code> had not been
+			defined.</p>
 
-<p>Because you don&#39;t declare variables before using them, you might lose track of what variables you have created, which could be problematic when you write R expressions. Variables are also known as <em>objects</em> in R. When you define objects, some of which can be variables, the collection of all such objects is called a <em>workspace</em>. To find the objects defined in the current workspace, you can use the <code>objects()</code> function.</p>
+		<p>Because you don&#39;t declare variables before using them, you might lose track of what variables you have
+			created, which could be problematic when you write R expressions. Variables are also known as
+			<em>objects</em> in R. When you define objects, some of which can be variables, the collection of all such
+			objects is called a <em>workspace</em>. To find the objects defined in the current workspace, you can use
+			the <code>objects()</code> function.
+		</p>
 
-<p>First, let&#39;s define a few variables.</p>
+		<p>First, let&#39;s define a few variables.</p>
 
-<div class="ocode">
-<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-<div><a href="#copy">Copy</a></div>
-</div>
+		<div class="ocode">
+			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+				<div><a href="#copy">Copy</a></div>
+			</div>
 
-<pre>
+			<pre>
 <code>
 &gt; v1.1 = 1
 &gt; v1.2 = 2
@@ -669,93 +783,96 @@ Error: object &#39;v2&#39; not found
 
 [1] &quot;v1&quot;   &quot;v1.1&quot; &quot;v1.2&quot; &quot;v1.3&quot;
 </code></pre>
-</div>
+		</div>
 
-<p>You can also use the <code>ls()</code> function to display all the variables defined in the workspace.</p>
+		<p>You can also use the <code>ls()</code> function to display all the variables defined in the workspace.</p>
 
-<p>Now, remember, you can use &quot;<code>.</code>&quot; to begin a variable name. But it has an interesting repercussion. Let&#39;s see by first declaring a variable named <code>.v2</code>.</p>
+		<p>Now, remember, you can use &quot;<code>.</code>&quot; to begin a variable name. But it has an interesting
+			repercussion. Let&#39;s see by first declaring a variable named <code>.v2</code>.</p>
 
-<div class="ocode">
-<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-<div><a href="#copy">Copy</a></div>
-</div>
+		<div class="ocode">
+			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+				<div><a href="#copy">Copy</a></div>
+			</div>
 
-<pre>
+			<pre>
 <code>
 &gt; .v2 &lt;- 1
 </code></pre>
-</div>
+		</div>
 
-<p>You can reference the variable like any other variable:</p>
+		<p>You can reference the variable like any other variable:</p>
 
-<div class="ocode">
-<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-<div><a href="#copy">Copy</a></div>
-</div>
+		<div class="ocode">
+			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+				<div><a href="#copy">Copy</a></div>
+			</div>
 
-<pre>
+			<pre>
 <code>
 &gt; .v2
 [1] 1
 </code></pre>
-</div>
+		</div>
 
-<p>However, if you use the <code>ls()</code> function, this variable will not be listed.</p>
+		<p>However, if you use the <code>ls()</code> function, this variable will not be listed.</p>
 
-<div class="ocode">
-<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-<div><a href="#copy">Copy</a></div>
-</div>
+		<div class="ocode">
+			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+				<div><a href="#copy">Copy</a></div>
+			</div>
 
-<pre>
+			<pre>
 <code>
 &gt; ls()
 [1] &quot;v1&quot;&nbsp;&nbsp; &quot;v1.1&quot; &quot;v1.2&quot; &quot;v1.3&quot;
 </code></pre>
-</div>
+		</div>
 
-<p>Note: The variable <code>.v2</code> is not listed above. To display this variable, you will need to set a special parameter, <code>all.names</code>, in the function <code>ls()</code> to <code>TRUE</code>.</p>
+		<p>Note: The variable <code>.v2</code> is not listed above. To display this variable, you will need to set a
+			special parameter, <code>all.names</code>, in the function <code>ls()</code> to <code>TRUE</code>.</p>
 
-<div class="ocode">
-<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-<div><a href="#copy">Copy</a></div>
-</div>
+		<div class="ocode">
+			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+				<div><a href="#copy">Copy</a></div>
+			</div>
 
-<pre>
+			<pre>
 <code>
 &gt; ls(all.names=TRUE)
 [1] &quot;.Random.seed&quot; &quot;.v2&quot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &quot;v1&quot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &quot;v1.1&quot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &quot;v1.2&quot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &quot;v1.3&quot;&nbsp;
 </code></pre>
-</div>
+		</div>
 
-<p>The variable <code>.v2</code> is now displayed.</p>
+		<p>The variable <code>.v2</code> is now displayed.</p>
 
-<p>To save memory space, you can remove a variable by using the <code>rm()</code> function.</p>
+		<p>To save memory space, you can remove a variable by using the <code>rm()</code> function.</p>
 
-<div class="ocode">
-<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-<div><a href="#copy">Copy</a></div>
-</div>
+		<div class="ocode">
+			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+				<div><a href="#copy">Copy</a></div>
+			</div>
 
-<pre>
+			<pre>
 <code>
 &gt; rm (v1)
 &gt; ls()
 [1] &quot;v1.1&quot; &quot;v1.2&quot; &quot;v1.3&quot; &quot;v1_1&quot;
 </code></pre>
-</div>
-<a name="9"></a>
+		</div>
+		<a name="9"></a>
 
-<h3>Operations on Variables</h3>
+		<h3>Operations on Variables</h3>
 
-<p>One of the useful functions, <code>paste()</code>, is needed when you want to concatenate multiple values to one:</p>
+		<p>One of the useful functions, <code>paste()</code>, is needed when you want to concatenate multiple values to
+			one:</p>
 
-<div class="ocode">
-<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-<div><a href="#copy">Copy</a></div>
-</div>
+		<div class="ocode">
+			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+				<div><a href="#copy">Copy</a></div>
+			</div>
 
-<pre>
+			<pre>
 <code>
 &gt; v1 &lt;- &#39;This&#39;
 &gt; v2 &lt;- &#39;is&#39;
@@ -764,34 +881,37 @@ Error: object &#39;v2&#39; not found
 &gt; paste(v1,v2,v3,v4)
 [1] &quot;This is a Test&quot;
 </code></pre>
-</div>
+		</div>
 
-<p>If you want to use a different character than a space, you would use the <code>sep</code> parameter. Here is how to use &quot;_&quot; as a separator parameter.</p>
+		<p>If you want to use a different character than a space, you would use the <code>sep</code> parameter. Here is
+			how to use &quot;_&quot; as a separator parameter.</p>
 
-<div class="ocode">
-<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-<div><a href="#copy">Copy</a></div>
-</div>
+		<div class="ocode">
+			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+				<div><a href="#copy">Copy</a></div>
+			</div>
 
-<pre>
+			<pre>
 <code>
 &gt; paste(v1,v2,v3,v4,sep=&#39;_&#39;)
 [1] &quot;This_is_a_Test&quot;
 </code></pre>
-</div>
+		</div>
 
-<p>If you want to just paste the values without anything in between, just use <code>&#39;&#39;</code> (with no space in between two single quotes) for the separator.</p>
+		<p>If you want to just paste the values without anything in between, just use <code>&#39;&#39;</code> (with no
+			space in between two single quotes) for the separator.</p>
 
-<h3>Case Conversion</h3>
+		<h3>Case Conversion</h3>
 
-<p>In PL/SQL, you use <code>UPPER()</code> and <code>LOWER()</code> to convert the case of strings. In R, you use <code>toupper()</code> and <code>tolower()</code>, respectively. Here is the PL/SQL code:</p>
+		<p>In PL/SQL, you use <code>UPPER()</code> and <code>LOWER()</code> to convert the case of strings. In R, you
+			use <code>toupper()</code> and <code>tolower()</code>, respectively. Here is the PL/SQL code:</p>
 
-<div class="ocode">
-<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-<div><a href="#copy">Copy</a></div>
-</div>
+		<div class="ocode">
+			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+				<div><a href="#copy">Copy</a></div>
+			</div>
 
-<pre>
+			<pre>
 <code>
 SQL&gt; declare
 2 v1 varchar2(200);
@@ -806,16 +926,16 @@ THIS
 
 this
 </code></pre>
-</div>
+		</div>
 
-<p>Here is the equivalent R code:</p>
+		<p>Here is the equivalent R code:</p>
 
-<div class="ocode">
-<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-<div><a href="#copy">Copy</a></div>
-</div>
+		<div class="ocode">
+			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+				<div><a href="#copy">Copy</a></div>
+			</div>
 
-<pre>
+			<pre>
 <code>
 &gt; v1 &lt;- &quot;This&quot;
 &gt; toupper(v1)
@@ -823,18 +943,19 @@ this
 &gt; tolower(v1)
 [1] &quot;this&quot;
 </code></pre>
-</div>
+		</div>
 
-<h3>Substringing</h3>
+		<h3>Substringing</h3>
 
-<p>When you want to choose specific characters from the string, in PL/SQL you use the <code>SUBSTR()</code> function. The R equivalent is <code>substring()</code>. In PL/SQL, you would write something like this:</p>
+		<p>When you want to choose specific characters from the string, in PL/SQL you use the <code>SUBSTR()</code>
+			function. The R equivalent is <code>substring()</code>. In PL/SQL, you would write something like this:</p>
 
-<div class="ocode">
-<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-<div><a href="#copy">Copy</a></div>
-</div>
+		<div class="ocode">
+			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+				<div><a href="#copy">Copy</a></div>
+			</div>
 
-<pre>
+			<pre>
 <code>
 SQL&gt; declare
 2 v1 varchar2(200);
@@ -845,32 +966,34 @@ SQL&gt; declare
 7 /
 &nbsp;hi
 </code></pre>
-</div>
+		</div>
 
-<p>In R, you&#39;d write this:</p>
+		<p>In R, you&#39;d write this:</p>
 
-<div class="ocode">
-<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-<div><a href="#copy">Copy</a></div>
-</div>
+		<div class="ocode">
+			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+				<div><a href="#copy">Copy</a></div>
+			</div>
 
-<pre>
+			<pre>
 <code>
 &gt; substring(v1,2,2)
 [1] &quot;h&quot;
 </code></pre>
-</div>
+		</div>
 
-<h3>Character Conversion and Formatting</h3>
+		<h3>Character Conversion and Formatting</h3>
 
-<p>When you display information, you would want to do so in a reasonably readable format. In PL/SQL, you would use <code>TO_CHAR()</code>, <code>LPAD()</code>, and <code>RPAD()</code> functions to convert to a specific string format and then pad with spaces. Here is an example:</p>
+		<p>When you display information, you would want to do so in a reasonably readable format. In PL/SQL, you would
+			use <code>TO_CHAR()</code>, <code>LPAD()</code>, and <code>RPAD()</code> functions to convert to a specific
+			string format and then pad with spaces. Here is an example:</p>
 
-<div class="ocode">
-<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-<div><a href="#copy">Copy</a></div>
-</div>
+		<div class="ocode">
+			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+				<div><a href="#copy">Copy</a></div>
+			</div>
 
-<pre>
+			<pre>
 <code>
 declare
   v1 number;
@@ -879,175 +1002,188 @@ begin
   dbms_output.put_line(&#39;v1=&#39;||to_char(v1,&#39;9999999999.999&#39;));
 end;
 /</code></pre>
-</div>
+		</div>
 
-<p>Output:</p>
+		<p>Output:</p>
 
-<div class="ocode">
-<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-<div><a href="#copy">Copy</a></div>
-</div>
+		<div class="ocode">
+			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+				<div><a href="#copy">Copy</a></div>
+			</div>
 
-<pre>
+			<pre>
 <code>
 v1= 100.123
 </code></pre>
-</div>
+		</div>
 
-<p>In R, you would use the simple <code>format()</code> function:</p>
+		<p>In R, you would use the simple <code>format()</code> function:</p>
 
-<div class="ocode">
-<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-<div><a href="#copy">Copy</a></div>
-</div>
+		<div class="ocode">
+			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+				<div><a href="#copy">Copy</a></div>
+			</div>
 
-<pre>
+			<pre>
 <code>
 &gt; v1 &lt;- 100.12345
 &gt; format(v1, digits=10)
 [1] &quot;100.12345&quot;
 </code></pre>
-</div>
+		</div>
 
-<p>Note that the value is not padded with spaces, as the case was with PL/SQL. To pad, you need to use the optional parameter <code>width</code> and set it to the number of digits to display. R will pad the unavailable digits with space:</p>
+		<p>Note that the value is not padded with spaces, as the case was with PL/SQL. To pad, you need to use the
+			optional parameter <code>width</code> and set it to the number of digits to display. R will pad the
+			unavailable digits with space:</p>
 
-<div class="ocode">
-<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-<div><a href="#copy">Copy</a></div>
-</div>
+		<div class="ocode">
+			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+				<div><a href="#copy">Copy</a></div>
+			</div>
 
-<pre>
+			<pre>
 <code>
 &gt; format(v1, digits=10, width=13)
 [1] &quot; 100.12345&quot;
 </code></pre>
-</div>
-<a name="10"></a>
+		</div>
+		<a name="10"></a>
 
-<h3>Conversion Functions</h3>
+		<h3>Conversion Functions</h3>
 
-<p>The <code>TO_<em>XXX</em></code> functions in PL/SQL, such as <code>TO_CHAR</code> and <code>TO_DATE</code>, convert one type to other. R also has similar functions. Let&#39;s see them compared with PL/SQL.</p>
+		<p>The <code>TO_<em>XXX</em></code> functions in PL/SQL, such as <code>TO_CHAR</code> and <code>TO_DATE</code>,
+			convert one type to other. R also has similar functions. Let&#39;s see them compared with PL/SQL.</p>
 
-<table border="1" cellpadding="3" cellspacing="0" style="width:90%">
-	<tbody>
-		<tr>
-			<th scope="col">PL/SQL Function</th>
-			<th scope="col">Equivalent R Function</th>
-		</tr>
-		<tr>
-			<td><code>TO_CHAR</code></td>
-			<td><code>as.character()</code><br />
-			<br />
-			Example:<br />
-			<br />
-			<code>&gt; v1 = 100.12345</code><br />
-			<code>&gt; as.character(v1)</code><br />
-			<code>[1] &quot;100.12345&quot;</code></td>
-		</tr>
-		<tr>
-			<td><code>TO_NUMBER</code></td>
-			<td><code>as.numeric</code><br />
-			<br />
-			Example:<br />
-			<br />
-			<code>&gt; v1 &lt;- &quot;12345.12345&quot;</code><br />
-			<code>&gt; as.numeric(v1)</code><br />
-			<code>[1] 12345.12</code></td>
-		</tr>
-		<tr>
-			<td><code>TO_DATE</code></td>
-			<td><code>as.date</code><br />
-			<br />
-			Example:<br />
-			<br />
-			The default date format in R is YYYY-MM-DD. So when passed a string in that format, you get this:<br />
-			<br />
-			<code>&gt; v1 &lt;- &quot;1975-12-11&quot;</code><br />
-			<code>&gt; as.Date(v1)</code><br />
-			<code>[1] &quot;1975-12-11&quot;</code><br />
-			<br />
-			If the format is different, for example, mm/dd/yyyy, you have to use the <code>format</code> parameter:<br />
-			<br />
-			<code>&gt; v1 &lt;- &quot;12/11/1975&quot;</code><br />
-			<code>&gt; as.Date(v1, format=&quot;%m/%d/%Y&quot;)</code><br />
-			<code>[1] &quot;1975-12-11&quot;</code><br />
-			<br />
-			Be careful about the case of the year parameter in format strings. You&#39;ll get different results if it is changed from <code>Y</code> to <code>y</code>:<br />
-			<br />
-			<code>&gt; as.Date(v1, format=&quot;%m/%d/%y&quot;)</code><br />
-			<code>[1] &quot;2019-12-11&quot;</code></td>
-		</tr>
-	</tbody>
-</table>
-<br />
-<a name="11"></a>
+		<table border="1" cellpadding="3" cellspacing="0" style="width:90%">
+			<tbody>
+				<tr>
+					<th scope="col">PL/SQL Function</th>
+					<th scope="col">Equivalent R Function</th>
+				</tr>
+				<tr>
+					<td><code>TO_CHAR</code></td>
+					<td><code>as.character()</code><br />
+						<br />
+						Example:<br />
+						<br />
+						<code>&gt; v1 = 100.12345</code><br />
+						<code>&gt; as.character(v1)</code><br />
+						<code>[1] &quot;100.12345&quot;</code>
+					</td>
+				</tr>
+				<tr>
+					<td><code>TO_NUMBER</code></td>
+					<td><code>as.numeric</code><br />
+						<br />
+						Example:<br />
+						<br />
+						<code>&gt; v1 &lt;- &quot;12345.12345&quot;</code><br />
+						<code>&gt; as.numeric(v1)</code><br />
+						<code>[1] 12345.12</code>
+					</td>
+				</tr>
+				<tr>
+					<td><code>TO_DATE</code></td>
+					<td><code>as.date</code><br />
+						<br />
+						Example:<br />
+						<br />
+						The default date format in R is YYYY-MM-DD. So when passed a string in that format, you get
+						this:<br />
+						<br />
+						<code>&gt; v1 &lt;- &quot;1975-12-11&quot;</code><br />
+						<code>&gt; as.Date(v1)</code><br />
+						<code>[1] &quot;1975-12-11&quot;</code><br />
+						<br />
+						If the format is different, for example, mm/dd/yyyy, you have to use the <code>format</code>
+						parameter:<br />
+						<br />
+						<code>&gt; v1 &lt;- &quot;12/11/1975&quot;</code><br />
+						<code>&gt; as.Date(v1, format=&quot;%m/%d/%Y&quot;)</code><br />
+						<code>[1] &quot;1975-12-11&quot;</code><br />
+						<br />
+						Be careful about the case of the year parameter in format strings. You&#39;ll get different
+						results if it is changed from <code>Y</code> to <code>y</code>:<br />
+						<br />
+						<code>&gt; as.Date(v1, format=&quot;%m/%d/%y&quot;)</code><br />
+						<code>[1] &quot;2019-12-11&quot;</code>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<br />
+		<a name="11"></a>
 
-<h3>Operators</h3>
+		<h3>Operators</h3>
 
-<p>You already learned about the assignment operators: <code>=</code>, <code>&lt;-</code>, and <code>-&gt;</code>. There are other operators that are normally the same as in PL/SQL, such as the following:</p>
+		<p>You already learned about the assignment operators: <code>=</code>, <code>&lt;-</code>, and
+			<code>-&gt;</code>. There are other operators that are normally the same as in PL/SQL, such as the
+			following:
+		</p>
 
-<table border="1" cellpadding="3" cellspacing="0" style="width:90%">
-	<tbody>
-		<tr>
-			<th scope="col">Operator</th>
-			<th scope="col">Description</th>
-		</tr>
-		<tr>
-			<td><code>+</code></td>
-			<td>Addition</td>
-		</tr>
-		<tr>
-			<td><code>-</code></td>
-			<td>Subtraction</td>
-		</tr>
-		<tr>
-			<td><code>/</code></td>
-			<td>Division</td>
-		</tr>
-		<tr>
-			<td><code>*</code></td>
-			<td>Multiplication</td>
-		</tr>
-		<tr>
-			<td><code>^</code> or <code>**</code></td>
-			<td>Raise to the specified power; for example, <code>3^2</code> returns 9</td>
-		</tr>
-		<tr>
-			<td><code>&gt;</code></td>
-			<td>Greater than</td>
-		</tr>
-		<tr>
-			<td><code>&lt;</code></td>
-			<td>Less than</td>
-		</tr>
-		<tr>
-			<td><code>&lt;=</code></td>
-			<td>Less than or equal to</td>
-		</tr>
-		<tr>
-			<td><code>&gt;=</code></td>
-			<td>Greater than or equal to</td>
-		</tr>
-		<tr>
-			<td><code>==</code></td>
-			<td>Is equal to</td>
-		</tr>
-		<tr>
-			<td><code>!=</code></td>
-			<td>Is not equal to</td>
-		</tr>
-	</tbody>
-</table>
-&nbsp;
+		<table border="1" cellpadding="3" cellspacing="0" style="width:90%">
+			<tbody>
+				<tr>
+					<th scope="col">Operator</th>
+					<th scope="col">Description</th>
+				</tr>
+				<tr>
+					<td><code>+</code></td>
+					<td>Addition</td>
+				</tr>
+				<tr>
+					<td><code>-</code></td>
+					<td>Subtraction</td>
+				</tr>
+				<tr>
+					<td><code>/</code></td>
+					<td>Division</td>
+				</tr>
+				<tr>
+					<td><code>*</code></td>
+					<td>Multiplication</td>
+				</tr>
+				<tr>
+					<td><code>^</code> or <code>**</code></td>
+					<td>Raise to the specified power; for example, <code>3^2</code> returns 9</td>
+				</tr>
+				<tr>
+					<td><code>&gt;</code></td>
+					<td>Greater than</td>
+				</tr>
+				<tr>
+					<td><code>&lt;</code></td>
+					<td>Less than</td>
+				</tr>
+				<tr>
+					<td><code>&lt;=</code></td>
+					<td>Less than or equal to</td>
+				</tr>
+				<tr>
+					<td><code>&gt;=</code></td>
+					<td>Greater than or equal to</td>
+				</tr>
+				<tr>
+					<td><code>==</code></td>
+					<td>Is equal to</td>
+				</tr>
+				<tr>
+					<td><code>!=</code></td>
+					<td>Is not equal to</td>
+				</tr>
+			</tbody>
+		</table>
+		&nbsp;
 
-<p>There is no point explaining each operator; they are pretty self-explanatory. Let&#39;s see some examples with relational operators:</p>
+		<p>There is no point explaining each operator; they are pretty self-explanatory. Let&#39;s see some examples
+			with relational operators:</p>
 
-<div class="ocode">
-<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-<div><a href="#copy">Copy</a></div>
-</div>
+		<div class="ocode">
+			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+				<div><a href="#copy">Copy</a></div>
+			</div>
 
-<pre>
+			<pre>
 <code>
 &gt; v1 &lt;- 100
 &gt; v2 &lt;- 200
@@ -1058,16 +1194,23 @@ v1= 100.123
 &gt; v1 == v2
 [1] FALSE
 </code></pre>
-</div>
+		</div>
 
-<p>The PL/SQL operator <code>&lt;&gt;</code> (not equal to) is not present in R; only <code>!=</code> is allowed. The important thing here to note here is that you don&#39;t have to explicitly print the results of the operations. The results are implicitly stored in the workspace. If you are in the R command-line interface, the results are printed automatically; but that&#39;s not very useful in real R programming. You probably want to store the results in some variables to be processed later. You can easily do that. Here is an example where you assign values 1 and 2 to variables <code>v1</code> and <code>v2</code> respectively, check if <code>v2</code> is greater than <code>v1</code>, and store the result, which is boolean, in the variable <code>v3</code>:</p>
+		<p>The PL/SQL operator <code>&lt;&gt;</code> (not equal to) is not present in R; only <code>!=</code> is
+			allowed. The important thing here to note here is that you don&#39;t have to explicitly print the results of
+			the operations. The results are implicitly stored in the workspace. If you are in the R command-line
+			interface, the results are printed automatically; but that&#39;s not very useful in real R programming. You
+			probably want to store the results in some variables to be processed later. You can easily do that. Here is
+			an example where you assign values 1 and 2 to variables <code>v1</code> and <code>v2</code> respectively,
+			check if <code>v2</code> is greater than <code>v1</code>, and store the result, which is boolean, in the
+			variable <code>v3</code>:</p>
 
-<div class="ocode">
-<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-<div><a href="#copy">Copy</a></div>
-</div>
+		<div class="ocode">
+			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+				<div><a href="#copy">Copy</a></div>
+			</div>
 
-<pre>
+			<pre>
 <code>
 &gt; v1 &lt;- 1
 &gt; v2 &lt;- 2
@@ -1075,84 +1218,93 @@ v1= 100.123
 &gt; v3
 [1] TRUE
 </code></pre>
-</div>
+		</div>
 
-<p>You will learn about other types of variables, especially collections, which are fairly common in a data oriented language such as R. Let&#39;s see some other operators you will be using a lot:</p>
+		<p>You will learn about other types of variables, especially collections, which are fairly common in a data
+			oriented language such as R. Let&#39;s see some other operators you will be using a lot:</p>
 
-<table border="1" cellpadding="3" cellspacing="0" style="width:90%">
-	<tbody>
-		<tr>
-			<th scope="col">Operator</th>
-			<th scope="col">Description</th>
-		</tr>
-		<tr>
-			<td><code>&amp;</code></td>
-			<td>Logical AND, where you evaluate two boolean variables. If they are both TRUE, it returns <code>TRUE</code>; otherwise, it returns <code>FALSE</code>.<br />
-			<br />
-			Example:<br />
-			<br />
-			<code>&gt; v1 = TRUE</code><br />
-			<code>&gt; v2 = FALSE</code><br />
-			<code>&gt; v1 &amp; v2</code><br />
-			<code>[1] FALSE</code><br />
-			<br />
-			Remember, the values can be made to be boolean. A value of 0 is considered FALSE and so is any non-zero value, including negative numbers.<br />
-			<br />
-			Example:<br />
-			<br />
-			<code>&gt; v3 = 0</code><br />
-			<code>&gt; v4 = 1</code><br />
-			<code>&gt; v3 &amp; v4</code><br />
-			<code>[1] FALSE</code></td>
-		</tr>
-		<tr>
-			<td><code>|</code></td>
-			<td>Logical OR, where two boolean variables are evaluated. The result is TRUE if at least one of them is TRUE. Let&#39;s see the result using the same two variables we used before.<br />
-			<br />
-			Example:<br />
-			<br />
-			<code>&gt; v1 | v2</code><br />
-			<code>[1] TRUE</code><br />
-			<br />
-			Example of testing with numbers coerced into logical values:<br />
-			<br />
-			<code>&gt; v3 = 0</code><br />
-			<code>&gt; v4 = 1</code><br />
-			<code>&gt; v3 | v4</code><br />
-			<code>[1] TRUE</code></td>
-		</tr>
-	</tbody>
-</table>
-&nbsp;
+		<table border="1" cellpadding="3" cellspacing="0" style="width:90%">
+			<tbody>
+				<tr>
+					<th scope="col">Operator</th>
+					<th scope="col">Description</th>
+				</tr>
+				<tr>
+					<td><code>&amp;</code></td>
+					<td>Logical AND, where you evaluate two boolean variables. If they are both TRUE, it returns
+						<code>TRUE</code>; otherwise, it returns <code>FALSE</code>.<br />
+						<br />
+						Example:<br />
+						<br />
+						<code>&gt; v1 = TRUE</code><br />
+						<code>&gt; v2 = FALSE</code><br />
+						<code>&gt; v1 &amp; v2</code><br />
+						<code>[1] FALSE</code><br />
+						<br />
+						Remember, the values can be made to be boolean. A value of 0 is considered FALSE and so is any
+						non-zero value, including negative numbers.<br />
+						<br />
+						Example:<br />
+						<br />
+						<code>&gt; v3 = 0</code><br />
+						<code>&gt; v4 = 1</code><br />
+						<code>&gt; v3 &amp; v4</code><br />
+						<code>[1] FALSE</code>
+					</td>
+				</tr>
+				<tr>
+					<td><code>|</code></td>
+					<td>Logical OR, where two boolean variables are evaluated. The result is TRUE if at least one of
+						them is TRUE. Let&#39;s see the result using the same two variables we used before.<br />
+						<br />
+						Example:<br />
+						<br />
+						<code>&gt; v1 | v2</code><br />
+						<code>[1] TRUE</code><br />
+						<br />
+						Example of testing with numbers coerced into logical values:<br />
+						<br />
+						<code>&gt; v3 = 0</code><br />
+						<code>&gt; v4 = 1</code><br />
+						<code>&gt; v3 | v4</code><br />
+						<code>[1] TRUE</code>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		&nbsp;
 
-<p>This is just touching the tip of the iceberg. In the subsequent articles in this series, you will learn a lot about other types of variables and operations for those.</p>
-<a name="12"></a>
+		<p>This is just touching the tip of the iceberg. In the subsequent articles in this series, you will learn a lot
+			about other types of variables and operations for those.</p>
+		<a name="12"></a>
 
-<h3>Read a File and Save the Output</h3>
+		<h3>Read a File and Save the Output</h3>
 
-<p>Sometimes you may have the commands available in a file, which is called a script file. In the SQL*Plus environment, you can call the script file as follows:</p>
+		<p>Sometimes you may have the commands available in a file, which is called a script file. In the SQL*Plus
+			environment, you can call the script file as follows:</p>
 
-<div class="ocode">
-<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-<div><a href="#copy">Copy</a></div>
-</div>
+		<div class="ocode">
+			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+				<div><a href="#copy">Copy</a></div>
+			</div>
 
-<pre>
+			<pre>
 <code>
 SQL&gt; @scriptfile.name
 </code></pre>
-</div>
+		</div>
 
-<p>This will execute the script file.</p>
+		<p>This will execute the script file.</p>
 
-<p>In R, the function you&#39;d use is <code>source()</code>, which executes a script file in the R environment. Here are the contents of a file named <code>f1.rscript</code>:</p>
+		<p>In R, the function you&#39;d use is <code>source()</code>, which executes a script file in the R environment.
+			Here are the contents of a file named <code>f1.rscript</code>:</p>
 
-<div class="ocode">
-<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-<div><a href="#copy">Copy</a></div>
-</div>
+		<div class="ocode">
+			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+				<div><a href="#copy">Copy</a></div>
+			</div>
 
-<pre>
+			<pre>
 <code>
 n1 &lt;- 1
 n2 &lt;- 2
@@ -1162,506 +1314,559 @@ if (n1&lt;n2) {
   print (&quot;No&quot;)
 }
 </code></pre>
-</div>
+		</div>
 
-<p>Here is how you call the script file. The script file gets executed and then results are printed immediately afterwards.</p>
+		<p>Here is how you call the script file. The script file gets executed and then results are printed immediately
+			afterwards.</p>
 
-<div class="ocode">
-<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-<div><a href="#copy">Copy</a></div>
-</div>
+		<div class="ocode">
+			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+				<div><a href="#copy">Copy</a></div>
+			</div>
 
-<pre>
+			<pre>
 <code>
 &gt; source(&quot;f1.rscript&quot;)
 [1] &quot;Yes; n1 is less than n2&quot;
 </code></pre>
-</div>
+		</div>
 
-<p>Similarly, if you want to save the output, you use the <em><code>SPOOL <em>filename</em></code></em> command in the SQL*Plus environment. In R, you would use the <code>sink()</code> command and you would pass a parameter as the filename:</p>
+		<p>Similarly, if you want to save the output, you use the <em><code>SPOOL <em>filename</em></code></em> command
+			in the SQL*Plus environment. In R, you would use the <code>sink()</code> command and you would pass a
+			parameter as the filename:</p>
 
-<div class="ocode">
-<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-<div><a href="#copy">Copy</a></div>
-</div>
+		<div class="ocode">
+			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+				<div><a href="#copy">Copy</a></div>
+			</div>
 
-<pre>
+			<pre>
 <code>
 &gt; sink(&quot;rout.txt&quot;)
 </code></pre>
-</div>
+		</div>
 
-<p>Run the <code>source</code> function again:</p>
+		<p>Run the <code>source</code> function again:</p>
 
-<div class="ocode">
-<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-<div><a href="#copy">Copy</a></div>
-</div>
+		<div class="ocode">
+			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+				<div><a href="#copy">Copy</a></div>
+			</div>
 
-<pre>
+			<pre>
 <code>
 &gt; source(&quot;f1.rscript&quot;)
 </code></pre>
-</div>
+		</div>
 
-<p>If you check the directory, the file will be there.</p>
-<a name="Summ"></a>
+		<p>If you check the directory, the file will be there.</p>
+		<a name="Summ"></a>
 
-<h3>Summary</h3>
+		<h3>Summary</h3>
 
-<p>Here is a quick summary for you to recap what you learned in this article. I have explained the components in both PL/SQL and R for you to follow along well.</p>
+		<p>Here is a quick summary for you to recap what you learned in this article. I have explained the components in
+			both PL/SQL and R for you to follow along well.</p>
 
-<table border="1" cellpadding="3" cellspacing="0" style="width:90%">
-	<tbody>
-		<tr>
-			<th scope="col">Element</th>
-			<th scope="col">PL/SQL</th>
-			<th scope="col">R</th>
-		</tr>
-		<tr>
-			<td>Case sensitivity</td>
-			<td>Case-insensitive, that is, keywords, function and variables can be written in any case. For instance, <code>BEGIN</code> and <code>begin</code> are the same. Variables <code>v1</code> and <code>V1</code> are the same.</td>
-			<td>Case-sensitive, as in UNIX systems. Function <code>print()</code> is correct; <code>PRINT()</code> is not correct. Variable <code>v1</code> and <code>V1</code> are different variables.</td>
-		</tr>
-		<tr>
-			<td>Comment</td>
-			<td>Single-line comment: starts with <code>--</code><br />
-			Multiple lines are commented within <code>/*</code> and <code>*/</code></td>
-			<td>Only single-line comments are allowed and they starts with <code>#</code></td>
-		</tr>
-		<tr>
-			<td>End of line</td>
-			<td>Code lines terminate with a semicolon (<code>;</code>) , for example:<br />
-			&nbsp;
-			<div class="ocode">
-			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-			<div><a href="#copy">Copy</a></div>
-			</div>
+		<table border="1" cellpadding="3" cellspacing="0" style="width:90%">
+			<tbody>
+				<tr>
+					<th scope="col">Element</th>
+					<th scope="col">PL/SQL</th>
+					<th scope="col">R</th>
+				</tr>
+				<tr>
+					<td>Case sensitivity</td>
+					<td>Case-insensitive, that is, keywords, function and variables can be written in any case. For
+						instance, <code>BEGIN</code> and <code>begin</code> are the same. Variables <code>v1</code> and
+						<code>V1</code> are the same.
+					</td>
+					<td>Case-sensitive, as in UNIX systems. Function <code>print()</code> is correct;
+						<code>PRINT()</code> is not correct. Variable <code>v1</code> and <code>V1</code> are different
+						variables.
+					</td>
+				</tr>
+				<tr>
+					<td>Comment</td>
+					<td>Single-line comment: starts with <code>--</code><br />
+						Multiple lines are commented within <code>/*</code> and <code>*/</code></td>
+					<td>Only single-line comments are allowed and they starts with <code>#</code></td>
+				</tr>
+				<tr>
+					<td>End of line</td>
+					<td>Code lines terminate with a semicolon (<code>;</code>) , for example:<br />
+						&nbsp;
+						<div class="ocode">
+							<div class="ocode-bttn" data-error="Error: Could not Copy"
+								data-success="Copied to Clipboard">
+								<div><a href="#copy">Copy</a></div>
+							</div>
 
-			<pre>
+							<pre>
 <code>
 dbms_output.put_line(&#39;This is an output&#39;);
 </code></pre>
-			</div>
-			</td>
-			<td>No terminating character. End of code line is marked with a newline character.</td>
-		</tr>
-		<tr>
-			<td>Variable declaration</td>
-			<td>Variables need to be declared with data types and precision, for example:<br />
-			&nbsp;
-			<div class="ocode">
-			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-			<div><a href="#copy">Copy</a></div>
-			</div>
+						</div>
+					</td>
+					<td>No terminating character. End of code line is marked with a newline character.</td>
+				</tr>
+				<tr>
+					<td>Variable declaration</td>
+					<td>Variables need to be declared with data types and precision, for example:<br />
+						&nbsp;
+						<div class="ocode">
+							<div class="ocode-bttn" data-error="Error: Could not Copy"
+								data-success="Copied to Clipboard">
+								<div><a href="#copy">Copy</a></div>
+							</div>
 
-			<pre>
+							<pre>
 <code>
 declare
 &nbsp;&nbsp; v1 number(10);
 &nbsp;&nbsp; v2 varchar2(200);
 </code></pre>
-			</div>
-			</td>
-			<td>Variables are not declared. They are created when they are assigned a value.</td>
-		</tr>
-		<tr>
-			<td>Variable naming</td>
-			<td>Variable names have to start with a character, may contain numbers and <code>_</code> and <code>#</code> as symbols. The &quot;.&quot; in an expression usually means a subelement, for example:<br />
-			<br />
-			<code>EMP.DEPT_NO means DEPT_NO column of EMP table; PKG1.PROC1 </code><br />
-			<br />
-			means <code>PROC1</code> procedure of package <code>PKG1</code>; <code>PKG1.VAR1</code> means a variable <code>VAR1</code> in package <code>PKG1</code>, and so on.</td>
-			<td>Variable names can contain any alphanumeric characters and two special characters: &quot;<code>.&quot;</code> and &quot;<code>_</code>&quot;<br />
-			<br />
-			They can&#39;t start with a number or with &quot;<code>_</code>&quot;<br />
-			<br />
-			If the first character is <code>&quot;.&quot;</code> the next character can&#39;t be a number</td>
-		</tr>
-		<tr>
-			<td>Variable assignment operator</td>
-			<td>The assignment operator is <code>:=</code><br />
-			<br />
-			Example:<br />
-			&nbsp;
-			<div class="ocode">
-			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-			<div><a href="#copy">Copy</a></div>
-			</div>
+						</div>
+					</td>
+					<td>Variables are not declared. They are created when they are assigned a value.</td>
+				</tr>
+				<tr>
+					<td>Variable naming</td>
+					<td>Variable names have to start with a character, may contain numbers and <code>_</code> and
+						<code>#</code> as symbols. The &quot;.&quot; in an expression usually means a subelement, for
+						example:<br />
+						<br />
+						<code>EMP.DEPT_NO means DEPT_NO column of EMP table; PKG1.PROC1 </code><br />
+						<br />
+						means <code>PROC1</code> procedure of package <code>PKG1</code>; <code>PKG1.VAR1</code> means a
+						variable <code>VAR1</code> in package <code>PKG1</code>, and so on.
+					</td>
+					<td>Variable names can contain any alphanumeric characters and two special characters:
+						&quot;<code>.&quot;</code> and &quot;<code>_</code>&quot;<br />
+						<br />
+						They can&#39;t start with a number or with &quot;<code>_</code>&quot;<br />
+						<br />
+						If the first character is <code>&quot;.&quot;</code> the next character can&#39;t be a number
+					</td>
+				</tr>
+				<tr>
+					<td>Variable assignment operator</td>
+					<td>The assignment operator is <code>:=</code><br />
+						<br />
+						Example:<br />
+						&nbsp;
+						<div class="ocode">
+							<div class="ocode-bttn" data-error="Error: Could not Copy"
+								data-success="Copied to Clipboard">
+								<div><a href="#copy">Copy</a></div>
+							</div>
 
-			<pre>
+							<pre>
 <code>
 begin
 &nbsp;&nbsp; v1 := 1;
 &nbsp;&nbsp; v2 := &#39;Char&#39;;
 </code></pre>
-			</div>
-			</td>
-			<td>The assignment operator can be any of these three operators:<br />
-			<br />
-			<code>=</code><br />
-			<code>&lt;-</code> (it can point in either direction, so <code>-&gt;</code> is also valid)<br />
-			<code>&lt;&lt;-</code><br />
-			<br />
-			Example:<br />
-			&nbsp;
-			<div class="ocode">
-			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-			<div><a href="#copy">Copy</a></div>
-			</div>
+						</div>
+					</td>
+					<td>The assignment operator can be any of these three operators:<br />
+						<br />
+						<code>=</code><br />
+						<code>&lt;-</code> (it can point in either direction, so <code>-&gt;</code> is also valid)<br />
+						<code>&lt;&lt;-</code><br />
+						<br />
+						Example:<br />
+						&nbsp;
+						<div class="ocode">
+							<div class="ocode-bttn" data-error="Error: Could not Copy"
+								data-success="Copied to Clipboard">
+								<div><a href="#copy">Copy</a></div>
+							</div>
 
-			<pre>
+							<pre>
 <code>
 v1 &lt;- 1
 1 -&gt; v1
 </code></pre>
-			</div>
-			</td>
-		</tr>
-		<tr>
-			<td>Variable data type stickiness</td>
-			<td>Once a variable is declared, the data type and precision is frozen; it can&#39;t be changed. For instance (in the example above), <code>v1</code> is a number and <code>v2</code> is a <code>varchar2</code>. If you use the following, you will get a syntax error because <code>v1</code> is declared as a number:<br />
-			&nbsp;
-			<div class="ocode">
-			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-			<div><a href="#copy">Copy</a></div>
-			</div>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>Variable data type stickiness</td>
+					<td>Once a variable is declared, the data type and precision is frozen; it can&#39;t be changed. For
+						instance (in the example above), <code>v1</code> is a number and <code>v2</code> is a
+						<code>varchar2</code>. If you use the following, you will get a syntax error because
+						<code>v1</code> is declared as a number:<br />
+						&nbsp;
+						<div class="ocode">
+							<div class="ocode-bttn" data-error="Error: Could not Copy"
+								data-success="Copied to Clipboard">
+								<div><a href="#copy">Copy</a></div>
+							</div>
 
-			<pre>
+							<pre>
 <code>
 v1 := &#39;Char&#39;
 </code></pre>
-			</div>
-			</td>
-			<td>Because variables are not declared, the concept of data type is fluid for variables. When a variable is assigned, the data type is set to that type; but it can change when a new data type is assigned. For instance:<br />
-			&nbsp;
-			<div class="ocode">
-			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-			<div><a href="#copy">Copy</a></div>
-			</div>
+						</div>
+					</td>
+					<td>Because variables are not declared, the concept of data type is fluid for variables. When a
+						variable is assigned, the data type is set to that type; but it can change when a new data type
+						is assigned. For instance:<br />
+						&nbsp;
+						<div class="ocode">
+							<div class="ocode-bttn" data-error="Error: Could not Copy"
+								data-success="Copied to Clipboard">
+								<div><a href="#copy">Copy</a></div>
+							</div>
 
-			<pre>
+							<pre>
 <code>
 v1 &lt;- 1  # here v1 is a number
 v1 &lt;- &#39;Char&#39;  # now v1 is a character
 </code></pre>
-			</div>
-			</td>
-		</tr>
-		<tr>
-			<td>Determining data type</td>
-			<td>Not needed, because the declaration section clearly states the type</td>
-			<td>Use the <code>class()</code> function:
-			<div class="ocode">
-			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-			<div><a href="#copy">Copy</a></div>
-			</div>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>Determining data type</td>
+					<td>Not needed, because the declaration section clearly states the type</td>
+					<td>Use the <code>class()</code> function:
+						<div class="ocode">
+							<div class="ocode-bttn" data-error="Error: Could not Copy"
+								data-success="Copied to Clipboard">
+								<div><a href="#copy">Copy</a></div>
+							</div>
 
-			<pre>
+							<pre>
 <code>
 class(<em>variablename</em>)
 </code></pre>
-			</div>
-			</td>
-		</tr>
-		<tr>
-			<td>Multiple variable assignment</td>
-			<td>If you want to assign the same value to multiple variables, you have to do it one by one:<br />
-			&nbsp;
-			<div class="ocode">
-			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-			<div><a href="#copy">Copy</a></div>
-			</div>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>Multiple variable assignment</td>
+					<td>If you want to assign the same value to multiple variables, you have to do it one by one:<br />
+						&nbsp;
+						<div class="ocode">
+							<div class="ocode-bttn" data-error="Error: Could not Copy"
+								data-success="Copied to Clipboard">
+								<div><a href="#copy">Copy</a></div>
+							</div>
 
-			<pre>
+							<pre>
 <code>
 v1 := 100;
 v2 := 100;
 </code></pre>
-			</div>
-			</td>
-			<td>Multiple variables can be assigned in one code line:<br />
-			&nbsp;
-			<div class="ocode">
-			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-			<div><a href="#copy">Copy</a></div>
-			</div>
+						</div>
+					</td>
+					<td>Multiple variables can be assigned in one code line:<br />
+						&nbsp;
+						<div class="ocode">
+							<div class="ocode-bttn" data-error="Error: Could not Copy"
+								data-success="Copied to Clipboard">
+								<div><a href="#copy">Copy</a></div>
+							</div>
 
-			<pre>
+							<pre>
 <code>
 v1 &lt;- v2 &lt;- 100
 </code></pre>
-			</div>
-			<br />
-			Or, even like this:<br />
-			&nbsp;
-			<div class="ocode">
-			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-			<div><a href="#copy">Copy</a></div>
-			</div>
+						</div>
+						<br />
+						Or, even like this:<br />
+						&nbsp;
+						<div class="ocode">
+							<div class="ocode-bttn" data-error="Error: Could not Copy"
+								data-success="Copied to Clipboard">
+								<div><a href="#copy">Copy</a></div>
+							</div>
 
-			<pre>
+							<pre>
 <code>
 v1 &lt;- 100 -&gt; v2
 </code></pre>
-			</div>
-			</td>
-		</tr>
-		<tr>
-			<td>Displaying variables in the environment</td>
-			<td>Not needed because the variables are explicitly declared</td>
-			<td><code>ls()</code> shows all variables except the ones starting with a period.<br />
-			<br />
-			<code>ls(all=TRUE)</code> shows all variables.</td>
-		</tr>
-		<tr>
-			<td>Remove a variable defined already</td>
-			<td>Not possible</td>
-			<td>
-			<div class="ocode">
-			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-			<div><a href="#copy">Copy</a></div>
-			</div>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>Displaying variables in the environment</td>
+					<td>Not needed because the variables are explicitly declared</td>
+					<td><code>ls()</code> shows all variables except the ones starting with a period.<br />
+						<br />
+						<code>ls(all=TRUE)</code> shows all variables.
+					</td>
+				</tr>
+				<tr>
+					<td>Remove a variable defined already</td>
+					<td>Not possible</td>
+					<td>
+						<div class="ocode">
+							<div class="ocode-bttn" data-error="Error: Could not Copy"
+								data-success="Copied to Clipboard">
+								<div><a href="#copy">Copy</a></div>
+							</div>
 
-			<pre>
+							<pre>
 <code>
 rm(<em>variableName</em>)
 </code></pre>
-			</div>
-			</td>
-		</tr>
-		<tr>
-			<td>Integer variables</td>
-			<td><code>NUMBER</code> is a generic type. <code>PLS_INTEGER</code> is generally faster if you can use it.</td>
-			<td>Because there is no declaration, there is no way to specify a variable of a specific data type. Appending &quot;<code>L</code>&quot; to the number makes the variable an integer:<br />
-			&nbsp;
-			<div class="ocode">
-			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-			<div><a href="#copy">Copy</a></div>
-			</div>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>Integer variables</td>
+					<td><code>NUMBER</code> is a generic type. <code>PLS_INTEGER</code> is generally faster if you can
+						use it.</td>
+					<td>Because there is no declaration, there is no way to specify a variable of a specific data type.
+						Appending &quot;<code>L</code>&quot; to the number makes the variable an integer:<br />
+						&nbsp;
+						<div class="ocode">
+							<div class="ocode-bttn" data-error="Error: Could not Copy"
+								data-success="Copied to Clipboard">
+								<div><a href="#copy">Copy</a></div>
+							</div>
 
-			<pre>
+							<pre>
 <code>
 v1 &lt;- 1L
 </code></pre>
-			</div>
-			</td>
-		</tr>
-		<tr>
-			<td>Writing strings</td>
-			<td>Enclosed in single quotes, for example:<br />
-			&nbsp;
-			<div class="ocode">
-			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-			<div><a href="#copy">Copy</a></div>
-			</div>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>Writing strings</td>
+					<td>Enclosed in single quotes, for example:<br />
+						&nbsp;
+						<div class="ocode">
+							<div class="ocode-bttn" data-error="Error: Could not Copy"
+								data-success="Copied to Clipboard">
+								<div><a href="#copy">Copy</a></div>
+							</div>
 
-			<pre>
+							<pre>
 <code>
 v1 := &#39;This is a string&#39;;
 </code></pre>
-			</div>
-			</td>
-			<td>Enclosed in either single or double quotes, for example:<br />
-			&nbsp;
-			<div class="ocode">
-			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-			<div><a href="#copy">Copy</a></div>
-			</div>
+						</div>
+					</td>
+					<td>Enclosed in either single or double quotes, for example:<br />
+						&nbsp;
+						<div class="ocode">
+							<div class="ocode-bttn" data-error="Error: Could not Copy"
+								data-success="Copied to Clipboard">
+								<div><a href="#copy">Copy</a></div>
+							</div>
 
-			<pre>
+							<pre>
 <code>
 v1 &lt;- &quot;This is a string&quot;
 </code></pre>
-			</div>
-			<br />
-			OR<br />
-			&nbsp;
-			<div class="ocode">
-			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-			<div><a href="#copy">Copy</a></div>
-			</div>
+						</div>
+						<br />
+						OR<br />
+						&nbsp;
+						<div class="ocode">
+							<div class="ocode-bttn" data-error="Error: Could not Copy"
+								data-success="Copied to Clipboard">
+								<div><a href="#copy">Copy</a></div>
+							</div>
 
-			<pre>
+							<pre>
 <code>
 v1 &lt;- &#39;This is a string&#39;
 </code></pre>
-			</div>
-			<br />
-			You can&#39;t mix the two types of quotes in the same value, for example, <code>&quot;This is a string&#39;</code> is not valid. However, using a different type of quote inside another type is allowed, for example:<br />
-			&nbsp;
-			<div class="ocode">
-			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-			<div><a href="#copy">Copy</a></div>
-			</div>
+						</div>
+						<br />
+						You can&#39;t mix the two types of quotes in the same value, for example,
+						<code>&quot;This is a string&#39;</code> is not valid. However, using a different type of quote
+						inside another type is allowed, for example:<br />
+						&nbsp;
+						<div class="ocode">
+							<div class="ocode-bttn" data-error="Error: Could not Copy"
+								data-success="Copied to Clipboard">
+								<div><a href="#copy">Copy</a></div>
+							</div>
 
-			<pre>
+							<pre>
 <code>
 v1 &lt;- &quot;Joe&#39;s Pizza&quot;
 </code></pre>
-			</div>
-			<br />
-			OR<br />
-			&nbsp;
-			<div class="ocode">
-			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-			<div><a href="#copy">Copy</a></div>
-			</div>
+						</div>
+						<br />
+						OR<br />
+						&nbsp;
+						<div class="ocode">
+							<div class="ocode-bttn" data-error="Error: Could not Copy"
+								data-success="Copied to Clipboard">
+								<div><a href="#copy">Copy</a></div>
+							</div>
 
-			<pre>
+							<pre>
 <code>
 v1 &lt;- &#39;Joe &quot;Special&quot; Pizza&#39;
 </code></pre>
-			</div>
-			</td>
-		</tr>
-		<tr>
-			<td>String quote escape</td>
-			<td>To use a single quote inside a string, use the single quote as an escape, for example:<br />
-			&nbsp;
-			<div class="ocode">
-			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-			<div><a href="#copy">Copy</a></div>
-			</div>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>String quote escape</td>
+					<td>To use a single quote inside a string, use the single quote as an escape, for example:<br />
+						&nbsp;
+						<div class="ocode">
+							<div class="ocode-bttn" data-error="Error: Could not Copy"
+								data-success="Copied to Clipboard">
+								<div><a href="#copy">Copy</a></div>
+							</div>
 
-			<pre>
+							<pre>
 <code>
 &nbsp; v1 := &#39;Joe&#39;&#39;s Pizza&#39;;
 </code></pre>
-			</div>
-			</td>
-			<td>The escape character is <code>\</code>, for example:<br />
-			&nbsp;
-			<div class="ocode">
-			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-			<div><a href="#copy">Copy</a></div>
-			</div>
+						</div>
+					</td>
+					<td>The escape character is <code>\</code>, for example:<br />
+						&nbsp;
+						<div class="ocode">
+							<div class="ocode-bttn" data-error="Error: Could not Copy"
+								data-success="Copied to Clipboard">
+								<div><a href="#copy">Copy</a></div>
+							</div>
 
-			<pre>
+							<pre>
 <code>
 v1 &lt;- &#39;Joe\&#39;s Pizza&#39;
 </code></pre>
-			</div>
-			<br />
-			OR<br />
-			&nbsp;
-			<div class="ocode">
-			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-			<div><a href="#copy">Copy</a></div>
-			</div>
+						</div>
+						<br />
+						OR<br />
+						&nbsp;
+						<div class="ocode">
+							<div class="ocode-bttn" data-error="Error: Could not Copy"
+								data-success="Copied to Clipboard">
+								<div><a href="#copy">Copy</a></div>
+							</div>
 
-			<pre>
+							<pre>
 <code>
 v1 &lt;- &quot;Joe \&quot;Special\&quot; Pizza&quot;
 </code></pre>
-			</div>
-			</td>
-		</tr>
-		<tr>
-			<td>Display something</td>
-			<td>
-			<div class="ocode">
-			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-			<div><a href="#copy">Copy</a></div>
-			</div>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>Display something</td>
+					<td>
+						<div class="ocode">
+							<div class="ocode-bttn" data-error="Error: Could not Copy"
+								data-success="Copied to Clipboard">
+								<div><a href="#copy">Copy</a></div>
+							</div>
 
-			<pre>
+							<pre>
 <code>
 dbms_output.put_line(&#39;....&#39;);
 </code></pre>
-			</div>
-			</td>
-			<td>
-			<div class="ocode">
-			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-			<div><a href="#copy">Copy</a></div>
-			</div>
+						</div>
+					</td>
+					<td>
+						<div class="ocode">
+							<div class="ocode-bttn" data-error="Error: Could not Copy"
+								data-success="Copied to Clipboard">
+								<div><a href="#copy">Copy</a></div>
+							</div>
 
-			<pre>
+							<pre>
 <code>
 print()
 paste()
 </code></pre>
-			</div>
-			</td>
-		</tr>
-		<tr>
-			<td>Combining strings</td>
-			<td>Use the <code>||</code> operator.</td>
-			<td>Use the <code>paste()</code> function, for example:<br />
-			&nbsp;
-			<div class="ocode">
-			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-			<div><a href="#copy">Copy</a></div>
-			</div>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>Combining strings</td>
+					<td>Use the <code>||</code> operator.</td>
+					<td>Use the <code>paste()</code> function, for example:<br />
+						&nbsp;
+						<div class="ocode">
+							<div class="ocode-bttn" data-error="Error: Could not Copy"
+								data-success="Copied to Clipboard">
+								<div><a href="#copy">Copy</a></div>
+							</div>
 
-			<pre>
+							<pre>
 <code>
 paste(v1,v2,v3,v4,sep=&#39;,&#39;)
 </code></pre>
-			</div>
-			</td>
-		</tr>
-		<tr>
-			<td>Case conversion</td>
-			<td>Use the <code>UPPER()</code> and <code>LOWER()</code> functions.</td>
-			<td>Use the <code>toupper()</code> and <code>tolower()</code> functions.</td>
-		</tr>
-		<tr>
-			<td>Substringing</td>
-			<td>Use the <code>SUBSTR()</code> function.</td>
-			<td>Use the <code>substring()</code> function.</td>
-		</tr>
-		<tr>
-			<td>Formatting</td>
-			<td>
-			<div class="ocode">
-			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-			<div><a href="#copy">Copy</a></div>
-			</div>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>Case conversion</td>
+					<td>Use the <code>UPPER()</code> and <code>LOWER()</code> functions.</td>
+					<td>Use the <code>toupper()</code> and <code>tolower()</code> functions.</td>
+				</tr>
+				<tr>
+					<td>Substringing</td>
+					<td>Use the <code>SUBSTR()</code> function.</td>
+					<td>Use the <code>substring()</code> function.</td>
+				</tr>
+				<tr>
+					<td>Formatting</td>
+					<td>
+						<div class="ocode">
+							<div class="ocode-bttn" data-error="Error: Could not Copy"
+								data-success="Copied to Clipboard">
+								<div><a href="#copy">Copy</a></div>
+							</div>
 
-			<pre>
+							<pre>
 <code>
 TO_CHAR(n, &#39;999999999.99&#39;)
 </code></pre>
-			</div>
-			</td>
-			<td>
-			<div class="ocode">
-			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-			<div><a href="#copy">Copy</a></div>
-			</div>
+						</div>
+					</td>
+					<td>
+						<div class="ocode">
+							<div class="ocode-bttn" data-error="Error: Could not Copy"
+								data-success="Copied to Clipboard">
+								<div><a href="#copy">Copy</a></div>
+							</div>
 
-			<pre>
+							<pre>
 <code>
 format(n, digits=<em>x</em>)
 </code></pre>
-			</div>
-			</td>
-		</tr>
-		<tr>
-			<td>Conversion functions</td>
-			<td><code>TO_CHAR</code>, <code>TO_DATE</code>, and <code>TO_NUMBER</code></td>
-			<td><code>as.character()</code>, <code>as.numeric()</code>, and <code>as.Date()</code></td>
-		</tr>
-		<tr>
-			<td>Operators</td>
-			<td>Most operators are the same. Important different ones include:<br />
-			<br />
-			<code>=</code> is for equality comparisons<br />
-			<code>!=</code> and <code>&lt;&gt;</code> for are for non-equality comparisons</td>
-			<td><code>==</code> is for equality comparisons<br />
-			Only <code>!=</code> is for non-equality comparisons</td>
-		</tr>
-		<tr>
-			<td>Logical value assignments</td>
-			<td>
-			<div class="ocode">
-			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-			<div><a href="#copy">Copy</a></div>
-			</div>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>Conversion functions</td>
+					<td><code>TO_CHAR</code>, <code>TO_DATE</code>, and <code>TO_NUMBER</code></td>
+					<td><code>as.character()</code>, <code>as.numeric()</code>, and <code>as.Date()</code></td>
+				</tr>
+				<tr>
+					<td>Operators</td>
+					<td>Most operators are the same. Important different ones include:<br />
+						<br />
+						<code>=</code> is for equality comparisons<br />
+						<code>!=</code> and <code>&lt;&gt;</code> for are for non-equality comparisons
+					</td>
+					<td><code>==</code> is for equality comparisons<br />
+						Only <code>!=</code> is for non-equality comparisons</td>
+				</tr>
+				<tr>
+					<td>Logical value assignments</td>
+					<td>
+						<div class="ocode">
+							<div class="ocode-bttn" data-error="Error: Could not Copy"
+								data-success="Copied to Clipboard">
+								<div><a href="#copy">Copy</a></div>
+							</div>
 
-			<pre>
+							<pre>
 <code>
 declare
 &nbsp;&nbsp; v1 boolean;
@@ -1670,293 +1875,309 @@ begin
 &nbsp;&nbsp; v1 := true;
 &nbsp;&nbsp; v2 := false;
 </code></pre>
-			</div>
-			</td>
-			<td><code>TRUE</code> (only uppercase; lowercase <code>true</code> is not valid), <code>T</code> or any non-zero number indicates a true logical value. <code>FALSE</code>, <code>F</code>, or <code>0</code> indicates false. For example, all of the following indicate the value of <code>v1</code> is <code>true</code>.
-			<div class="ocode">
-			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-			<div><a href="#copy">Copy</a></div>
-			</div>
+						</div>
+					</td>
+					<td><code>TRUE</code> (only uppercase; lowercase <code>true</code> is not valid), <code>T</code> or
+						any non-zero number indicates a true logical value. <code>FALSE</code>, <code>F</code>, or
+						<code>0</code> indicates false. For example, all of the following indicate the value of
+						<code>v1</code> is <code>true</code>.
+						<div class="ocode">
+							<div class="ocode-bttn" data-error="Error: Could not Copy"
+								data-success="Copied to Clipboard">
+								<div><a href="#copy">Copy</a></div>
+							</div>
 
-			<pre>
+							<pre>
 <code>
 v1 &lt;- 1
 v1 &lt;- T
 v1 &lt;- TRUE
 </code></pre>
-			</div>
-			</td>
-		</tr>
-		<tr>
-			<td>Null value</td>
-			<td><code>NULL</code>, for example:<br />
-			&nbsp;
-			<div class="ocode">
-			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-			<div><a href="#copy">Copy</a></div>
-			</div>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>Null value</td>
+					<td><code>NULL</code>, for example:<br />
+						&nbsp;
+						<div class="ocode">
+							<div class="ocode-bttn" data-error="Error: Could not Copy"
+								data-success="Copied to Clipboard">
+								<div><a href="#copy">Copy</a></div>
+							</div>
 
-			<pre>
+							<pre>
 <code>
 v1 := NULL;
 </code></pre>
-			</div>
-			</td>
-			<td><code>NA</code>, for example:<br />
-			&nbsp;
-			<div class="ocode">
-			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-			<div><a href="#copy">Copy</a></div>
-			</div>
+						</div>
+					</td>
+					<td><code>NA</code>, for example:<br />
+						&nbsp;
+						<div class="ocode">
+							<div class="ocode-bttn" data-error="Error: Could not Copy"
+								data-success="Copied to Clipboard">
+								<div><a href="#copy">Copy</a></div>
+							</div>
 
-			<pre>
+							<pre>
 <code>
 &nbsp; v1 &lt;- NA
 </code></pre>
-			</div>
-			<br />
-			But this makes the variable a logical variable.</td>
-		</tr>
-		<tr>
-			<td>AND operator</td>
-			<td><code>AND</code>, for example:<br />
-			&nbsp;
-			<div class="ocode">
-			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-			<div><a href="#copy">Copy</a></div>
-			</div>
+						</div>
+						<br />
+						But this makes the variable a logical variable.
+					</td>
+				</tr>
+				<tr>
+					<td>AND operator</td>
+					<td><code>AND</code>, for example:<br />
+						&nbsp;
+						<div class="ocode">
+							<div class="ocode-bttn" data-error="Error: Could not Copy"
+								data-success="Copied to Clipboard">
+								<div><a href="#copy">Copy</a></div>
+							</div>
 
-			<pre>
+							<pre>
 <code>
 WHERE x = 1 and y = 2
 </code></pre>
-			</div>
-			</td>
-			<td><code>&amp;</code>, for example:<br />
-			&nbsp;
-			<div class="ocode">
-			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-			<div><a href="#copy">Copy</a></div>
-			</div>
+						</div>
+					</td>
+					<td><code>&amp;</code>, for example:<br />
+						&nbsp;
+						<div class="ocode">
+							<div class="ocode-bttn" data-error="Error: Could not Copy"
+								data-success="Copied to Clipboard">
+								<div><a href="#copy">Copy</a></div>
+							</div>
 
-			<pre>
+							<pre>
 <code>
 x==1 &amp; y==2
 </code></pre>
-			</div>
-			</td>
-		</tr>
-		<tr>
-			<td>OR operator</td>
-			<td><code>OR</code>, for example:<br />
-			&nbsp;
-			<div class="ocode">
-			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-			<div><a href="#copy">Copy</a></div>
-			</div>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>OR operator</td>
+					<td><code>OR</code>, for example:<br />
+						&nbsp;
+						<div class="ocode">
+							<div class="ocode-bttn" data-error="Error: Could not Copy"
+								data-success="Copied to Clipboard">
+								<div><a href="#copy">Copy</a></div>
+							</div>
 
-			<pre>
+							<pre>
 <code>
 WHERE x = 1 or y = 2
 </code></pre>
-			</div>
-			</td>
-			<td><code>|</code>, for example:<br />
-			&nbsp;
-			<div class="ocode">
-			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-			<div><a href="#copy">Copy</a></div>
-			</div>
+						</div>
+					</td>
+					<td><code>|</code>, for example:<br />
+						&nbsp;
+						<div class="ocode">
+							<div class="ocode-bttn" data-error="Error: Could not Copy"
+								data-success="Copied to Clipboard">
+								<div><a href="#copy">Copy</a></div>
+							</div>
 
-			<pre>
+							<pre>
 <code>
 x == 1 | y == 2
 </code></pre>
-			</div>
-			</td>
-		</tr>
-		<tr>
-			<td>Read a file at the command prompt</td>
-			<td>
-			<div class="ocode">
-			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-			<div><a href="#copy">Copy</a></div>
-			</div>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>Read a file at the command prompt</td>
+					<td>
+						<div class="ocode">
+							<div class="ocode-bttn" data-error="Error: Could not Copy"
+								data-success="Copied to Clipboard">
+								<div><a href="#copy">Copy</a></div>
+							</div>
 
-			<pre>
+							<pre>
 <code>
 SQL&gt; @file.sql</code></pre>
-			</div>
-			</td>
-			<td>
-			<div class="ocode">
-			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-			<div><a href="#copy">Copy</a></div>
-			</div>
+						</div>
+					</td>
+					<td>
+						<div class="ocode">
+							<div class="ocode-bttn" data-error="Error: Could not Copy"
+								data-success="Copied to Clipboard">
+								<div><a href="#copy">Copy</a></div>
+							</div>
 
-			<pre>
+							<pre>
 <code>
 &gt; source(&quot;filename&quot;)</code></pre>
-			</div>
-			</td>
-		</tr>
-		<tr>
-			<td>Redirect output to a file</td>
-			<td>
-			<div class="ocode">
-			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-			<div><a href="#copy">Copy</a></div>
-			</div>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>Redirect output to a file</td>
+					<td>
+						<div class="ocode">
+							<div class="ocode-bttn" data-error="Error: Could not Copy"
+								data-success="Copied to Clipboard">
+								<div><a href="#copy">Copy</a></div>
+							</div>
 
-			<pre>
+							<pre>
 <code>
 SQL&gt; spool out.txt</code></pre>
-			</div>
-			</td>
-			<td>
-			<div class="ocode">
+						</div>
+					</td>
+					<td>
+						<div class="ocode">
+							<div class="ocode-bttn" data-error="Error: Could not Copy"
+								data-success="Copied to Clipboard">
+								<div><a href="#copy">Copy</a></div>
+							</div>
+
+							<pre>
+<code>
+&gt; sink(&quot;out.txt&quot;)</code></pre>
+						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<br />
+		<a name="Quiz"></a>
+
+		<h3>Quiz</h3>
+
+		<p>Let&#39;s test your understanding with these simple questions.</p>
+
+		<h3>Questions</h3>
+
+		<p>1. What will be result of the following? If this will result in a syntax error, mention that as well.</p>
+
+		<div class="ocode">
 			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-			<div><a href="#copy">Copy</a></div>
+				<div><a href="#copy">Copy</a></div>
 			</div>
 
 			<pre>
-<code>
-&gt; sink(&quot;out.txt&quot;)</code></pre>
-			</div>
-			</td>
-		</tr>
-	</tbody>
-</table>
-<br />
-<a name="Quiz"></a>
-
-<h3>Quiz</h3>
-
-<p>Let&#39;s test your understanding with these simple questions.</p>
-
-<h3>Questions</h3>
-
-<p>1. What will be result of the following? If this will result in a syntax error, mention that as well.</p>
-
-<div class="ocode">
-<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-<div><a href="#copy">Copy</a></div>
-</div>
-
-<pre>
 <code>
 v1 &lt;- 2
 v2 &lt;- v1 ** 5v1 &lt;- 2
 v2 &lt;- v1 ** 5
 print(v2)
 </code></pre>
-</div>
+		</div>
 
-<p>2. What will be the result of the following? If this will result in a syntax error, mention that as well.</p>
+		<p>2. What will be the result of the following? If this will result in a syntax error, mention that as well.</p>
 
-<div class="ocode">
-<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-<div><a href="#copy">Copy</a></div>
-</div>
+		<div class="ocode">
+			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+				<div><a href="#copy">Copy</a></div>
+			</div>
 
-<pre>
+			<pre>
 <code>
 2 -&gt; v1
 v2 &lt;- v1 ^ 5
 print(v2)
 </code></pre>
-</div>
+		</div>
 
-<p>3. What will be the result of the following? If this will result in a syntax error, mention that as well.</p>
+		<p>3. What will be the result of the following? If this will result in a syntax error, mention that as well.</p>
 
-<div class="ocode">
-<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-<div><a href="#copy">Copy</a></div>
-</div>
+		<div class="ocode">
+			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+				<div><a href="#copy">Copy</a></div>
+			</div>
 
-<pre>
+			<pre>
 <code>
 v1 -&gt; 2
 v2 &lt;- v1 ^ 5
 print(v2)
 </code></pre>
-</div>
+		</div>
 
-<p>4. Which of the following variable names are invalid in R?</p>
+		<p>4. Which of the following variable names are invalid in R?</p>
 
-<p>a: <code class="ocode"> v1</code></p>
+		<p>a: <code class="ocode"> v1</code></p>
 
-<p>b: <code class="ocode">v1.1</code></p>
+		<p>b: <code class="ocode">v1.1</code></p>
 
-<p>c: <code class="ocode">v1_1</code></p>
+		<p>c: <code class="ocode">v1_1</code></p>
 
-<p>d: <code class="ocode">.v1</code></p>
+		<p>d: <code class="ocode">.v1</code></p>
 
-<p>e: <code class="ocode">1v</code></p>
+		<p>e: <code class="ocode">1v</code></p>
 
-<p>f: <code class="ocode">_v1</code></p>
+		<p>f: <code class="ocode">_v1</code></p>
 
-<p>g: <code class="ocode">v#1</code></p>
+		<p>g: <code class="ocode">v#1</code></p>
 
-<p>h: <code class="ocode">.1v</code></p>
+		<p>h: <code class="ocode">.1v</code></p>
 
-<p>5. A script has the following contents:</p>
+		<p>5. A script has the following contents:</p>
 
-<div class="ocode">
-<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-<div><a href="#copy">Copy</a></div>
-</div>
+		<div class="ocode">
+			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+				<div><a href="#copy">Copy</a></div>
+			</div>
 
-<pre>
+			<pre>
 <code>
 v1.1 &lt;- 1
 v1.2 &lt;- 2
 .v1.3 &lt;- 3
 </code></pre>
-</div>
+		</div>
 
-<p>You ran the script and then issued the <code>ls()</code> function. What will be the output?</p>
+		<p>You ran the script and then issued the <code>ls()</code> function. What will be the output?</p>
 
-<p>6. A script file has the following contents:</p>
+		<p>6. A script file has the following contents:</p>
 
-<div class="ocode">
-<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-<div><a href="#copy">Copy</a></div>
-</div>
+		<div class="ocode">
+			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+				<div><a href="#copy">Copy</a></div>
+			</div>
 
-<pre>
+			<pre>
 <code>
 student &lt;- &quot;Andy&quot;
 student#1 &lt;- &quot;Billy&quot;
 student#2 &lt;- &quot;Charlie&quot;
 </code></pre>
-</div>
+		</div>
 
-<p>You ran the script in R and then ran the <code>ls()</code> command to see the variables. How many variables will be you see? Or, will the script fail with a syntax error?</p>
+		<p>You ran the script in R and then ran the <code>ls()</code> command to see the variables. How many variables
+			will be you see? Or, will the script fail with a syntax error?</p>
 
-<p>7. What will be the result of the following? Mention if it will result in a syntax error.</p>
+		<p>7. What will be the result of the following? Mention if it will result in a syntax error.</p>
 
-<div class="ocode">
-<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-<div><a href="#copy">Copy</a></div>
-</div>
+		<div class="ocode">
+			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+				<div><a href="#copy">Copy</a></div>
+			</div>
 
-<pre>
+			<pre>
 <code>
 v1 = 1
 v2 = FALSE
 v1 | v2
 </code></pre>
-</div>
+		</div>
 
-<p>8. What will be output of the following code? Indicate if it will raise an error:</p>
+		<p>8. What will be output of the following code? Indicate if it will raise an error:</p>
 
-<div class="ocode">
-<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-<div><a href="#copy">Copy</a></div>
-</div>
+		<div class="ocode">
+			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+				<div><a href="#copy">Copy</a></div>
+			</div>
 
-<pre>
+			<pre>
 <code>
 &gt; l1 &lt;- 1
 &gt; l2 &lt;- 2
@@ -1964,65 +2185,96 @@ v1 | v2
 &gt; l1 &lt; l2 -&gt; l3
 &gt; l3 + 1
 </code></pre>
-</div>
+		</div>
 
-<p>9. What is the purpose of the code below? Does the last line redirect the output to <code>l3</code>? Or, will it fail with a syntax error?</p>
+		<p>9. What is the purpose of the code below? Does the last line redirect the output to <code>l3</code>? Or, will
+			it fail with a syntax error?</p>
 
-<div class="ocode">
-<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-<div><a href="#copy">Copy</a></div>
-</div>
+		<div class="ocode">
+			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+				<div><a href="#copy">Copy</a></div>
+			</div>
 
-<pre>
+			<pre>
 <code>
 &gt; l1 &lt;- 1
 &gt; l2 &lt;- 2
 &gt; l3 &lt;- 3
 &gt; l1 &lt;- l2 &gt; l3
 </code></pre>
-</div>
+		</div>
 
-<p>10. What is the output of the following code:</p>
+		<p>10. What is the output of the following code:</p>
 
-<div class="ocode">
-<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-<div><a href="#copy">Copy</a></div>
-</div>
+		<div class="ocode">
+			<div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+				<div><a href="#copy">Copy</a></div>
+			</div>
 
-<pre>
+			<pre>
 <code>
 &gt; v1 &lt;- NA
 &gt; v2 &lt;- 1
 &gt; v1 &lt; v2
 </code></pre>
-</div>
+		</div>
 
-<h3>Answers</h3>
+		<h3>Answers</h3>
 
-<p>1. This is 2 raised to the power 5, which is 32.</p>
+		<p>1. This is 2 raised to the power 5, which is 32.</p>
 
-<p>2. This will not produce an error. <code>2 -&gt; v1</code> is perfectly valid. It&#39;s the same as <code>v1 &lt;- 2</code> or <code>v1 = 2</code>. So the output will be 32.</p>
+		<p>2. This will not produce an error. <code>2 -&gt; v1</code> is perfectly valid. It&#39;s the same as
+			<code>v1 &lt;- 2</code> or <code>v1 = 2</code>. So the output will be 32.
+		</p>
 
-<p>3. This will result in a syntax error. Note the line <code>v1 -&gt; 2</code>, which assigns <code>v1</code> (a constant) to <code>2</code> and, hence, is not possible. If the intention was to assign 2 to <code>v1</code>, the correct expression is <code>v1 &lt; 2</code> or <code>2 -&gt; v1</code>.</p>
+		<p>3. This will result in a syntax error. Note the line <code>v1 -&gt; 2</code>, which assigns <code>v1</code>
+			(a constant) to <code>2</code> and, hence, is not possible. If the intention was to assign 2 to
+			<code>v1</code>, the correct expression is <code>v1 &lt; 2</code> or <code>2 -&gt; v1</code>.
+		</p>
 
-<p>4. Answer &quot;e&quot; is invalid because it starts with a number. Answer &quot;f&quot; is invalid because it starts with <code>_</code>. Answer &quot;h&quot; is invalid because it starts with a &quot;<code>.</code>&quot; which is allowed unless it is immediately followed by a number.</p>
+		<p>4. Answer &quot;e&quot; is invalid because it starts with a number. Answer &quot;f&quot; is invalid because
+			it starts with <code>_</code>. Answer &quot;h&quot; is invalid because it starts with a
+			&quot;<code>.</code>&quot; which is allowed unless it is immediately followed by a number.</p>
 
-<p>5. The output will show only <code>v1.1</code> and <code>v1.2</code>. The third variable name starts with &quot;<code>.</code>&quot;; so it will not be shown. To show it, use <code>ls(all=T)</code>.</p>
+		<p>5. The output will show only <code>v1.1</code> and <code>v1.2</code>. The third variable name starts with
+			&quot;<code>.</code>&quot;; so it will not be shown. To show it, use <code>ls(all=T)</code>.</p>
 
-<p>6. You will not see any syntax error; but you will see only one variable named <code>student</code>. Why? It&#39;s because <code>student#1</code> is not really a variable. Everything after <code>#</code> will be considered a comment and therefore will be ignored. The only variable will be <code>student</code>.</p>
+		<p>6. You will not see any syntax error; but you will see only one variable named <code>student</code>. Why?
+			It&#39;s because <code>student#1</code> is not really a variable. Everything after <code>#</code> will be
+			considered a comment and therefore will be ignored. The only variable will be <code>student</code>.</p>
 
-<p>7. The syntax is fine. <code>v1 = 1</code> will be numeric. However in the third line, when you use the <code>|</code> operator (which is &quot;or&quot;), <code>v1</code> will be coerced into a logical value. Because any non-zero number will be <code>TRUE</code>, <code>v1</code> will be <code>TRUE</code>. Hence <code>v1 | v2</code> will be evaluated as <code>TRUE</code> (&quot;TRUE or FALSE&quot; yields TRUE) and that will be the output.</p>
+		<p>7. The syntax is fine. <code>v1 = 1</code> will be numeric. However in the third line, when you use the
+			<code>|</code> operator (which is &quot;or&quot;), <code>v1</code> will be coerced into a logical value.
+			Because any non-zero number will be <code>TRUE</code>, <code>v1</code> will be <code>TRUE</code>. Hence
+			<code>v1 | v2</code> will be evaluated as <code>TRUE</code> (&quot;TRUE or FALSE&quot; yields TRUE) and that
+			will be the output.
+		</p>
 
-<p>8. The result will be 2. Variable <code>l1</code> is less than <code>l2</code>. So, <code>l1 &lt; l2</code> will yield <code>TRUE</code>, which is assigned as a value to variable <code>l3</code>. When you add 1 to <code>l3</code>, <code>l3</code> is coerced into 1 (remember, 0 equals <code>false</code> and 1 equals <code>true</code>). So <code>l3</code> + 1 will yield 2.</p>
+		<p>8. The result will be 2. Variable <code>l1</code> is less than <code>l2</code>. So, <code>l1 &lt; l2</code>
+			will yield <code>TRUE</code>, which is assigned as a value to variable <code>l3</code>. When you add 1 to
+			<code>l3</code>, <code>l3</code> is coerced into 1 (remember, 0 equals <code>false</code> and 1 equals
+			<code>true</code>). So <code>l3</code> + 1 will yield 2.
+		</p>
 
-<p>9. No; it will not produce a syntax error. The last line merely checks whether <code>l2</code> is greater than <code>l3</code> and stores the result in <code>l1</code>. Because <code>2 &gt; 3</code> will yield <code>false</code>, <code>l1</code> will hold the value <code>FALSE</code>. You can check that by printing <code>l1</code> at the prompt.</p>
+		<p>9. No; it will not produce a syntax error. The last line merely checks whether <code>l2</code> is greater
+			than <code>l3</code> and stores the result in <code>l1</code>. Because <code>2 &gt; 3</code> will yield
+			<code>false</code>, <code>l1</code> will hold the value <code>FALSE</code>. You can check that by printing
+			<code>l1</code> at the prompt.
+		</p>
 
-<p>10. We are comparing <code>NA</code> (the equivalent of <code>NULL</code> in PL/SQL) to a number value. They can&#39;t be compared. So the result will be <code>NA</code>.</p>
+		<p>10. We are comparing <code>NA</code> (the equivalent of <code>NULL</code> in PL/SQL) to a number value. They
+			can&#39;t be compared. So the result will be <code>NA</code>.</p>
 
-<h3>About the Authors</h3>
+		<h3>About the Authors</h3>
 
-<p><strong>Arup Nanda</strong> <a href="mailto:arup@proligence.com">arup@proligence.com</a> has been an Oracle DBA since 1993, handling all aspects of database administration, from performance tuning to security and disaster recovery. He was <em>Oracle Magazine&#39;s</em> DBA of the Year in 2003 and received an Oracle Excellence Award for Technologist of the Year in 2012. Arup Nanda has been an Oracle DBA since 1993, handling all aspects of database administration, from performance tuning to security and disaster recovery. He was <em>Oracle Magazine&#39;s</em> DBA of the Year in 2003 and received an Oracle Excellence Award for Technologist of the Year in 2012.</p>
-</div>
+		<p><strong>Arup Nanda</strong> <a href="mailto:arup@proligence.com">arup@proligence.com</a> has been an Oracle
+			DBA since 1993, handling all aspects of database administration, from performance tuning to security and
+			disaster recovery. He was <em>Oracle Magazine&#39;s</em> DBA of the Year in 2003 and received an Oracle
+			Excellence Award for Technologist of the Year in 2012. Arup Nanda has been an Oracle DBA since 1993,
+			handling all aspects of database administration, from performance tuning to security and disaster recovery.
+			He was <em>Oracle Magazine&#39;s</em> DBA of the Year in 2003 and received an Oracle Excellence Award for
+			Technologist of the Year in 2012.</p>
+	</div>
 </section>
 
 <!-- / _Raw-HTML -->

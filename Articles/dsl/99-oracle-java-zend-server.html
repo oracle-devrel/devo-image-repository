@@ -1,7 +1,11 @@
-<!-- _Raw-Text -->
-
 <section class="cc01 cc01v0 cpad crule">
     <div class="cc01w1 cwidth">
+
+        <style>
+            .content-container .technical-content-container .body .ocode pre {
+                padding: 24px 24px 24px 24px !important;
+            }
+        </style>
 
         <p><strong>Zend Server, a high-performance, enterprise-ready PHP stack, comes with a built-in
                 "Java bridge" to connect PHP with JEE applications and services. Here's how it
@@ -11,7 +15,7 @@
             development environments together is a "best of both worlds" scenario for enterprise Web
             application developers. PHP is one of the most versatile environments for Web application
             development, with a wealth of extensions and add-on libraries freely available through the
-            PECL and PEAR repositories and the <a href="//framework.zend.com/">Zend Framework</a>. In
+            PECL and PEAR repositories and the <a href="//framework.zend.com/" target="_blank">Zend Framework</a>. In
             the PHP environment, developers can easily perform tasks as diverse as accessing cloud
             services, programmatically generating PDFs and processing XML.</p>
 
@@ -66,13 +70,15 @@
 
         <p>It's worth noting that the Zend Java Bridge is not the only available option. PHP's built-in support for XML
             and JSON formats means that even without the Zend Java Bridge, it's still possible to access Java resources
-            exposed as Web services from PHP. PHP 4.x also included a <a href="//www.php.net/java">Java extension</a>
+            exposed as Web services from PHP. PHP 4.x also included a <a href="//www.php.net/java" target="_blank">Java
+                extension</a>
             that allowed Java classes to be instantiated directly from PHP, as well as a Java Servlet SAPI that allowed
             PHP to be integrated into a servlet environment.</p>
 
         <p>Other open-source tools also exist to achieve the same result. For example, <a
-                href="http://quercus.caucho.com/">Quercus</a> is a 100% Java implementation of PHP, while the <a
-                href="http://php-java-bridge.sourceforge.net/pjb/">PHP/Java Bridge </a>is a Java Web application that
+                href="http://quercus.caucho.com/" target="_blank">Quercus</a> is a 100% Java implementation of PHP,
+            while the <a href="http://php-java-bridge.sourceforge.net/pjb/" target="_blank">PHP/Java Bridge </a>is a
+            Java Web application that
             allows two-way method invocation between PHP and Java using an XML-based protocol. Quercus and the PHP/Java
             Bridge are not discussed in this article; however, you can find more information on using the PHP/Java
             Bridge in this article by Gary Horen.</p>
@@ -83,7 +89,8 @@
         <p>For purposes of this article, I'll assume that you have a current version of Oracle WebLogic Server and JRE
             1.5+, with all samples installed and the Samples domain active. In case you don't, you can download a
             version of Oracle WebLogic Server suitable for your development environment from the Oracle WebLogic <a
-                target="" href="//www.oracle.com/middleware/technologies/weblogic.html">homepage</a> on OTN. Note that
+                target="_blank" href="//www.oracle.com/middleware/technologies/weblogic.html">homepage</a> on OTN. Note
+            that
             the code samples are not installed automatically; you must perform a custom installation to obtain these.
             The examples in this article were tested using Oracle WebLogic Server 11<em>g</em> (V10.3.2) with JDK 1.6 on
             Linux with Zend Server 5.0.1 and PHP 5.3.</p>
@@ -97,7 +104,8 @@
         <p>Once Zend Server is successfully installed, you will be able to access it at the URL <code
                 class="ocode">http://localhost:10081/ZendServer</code>. The first time you access this URL, you will be
             asked to accept the software license agreement, and enter an administrator password and a license key.
-            Remember that you can get a <a href="//www.zend.com/products/server/license">trial license key</a>. In the
+            Remember that you can get a <a href="//www.zend.com/products/server/license" target="_blank">trial license
+                key</a>. In the
             absence of the license key, Zend Server will function in community mode, with many of its key features
             disabled.</p>
 
@@ -113,7 +121,7 @@
             the Zend Java Bridge will typically need to be downloaded and configured manually. So, navigate to the
             Server Setup -&gt; Components page, and check if the Zend Java Bridge is installed and active.</p>
 
-        </p>
+        <p></p>
         <p align="center"><img alt="Figure 1"
                 src="//www.oracle.com/ocom/groups/public/@otn/documents/webcontent/152540.jpg"></p>
 
@@ -128,8 +136,7 @@
             <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
                 <div><a href="#copy">Copy</a></div>
             </div>
-            <pre>
-<code>shell&gt; up2date zend-server-repo
+            <pre><code>shell&gt; up2date zend-server-repo
 shell&gt; yum install php-5.3-java-bridge-zend-server
 </code></pre>
         </div>
@@ -138,7 +145,7 @@ shell&gt; yum install php-5.3-java-bridge-zend-server
             Users of Debian-based distributions can install the component with aptitude, as shown below:</p>
 
 
-        <code class="ocode">shell&gt; aptitude install php-5.3-java-bridge-zend-server
+        <code class="ocode2">shell&gt; aptitude install php-5.3-java-bridge-zend-server
 </code>
 
         <p>
@@ -196,8 +203,7 @@ shell&gt; yum install php-5.3-java-bridge-zend-server
             <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
                 <div><a href="#copy">Copy</a></div>
             </div>
-            <pre>
-<code>import java.text.SimpleDateFormat;
+            <pre><code>import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -235,8 +241,7 @@ class MyClass
             <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
                 <div><a href="#copy">Copy</a></div>
             </div>
-            <pre>
-<code>&lt;?php
+            <pre><code>&lt;?php
 // initialize calendar object
 $cal = new Java("java.util.GregorianCalendar");
 $cal-&gt;set(2010,$cal-&gt;JANUARY,1);
@@ -313,8 +318,7 @@ echo "Ending date is: " . $date-&gt;format($cal-&gt;getTime());
             <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
                 <div><a href="#copy">Copy</a></div>
             </div>
-            <pre>
-<code>public class Menu
+            <pre><code>public class Menu
 {
   private static String[] myArray = {"eggs", "hamburgers", "tomato soup", "chicken pot pie", 
                                      "spaghetti bolognese", "ice cream", "chocolate chip cookies", 
@@ -347,7 +351,7 @@ echo "Ending date is: " . $date-&gt;format($cal-&gt;getTime());
         </p>
 
 
-        <code class="ocode">shell&gt; javac Menu.java
+        <code class="ocode2">shell&gt; javac Menu.java
 </code>
 
 
@@ -359,7 +363,7 @@ echo "Ending date is: " . $date-&gt;format($cal-&gt;getTime());
             classpath configuration:</p>
 
 
-        <code class="ocode">zend_wd.env.java_daemon=CLASSPATH=.:/usr/local/zend/bin/javamw.jar:/tmp/Menu.class:
+        <code class="ocode2">zend_wd.env.java_daemon=CLASSPATH=.:/usr/local/zend/bin/javamw.jar:/tmp/Menu.class:
 </code>
 
         <p>
@@ -370,8 +374,7 @@ echo "Ending date is: " . $date-&gt;format($cal-&gt;getTime());
             <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
                 <div><a href="#copy">Copy</a></div>
             </div>
-            <pre>
-<code>&lt;?php
+            <pre><code>&lt;?php
 // initialize custom Java class and invoke class method
 $m = new Java("Menu");
 echo $m-&gt;getMenu();
@@ -396,8 +399,7 @@ echo $m-&gt;getMenu();
             <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
                 <div><a href="#copy">Copy</a></div>
             </div>
-            <pre>
-<code>public class Menu
+            <pre><code>public class Menu
 {
   private static String[] myArray = {"eggs", "hamburgers", "tomato soup", "chicken pot pie", 
                                      "spaghetti bolognese", "ice cream", "chocolate chip cookies", 
@@ -430,8 +432,7 @@ echo $m-&gt;getMenu();
             <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
                 <div><a href="#copy">Copy</a></div>
             </div>
-            <pre>
-<code>&lt;?php
+            <pre><code>&lt;?php
 // initialize custom Java class and invoke class method
 $m = new Java("Menu");
 print_r($m-&gt;getMenu());
@@ -482,8 +483,7 @@ print_r($m-&gt;getMenu());
             <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
                 <div><a href="#copy">Copy</a></div>
             </div>
-            <pre>
-<code>&lt;html&gt;
+            <pre><code>&lt;html&gt;
   &lt;head&gt;&lt;/head&gt;
   &lt;body&gt;
   &lt;h2&gt;Bank Account Administration&lt;/h2&gt;
@@ -639,7 +639,8 @@ print_r($m-&gt;getMenu());
 
 
         <p><strong>
-                Vikram Vaswani</strong> is the founder and CEO of <a href="//www.melonfire.com">Melonfire</a>, a
+                Vikram Vaswani</strong> is the founder and CEO of <a href="//www.melonfire.com"
+                target="_blank">Melonfire</a>, a
             consultancy firm with special expertise in open-source tools and technologies. He is the author of four
             books on PHP and MySQL, and a frequent contributor to Zend Developer Zone, IBM DeveloperWorks, and other
             community sites.</p>
@@ -649,6 +650,3 @@ print_r($m-&gt;getMenu());
 
     </div>
 </section>
-
-<!--</article>-->
-<!-- / _Raw-Text -->

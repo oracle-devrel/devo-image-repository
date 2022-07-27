@@ -1,6 +1,11 @@
-<!-- _Raw-Text -->
 <section class="cc01 cc01v0 cpad crule">
     <div class="cc01w1 cwidth">
+
+        <style>
+            .content-container .technical-content-container .body .ocode pre {
+                padding: 24px 24px 24px 24px !important;
+            }
+        </style>
 
         <p><strong> This article is Part 1 of a two-part series that describes the steps for creating a JavaScript-based
                 data management application that integrates with Oracle Database via RESTful service calls. </strong>
@@ -47,7 +52,7 @@
                 have all that you need to start building and populating your tables. The steps outlined in this article
                 should work with either of these options; however, connecting via Oracle SQL Developer might differ. To
                 get started with a free trial of any of the Oracle Cloud services, visit this site: <a
-                    href="https://cloud.oracle.com/tryit">cloud.oracle.com/tryit</a>.<br>&nbsp;</li>
+                    href="https://cloud.oracle.com/tryit" target="_blank">cloud.oracle.com/tryit</a>.<br>&nbsp;</li>
             <li>Oracle Technology Network Developer Day virtual machines (VMs). If you want to have something local to
                 your machine and don't want to sign up for anything other than a free Oracle Technology Network account,
                 you can use one of the freely available Oracle Technology Network Developer Day VMs. These VMs are based
@@ -55,7 +60,8 @@
                 However, they are not suitable nor are they licensed to be used for developing production applications.
                 They can run natively in Oracle VM VirtualBox or they can easily be converted to run in other VM
                 software, such as VMware. The best-suited VM for this article is the <a
-                    href="http://www.oracle.com/technetwork/database/enterprise-edition/databaseappdev-vm-161299.html">Database
+                    href="http://www.oracle.com/technetwork/database/enterprise-edition/databaseappdev-vm-161299.html"
+                    target="_blank">Database
                     App Development VM</a>. <strong>Note</strong>: Oracle SQL Developer might have to be updated to at
                 least version 4.2 if you are using the Oracle Technology Network Developer Day VMs. Oracle SQL Developer
                 4.2 was released in late April, and might not yet be found in the VMs.<br>&nbsp;</li>
@@ -77,22 +83,24 @@
             Developer also includes a DBA console that can be used to manage databases. Make sure that the version of
             Oracle SQL Developer you download is at least 4.2; anything earlier will not have the required components
             for managing web services.</p>
-        <p>Oracle SQL Developer can be downloaded for free here: <a
-                href="https://oracle.com/sqldeveloper">oracle.com/sqldeveloper</a>. Simply choose your corresponding
+        <p>Oracle SQL Developer can be downloaded for free here: <a href="https://oracle.com/sqldeveloper"
+                target="_blank">oracle.com/sqldeveloper</a>. Simply choose your corresponding
             platform. To complete the download, you will need to log in to your Oracle Technology Network account.
             Oracle Technology Network accounts are free; simply navigate to the following site and click the
-            <strong>Create Account</strong> button: <a
-                href="https://login.oracle.com/mysso/signon.jsp">https://login.oracle.com/mysso/signon.jsp</a>.
+            <strong>Create Account</strong> button: <a href="https://login.oracle.com/mysso/signon.jsp"
+                target="_blank">https://login.oracle.com/mysso/signon.jsp</a>.
         </p>
         <p>Depending on your platform, you might have to also download and install a JDK. JDKs for several different
             platforms can be downloaded <a
-                href="http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html">here</a>.</p>
+                href="http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html"
+                target="_blank">here</a>.</p>
         <h3>Configuring Oracle SQL Developer</h3>
         <p>Once Oracle SQL Developer has been installed, the next step is to create a connection to your database.
             Depending on which Oracle Cloud environment you selected, the steps for connecting will differ slightly.</p>
         <ul class="obullets">
             <li>For Oracle Database Cloud Service, see <a
-                    href="https://docs.oracle.com/en/cloud/paas/database-dbaas-cloud/csdbi/get-started-this-service.html"><em>Using
+                    href="https://docs.oracle.com/en/cloud/paas/database-dbaas-cloud/csdbi/get-started-this-service.html"
+                    target="_blank"><em>Using
                         Oracle Database Cloud Service</em></a>.</li>
             <li>For Oracle Database Exadata Express Cloud Service (Exadata Express), see <em>Using Oracle Database
                     Exadata Express Cloud Service</em>.</li>
@@ -107,24 +115,28 @@
             have been used for years. Figure 1 illustrates a data model of the two tables.</p>
         <p align="center"><img src="//www.oracle.com/technetwork/articles/dsl/odb-browser-apps-f1-3844848.gif"
                 alt="ODB-apps-Figure1 "><br>
-        <p></p><strong>Figure 1: A data model of the EMP and DEPT tables.</strong></p>
+        </p>
+        <p></p><strong>Figure 1: A data model of the EMP and DEPT tables.</strong>
+        <p></p>
         <p>The elegance of the EMP and DEPT tables lies in their simplicity: with only a few columns and a handful of
             rows, it's possible to demonstrate almost any relational database concept with these two tables.</p>
         <p>Your schema might or might not include EMP and DEPT. If it does, no further action is required. However, if
-            it does not, you'll have to create them. This can be done by running the script shown in <a
-                href="#listing3">Listing 3</a> of Appendix A.</p>
+            it does not, you'll have to create them. This can be done by running the script shown in <a href="#listing3"
+                target="_blank">Listing 3</a> of Appendix A.</p>
         <p>To create the EMP and DEPT tables, do the following:</p>
         <ol class="decimal">
             <li>Start Oracle SQL Developer.</li>
             <li>Connect to the schema defined in the previous step.</li>
-            <li>Locate the script in <a href="#listing3">Listing 3</a> of Appendix A and copy it.</li>
+            <li>Locate the script in <a href="#listing3" target="_blank">Listing 3</a> of Appendix A and copy it.</li>
             <li>Paste the contents of the script into the <strong>Worksheet</strong> tab of Oracle SQL Developer.</li>
             <li>Click the <strong>Run Script</strong> icon, which is circled in red in Figure 2. <strong>Note</strong>:
                 If you have an EMP and DEPT table, this script will first remove and then re-create them.<br>&nbsp;</li>
         </ol>
         <p align="center"><img src="//www.oracle.com/technetwork/articles/dsl/odb-browser-apps-f2-3844849.gif"
                 alt="ODB-apps-Figure2 "><br>
-        <p></p><strong>Figure 2: Results of running the script after clicking the Run Script icon.</strong></p>
+        </p>
+        <p></p><strong>Figure 2: Results of running the script after clicking the Run Script icon.</strong>
+        <p></p>
         <p>As the script runs, a list of messages should be displayed in a new window called Script Output. Once the
             script is finished running, the last line will say "Commit Complete."</p>
         <p>Scroll through the Script Output window to ensure that there were no errors when the tables were created or
@@ -137,7 +149,9 @@
         </p>
         <p align="center"><img src="//www.oracle.com/technetwork/articles/dsl/odb-browser-apps-f3-3844850.gif"
                 alt="ODB-apps-Figure3"><br>
-        <p></p><strong>Figure 3: The Columns tab of the EMP table.</strong></p>
+        </p>
+        <p></p><strong>Figure 3: The Columns tab of the EMP table.</strong>
+        <p></p>
         <p>By default, the <strong>Columns</strong> tab is selected. Take a minute to explore the different properties
             of the EMP table by clicking each of the subtabs. Ensure that the <strong>Data</strong> tab contains the 14
             records that were created as part of the script that was just run. Repeat this process with for the DEPT
@@ -206,8 +220,7 @@
                     <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
                         <div><a href="#copy">Copy</a></div>
                     </div>
-                    <pre>
-  <code> SELECT  empno,
+                    <pre>  <code> SELECT  empno,
    dname,
    ename, 
    sal, 
@@ -236,12 +249,13 @@
             being tested. Typically, GETs are fairly simple to test, and testing can be done with nothing more than a
             browser. The others—specifically POST, PUT, and DELETE—require a tool designed to help test web services.
             While there are several tools that can be used to do this, one that is easy to use, is free, and works on
-            all major platforms is called <a href="https://www.getpostman.com/">Postman</a>. Postman makes it simple to
+            all major platforms is called <a href="https://www.getpostman.com/" target="_blank">Postman</a>. Postman
+            makes it simple to
             test almost any web service, even those that require authentication or header variables. We'll use Postman
             in this article to verify that our web services are working properly, but any similar tool would also work.
         </p>
         <p>To test our first web service, simply start Postman and enter the following into the <strong>Enter request
-                URL</strong> field:</p> <code class="ocode"> http://<em>servername</em>/ords/db/demo/emp</code>
+                URL</strong> field:</p> <code class="ocode2"> http://<em>servername</em>/ords/db/demo/emp</code>
         <p><strong>Note</strong>: Be sure to replace <em><code class="ocode">servername</code></em> with the name of
             your server.</p>
         <p>If Postman successfully runs the web service, it will display the JSON document from our first web service,
@@ -249,7 +263,9 @@
             document formatted in various modes.</p>
         <p align="center"><img src="//www.oracle.com/technetwork/articles/dsl/odb-browser-apps-f10-3844857.gif"
                 alt="ODB-apps-Figure10"><br>
-        <p></p><strong>Figure 10: The results of testing our first web service in Postman.</strong></p>
+        </p>
+        <p></p><strong>Figure 10: The results of testing our first web service in Postman.</strong>
+        <p></p>
         <p><strong>Note</strong>: The first parameter of the URL might vary. Check with your DBA for the specifics.</p>
         <h3>Creating the Remaining Web Services</h3>
         <p>We need to create four more web services: one for the DEPT table, one for a specific record from the EMP
@@ -272,8 +288,7 @@
                     <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
                         <div><a href="#copy">Copy</a></div>
                     </div>
-                    <pre>
-  <code>SELECT 
+                    <pre>  <code>SELECT 
    dname,
    deptno
    FROM 
@@ -285,7 +300,7 @@
             <li>Click the single floppy disk icon to save your changes.</li>
         </ol>
         <p>To test out the dept web service, enter the following URL into either your browser or Postman:</p>
-        http://<em>servername</em>/ords/db/demo/dept</pre>
+        http://<em>servername</em>/ords/db/demo/dept
         <p><strong>Note</strong>: Be sure to replace <em><code class="ocode">servername</code></em> with the name of
             your server.</p>
         <p>The results should contain a JSON document with four records, one for each of the departments in the table.
@@ -310,8 +325,7 @@
                     <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
                         <div><a href="#copy">Copy</a></div>
                     </div>
-                    <pre>
-  <code> SELECT empno,
+                    <pre>  <code> SELECT empno,
    deptno, 
    ename,
    sal, 
@@ -333,14 +347,15 @@
         </ol>
         <p>Testing this web service is a bit more involved, because we have to manually substitute the value of <code
                 class="ocode">empno</code> when we test. Thus, a sample URL that we can try looks like this:</p><code
-            class="ocode"> http://servername/ords/db/demo/emp/7839</code>
+            class="ocode2"> http://servername/ords/db/demo/emp/7839</code>
         <p><strong>Note</strong>: Be sure to replace <em><code class="ocode">servername</code></em> with the name of
             your server.</p>
         <p>This should bring back a JSON document with a single record for the employee KING.</p>
         <h4>salByJob Web Service</h4>
         <p>We also need a simple web service that will produce the data for an Oracle JET chart. This web service will
             simply return a job title and the total amount of the salaries associated with each job.</p>
-        <p><a href="http://www.oracle.com/webfolder//www.oracle.com/technetwork/jet/index.html">Oracle JavaScript
+        <p><a href="http://www.oracle.com/webfolder//www.oracle.com/technetwork/jet/index.html" target="_blank">Oracle
+                JavaScript
                 Extension Toolkit</a> (Oracle JET) is a free, open source JavaScript library that is maintained by
             Oracle. Here's a description of it from the Oracle JET home page: "<em>Oracle JET is targeted at
                 intermediate to advanced JavaScript developers working on client-side applications. It's a collection of
@@ -365,12 +380,12 @@
             <li>Set the <strong>Source Type</strong> field to <strong>Query</strong>, ensure that <strong>Data
                     Format</strong> is set to <strong>JSON</strong>, and click <strong>Apply</strong>.</li>
             <li>In the resulting worksheet, enter the following SQL commands: SELECT job, SUM(sal) salFROM empGROUP BY
-                jobORDER BY 2 DESC</pre>
+                jobORDER BY 2 DESC
             </li>
             <li>Click the single floppy disk icon to save your changes.</li>
         </ol>
         <p>Testing this web service is just as straightforward as the last few tests we did. Navigate to the following
-            URL:</p> http://<em>servername</em>/ords/db/demo/salByJob</pre>
+            URL:</p> http://<em>servername</em>/ords/db/demo/salByJob
         <p><strong>Note</strong>: Be sure to replace <em><code class="ocode">servername</code></em> with the name of
             your server.</p>
         <p>This should bring back a JSON document that shows the total salary for each distinct job.</p>
@@ -391,8 +406,7 @@
                     <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
                         <div><a href="#copy">Copy</a></div>
                     </div>
-                    <pre>
-  <code> BEGIN
+                    <pre>  <code> BEGIN
    UPDATE emp SET 
    sal = :sal,
    deptno = :deptno,
@@ -479,7 +493,7 @@
                         alt="ODB-apps-Figure13"> </p><strong>Figure 13. Changing the transaction
                     type.</strong><br>&nbsp;</li>
             <li>Enter the following URL into the <strong>Enter Request URL</strong> field in Postman:
-                http://<em>servername</em>/ords/db/demo/emp</pre> <strong>Note</strong>: Be sure to replace <em><code
+                http://<em>servername</em>/ords/db/demo/emp <strong>Note</strong>: Be sure to replace <em><code
                         class="ocode">servername</code></em> with the name of your server.<br>&nbsp;</li>
             <li>Click the <strong>Headers</strong> tab and then enter the six rows of data shown in Table 2:
                 <strong>Table 2. Data to add</strong>
@@ -554,8 +568,7 @@
             <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
                 <div><a href="#copy">Copy</a></div>
             </div>
-            <pre>
-  <code>&lt;script type="text/javascript" language="javascript"&gt; $(document).ready(function() {   $.getJSON("http://servername/ords/db/demo/emp", function(data) {     $(data.items).each(function (index, value) {         $("#rpt").append(         '&lt;tr&gt;'         + '&lt;td class="text-center"&gt;&lt;a href="form.html#'         + value.empno + '"&gt;Edit&lt;/a&gt;&lt;/td&gt;'         + '&lt;td class="text-right"&gt;'  + value.empno    + '&lt;/td&gt;'         + '&lt;td class="text-center"&gt;' + value.dname    + '&lt;/td&gt;'         + '&lt;td class="text-left"&gt;'   + value.ename    + '&lt;/td&gt;'         + '&lt;td class="text-left"&gt;'   + value.job      + '&lt;/td&gt;'         + '&lt;td class="text-right"&gt;'  + value.sal      + '&lt;/td&gt;'         + '&lt;td class="text-right"&gt;'  + value.sal_diff + '&lt;/td&gt;'         + '&lt;td class="text-right"&gt;'  + value.comm     + '&lt;/td&gt;         + '&lt;td class="text-center"&gt;' + value.rank     + '&lt;/td&gt;'         + '&lt;/tr&gt;');     });   }); });&lt;/script&gt;</code></pre>
+            <pre>  <code>&lt;script type="text/javascript" language="javascript"&gt; $(document).ready(function() {   $.getJSON("http://servername/ords/db/demo/emp", function(data) {     $(data.items).each(function (index, value) {         $("#rpt").append(         '&lt;tr&gt;'         + '&lt;td class="text-center"&gt;&lt;a href="form.html#'         + value.empno + '"&gt;Edit&lt;/a&gt;&lt;/td&gt;'         + '&lt;td class="text-right"&gt;'  + value.empno    + '&lt;/td&gt;'         + '&lt;td class="text-center"&gt;' + value.dname    + '&lt;/td&gt;'         + '&lt;td class="text-left"&gt;'   + value.ename    + '&lt;/td&gt;'         + '&lt;td class="text-left"&gt;'   + value.job      + '&lt;/td&gt;'         + '&lt;td class="text-right"&gt;'  + value.sal      + '&lt;/td&gt;'         + '&lt;td class="text-right"&gt;'  + value.sal_diff + '&lt;/td&gt;'         + '&lt;td class="text-right"&gt;'  + value.comm     + '&lt;/td&gt;         + '&lt;td class="text-center"&gt;' + value.rank     + '&lt;/td&gt;'         + '&lt;/tr&gt;');     });   }); });&lt;/script&gt;</code></pre>
         </div>
         <p><strong>Listing 1: The jQuery function that calls the web service and parses and prints the data to the
                 page.</strong></p>
@@ -563,23 +576,26 @@
             static page. A couple of CSS lines from Bootstrap and the Oracle JET chart add some polish to an otherwise
             drab looking report, as shown in Figure 14. Bootstrap is a free, open source library that's a combination of
             JavaScript, CSS, and HTML templates designed to provide a solid, responsive, and compatible user interface
-            framework.<a name="fig14"></a></p>
+            framework.<a name="fig14" target="_blank"></a></p>
         <p align="center"><img src="//www.oracle.com/technetwork/articles/dsl/odb-browser-apps-f14-3844861.gif"
                 alt="ODB-apps-Figure14">
-        <p></p><strong>Figure 14: The results of the HTML page that calls the web service via jQuery.</strong></p>
+        </p>
+        <p></p><strong>Figure 14: The results of the HTML page that calls the web service via jQuery.</strong>
+        <p></p>
         <p>When a user clicks an <strong>Edit</strong> link, the form page will be called. This page will call the web
             service for the corresponding row that was clicked and populate the form elements. The results are also
             spruced up a bit with Bootstrap, as seen in Figure 15.</p>
         <p align="center"><img src="//www.oracle.com/technetwork/articles/dsl/odb-browser-apps-f15-3844862.gif"
                 alt="ODB-apps-Figure15">
-        <p></p><strong>Figure 15: The form used to update data via web services.</strong></p>
+        </p>
+        <p></p><strong>Figure 15: The form used to update data via web services.</strong>
+        <p></p>
         <p>When the form page is loaded, two separate web service calls are made, as shown in Listing 2.</p>
         <div class="ocode">
             <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
                 <div><a href="#copy">Copy</a></div>
             </div>
-            <pre>
-  <code>&lt;script type="text/javascript" language="javascript"&gt; $(document).ready(function() {   $.getJSON("http://servername/ords/db/demo/dept", function(data) {     $(data.items).each(function( i ) {     $('#deptno').append($('&lt;option&gt;',         {value:data.items[i].deptno, text:data.items[i].dname}));     });   });   setTimeout(function(){     $.getJSON("http://servername/ords/db/demo/emp/"        + window.location.hash.substring(1), function(data) {       $(data).each(function (index, value) {         $("#empno").val(value.empno);           $("#ename").val(value.ename);           $("#job").val(value.job);           $("#sal").val(value.sal);         $("#deptno").val(value.deptno);         $("#comm").val(value.comm);       });     });   }, 100); });&lt;/script&gt;</code></pre>
+            <pre>  <code>&lt;script type="text/javascript" language="javascript"&gt; $(document).ready(function() {   $.getJSON("http://servername/ords/db/demo/dept", function(data) {     $(data.items).each(function( i ) {     $('#deptno').append($('&lt;option&gt;',         {value:data.items[i].deptno, text:data.items[i].dname}));     });   });   setTimeout(function(){     $.getJSON("http://servername/ords/db/demo/emp/"        + window.location.hash.substring(1), function(data) {       $(data).each(function (index, value) {         $("#empno").val(value.empno);           $("#ename").val(value.ename);           $("#job").val(value.job);           $("#sal").val(value.sal);         $("#deptno").val(value.deptno);         $("#comm").val(value.comm);       });     });   }, 100); });&lt;/script&gt;</code></pre>
         </div>
         <p><strong>Listing 2: The jQuery on the form will call two web services: one for the select list and one for the
                 data.</strong></p>
@@ -591,18 +607,22 @@
             back to the server where it will be processed and update the corresponding record. The user will then be
             returned to the report page, where the updated values can be seen.</p>
         <p>Now that you have a basic understanding as to how things will work, the only thing left to do is to create
-            three files based on Listing 4, Listing 5, and Listing 6 (all are in <a href="#appa">Appendix A</a>). Simply
-            copy the source code from each listing and paste it into a new text file. Save <a href="#listing4">Listing
-                4</a> as <code class="ocode">rpt.html</code>, save <a href="#listing5">Listing 5</a> as <code
-                class="ocode">form.htm</code>l, and save <a href="#listing6">Listing 6</a> as <code
+            three files based on Listing 4, Listing 5, and Listing 6 (all are in <a href="#appa"
+                target="_blank">Appendix A</a>). Simply
+            copy the source code from each listing and paste it into a new text file. Save <a href="#listing4"
+                target="_blank">Listing
+                4</a> as <code class="ocode">rpt.html</code>, save <a href="#listing5" target="_blank">Listing 5</a> as
+            <code class="ocode">form.htm</code>l, and save <a href="#listing6" target="_blank">Listing 6</a> as <code
                 class="ocode">chart.js</code>. Be sure that all files are in the same directory on your computer and
-            that you change any occurrences of servername to your server's name.</p>
+            that you change any occurrences of servername to your server's name.
+        </p>
         <p>Once the three files are created, simply open <code class="ocode">rpt.html</code> in any modern browser. You
             should see a report with 14 rows of data and a pie chart summarizing salaries by job, similar to <a
-                href="#fig14">Figure 14</a>.</p>
+                href="#fig14" target="_blank">Figure 14</a>.</p>
         <h3>Conclusion</h3>
-        <p>Now that you've prepared the environment, created the web services, and created the front end, in <a
-                href="">Part 2 of this series</a>, all you'll have to do is simply reload the HTML pages to see changes,
+        <p>Now that you've prepared the environment, created the web services, and created the front end, in <a href=""
+                target="_blank">Part 2 of this series</a>, all you'll have to do is simply reload the HTML pages to see
+            changes,
             because they will all be made on the server side in the database. Keep in mind that this example is
             intentionally simple so that you can focus more on understanding how the server-side components work. The
             front end can capture and parse JSON from the web service any number of ways and for any number of purposes,
@@ -620,15 +640,14 @@
             seven years and was a senior product manager for Oracle Application Express for over three years. He holds a
             dual bachelor's degree from Syracuse University in management information systems and telecommunications
             management.</p>
-        <h3><a name="appa"></a>Appendix A</h3>
-        <h3><a name="listing3"></a>Listing 3: Scripts to Create the EMP and DEPT Tables</h3>
+        <h3><a name="appa" target="_blank"></a>Appendix A</h3>
+        <h3><a name="listing3" target="_blank"></a>Listing 3: Scripts to Create the EMP and DEPT Tables</h3>
         <div class="ocode">
             <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
                 <div><a href="#copy">Copy</a></div>
             </div>
-            <pre>
-  <code>DROP TABLE EMP/DROP TABLE DEPT/CREATE TABLE DEPT ( DEPTNO NUMBER(2), DNAME VARCHAR2(14), LOC VARCHAR2(13), CONSTRAINT dept_pk PRIMARY KEY (deptno) )/CREATE TABLE EMP ( EMPNO NUMBER(4) NOT NULL, ENAME VARCHAR2(10), JOB VARCHAR2(9), MGR NUMBER(4), HIREDATE DATE, SAL NUMBER(7, 2), COMM NUMBER(7, 2), DEPTNO NUMBER(2), CONSTRAINT EMP_PK PRIMARY KEY (empno), CONSTRAINT deptno_fk FOREIGN KEY (deptno) REFERENCES dept (deptno) )/INSERT INTO DEPT VALUES (10, 'ACCOUNTING', 'NEW YORK');INSERT INTO DEPT VALUES (20, 'RESEARCH', 'DALLAS');INSERT INTO DEPT VALUES (30, 'SALES', 'CHICAGO');INSERT INTO DEPT VALUES (40, 'OPERATIONS', 'BOSTON');INSERT INTO EMP VALUES (7369, 'SMITH', 'CLERK', 7902, TO_DATE('17-DEC-1980', 'DD-MON-YYYY'), 800, NULL, 20);INSERT INTO EMP VALUES (7499, 'ALLEN', 'SALESMAN', 7698, TO_DATE('20-FEB-1981', 'DD-MON-YYYY'), 1600, 300, 30);INSERT INTO EMP VALUES (7521, 'WARD', 'SALESMAN', 7698, TO_DATE('22-FEB-1981', 'DD-MON-YYYY'), 1250, 500, 30);INSERT INTO EMP VALUES (7566, 'JONES', 'MANAGER', 7839, TO_DATE('2-APR-1981', 'DD-MON-YYYY'), 2975, NULL, 20);INSERT INTO EMP VALUES (7654, 'MARTIN', 'SALESMAN', 7698, TO_DATE('28-SEP-1981', 'DD-MON-YYYY'), 1250, 1400, 30);INSERT INTO EMP VALUES (7698, 'BLAKE', 'MANAGER', 7839, TO_DATE('1-MAY-1981', 'DD-MON-YYYY'), 2850, NULL, 30);INSERT INTO EMP VALUES (7782, 'CLARK', 'MANAGER', 7839, TO_DATE('9-JUN-1981', 'DD-MON-YYYY'), 2450, NULL, 10);INSERT INTO EMP VALUES (7788, 'SCOTT', 'ANALYST', 7566, TO_DATE('09-DEC-1982', 'DD-MON-YYYY'), 3000, NULL, 20);INSERT INTO EMP VALUES (7839, 'KING', 'PRESIDENT', NULL, TO_DATE('17-NOV-1981', 'DD-MON-YYYY'), 5000, NULL, 10);INSERT INTO EMP VALUES (7844, 'TURNER', 'SALESMAN', 7698, TO_DATE('8-SEP-1981', 'DD-MON-YYYY'), 1500, 0, 30);INSERT INTO EMP VALUES (7876, 'ADAMS', 'CLERK', 7788, TO_DATE('12-JAN-1983', 'DD-MON-YYYY'), 1100, NULL, 20);INSERT INTO EMP VALUES (7900, 'JAMES', 'CLERK', 7698, TO_DATE('3-DEC-1981', 'DD-MON-YYYY'), 950, NULL, 30);INSERT INTO EMP VALUES (7902, 'FORD', 'ANALYST', 7566, TO_DATE('3-DEC-1981', 'DD-MON-YYYY'), 3000, NULL, 20);INSERT INTO EMP VALUES (7934, 'MILLER', 'CLERK', 7782, TO_DATE('23-JAN-1982', 'DD-MON-YYYY'), 1300, NULL, 10);COMMIT/</code></pre>
-        </div>   <h3><a name="listing4"></a>Listing 4: Sample Report HTML File</h3>
+            <pre>  <code>DROP TABLE EMP/DROP TABLE DEPT/CREATE TABLE DEPT ( DEPTNO NUMBER(2), DNAME VARCHAR2(14), LOC VARCHAR2(13), CONSTRAINT dept_pk PRIMARY KEY (deptno) )/CREATE TABLE EMP ( EMPNO NUMBER(4) NOT NULL, ENAME VARCHAR2(10), JOB VARCHAR2(9), MGR NUMBER(4), HIREDATE DATE, SAL NUMBER(7, 2), COMM NUMBER(7, 2), DEPTNO NUMBER(2), CONSTRAINT EMP_PK PRIMARY KEY (empno), CONSTRAINT deptno_fk FOREIGN KEY (deptno) REFERENCES dept (deptno) )/INSERT INTO DEPT VALUES (10, 'ACCOUNTING', 'NEW YORK');INSERT INTO DEPT VALUES (20, 'RESEARCH', 'DALLAS');INSERT INTO DEPT VALUES (30, 'SALES', 'CHICAGO');INSERT INTO DEPT VALUES (40, 'OPERATIONS', 'BOSTON');INSERT INTO EMP VALUES (7369, 'SMITH', 'CLERK', 7902, TO_DATE('17-DEC-1980', 'DD-MON-YYYY'), 800, NULL, 20);INSERT INTO EMP VALUES (7499, 'ALLEN', 'SALESMAN', 7698, TO_DATE('20-FEB-1981', 'DD-MON-YYYY'), 1600, 300, 30);INSERT INTO EMP VALUES (7521, 'WARD', 'SALESMAN', 7698, TO_DATE('22-FEB-1981', 'DD-MON-YYYY'), 1250, 500, 30);INSERT INTO EMP VALUES (7566, 'JONES', 'MANAGER', 7839, TO_DATE('2-APR-1981', 'DD-MON-YYYY'), 2975, NULL, 20);INSERT INTO EMP VALUES (7654, 'MARTIN', 'SALESMAN', 7698, TO_DATE('28-SEP-1981', 'DD-MON-YYYY'), 1250, 1400, 30);INSERT INTO EMP VALUES (7698, 'BLAKE', 'MANAGER', 7839, TO_DATE('1-MAY-1981', 'DD-MON-YYYY'), 2850, NULL, 30);INSERT INTO EMP VALUES (7782, 'CLARK', 'MANAGER', 7839, TO_DATE('9-JUN-1981', 'DD-MON-YYYY'), 2450, NULL, 10);INSERT INTO EMP VALUES (7788, 'SCOTT', 'ANALYST', 7566, TO_DATE('09-DEC-1982', 'DD-MON-YYYY'), 3000, NULL, 20);INSERT INTO EMP VALUES (7839, 'KING', 'PRESIDENT', NULL, TO_DATE('17-NOV-1981', 'DD-MON-YYYY'), 5000, NULL, 10);INSERT INTO EMP VALUES (7844, 'TURNER', 'SALESMAN', 7698, TO_DATE('8-SEP-1981', 'DD-MON-YYYY'), 1500, 0, 30);INSERT INTO EMP VALUES (7876, 'ADAMS', 'CLERK', 7788, TO_DATE('12-JAN-1983', 'DD-MON-YYYY'), 1100, NULL, 20);INSERT INTO EMP VALUES (7900, 'JAMES', 'CLERK', 7698, TO_DATE('3-DEC-1981', 'DD-MON-YYYY'), 950, NULL, 30);INSERT INTO EMP VALUES (7902, 'FORD', 'ANALYST', 7566, TO_DATE('3-DEC-1981', 'DD-MON-YYYY'), 3000, NULL, 20);INSERT INTO EMP VALUES (7934, 'MILLER', 'CLERK', 7782, TO_DATE('23-JAN-1982', 'DD-MON-YYYY'), 1300, NULL, 10);COMMIT/</code></pre>
+        </div>   <h3><a name="listing4" target="_blank"></a>Listing 4: Sample Report HTML File</h3>
         <p>Save this file as <code class="ocode">rpt.html</code>.</p>
         <p><strong>Note</strong>: Be sure to change the value of <em><code class="ocode">servername</code></em> to your
             server's name. There is one instance in this file.</p>
@@ -637,10 +656,9 @@
             <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
                 <div><a href="#copy">Copy</a></div>
             </div>
-            <pre>
-  <code>&lt;!DOCTYPE html&gt;&lt;meta content="text/html;charset=utf-8" http-equiv="Content-Type"&gt;&lt;meta content="utf-8" http-equiv="encoding"&gt;&lt;head&gt;&lt;script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"&gt;&lt;/script&gt;&lt;script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.2.0/require.min.js"&gt;&lt;/script&gt;&lt;link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"&gt;&lt;link rel="stylesheet" href="http://rawgit.com/oracle/oraclejet/2.1.0/dist/css/alta/oj-alta-min.css"&gt;&lt;script type="text/javascript" src="chart.js"&gt;&lt;/script&gt;&lt;style type="text/css"&gt;th { text-align: center !important }&lt;/style&gt;&lt;title&gt;Employees&lt;/title&gt;&lt;script type="text/javascript" language="javascript"&gt; $(document).ready(function() {   $.getJSON("http://<em>servername</em>/ords/db/demo/emp", function(data) {     $(data.items).each(function (index, value) {         $("#rpt").append(         '&lt;tr&gt;'         + '&lt;td class="text-center"&gt;&lt;a href="form.html#' + value.empno    + '"&gt;Edit&lt;/a&gt;&lt;/td&gt;'         + '&lt;td class="text-right"&gt;'  + value.empno    + '&lt;/td&gt;'         + '&lt;td class="text-center"&gt;' + value.dname    + '&lt;/td&gt;'         + '&lt;td class="text-left"&gt;'   + value.ename    + '&lt;/td&gt;'         + '&lt;td class="text-left"&gt;'   + value.job    + '&lt;/td&gt;'         + '&lt;td class="text-right"&gt;$'  + value.sal      + '&lt;/td&gt;'         + '&lt;td class="text-right"&gt;$'  + value.sal_diff + '&lt;/td&gt;'         + '&lt;td class="text-right"&gt;$'  + value.comm     + '&lt;/td&gt;'         + '&lt;td class="text-center"&gt;' + value.rank     + '&lt;/td&gt;'         + '&lt;/tr&gt;');     });   }); });&lt;/script&gt;&lt;/head&gt;&lt;body&gt;&lt;div class="container"&gt; &lt;div class="row"&gt;   &lt;div class="col-sm-8"&gt;     &lt;h2&gt;Employees&lt;/h2&gt;     &lt;table id="rpt" class="table table-striped table-hover"&gt;     &lt;tr&gt;       &lt;th&gt;EDIT&lt;/th&gt;       &lt;th&gt;EMPNO&lt;/th&gt;       &lt;th&gt;DEPT&lt;/th&gt;       &lt;th&gt;ENAME&lt;/th&gt;       &lt;th&gt;JOB&lt;/th&gt;       &lt;th&gt;SAL&lt;/th&gt;       &lt;th&gt;SAL_DIFF&lt;/th&gt;       &lt;th&gt;COMM&lt;/th&gt;       &lt;th&gt;RANK&lt;/th&gt;     &lt;/tr&gt;     &lt;/table&gt;   &lt;/div&gt;   &lt;div class="col-sm-4" id='chart-container'&gt;     &lt;h2&gt;Salaries by Job&lt;/h2&gt;     &lt;div id="pieChart" data-bind="ojComponent: {               component: 'ojChart',               type: 'pie',               series: pieSeriesValue,               animationOnDisplay: 'false',               animationOnDataChange: 'auto',               hoverBehavior: 'dim'               }"               style="max-width:500px;width:100%;height:350px;"&gt;     &lt;/div&gt;   &lt;/div&gt; &lt;/div&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt; </code></pre>
+            <pre>  <code>&lt;!DOCTYPE html&gt;&lt;meta content="text/html;charset=utf-8" http-equiv="Content-Type"&gt;&lt;meta content="utf-8" http-equiv="encoding"&gt;&lt;head&gt;&lt;script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"&gt;&lt;/script&gt;&lt;script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.2.0/require.min.js"&gt;&lt;/script&gt;&lt;link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"&gt;&lt;link rel="stylesheet" href="http://rawgit.com/oracle/oraclejet/2.1.0/dist/css/alta/oj-alta-min.css"&gt;&lt;script type="text/javascript" src="chart.js"&gt;&lt;/script&gt;&lt;style type="text/css"&gt;th { text-align: center !important }&lt;/style&gt;&lt;title&gt;Employees&lt;/title&gt;&lt;script type="text/javascript" language="javascript"&gt; $(document).ready(function() {   $.getJSON("http://<em>servername</em>/ords/db/demo/emp", function(data) {     $(data.items).each(function (index, value) {         $("#rpt").append(         '&lt;tr&gt;'         + '&lt;td class="text-center"&gt;&lt;a href="form.html#' + value.empno    + '"&gt;Edit&lt;/a&gt;&lt;/td&gt;'         + '&lt;td class="text-right"&gt;'  + value.empno    + '&lt;/td&gt;'         + '&lt;td class="text-center"&gt;' + value.dname    + '&lt;/td&gt;'         + '&lt;td class="text-left"&gt;'   + value.ename    + '&lt;/td&gt;'         + '&lt;td class="text-left"&gt;'   + value.job    + '&lt;/td&gt;'         + '&lt;td class="text-right"&gt;$'  + value.sal      + '&lt;/td&gt;'         + '&lt;td class="text-right"&gt;$'  + value.sal_diff + '&lt;/td&gt;'         + '&lt;td class="text-right"&gt;$'  + value.comm     + '&lt;/td&gt;'         + '&lt;td class="text-center"&gt;' + value.rank     + '&lt;/td&gt;'         + '&lt;/tr&gt;');     });   }); });&lt;/script&gt;&lt;/head&gt;&lt;body&gt;&lt;div class="container"&gt; &lt;div class="row"&gt;   &lt;div class="col-sm-8"&gt;     &lt;h2&gt;Employees&lt;/h2&gt;     &lt;table id="rpt" class="table table-striped table-hover"&gt;     &lt;tr&gt;       &lt;th&gt;EDIT&lt;/th&gt;       &lt;th&gt;EMPNO&lt;/th&gt;       &lt;th&gt;DEPT&lt;/th&gt;       &lt;th&gt;ENAME&lt;/th&gt;       &lt;th&gt;JOB&lt;/th&gt;       &lt;th&gt;SAL&lt;/th&gt;       &lt;th&gt;SAL_DIFF&lt;/th&gt;       &lt;th&gt;COMM&lt;/th&gt;       &lt;th&gt;RANK&lt;/th&gt;     &lt;/tr&gt;     &lt;/table&gt;   &lt;/div&gt;   &lt;div class="col-sm-4" id='chart-container'&gt;     &lt;h2&gt;Salaries by Job&lt;/h2&gt;     &lt;div id="pieChart" data-bind="ojComponent: {               component: 'ojChart',               type: 'pie',               series: pieSeriesValue,               animationOnDisplay: 'false',               animationOnDataChange: 'auto',               hoverBehavior: 'dim'               }"               style="max-width:500px;width:100%;height:350px;"&gt;     &lt;/div&gt;   &lt;/div&gt; &lt;/div&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt; </code></pre>
         </div>
-        <h3><a name="listing5"></a>Listing 5: Sample Form HTML File</h3>
+        <h3><a name="listing5" target="_blank"></a>Listing 5: Sample Form HTML File</h3>
         <p>Save this file as <code class="ocode">form.html</code>. Be sure to save it in the same directory as <code
                 class="ocode">rpt.html</code>.</p>
         <p><strong>Note</strong>: Be sure to change the value of <em><code class="ocode">servername</code></em> to your
@@ -649,10 +667,9 @@
             <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
                 <div><a href="#copy">Copy</a></div>
             </div>
-            <pre>
-  <code>&lt;!DOCTYPE html&gt;&lt;meta content="text/html;charset=utf-8" http-equiv="Content-Type"&gt;&lt;meta content="utf-8" http-equiv="encoding"&gt;&lt;head&gt;&lt;script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"&gt;&lt;/script&gt;&lt;link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"&gt;&lt;style type="text/css"&gt;label { padding: 10px; width:150px; text-align: right;}button { margin: 10px;}&lt;/style&gt;&lt;title&gt;Employee Details&lt;/title&gt;&lt;script type="text/javascript" language="javascript"&gt; $(document).ready(function() {   $.getJSON("http://<em>servername</em>/ords/db/demo/dept", function(data) {     $(data.items).each(function( i ) {     $('#deptno').append($('&lt;option&gt;', {value:data.items[i].deptno, text:data.items[i].dname}));     });   });   setTimeout(function(){     $.getJSON("http://<em>servername</em>/ords/db/demo/emp/" + window.location.hash.substring(1), function(data) {       $(data).each(function (index, value) {         $("#empno").val(value.empno);           $("#ename").val(value.ename);           $("#job").val(value.job);         $("#sal").val(value.sal);         $("#deptno").val(value.deptno);         $("#comm").val(value.comm);       });     });   }, 100); });&lt;/script&gt;&lt;/head&gt;&lt;body&gt;&lt;form action="rpt.html" method="post" name="registration" id="form"&gt; &lt;div class="container" style="outline: 1px solid black;background-color:#eee;margin-top:20px;"&gt;   &lt;h2&gt;Employee Details&lt;/h2&gt;   &lt;input type="hidden" name="empno" id="empno" /&gt;   &lt;label for="ename"&gt;Employee Name&lt;/label&gt;   &lt;input type="text" name="ename" id="ename" /&gt;   &lt;label for="deptno"&gt;Department&lt;/label&gt;   &lt;select name="deptno" id="deptno"&gt;&lt;/select&gt;   &lt;label for="job"&gt;Job&lt;/label&gt;   &lt;input type="text" name="job" id="job" /&gt;   &lt;br /&gt;   &lt;label for="sal"&gt;Salary&lt;/label&gt;   &lt;input type="text" name="sal" id="sal" /&gt;   &lt;label for="comm"&gt;Commission&lt;/label&gt;   &lt;input type="text" name="comm" id="comm" /&gt;   &lt;/br &gt;   &lt;span class="pull-right"&gt;     &lt;a href="rpt.html" style="color:black;"&gt;&lt;input type="button" value="Cancel" /&gt;&lt;/a&gt;     &lt;button type="submit"&gt;Save&lt;/button&gt;   &lt;/span&gt; &lt;/div&gt;&lt;/form&gt;&lt;script&gt;$( "form" ).submit(function( event ) { $.post( "http://<em>servername</em>/ords/db/demo/emp", $( "#form" ).serialize() );});&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;</code></pre>
+            <pre>  <code>&lt;!DOCTYPE html&gt;&lt;meta content="text/html;charset=utf-8" http-equiv="Content-Type"&gt;&lt;meta content="utf-8" http-equiv="encoding"&gt;&lt;head&gt;&lt;script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"&gt;&lt;/script&gt;&lt;link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"&gt;&lt;style type="text/css"&gt;label { padding: 10px; width:150px; text-align: right;}button { margin: 10px;}&lt;/style&gt;&lt;title&gt;Employee Details&lt;/title&gt;&lt;script type="text/javascript" language="javascript"&gt; $(document).ready(function() {   $.getJSON("http://<em>servername</em>/ords/db/demo/dept", function(data) {     $(data.items).each(function( i ) {     $('#deptno').append($('&lt;option&gt;', {value:data.items[i].deptno, text:data.items[i].dname}));     });   });   setTimeout(function(){     $.getJSON("http://<em>servername</em>/ords/db/demo/emp/" + window.location.hash.substring(1), function(data) {       $(data).each(function (index, value) {         $("#empno").val(value.empno);           $("#ename").val(value.ename);           $("#job").val(value.job);         $("#sal").val(value.sal);         $("#deptno").val(value.deptno);         $("#comm").val(value.comm);       });     });   }, 100); });&lt;/script&gt;&lt;/head&gt;&lt;body&gt;&lt;form action="rpt.html" method="post" name="registration" id="form"&gt; &lt;div class="container" style="outline: 1px solid black;background-color:#eee;margin-top:20px;"&gt;   &lt;h2&gt;Employee Details&lt;/h2&gt;   &lt;input type="hidden" name="empno" id="empno" /&gt;   &lt;label for="ename"&gt;Employee Name&lt;/label&gt;   &lt;input type="text" name="ename" id="ename" /&gt;   &lt;label for="deptno"&gt;Department&lt;/label&gt;   &lt;select name="deptno" id="deptno"&gt;&lt;/select&gt;   &lt;label for="job"&gt;Job&lt;/label&gt;   &lt;input type="text" name="job" id="job" /&gt;   &lt;br /&gt;   &lt;label for="sal"&gt;Salary&lt;/label&gt;   &lt;input type="text" name="sal" id="sal" /&gt;   &lt;label for="comm"&gt;Commission&lt;/label&gt;   &lt;input type="text" name="comm" id="comm" /&gt;   &lt;/br &gt;   &lt;span class="pull-right"&gt;     &lt;a href="rpt.html" style="color:black;"&gt;&lt;input type="button" value="Cancel" /&gt;&lt;/a&gt;     &lt;button type="submit"&gt;Save&lt;/button&gt;   &lt;/span&gt; &lt;/div&gt;&lt;/form&gt;&lt;script&gt;$( "form" ).submit(function( event ) { $.post( "http://<em>servername</em>/ords/db/demo/emp", $( "#form" ).serialize() );});&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;</code></pre>
         </div>
-        <h3><a name="listing6"></a>Listing 6: <code class="ocode">chart.js</code> File</h3>
+        <h3><a name="listing6" target="_blank"></a>Listing 6: <code class="ocode2">chart.js</code> File</h3>
         <p>Save this file as <code class="ocode">chart.js</code>. Be sure to save it in the same directory as <code
                 class="ocode">rpt.html</code>.</p>
         <p><strong>Note</strong>: Be sure to change the value of <em><code class="ocode">servername</code></em> to your
@@ -661,14 +678,10 @@
             <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
                 <div><a href="#copy">Copy</a></div>
             </div>
-            <pre>
-  <code>  
+            <pre>  <code>  
   
       window.onload=function(){       require(['knockout',       'ojs/ojcore',       'jquery',       'ojs/ojknockout',       'ojs/ojcore',       'ojs/ojbutton',       'ojs/ojchart'       ], function(ko, oj, $) {       'use strict';       function ChartModel(pieSeries) {       var self = this;       self.threeDValue = ko.observable('off');       self.sortingValue = ko.observable('descending');       self.pieSeriesValue = ko.observableArray(pieSeries);       /* toggle buttons*/       self.threeDOptions = [       {id: '2D', label: '2D', value: 'off', icon: 'oj-icon demo-2d'},       {id: '3D', label: '3D', value: 'on', icon: 'oj-icon demo-3d'}       ];       self.threeDValueChange = function(event, data) {       self.threeDValue(data.value);       return true;       }       }              $(document).ready(function(){       $.getJSON("http://<em>servername</em>/ords/db/demo/salByJob").       then(function(ret) {       var pieSeries=[];       $.each(ret.items, function(idx,emp) {       var nextEl= {"name" :emp.job,"items": [emp.sal]};       pieSeries.push(nextEl);       });       console.log(pieSeries)       ko.applyBindings(new ChartModel(pieSeries), document.getElementById('chart-container'));       });       });       });       //RequireJS configs (usually these come first in main.js, but they don't have to)       requirejs.config({       // Path mappings for the logical module names       paths: {       'knockout': 'http://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.0/knockout-min',       'jquery': 'http://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min',       "jqueryui-amd": "http://rawgit.com/jquery/jquery-ui/1.12.0/ui",       "promise": "http://cdnjs.cloudflare.com/ajax/libs/es6-promise/3.2.1/es6-promise.min",       "hammerjs": "http://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min",       "ojdnd": "http://rawgit.com/oracle/oraclejet/2.1.0/dist/js/libs/dnd-polyfill/dnd-polyfill-1.0.0.min",       "ojs": "http://rawgit.com/oracle/oraclejet/2.1.0/dist/js/libs/oj/debug",       "ojL10n": "http://rawgit.com/oracle/oraclejet/2.1.0/dist/js/libs/oj/ojL10n",       "ojtranslations": "http://rawgit.com/oracle/oraclejet/2.1.0/dist/js/libs/oj/resources",       "text": "http://cdnjs.cloudflare.com/ajax/libs/require-text/2.0.12/text.min",       "signals": "http://cdnjs.cloudflare.com/ajax/libs/js-signals/1.0.0/js-signals.min",       },       // Shim configurations for modules that do not expose AMD       shim: {       'jquery': {       exports: ['jQuery', '$']       }       }       });       }//]]&gt;</code></pre>
         </div>
 
     </div>
 </section>
-
-<!--</article>-->
-<!-- / _Raw-Text -->
