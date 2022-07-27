@@ -1,3 +1,4 @@
+//Sticks Menu Bar
 let topNav = document.getElementById("TopNav");
 let heroNav = document.getElementById("TechnicalContentHero");
 

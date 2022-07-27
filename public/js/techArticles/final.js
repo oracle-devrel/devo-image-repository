@@ -10,30 +10,28 @@ window.onload = function () {
     hero.style.width = "66rem";
   } else {
     hero.style.width = "100rem";
-  }
 
-  //Sticks Menu Bar
-  let topNav = document.getElementById("TopNav");
-  let heroNav = document.getElementById("TechnicalContentHero");
+    //Sticks Chapters
+    //User scrolls the page
+    window.onscroll = function () {
+      stickChapters();
+    };
 
-  let translate = topNav.clientHeight;
-  //console.log(translate);
+    // Get the Chapters
+    var navbar = document.querySelector(".chapters");
 
-  topNav.style.maxWidth = "120rem";
-
-  function stickNavBar(x) {
-    if (x.matches) {
-      heroNav.style.marginTop = translate + "px";
-      topNav.style.position = "fixed";
-    } else {
-      heroNav.style.marginTop = "auto";
-      topNav.style.position = "sticky";
+    // Add the sticky class
+    function stickChapters() {
+      //console.log(window.pageYOffset);
+      if (window.pageYOffset >= 190) {
+        navbar.classList.add("sticky");
+        console.log("Sticky class added");
+      } else {
+        navbar.classList.remove("sticky");
+      }
     }
+    //End -----------------Sticks Chapters
   }
-
-  var x = window.matchMedia("(max-width: 1999px)");
-  stickNavBar(x);
-  x.addListener(stickNavBar);
 
   //Add the Blank attribute to Links
   let links = document.querySelectorAll("#TechnicalContent a");
@@ -44,26 +42,6 @@ window.onload = function () {
     if (link != "#copy" || link == null) {
       links[i].setAttribute("target", "_blank");
       console.log(link + " added _blank attribute");
-    }
-  }
-
-  //Sticks Chapters
-  //User scrolls the page
-  window.onscroll = function () {
-    stickChapters();
-  };
-
-  // Get the Chapters
-  var navbar = document.querySelector(".chapters");
-
-  // Add the sticky class
-  function stickChapters() {
-    //console.log(window.pageYOffset);
-    if (window.pageYOffset >= 190) {
-      navbar.classList.add("sticky");
-      console.log("Sticky class added");
-    } else {
-      navbar.classList.remove("sticky");
     }
   }
 
