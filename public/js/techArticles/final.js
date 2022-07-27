@@ -14,7 +14,7 @@ window.onload = function () {
 
   //Sticks Menu Bar
   let topNav = document.getElementById("TopNav");
-  let hero = document.getElementById("TechnicalContentHero");
+  let heroNav = document.getElementById("TechnicalContentHero");
 
   let translate = topNav.clientHeight;
   //console.log(translate);
@@ -23,10 +23,10 @@ window.onload = function () {
 
   function stickNavBar(x) {
     if (x.matches) {
-      hero.style.marginTop = translate + "px";
+      heroNav.style.marginTop = translate + "px";
       topNav.style.position = "fixed";
     } else {
-      hero.style.marginTop = "auto";
+      heroNav.style.marginTop = "auto";
       topNav.style.position = "sticky";
     }
   }
