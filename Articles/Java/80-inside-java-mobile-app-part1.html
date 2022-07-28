@@ -14,10 +14,7 @@
 
         <p>There are a few mobile apps in the Apple App Store and the Google Play Store that provide the OTN
             Experiences. Recently, the OTN demo app was released to support the OTN Experiences at the JFokus
-            conference. You can find it in the <a class="textLinks"
-                href="https://itunes.apple.com/us/app/otn-codelounge/id1200292536" target="_blank">App Store</a> and in
-            the <a class="textLinks" href="https://play.google.com/store/apps/details?id=com.gluonhq.otnexp"
-                target="_blank">Play Store</a> For this article, we will create a standalone Java client application
+            conference. For this article, we will create a standalone Java client application
             that works on desktop, mobile, and embedded devices (such as the Raspberry Pi), and that provides the same
             user interface as the apps you could use at the conferences.</p>
 
@@ -39,7 +36,7 @@
 
         <p>git clone https://github.com/gluonhq/otnarticle1.git</p>
 
-        <p align="center" class="xsml">Then run the code using this command:</p>
+        <p align="left">Then run the code using this command:</p>
 
         <p>/gradlew runt</p>
 
@@ -59,21 +56,21 @@
 
             <pre>
 <code>
+<code>./gradlew launchIosDevice </code>
 
+    <p><code>If you don&#39;t have a device connected, but you want to see how the app would look on a mobile device, you can run the following command:</code>
+    </p>
+
+<code>./gradlew launchIphoneSimulator </code>
+
+    <p><code>Developers who have the Android SDK installed can install the app on their connected Android devices by running this command:</code>
+    </p>
+
+<code>./gradlew androidInstall </code>
 
   </code></pre>
 
-            <div class="codeSamples"><code>./gradlew launchIosDevice </code></div>
 
-            <p><code>If you don&#39;t have a device connected, but you want to see how the app would look on a mobile device, you can run the following command:</code>
-            </p>
-
-            <div class="codeSamples"><code>./gradlew launchIphoneSimulator </code></div>
-
-            <p><code>Developers who have the Android SDK installed can install the app on their connected Android devices by running this command:</code>
-            </p>
-
-            <div class="codeSamples"><code>./gradlew androidInstall </code></div>
         </div>
 
         <p>Running the application on a mobile device is not hard, but it is beyond the scope of this article. If you
