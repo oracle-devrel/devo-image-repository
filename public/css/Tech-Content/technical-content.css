@@ -4,34 +4,32 @@
   top: calc(60px + 2.5rem);
 }
 
-
 @media (max-width: 1130px) {
   .sticky {
     top: calc(100px + 2.5rem);
   }
 }
 
+.chapters {
+  max-width: 512px;
+}
 
 @media (max-width: 1130px) {
-  .sticky {
-    width: 445px !important;
+  .chapters {
+    max-width: 445px !important;
   }
 }
 
 @media (max-width: 990px) {
-  .sticky {
-    width: 360px !important;
+  .chapters {
+    max-width: 360px !important;
   }
 }
 
 @media (max-width: 900px) {
-  .sticky {
-    width: 200px !important;
+  .chapters {
+    max-width: 200px !important;
   }
-}
-
-.chapters {
-  max-width: 512px;
 }
 
 /*Modification to space between Title and Article's content */
