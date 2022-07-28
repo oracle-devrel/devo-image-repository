@@ -5,7 +5,7 @@ window.onresize = window.onload = function () {
   if (window.innerWidth <= 767) {
     for (let i = 0; i < title.length; i++) {
       //console.log(title[i]);
-      title[i].style.paddingTop = "0rem";
+      title[i].style.paddingTop = "1rem";
     }
     console.log("Mobile Headers updated");
   } else {
