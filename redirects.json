@@ -1,0 +1,385 @@
+{
+  "redirectRules": [
+    {"type": "string","comment": "WCS to OCM","expression": "/ace/","location": "/community/ace.html"},
+    {"type": "string","comment": "WCS to OCM","expression": "/ace","location": "/community/ace.html"},
+
+    {"type": "string","comment": "WCS to OCM","expression": "/cloudcoach/","location": "/community/cloud-coaching.html"},
+    {"type": "string","comment": "WCS to OCM","expression": "/cloudcoach","location": "/community/cloud-coaching.html"},
+
+    {"type": "string","comment": "WCS to OCM","expression": "/code-innovate/","location": "/community/code-innovate.html"},
+    {"type": "string","comment": "WCS to OCM","expression": "/code-innovate","location": "/community/code-innovate.html"},
+
+    {"type": "string","comment": "WCS to OCM","expression": "/events/","location": "/community/events.html"},
+    {"type": "string","comment": "WCS to OCM","expression": "/events","location": "/community/events.html"},
+
+    {"type": "string","comment": "WCS to OCM","expression": "/developer-live/ai-ml-enterprise/","location": "/community/events/ai-ml-devlive-replays.html"},
+    {"type": "string","comment": "WCS to OCM","expression": "/developer-live/ai-ml-enterprise","location": "/community/events/ai-ml-devlive-replays.html"},
+
+    {"type": "string","comment": "WCS to OCM","expression": "/developer-live/database/","location": "/community/events/developer-live-2020-database-event.html"},
+    {"type": "string","comment": "WCS to OCM","expression": "/developer-live/database","location": "/community/events/developer-live-2020-database-event.html"},
+   
+    {"type": "string","comment": "WCS to OCM","expression": "/developer-live/","location": "/community/events/developer-live-event-replays.html"},
+    {"type": "string","comment": "WCS to OCM","expression": "/developer-live","location": "/community/events/developer-live-event-replays.html"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/developer-live/app-dev-database/","location": "/community/events/devlive-app-dev-database-recordings.html"},
+    {"type": "string","comment": "WCS to OCM","expression": "/developer-live/app-dev-database","location": "/community/events/devlive-app-dev-database-recordings.html"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/developer-live/java/","location": "/community/events/devlive-java-recordings.html"},
+    {"type": "string","comment": "WCS to OCM","expression": "/developer-live/java","location": "/community/events/devlive-java-recordings.html"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/developer-live/mysql/","location": "/community/events/devlive-mysql-replays.html"},
+    {"type": "string","comment": "WCS to OCM","expression": "/developer-live/mysql","location": "/community/events/devlive-mysql-replays.html"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/developer-live/simplifying-modern-app-dev/","location": "/community/events/devlive-simplifying-modern-app-dev.html"},
+    {"type": "string","comment": "WCS to OCM","expression": "/developer-live/simplifying-modern-app-dev","location": "/community/events/devlive-simplifying-modern-app-dev.html"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/developer-live/java-innovations/","location": "/community/events/java-innovations-mars-2021-replays.html"},
+    {"type": "string","comment": "WCS to OCM","expression": "/developer-live/java-innovations","location": "/community/events/java-innovations-mars-2021-replays.html"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/community/events/java-innovations-sept-2021-replays/","location": "/community/events/java-innovations-sept-2021-replays.html"},
+    {"type": "string","comment": "WCS to OCM","expression": "/community/events/java-innovations-sept-2021-replays","location": "/community/events/java-innovations-sept-2021-replays.html"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/pi-day/","location": "/community/events/pi-day-2022-recordings.html"},
+    {"type": "string","comment": "WCS to OCM","expression": "/pi-day","location": "/community/events/pi-day-2022-recordings.html"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/ama/","location": "/community/events/reddit-ama-2022.html"},
+    {"type": "string","comment": "WCS to OCM","expression": "/ama","location": "/community/events/reddit-ama-2022.html"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/lifestyle/","location": "/community/lifestyle.html"},
+    {"type": "string","comment": "WCS to OCM","expression": "/lifestyle","location": "/community/lifestyle.html"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/team/","location": "/community/meet-the-devrel-team.html"},
+    {"type": "string","comment": "WCS to OCM","expression": "/team","location": "/community/meet-the-devrel-team.html"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/dotnet/","location": "/languages/dotnet.html"},
+    {"type": "string","comment": "WCS to OCM","expression": "/dotnet","location": "/languages/dotnet.html"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/java/graalvm/","location": "/languages/graalvm.html"},
+    {"type": "string","comment": "WCS to OCM","expression": "/java/graalvm","location": "/languages/graalvm.html"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/java/graalvm/cloud-native/","location": "/languages/graalvm/graal-cloud-native.html"},
+    {"type": "string","comment": "WCS to OCM","expression": "/java/graalvm/cloud-native","location": "/languages/graalvm/graal-cloud-native.html"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/java11/","location": "/languages/java-11.html"},
+    {"type": "string","comment": "WCS to OCM","expression": "/java11","location": "/languages/java-11.html"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/java/","location": "/languages/java.html"},
+    {"type": "string","comment": "WCS to OCM","expression": "/java","location": "/languages/java.html"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/java/cloud/","location": "/languages/java/java-microservices.html"},
+    {"type": "string","comment": "WCS to OCM","expression": "/java/cloud","location": "/languages/java/java-microservices.html"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/javascript/","location": "/languages/javascript.html"},
+    {"type": "string","comment": "WCS to OCM","expression": "/javascript","location": "/languages/javascript.html"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/nodejs/","location": "/languages/javascript/node-js.html"},
+    {"type": "string","comment": "WCS to OCM","expression": "/nodejs","location": "/languages/javascript/node-js.html"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/php/","location": "/languages/php.html"},
+    {"type": "string","comment": "WCS to OCM","expression": "/php","location": "/languages/php.html"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/python/","location": "/languages/python.html"},
+    {"type": "string","comment": "WCS to OCM","expression": "/python","location": "/languages/python.html"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/ruby/","location": "/languages/ruby.html"},
+    {"type": "string","comment": "WCS to OCM","expression": "/ruby","location": "/languages/ruby.html"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/agile-methodology-success.html/","location": "/learn/agile-methodology-success"},
+    {"type": "string","comment": "WCS to OCM","expression": "/agile-methodology-success.html","location": "/learn/agile-methodology-success"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/solutions/create-app-from-spreadsheet/","location": "/learn/create-apps-from-a-spreadsheet.html"},
+    {"type": "string","comment": "WCS to OCM","expression": "/solutions/create-app-from-spreadsheet","location": "/learn/create-apps-from-a-spreadsheet.html"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/developer-live/cloud-native/","location": "/learn/developer-live-cloud-native-replays.html"},
+    {"type": "string","comment": "WCS to OCM","expression": "/developer-live/cloud-native","location": "/learn/developer-live-cloud-native-replays.html"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/devsimple/","location": "/learn/devsimple.html"},
+    {"type": "string","comment": "WCS to OCM","expression": "/devsimple","location": "/learn/devsimple.html"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/content-management/headless-cms/","location": "/learn/headless-cms-tutorials.html"},
+    {"type": "string","comment": "WCS to OCM","expression": "/content-management/headless-cms","location": "/learn/headless-cms-tutorials.html"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/java/database/","location": "/learn/java-and-databases.html"},
+    {"type": "string","comment": "WCS to OCM","expression": "/java/database","location": "/learn/java-and-databases.html"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/videos/","location": "/learn/learning-videos.html"},
+    {"type": "string","comment": "WCS to OCM","expression": "/videos","location": "/learn/learning-videos.html"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/content-management/site-builder/","location": "/learn/oracle-content-management-tutorials.html"},
+    {"type": "string","comment": "WCS to OCM","expression": "/content-management/site-builder","location": "/learn/oracle-content-management-tutorials.html"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/react-js/","location": "/learn/react-js"},
+    {"type": "string","comment": "WCS to OCM","expression": "/react-js","location": "/learn/react-js"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/hols/","location": "/learn/self-guided-hands-on-labs.html"},
+    {"type": "string","comment": "WCS to OCM","expression": "/hols","location": "/learn/self-guided-hands-on-labs.html"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/solutions/build-microservice-app/","location": "/learn/technical-articles/build-microservice-app"},
+    {"type": "string","comment": "WCS to OCM","expression": "/solutions/build-microservice-app","location": "/learn/technical-articles/build-microservice-app"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/id/solutions/build-microservice-app/","location": "/learn/technical-articles/build-microservice-app"},
+    {"type": "string","comment": "WCS to OCM","expression": "/id/solutions/build-microservice-app","location": "/learn/technical-articles/build-microservice-app"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/sg/solutions/build-microservice-app/","location": "/learn/technical-articles/build-microservice-app"},
+    {"type": "string","comment": "WCS to OCM","expression": "/sg/solutions/build-microservice-app","location": "/learn/technical-articles/build-microservice-app"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/solutions/build-microservice-app-post-reg/","location": "/learn/technical-articles/build-microservice-app-post-reg"},
+    {"type": "string","comment": "WCS to OCM","expression": "/solutions/build-microservice-app-post-reg","location": "/learn/technical-articles/build-microservice-app-post-reg"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/databases/building-apps-odb12c-apex-part1.html/","location": "/learn/technical-articles/building-apps-odb12c-apex-part1"},
+    {"type": "string","comment": "WCS to OCM","expression": "/databases/building-apps-odb12c-apex-part1.html","location": "/learn/technical-articles/building-apps-odb12c-apex-part1"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/databases/building-apps-odb12c-apex-part2.html/","location": "/learn/technical-articles/building-apps-odb12c-apex-part2"},
+    {"type": "string","comment": "WCS to OCM","expression": "/databases/building-apps-odb12c-apex-part2.html","location": "/learn/technical-articles/building-apps-odb12c-apex-part2"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/databases/building-jet-crud-apps-odb12c.html/","location": "/learn/technical-articles/building-jet-crud-apps-odb12c"},
+    {"type": "string","comment": "WCS to OCM","expression": "/databases/building-jet-crud-apps-odb12c.html","location": "/learn/technical-articles/building-jet-crud-apps-odb12c"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/java/bullet-time.html/","location": "/learn/technical-articles/bullet-time"},
+    {"type": "string","comment": "WCS to OCM","expression": "/java/bullet-time.html","location": "/learn/technical-articles/bullet-time"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/proximasafe/chapter-1/","location": "/learn/technical-articles/chapter-1"},
+    {"type": "string","comment": "WCS to OCM","expression": "/proximasafe/chapter-1","location": "/learn/technical-articles/chapter-1"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/proximasafe/chapter-2/","location": "/learn/technical-articles/chapter-2"},
+    {"type": "string","comment": "WCS to OCM","expression": "/proximasafe/chapter-2","location": "/learn/technical-articles/chapter-2"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/databases/combining-r-with-sql-for-data-analysis.html/","location": "/learn/technical-articles/combining-r-with-sql-for-data-analysis"},
+    {"type": "string","comment": "WCS to OCM","expression": "/databases/combining-r-with-sql-for-data-analysis.html","location": "/learn/technical-articles/combining-r-with-sql-for-data-analysis"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/oracle-cloud-infrastructure/compute-vm-simple-tutorial/","location": "/learn/technical-articles/compute-vm-simple-tutorial"},
+    {"type": "string","comment": "WCS to OCM","expression": "/oracle-cloud-infrastructure/compute-vm-simple-tutorial","location": "/learn/technical-articles/compute-vm-simple-tutorial"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/solutions/create-app-from-spreadsheet-post-reg/","location": "/learn/technical-articles/create-app-from-spreadsheet-post-reg"},
+    {"type": "string","comment": "WCS to OCM","expression": "/solutions/create-app-from-spreadsheet-post-reg","location": "/learn/technical-articles/create-app-from-spreadsheet-post-reg"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/databases/database-for-python-developers-1.html","location": "/learn/technical-articles/database-for-python-developers-1"},
+    {"type": "string","comment": "WCS to OCM","expression": "/databases/database-for-python-developers-1.html/","location": "/learn/technical-articles/database-for-python-developers-1"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/java/deep-learning-on-clients.html/","location": "/learn/technical-articles/deep-learning-on-clients"},
+    {"type": "string","comment": "WCS to OCM","expression": "/java/deep-learning-on-clients.html","location": "/learn/technical-articles/deep-learning-on-clients"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/oracle-cloud-infrastructure/deploy-micro-service-application-tutorial/","location": "/learn/technical-articles/deploy-micro-service-application-tutorial"},
+    {"type": "string","comment": "WCS to OCM","expression": "/oracle-cloud-infrastructure/deploy-micro-service-application-tutorial","location": "/learn/technical-articles/deploy-micro-service-application-tutorial"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/solutions/deploy-weblogic-cloud-app/","location": "/learn/technical-articles/deploy-weblogic-cloud-app"},
+    {"type": "string","comment": "WCS to OCM","expression": "/solutions/deploy-weblogic-cloud-app","location": "/learn/technical-articles/deploy-weblogic-cloud-app"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/solutions/deploy-weblogic-cloud-app-post-reg/","location": "/learn/technical-articles/deploy-weblogic-cloud-app-post-reg"},
+    {"type": "string","comment": "WCS to OCM","expression": "/solutions/deploy-weblogic-cloud-app-post-reg","location": "/learn/technical-articles/deploy-weblogic-cloud-app-post-reg"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/github/","location": "/learn/technical-articles/github/"},
+    {"type": "string","comment": "WCS to OCM","expression": "/github","location": "/learn/technical-articles/github/"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/java/federated-deep-learning-using-java.html/","location": "/learn/technical-articles/federated-deep-learning-using-java"},
+    {"type": "string","comment": "WCS to OCM","expression": "/java/federated-deep-learning-using-java.html","location": "/learn/technical-articles/federated-deep-learning-using-java"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/java/inside-java-mobile-app-part1.html/","location": "/learn/technical-articles/inside-java-mobile-app-part1"},
+    {"type": "string","comment": "WCS to OCM","expression": "/java/inside-java-mobile-app-part1.html","location": "/learn/technical-articles/inside-java-mobile-app-part1"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/java/inside-java-mobile-app-part2.html/","location": "/learn/technical-articles/inside-java-mobile-app-part2"},
+    {"type": "string","comment": "WCS to OCM","expression": "/java/inside-java-mobile-app-part2.html","location": "/learn/technical-articles/inside-java-mobile-app-part2"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/java/jdk-10-local-variable-type-inference.html/","location": "/learn/technical-articles/jdk-10-local-variable-type-inference"},
+    {"type": "string","comment": "WCS to OCM","expression": "/java/jdk-10-local-variable-type-inference.html","location": "/learn/technical-articles/jdk-10-local-variable-type-inference"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/microservices/jellema_microservice_design/","location": "/learn/technical-articles/jellema_microservice_design"},
+    {"type": "string","comment": "WCS to OCM","expression": "/microservices/jellema_microservice_design","location": "/learn/technical-articles/jellema_microservice_design"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/java/kubernetes.html/","location": "/learn/technical-articles/kubernetes"},
+    {"type": "string","comment": "WCS to OCM","expression": "/java/kubernetes.html","location": "/learn/technical-articles/kubernetes"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/databases/learning-r-for-pl-sql-developers-part-1.html/","location": "/learn/technical-articles/learning-r-for-pl-sql-developers-part-1"},
+    {"type": "string","comment": "WCS to OCM","expression": "/databases/learning-r-for-pl-sql-developers-part-1.html","location": "/learn/technical-articles/learning-r-for-pl-sql-developers-part-1"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/databases/learning-r-for-pl-sql-developers-part-2.html/","location": "/learn/technical-articles/learning-r-for-pl-sql-developers-part-2"},
+    {"type": "string","comment": "WCS to OCM","expression": "/databases/learning-r-for-pl-sql-developers-part-2.html","location": "/learn/technical-articles/learning-r-for-pl-sql-developers-part-2"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/databases/learning-r-for-pl-sql-developers-part-3.html/","location": "/learn/technical-articles/learning-r-for-pl-sql-developers-part-3"},
+    {"type": "string","comment": "WCS to OCM","expression": "/databases/learning-r-for-pl-sql-developers-part-3.html","location": "/learn/technical-articles/learning-r-for-pl-sql-developers-part-3"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/machine-learning-and-neural-networks.html/","location": "/learn/technical-articles/machine-learning-and-neural-networks"},
+    {"type": "string","comment": "WCS to OCM","expression": "/machine-learning-and-neural-networks.html","location": "/learn/technical-articles/machine-learning-and-neural-networks"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/java/modular-reusable-javaee-architecture-with-docker.html/","location": "/learn/technical-articles/modular-reusable-javaee-architecture-with-docker"},
+    {"type": "string","comment": "WCS to OCM","expression": "/java/modular-reusable-javaee-architecture-with-docker.html","location": "/learn/technical-articles/modular-reusable-javaee-architecture-with-docker"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/databases/my-sql-is-stuck.html/","location": "/learn/technical-articles/my-sql-is-stuck"},
+    {"type": "string","comment": "WCS to OCM","expression": "/databases/my-sql-is-stuck.html","location": "/learn/technical-articles/my-sql-is-stuck"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/databases/nashorn-javascript-part1.html/","location": "/learn/technical-articles/nashorn-javascript-part1"},
+    {"type": "string","comment": "WCS to OCM","expression": "/databases/nashorn-javascript-part1.html","location": "/learn/technical-articles/nashorn-javascript-part1"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/databases/nashorn-javascript-part2.html/","location": "/learn/technical-articles/nashorn-javascript-part2"},
+    {"type": "string","comment": "WCS to OCM","expression": "/databases/nashorn-javascript-part2.html","location": "/learn/technical-articles/nashorn-javascript-part2"},
+
+    {"type": "string","comment": "WCS to OCM","expression": "/databases/nashorn-javascript-part3.html/","location": "/learn/technical-articles/nashorn-javascript-part3"},
+    {"type": "string","comment": "WCS to OCM","expression": "/databases/nashorn-javascript-part3.html","location": "/learn/technical-articles/nashorn-javascript-part3"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/databases/neural-network-machine-learning.html/","location": "/learn/technical-articles/neural-network-machine-learning"},
+    {"type": "string","comment": "WCS to OCM","expression": "/databases/neural-network-machine-learning.html","location": "/learn/technical-articles/neural-network-machine-learning"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/containers/nodevops.html/","location": "/learn/technical-articles/nodevops"},
+    {"type": "string","comment": "WCS to OCM","expression": "/containers/nodevops.html","location": "/learn/technical-articles/nodevops"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/oci-key-concepts/","location": "/learn/technical-articles/oci-key-concepts"},
+    {"type": "string","comment": "WCS to OCM","expression": "/oci-key-concepts","location": "/learn/technical-articles/oci-key-concepts"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/dsl/odb-browser-apps-js-rest.html/","location": "/learn/technical-articles/odb-browser-apps-js-rest"},
+    {"type": "string","comment": "WCS to OCM","expression": "/dsl/odb-browser-apps-js-rest.html","location": "/learn/technical-articles/odb-browser-apps-js-rest"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/dsl/odb-browser-apps-js-rest-p2.html/","location": "/learn/technical-articles/odb-browser-apps-js-rest-p2"},
+    {"type": "string","comment": "WCS to OCM","expression": "/dsl/odb-browser-apps-js-rest-p2.html","location": "/learn/technical-articles/odb-browser-apps-js-rest-p2"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/dsl/oracle-java-zend-server.html/","location": "/learn/technical-articles/oracle-java-zend-server"},
+    {"type": "string","comment": "WCS to OCM","expression": "/dsl/oracle-java-zend-server.html","location": "/learn/technical-articles/oracle-java-zend-server"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/databases/oracle-r-advanced-analytics-for-hadoop-part-1.html/","location": "/learn/technical-articles/oracle-r-advanced-analytics-for-hadoop-part-1"},
+    {"type": "string","comment": "WCS to OCM","expression": "/databases/oracle-r-advanced-analytics-for-hadoop-part-1.html","location": "/learn/technical-articles/oracle-r-advanced-analytics-for-hadoop-part-1"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/databases/oracle-r-advanced-analytics-for-hadoop-part-2.html/","location": "/learn/technical-articles/oracle-r-advanced-analytics-for-hadoop-part-2"},
+    {"type": "string","comment": "WCS to OCM","expression": "/databases/oracle-r-advanced-analytics-for-hadoop-part-2.html","location": "/learn/technical-articles/oracle-r-advanced-analytics-for-hadoop-part-2"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/databases/oracle-rest-data-services-for-python-developers.html/","location": "/learn/technical-articles/oracle-rest-data-services-for-python-developers"},
+    {"type": "string","comment": "WCS to OCM","expression": "/databases/oracle-rest-data-services-for-python-developers.html","location": "/learn/technical-articles/oracle-rest-data-services-for-python-developers"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/databases/oracle-rest-data-services-for-python-developers-part2.html/","location": "/learn/technical-articles/oracle-rest-data-services-for-python-developers-part2"},
+    {"type": "string","comment": "WCS to OCM","expression": "/databases/oracle-rest-data-services-for-python-developers-part2.html","location": "/learn/technical-articles/oracle-rest-data-services-for-python-developers-part2"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/dsl/php-web-auditing.html/","location": "/learn/technical-articles/php-web-auditing"},
+    {"type": "string","comment": "WCS to OCM","expression": "/dsl/php-web-auditing.html","location": "/learn/technical-articles/php-web-auditing"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/proximasafe-intro/","location": "/learn/technical-articles/proximasafe-intro"},
+    {"type": "string","comment": "WCS to OCM","expression": "/proximasafe-intro","location": "/learn/technical-articles/proximasafe-intro"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/proximasafe-part-3/","location": "/learn/technical-articles/proximasafe-part-2"},
+    {"type": "string","comment": "WCS to OCM","expression": "/proximasafe-part-3","location": "/learn/technical-articles/proximasafe-part-2"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/proximasafe-part-2/","location": "/learn/technical-articles/proximasafe-part-2"},
+    {"type": "string","comment": "WCS to OCM","expression": "/proximasafe-part-2","location": "/learn/technical-articles/proximasafe-part-2"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/java/quantum-computing.html/","location": "/learn/technical-articles/quantum-computing"},
+    {"type": "string","comment": "WCS to OCM","expression": "/java/quantum-computing.html","location": "/learn/technical-articles/quantum-computing"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/opensource/serverless-with-fn-project.html/","location": "/learn/technical-articles/serverless-with-fn-project"},
+    {"type": "string","comment": "WCS to OCM","expression": "/opensource/serverless-with-fn-project.html","location": "/learn/technical-articles/serverless-with-fn-project"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/dsl/technote-php-instant.html/","location": "/learn/technical-articles/technote-php-instant"},
+    {"type": "string","comment": "WCS to OCM","expression": "/dsl/technote-php-instant.html","location": "/learn/technical-articles/technote-php-instant"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/dsl/tuininga-cx-oracle.html/","location": "/learn/technical-articles/tuininga-cx-oracle"},
+    {"type": "string","comment": "WCS to OCM","expression": "/dsl/tuininga-cx-oracle.html","location": "/learn/technical-articles/tuininga-cx-oracle"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/microservices/what-are-microservices/","location": "/learn/technical-articles/what-are-microservices"},
+    {"type": "string","comment": "WCS to OCM","expression": "/microservices/what-are-microservices","location": "/learn/technical-articles/what-are-microservices"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/what-is-iac/","location": "/learn/technical-articles/what-is-iac"},
+    {"type": "string","comment": "WCS to OCM","expression": "/what-is-iac","location": "/learn/technical-articles/what-is-iac"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/javascript/what-is-javascript/","location": "/learn/technical-articles/what-is-javascript"},
+    {"type": "string","comment": "WCS to OCM","expression": "/javascript/what-is-javascript","location": "/learn/technical-articles/what-is-javascript"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/lowcode/what-is-lowcode/","location": "/learn/technical-articles/what-is-lowcode"},
+    {"type": "string","comment": "WCS to OCM","expression": "/lowcode/what-is-lowcode","location": "/learn/technical-articles/what-is-lowcode"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/nodejs/what-is-node-js/","location": "/learn/technical-articles/what-is-node-js"},
+    {"type": "string","comment": "WCS to OCM","expression": "/nodejs/what-is-node-js","location": "/learn/technical-articles/what-is-node-js"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/open-source/what-is-open-source/","location": "/learn/technical-articles/what-is-open-source"},
+    {"type": "string","comment": "WCS to OCM","expression": "/open-source/what-is-open-source","location": "/learn/technical-articles/what-is-open-source"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/python/what-is-python/","location": "/learn/technical-articles/what-is-python"},
+    {"type": "string","comment": "WCS to OCM","expression": "/python/what-is-python","location": "/learn/technical-articles/what-is-python"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/what-is-pytorch/","location": "/learn/technical-articles/what-is-pytorch"},
+    {"type": "string","comment": "WCS to OCM","expression": "/what-is-pytorch","location": "/learn/technical-articles/what-is-pytorch"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/ruby/what-is-ruby/","location": "/learn/technical-articles/what-is-ruby"},
+    {"type": "string","comment": "WCS to OCM","expression": "/ruby/what-is-ruby","location": "/learn/technical-articles/what-is-ruby"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/what-is-tensorflow/","location": "/learn/technical-articles/what-is-tensorflow"},
+    {"type": "string","comment": "WCS to OCM","expression": "/what-is-tensorflow","location": "/learn/technical-articles/what-is-tensorflow"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/dotnet/williams-refcursors.html/","location": "/learn/technical-articles/williams-refcursors"},
+    {"type": "string","comment": "WCS to OCM","expression": "/dotnet/williams-refcursors.html","location": "/learn/technical-articles/williams-refcursors"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/use-cases/","location": "/learn/use-cases.html"},
+    {"type": "string","comment": "WCS to OCM","expression": "/use-cases","location": "/learn/use-cases.html"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/modern-appdev/","location": "/learn/webcasts.html"},
+    {"type": "string","comment": "WCS to OCM","expression": "/modern-appdev","location": "/learn/webcasts.html"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/open-source/","location": "/open-source.html"},
+    {"type": "string","comment": "WCS to OCM","expression": "/open-source","location": "/open-source.html"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/redbull/","location": "/redbull.html"},
+    {"type": "string","comment": "WCS to OCM","expression": "/redbull","location": "/redbull.html"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/ai-ml/","location": "/technologies/ai-ml.html"},
+    {"type": "string","comment": "WCS to OCM","expression": "/ai-ml","location": "/technologies/ai-ml.html"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/api/","location": "/technologies/api.html"},
+    {"type": "string","comment": "WCS to OCM","expression": "/api","location": "/technologies/api.html"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/blockchain/","location": "/technologies/blockchain.html"},
+    {"type": "string","comment": "WCS to OCM","expression": "/blockchain","location": "/technologies/blockchain.html"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/chatbots/","location": "/technologies/chatbots.html"},
+    {"type": "string","comment": "WCS to OCM","expression": "/chatbots","location": "/technologies/chatbots.html"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/content-management/","location": "/technologies/content-management.html"},
+    {"type": "string","comment": "WCS to OCM","expression": "/content-management","location": "/technologies/content-management.html"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/databases/","location": "/technologies/databases.html"},
+    {"type": "string","comment": "WCS to OCM","expression": "/databases","location": "/technologies/databases.html"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/devops/","location": "/technologies/devops.html"},
+    {"type": "string","comment": "WCS to OCM","expression": "/devops","location": "/technologies/devops.html"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/infrastructure-as-code/","location": "/technologies/infrastructure-as-code.html"},
+    {"type": "string","comment": "WCS to OCM","expression": "/infrastructure-as-code","location": "/technologies/infrastructure-as-code.html"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/linux/","location": "/technologies/linux.html"},
+    {"type": "string","comment": "WCS to OCM","expression": "/linux","location": "/technologies/linux.html"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/lowcode/","location": "/technologies/low-code.html"},
+    {"type": "string","comment": "WCS to OCM","expression": "/lowcode","location": "/technologies/low-code.html"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/microservices/","location": "/technologies/microservices.html"},
+    {"type": "string","comment": "WCS to OCM","expression": "/microservices","location": "/technologies/microservices.html"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/quick-reference/","location": "/technologies/oci-quick-reference.html"},
+    {"type": "string","comment": "WCS to OCM","expression": "/quick-reference","location": "/technologies/oci-quick-reference.html"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/oracle-cloud-infrastructure/","location": "/technologies/oracle-cloud-infrastructure.html"},
+    {"type": "string","comment": "WCS to OCM","expression": "/oracle-cloud-infrastructure","location": "/technologies/oracle-cloud-infrastructure.html"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/arm/","location": "/technologies/oracle-cloud-infrastructure/arm.html"},
+    {"type": "string","comment": "WCS to OCM","expression": "/arm","location": "/technologies/oracle-cloud-infrastructure/arm.html"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/arm/tools/","location": "/technologies/oracle-cloud-infrastructure/arm/tools.html"},
+    {"type": "string","comment": "WCS to OCM","expression": "/arm/tools","location": "/technologies/oracle-cloud-infrastructure/arm/tools.html"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/getting-started/","location": "/technologies/oracle-cloud-infrastructure/getting-started.html"},
+    {"type": "string","comment": "WCS to OCM","expression": "/getting-started","location": "/technologies/oracle-cloud-infrastructure/getting-started.html"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/visual-builder/","location": "/technologies/visual-builder.html"},
+    {"type": "string","comment": "WCS to OCM","expression": "/visual-builder","location": "/technologies/visual-builder.html"},
+  
+    {"type": "string","comment": "WCS to OCM","expression": "/tutorials/","location": "learn/dev-tutorials.html"},
+    {"type": "string","comment": "WCS to OCM","expression": "/tutorials","location": "learn/dev-tutorials.html"},
+
+    {"type": "string","comment": "WCS to OCM","expression": "/technologies.html","location": "/"},
+    {"type": "string","comment": "WCS to OCM","expression": "/technologies.html/","location": "/"},
+
+    {"type": "string","comment": "WCS to OCM","expression": "/learn.html","location": "/"},
+    {"type": "string","comment": "WCS to OCM","expression": "/learn.html/","location": "/"},
+
+    {"type": "string","comment": "WCS to OCM","expression": "/languages.html/","location": "/"},
+    {"type": "string","comment": "WCS to OCM","expression": "/languages.html","location": "/"},
+
+    {"type": "string","comment": "WCS to OCM","expression": "/learn/technical-articles/proximasafe-intro","location": "/learn/technical-articles/chapter-1"}
+    ]
+}
+
+
