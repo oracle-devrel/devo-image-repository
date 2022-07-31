@@ -7,7 +7,7 @@
 /* Banners problems - Multiple CSS classes */
 .banner .banner-content-container .body-content-def .banner-text-content {
   font-size: 1rem !important;
-  line-height: 0rem !important;
+  line-height: 1.375rem !important;
   font-family: "Oracle Sans regular", sans-serif !important;
 }
 
