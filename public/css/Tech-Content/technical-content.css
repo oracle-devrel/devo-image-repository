@@ -204,7 +204,8 @@ strong > .ocode,
 li > code,
 directory > code,
 em > code,
-.ocode2 {
+.ocode2,
+table > tbody > tr > th > code {
   position: relative;
   width: 100%;
   padding: 0.1em 0.25em 0.1em 0.25em;
