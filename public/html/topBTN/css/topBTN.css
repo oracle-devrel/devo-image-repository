@@ -12,9 +12,8 @@
   width: 60px;
   bottom: 30px; /* Place the button at the bottom of the page */
   right: 30px; /* Place the button 30px from the right */
-  transition-timing-function: ease;
 }
 
 #myBtn:hover {
-  background-color: #004F59;
+  background-color: #004f59;
 }

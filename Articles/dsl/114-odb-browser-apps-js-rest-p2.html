@@ -1,6 +1,12 @@
 <!-- _Raw-Text -->
 <section class="cc01 cc01v0 cpad crule">
     <div class="cc01w1 cwidth">
+        <style>
+            .content-container .technical-content-container .body .ocode pre {
+                padding: 24px 24px 24px 24px !important;
+            }
+        </style>
+
         <p><strong> This article is Part 2 of a two-part series that describes the steps for creating a JavaScript-based
                 data management application that integrates with Oracle Database via RESTful service calls. </strong>
         </p>
@@ -339,7 +345,7 @@
         <p>Also, Oracle Virtual Private Database applies to anytime the database queries the EMP table. This means that
             data will be restricted when we view both the form and the report. If you edit any of the employees in the
             SALES department, notice the URL in your browser. It should look something like this:</p> <code
-            class="ocode">file:///Users/scott/OTN/Files/html/form.html#7698 </code>
+            class="ocode2">file:///Users/scott/OTN/Files/html/form.html#7698 </code>
         <p>The last parameter is the EMPNO of the user that we're editing; in this case, BLAKE. If we want to tamper
             with the URL and try to see KING's record, all we need to do is change that last parameter to 7839 and
             reload the page, right? Wrong.</p>

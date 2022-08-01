@@ -1,18 +1,33 @@
 //Get the button:
-mybutton = document.getElementById("myBtn");
+topBTN = document.getElementById("myBtn");
 
 window.onscroll = function () {
   scrollFunction();
 };
+
+window.onresize = function () {
+  adjustPosition();
+};
+
+function adjustPosition() {
+  var width = window.innerWidth;
+
+  if (width >= 1920) {
+    var newPos = (width - 1920) / 2 + 30;
+    topBTN.style.right = newPos + "px";
+  } else {
+    topBTN.style.right = "30px";
+  }
+}
 
 function scrollFunction() {
   if (
     document.body.scrollTop > 400 ||
     document.documentElement.scrollTop > 400
   ) {
-    mybutton.style.display = "block";
+    topBTN.style.display = "block";
   } else {
-    mybutton.style.display = "none";
+    topBTN.style.display = "none";
   }
 }
 
