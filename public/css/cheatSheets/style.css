@@ -1,34 +1,40 @@
 .CScolumn {
   margin: 0 auto;
   display: grid;
-  gap: 1rem;
+  gap: 4rem;
   grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
 }
 
 .card {
   background-color: #edeff500;
   color: white;
-  padding: 1.375rem;
-  height:fit-content;
+  height: fit-content;
 }
 
 caption {
-    color:  #00747A;
-    line-height: 3rem;
-    text-align: left;
+  color: #00747a;
+  margin-bottom: 1rem;
+  text-align: left;
 }
 
 .demo {
   border-collapse: collapse;
   padding: 5px;
+  margin-bottom: 2.5rem;
 }
 .demo th {
   background-color: #141821;
   font-weight: bold;
   line-height: 2.5rem;
+  text-align: left;
+  padding-left: 1rem;
 }
 .demo td {
-  border-bottom: 1px solid  #EDEFF5;
+  border-bottom: 1px solid #cfd5e3;
   padding: 1rem;
   color: #141821;
+}
+
+u{
+    text-decoration: none;
 }
