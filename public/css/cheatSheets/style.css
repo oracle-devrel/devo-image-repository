@@ -1,0 +1,36 @@
+.CScolumn {
+  margin: 0 auto;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(530px, 1fr));
+}
+
+.card {
+  background-color: #EDEFF5;
+  color: white;
+  padding: 1.375rem;
+  height: auto;
+}
+
+caption {
+    color:  #00747A;
+    line-height: 2.5rem;
+    text-align: left;
+}
+
+.demo {
+  border: 1px solid #c0c0c0;
+  border-collapse: collapse;
+  padding: 5px;
+}
+.demo th {
+  border: 1px solid #c0c0c0;
+  background-color: #141821;
+  font-weight: bold;
+  line-height: 2.5rem;
+}
+.demo td {
+  border: 1px solid #c0c0c0;
+  padding: 1rem;
+  color: #141821;
+}
