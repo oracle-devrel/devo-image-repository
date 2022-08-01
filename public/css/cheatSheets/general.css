@@ -1,0 +1,44 @@
+/*
+.container {
+  overflow-x: hidden;
+}
+*/
+
+/* Primary BTNs gets black on Mobile -ALL*/
+.cta-btn.primary.bg-primary,
+.cta-btn.primary.bg-white {
+  color: #000000;
+}
+
+.hero.heightShort {
+  min-height: auto !important;
+}
+
+@media (max-width: 1999px) {
+  .container {
+    overflow-x: hidden;
+    overflow-y: hidden;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Extra Space from title removed -FOOTER*/
+  #social-ankle-title {
+    margin-bottom: 0rem !important;
+  }
+
+  /* Removes Space from languages -FOOTER*/
+  #u10 > div > div.u10w5.u10w10 > div {
+    margin-top: 0rem !important ;
+    padding-top: 0rem !important;
+  }
+
+  /* Hides Extra Social Icons -FOOTER*/
+  #u10 > div > div.u10w5.u10w10 > ul.scl-icons {
+    display: none !important;
+  }
+
+  .social-ankle-container .links {
+    max-width: 23rem !important;
+  }
+}
