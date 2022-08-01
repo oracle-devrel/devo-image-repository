@@ -32,12 +32,8 @@
             data (the array of numbers), an output layer containing the results (in this case the most likely label
             being a bike) and one or more hidden layers. Data propagates through the network, using network parameters
             like weights, biases and activation functions, and results in resulting data. The following diagram, taken
-            from <a href="https://deeplearning4j.org">https://deeplearning4j.org</a>, illustrates the process:</p>
-
-        <p>A course in deep learning is out of scope for this article, the interested reader is referred to<br />
-            <a
-                href="https://deeplearning4j.org/docs/latest/deeplearning4j-beginners">https://deeplearning4j.org/docs/latest/deeplearning4j-beginners</a>.
-        </p>
+            from <a href="https://deeplearning4j.konduit.ai/">https://deeplearning4j.konduit.ai/</a>, illustrates the
+            process:</p>
 
         <p>Before a Neural Network can be used, it should be trained. This is done by applying lots of data to the
             network, and tell the network when it is wrong. Based on the feedback, the deep learning algorithm modifies
@@ -55,7 +51,8 @@
 
         <p>There are many software libraries providing Deep Learning API&rsquo;s, in different languages. One of the
             leading Java libraries is deeplearning4j (<a
-                href="https://deeplearning4j.org">https://deeplearning4j.org</a>), created and maintained by SkyMind
+                href="https://deeplearning4j.konduit.ai/">https://deeplearning4j.konduit.ai/</a>), created and
+            maintained by SkyMind
             While the top-level API for deeplearning4j is pure Java, the implementations of the functionality offered by
             the API&rsquo;s are leveraging native code, including GPU-specific optimisations.</p>
 
@@ -97,7 +94,8 @@ MultiLayerConfiguration conf = new NeuralNetConfiguration.Builder()             
 
         <p>In this code snippet, we create the configuration for the neural network. Again, the details about the
             deeplearning4j library are out of scope for this article, and the reader is referred to <a
-                href="https://deeplearning4j.org">https://deeplearning4j.org</a> for more information. The configuration
+                href="https://deeplearning4j.konduit.ai/">https://deeplearning4j.konduit.ai/</a> for more information.
+            The configuration
             contains 2 layers (the input data is often not considered to be a layer as it is not configurable). The
             first layer is a hidden layer, and the second layer is the output layer. The output of the first layer is
             the input of the second layer.</p>

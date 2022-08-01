@@ -186,6 +186,17 @@ p > img {
   margin-bottom: 48px;
 }
 
+ol > li > p.xsml {
+  font-style: normal;
+  text-align: center;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  margin: 0;
+  margin-top: -10px;
+  margin-bottom: 48px;
+}
+
 /*Codes Section */
 .ocode:not(code):not(.ocode-simple) {
   margin-top: 39px;

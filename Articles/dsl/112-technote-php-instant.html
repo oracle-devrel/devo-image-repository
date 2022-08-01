@@ -24,7 +24,7 @@
 
         <h3>Software Requirements</h3>
 
-        <div class="otable-w1">
+        <div class="otable">
             <table class="otable-w2">
                 <tbody>
                     <tr>
@@ -165,7 +165,7 @@ FcgidWrapper "c:/php-5.4.0/php-cgi.exe" .php
         <h3>Enabling the PHP OCI8 Extension on Linux</h3>
         <p>On Linux, PHP is generally manually compiled because the bundled version nevers seems to be up to date.
             However, if you don't wish to recompile PHP, more recent, unsupported RPM packages for Oracle Linux are
-            available from <a href="http://oss.oracle.com/projects/php/">oss.oracle.com</a>, or via <a
+            available from <a href="https://oss.oracle.com/sources/">oss.oracle.com</a>, or via <a
                 href="http://linux.oracle.com/">Unbreakable Linux Network</a> updates. If a supported PHP environment is
             desired use <a href="http://www.oracle.com/technetwork/topics/php/zend-server-096314.html">Zend Server</a>.
             These all have the OCI8 extension pre-built.</p>
@@ -185,7 +185,7 @@ FcgidWrapper "c:/php-5.4.0/php-cgi.exe" .php
             </li>
             <li>
                 <b>Download the Basic and the SDK Instant Client packages</b> from the OTN <a
-                    href="http://www.oracle.com/technetwork/database/features/instant-client/index-100365.html">Instant
+                    href="https://www.oracle.com/database/technologies/instant-client/downloads.html">Instant
                     Client page</a>. Either the zip file or RPMs can be used.
                 <p>Install the RPMs as the root user, for example:</p>
                 <div class="ocode">
@@ -270,7 +270,7 @@ make install
         <h3>Verifying the PHP OCI8 Extension is Installed</h3>
         <p>To check OCI8 configuration, create a simple PHP script <code class="ocode">phpinfo.php</code> in the Apache
             document root:</p>
-        <code class="ocode">&lt;?php
+        <code class="ocode2">&lt;?php
 phpinfo();
 ?&gt;
 </code>
@@ -280,7 +280,7 @@ phpinfo();
             saying "OCI8 Support enabled" and listing the OCI8 options that can be configured.</p>
         <h3>Connecting to an Oracle Database</h3>
         <p>To create a connection, Oracle username and password credentials are passed as two parameters of <a
-                href="http://php.net/function.oci-connect.php"><code class="ocode">oci_connect()</code></a>. An Oracle
+                href="http://php.net/function.oci-connect.php"><code class="ocode2">oci_connect()</code></a>. An Oracle
             Database name connection identifier must be used for the third parameter because programs linked with
             Instant Client are always considered "remote" from any database server and need to be told which database
             instance to connect to. The connection string is likely to be well known for established Oracle databases.
@@ -291,12 +291,12 @@ phpinfo();
             syntax to connect to the <em>HR</em> schema in the <em>orcl</em> database service running on
             <em>mymachine</em>. No <code class="ocode">tnsnames.ora</code> or other Oracle Network file is needed:
         </p>
-        <code class="ocode">$conn = oci_connect('hr', 'hr_password', 'mymachine.mydomain/orcl');</code>
+        <code class="ocode2">$conn = oci_connect('hr', 'hr_password', 'mymachine.mydomain/orcl');</code>
 
         <p>See Oracle's Using the Easy Connect Naming Method documentation for the Easy Connect syntax.</p>
         <p>In new databases the demonstration schemas such as the HR user will need to be unlocked and given a password.
             This may be done in SQL*Plus by connecting as the SYSTEM user and executing the statement:</p>
-        <code class="ocode">ALTER USER <em>username</em> IDENTIFIED BY <em>new_password</em> ACCOUNT UNLOCK;
+        <code class="ocode2">ALTER USER <em>username</em> IDENTIFIED BY <em>new_password</em> ACCOUNT UNLOCK;
 </code>
 
         <h3>Using PHP OCI8 and Oracle</h3>
@@ -363,10 +363,8 @@ echo "&lt;/table&gt;\n";
         <p>Using Oracle Instant Client and installing PHP OCI8 from PECL provide maximum flexibility, allowing
             components to be easily installed and upgraded.</p>
         <p>Questions and suggestions can be posted on the OTN <a
-                href="https://community.oracle.com/community/database/developer-tools/php">PHP</a> or <a
-                href="https://community.oracle.com/community/archived_forums/oracle_database_archived_forums/instant_client">Instant
-                Client</a> forums.</p>
-        <p>The <a target="" href="http://www.oracle.com/technetwork/topics/php/index.html">PHP Developer Center</a>
+                href="https://community.oracle.com/community/database/developer-tools/php">PHP</a></p>
+        <p>The <a target="" href="/languages/php.html">PHP Developer Center</a>
             contains links to useful background material.</p>
 
     </div>

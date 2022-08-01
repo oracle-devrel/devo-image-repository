@@ -5,7 +5,8 @@
                 data management application that integrates with Oracle Database via RESTful service calls. </strong>
         </p>
         <p>Now that the web services have been created and integrated into the client side in <a
-                href="/dsl/odb-browser-apps-js-rest.html" target="">Part 1 of this series</a>, we can spend some time on
+                href="/learn/technical-articles/odb-browser-apps-js-rest" target="">Part 1 of this series</a>, we can
+            spend some time on
             the database tier using database features to modify which rows get returned. There will be no more code
             changes in the client-side portion of the application for the rest of this article; all updates will simply
             be enabling different database features or slightly modifying the SQL query used in the web service.</p>
@@ -23,7 +24,8 @@
             smallest salary while KING enjoys the largest, as shown in Figure 1.</p>
         <p align="center"><img src="//www.oracle.com/technetwork/articles/dsl/odb-browser-apps-p2-f1-3844915.gif"
                 alt="ODB-apps-p2-Figure1"></p>
-        <p><strong>Figure 1: Results of SQL sorting on salary.</strong></p>
+        <p align="center" class="xsml">Figure 1: Results of SQL sorting on salary.</p>
+
         <p>But what if we want to find the same information but segment it by department? We could simply run the SQL
             query for each department, adding a WHERE clause to only look at a specific department, and then use UNION
             to put all of those queries together. With a small dataset, this approach might work. But for a table with
@@ -114,12 +116,16 @@
 
         <p align="center"><img src="//www.oracle.com/technetwork/articles/dsl/odb-browser-apps-p2-f2-3844916.gif"
                 alt="ODB-apps-p2-Figure2"></p>
-        <p><strong>Figure 2: Updating the SQL query of the web service.</strong></p>
+
+        <p align="center" class="xsml">Figure 2: Updating the SQL query of the web service.</p>
+
         <p>Now, the <strong>RANK</strong> column will contain the rank of an employee's salary within a specific
             department, not overall across all departments, as shown in Figure 3.</p>
         <p align="center"><img src="//www.oracle.com/technetwork/articles/dsl/odb-browser-apps-p2-f3-3844917.gif"
                 alt="ODB-apps-p2-Figure3"></p>
-        <p><strong>Figure 3: Results of SQL query with RANK analytic function.</strong></p>
+        <p align="center" class="xsml">Figure 3: Results of SQL query with RANK analytic function.</p>
+
+
         <p>The results of the web service call and web page will also reflect the updated results.</p>
         <p>We can also apply multiple analytic functions to a single SQL statement. Let's say we wanted to easily see
             the difference in salary between the current employee and the previous employee in the same department. We
@@ -164,7 +170,11 @@
             is no previous row to compare to. The results of the new query can be seen in Figure 4.</p>
         <p align="center"><img src="//www.oracle.com/technetwork/articles/dsl/odb-browser-apps-p2-f4-3844918.gif"
                 alt="ODB-apps-p2-Figure4"></p>
-        <p><strong>Figure 4: The results of the LAG function, illustrating the differences in salary.</strong></p>
+        <p><strong></strong></p>
+
+        <p align="center" class="xsml">Figure 4: The results of the LAG function, illustrating the differences in
+            salary.</p>
+
         <p>RANK, DENSE_RANK, LAG, and LEAD are just a few of the many analytic functions that you can easily incorporate
             into your SQL statements—regardless of whether they are called as part of a web service. Read more about
             analytic functions in the <a
@@ -188,8 +198,11 @@
                     href="/dsl/odb-browser-apps-js-rest.html">Part 1.</a> If you don't see a <strong>SQL
                     Worksheet</strong> tab, create a new one by clicking the icon circled in Figure 5.<p align="center">
                     <img src="//www.oracle.com/technetwork/articles/dsl/odb-browser-apps-p2-f5-3844919.gif"
-                        alt="ODB-apps-p2-Figure5"> <br> <strong>Figure 5. Icon for opening a new SQL
-                        worksheet.</strong>&nbsp;</li>
+                        alt="ODB-apps-p2-Figure5">
+
+                <p align="center" class="xsml">Figure 5. Icon for opening a new SQL
+                    worksheet.</p>
+            </li>
             <li>Enter the following SQL query in the <strong>SQL Worksheet</strong> tab:<div class="ocode">
                     <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
                         <div><a href="#copy">Copy</a></div>
@@ -211,15 +224,22 @@
             </li>
             <li>Execute the SQL query by clicking the <strong>Run Statement</strong> icon. <p align="center"><img
                         src="//www.oracle.com/technetwork/articles/dsl/odb-browser-apps-p2-f6-3844920.gif"
-                        alt="ODB-apps-p2-Figure6"><br> <strong>Figure 6. Icon for executing the query.</strong></p>
+                        alt="ODB-apps-p2-Figure6">
+                <p align="center" class="xsml">Figure 6. Icon for executing the query.</p>
+
+
+                </p>
             </li>
         </ol>
         <p>If the query executes successfully, you will see a message that reads "PL/SQL procedure successfully
             completed." If you re-query the data from either Oracle SQL Developer or the web service, all values for
             COMM should read <code class="ocode">0</code>, as shown in Figure 7.</p>
         <p align="center"><img src="//www.oracle.com/technetwork/articles/dsl/odb-browser-apps-p2-f7-3844921.gif"
-                alt="ODB-apps-p2-Figure7"><br><strong>Figure 7: The results of the same query after a redaction policy
-                was applied.</strong></p>
+                alt="ODB-apps-p2-Figure7">
+        <p align="center" class="xsml">Figure 7: The results of the same query after a redaction policy
+            was applied..</p>
+
+        </p>
         <p>Let's keep the redaction policy in force as we enable additional database functionality.</p>
         <h3>Oracle Virtual Private Database</h3>
         <p>Security is always on the mind of developers today. With incidents of breaches on the rise and no end in
@@ -252,7 +272,8 @@
                 you don't see a <strong>SQL Worksheet</strong> tab, create a new one by clicking the icon circled in
                 Figure 8. <p align="center"><img
                         src="//www.oracle.com/technetwork/articles/dsl/odb-browser-apps-p2-f8-3844922.gif"
-                        alt="ODB-apps-p2-Figure8"><br> <strong>Figure 8. Icon for opening a new SQL worksheet.</strong>
+                        alt="ODB-apps-p2-Figure8">
+                <p align="center" class="xsml">Figure 8. Icon for opening a new SQL worksheet.</p>
                 </p>
             </li>
             <li>Enter the following SQL query in the <strong>SQL Worksheet</strong> tab: <div class="ocode">
@@ -276,8 +297,11 @@
             <li>Execute the SQL query by clicking the <strong>Run Statement</strong> icon shown in Figure 9. <p
                     align="center"><img
                         src="//www.oracle.com/technetwork/articles/dsl/odb-browser-apps-p2-f9-3844923.gif"
-                        alt="ODB-apps-p2-Figure9"> <br> <strong>Figure 9. Icon for creating a executing the
-                        query.</strong></p>
+                        alt="ODB-apps-p2-Figure9">
+                <p align="center" class="xsml">Figure 9. Icon for creating a executing the
+                    query.</p>
+
+                </p>
             </li>
             <li>Enter the following SQL query in the <strong>SQL Worksheet</strong> tab, replacing the previous content:
             </li>
@@ -303,8 +327,11 @@
         <p>If you simply reload the web page now, only employees in department 30 will be returned in both the report
             and the chart, as illustrated in Figure 10.</p>
         <p align="center"><img src="//www.oracle.com/technetwork/articles/dsl/odb-browser-apps-p2-f10-3844924.gif"
-                alt="ODB-apps-p2-Figure10"><br><strong>Figure 10: The report and chart after a rule restricting data to
-                the sales department was applied.</strong></p>
+                alt="ODB-apps-p2-Figure10">
+        <p align="center" class="xsml">Figure 10: The report and chart after a rule restricting data to
+            the sales department was applied.</p>
+
+        </p>
         <p>Note that the commission values are still being redacted, and the employees are still sorted from most paid
             to least paid, per the RANK analytic function. Differences in salaries are still being displayed, per the
             LAG analytic function as well. Not a single line in the HTML file or even the JavaScript file was changed.
@@ -320,8 +347,11 @@
             get a blank form. Oracle Virtual Private Database is doing its job by protecting the data, regardless how it
             is accessed.</p>
         <p align="center"><img src="//www.oracle.com/technetwork/articles/dsl/odb-browser-apps-p2-f11-3844925.gif"
-                alt="ODB-apps-p2-Figure11"><br><strong>Figure 11: The results of trying to alter the URL and view an
-                employee not in the accounting department.</strong></p>
+                alt="ODB-apps-p2-Figure11">
+        <p align="center" class="xsml">Figure 11: The results of trying to alter the URL and view an
+            employee not in the accounting department.</p>
+
+        </p>
         <h3>Auditing</h3>
         <p>As a final step, we can enable auditing to record each time the query used in the web service was accessed.
             This will allow us to monitor its usage and ensure that it is being run by expected clients for authorized
@@ -457,7 +487,8 @@
             conferences, including Oracle OpenWorld, Kscope, and Rocky Mountain Oracle Users Group (RMOUG). He is an
             Oracle Ace Director, the author of <em>Expert Oracle Application Express Security</em>, and a coauthor of
             <em>Pro Oracle Application Express</em>. Spendolini is also an Oracle Certified Oracle Application Express
-            developer.</p>
+            developer.
+        </p>
         <p>Spendolini started his career at Oracle Corporation, where he worked with Oracle E-Business Suite for almost
             seven years and was a senior product manager for Oracle Application Express for over three years. He holds a
             dual bachelor's degree from Syracuse University in management information systems and telecommunications
