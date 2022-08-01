@@ -6,10 +6,10 @@
 }
 
 .card {
-  background-color: #EDEFF5;
+  background-color: #edeff500;
   color: white;
   padding: 1.375rem;
-  height: auto;
+  height:fit-content;
 }
 
 caption {
@@ -19,18 +19,16 @@ caption {
 }
 
 .demo {
-  border: 1px solid #CFD5E3;
   border-collapse: collapse;
   padding: 5px;
 }
 .demo th {
-  border: 1px solid #CFD5E3;
   background-color: #141821;
   font-weight: bold;
   line-height: 2.5rem;
 }
 .demo td {
-  border: 1px solid #c0c0c0;
+  border-bottom: 1px solid  #EDEFF5;
   padding: 1rem;
   color: #141821;
 }

@@ -59,18 +59,590 @@
                 <tbody>
             </table>
 
+            <table class="demo">
+                <caption>
+                    <h2>Undo/Restore a previous state</h2>
+                </caption>
+                <thead>
+                    <tr>
+                        <th>Action</th>
+                        <th>Command</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <p><strong>Remove local (untracked) files from the working tree</strong></span></p>
+                        </td>
+                        <td>
+                            <p><u><strong>git clean</strong></u></span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p><strong>Dry run:</strong> shows you what files would be deleted if you ran <strong>git
+                                    clean</strong></span></p>
+                        </td>
+                        <td>
+                            <p>git clean -n</span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p>Remove all untracked files (ignores directories)</span></p>
+                        </td>
+                        <td>
+                            <p>git clean -f</span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p>Remove a specific untracked file</span></p>
+                        </td>
+                        <td>
+                            <p>git clean -f &lt;<em>filePath</em>&gt;</span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p>Remove untracked <em>directories</em> as well as files</span></p>
+                        </td>
+                        <td>
+                            <p>git clean -fd</span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p>Remove any <em>ignored</em>, untracked files/directories</span></p>
+                        </td>
+                        <td>
+                            <p>git clean -xf[d]</span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p>Interactive mode</span></p>
+                        </td>
+                        <td>
+                            <p>git clean -i[d]</span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p><strong>Rebase</strong></span></p>
+                        </td>
+                        <td>
+                            <p><u><strong>git rebase</strong></u></span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p>Abort a rebase</span></p>
+                        </td>
+                        <td>
+                            <p>git rebase - -abort</span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p><strong>Reflog</strong></span></p>
+                        </td>
+                        <td>
+                            <p><u><strong>git reflog</strong></u></span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p><span><u>Recover a deleted commit</u></span></p>
+                        </td>
+                        <td>
+                            <p><em>Advanced/compound command</em></span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p><span><u>Recover a deleted branch</u></span></p>
+                        </td>
+                        <td>
+                            <p><em>Advanced/compound command</em></span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p><strong>Reset (soft rollback that changes where the HEAD of the current branch is
+                                    pointing)</strong></span></p>
+                        </td>
+                        <td>
+                            <p><u><strong>git reset</strong></u></span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p>Reset the current branch to the state prior to running </span><span><u><strong>git
+                                            add</strong></u></span><strong><span
+                                        class="Apple-converted-space">&nbsp;</span></strong></span></p>
+                        </td>
+                        <td>
+                            <p><span><u>git reset</u></span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p>Reset HEAD to the indicated <em>commit</em></span></p>
+                        </td>
+                        <td>
+                            <p><span><u>git reset <em>&lt;commitID</em>&gt;</u></span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td rowspan="2">
+                            <p>Resets HEAD to the indicated <em>commitID</em></span></p>
+                        </td>
+                        <td>
+                            <p>git reset - -hard</span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p><span>No undo</span></p>
+                        </td>
+                    </tr>
+                <tbody>
+            </table>
+
         </div>
-        <div class="card">TWO</div>
-        <div class="card">THREE</div>
-        <div class="card">FOUR</div>
-        <div class="card">FIVE</div>
-        <div class="card">SIX</div>
-        <div class="card">SEVEN</div>
-        <div class="card">EIGHT</div>
-        <div class="card">NINE</div>
-        <div class="card">TEN</div>
-        <div class="card">ELEVEN</div>
-        <div class="card">TWELVE</div>
+        <div class="card">
+            <table class="demo">
+                <caption>
+                    <h2>Saving changes</h2>
+                </caption>
+                <thead>
+                    <tr>
+                        <th>Action</th>
+                        <th>Command</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <tr>
+                        <td>
+                            <p><span>Add files
+                                    to the index</span></p>
+                        </td>
+                        <td>
+                            <p><u>git
+                                    add</u></span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p><span>Add all new,
+                                    modified, and deleted files to a commit</span></p>
+                        </td>
+                        <td>
+                            <p><span>git add [ . | -A |
+                                    --all ]</span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p><span>Add modified and
+                                    deleted files</span></p>
+                        </td>
+                        <td>
+                            <p><span>git add -u</span>
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p><span>Add 1 or more
+                                    files to the staging area</span></p>
+                        </td>
+                        <td>
+                            <p><span>git add
+                                    &lt;<em>file1</em>&gt; &lt;<em>file2</em>&gt;<em> &hellip;
+                                    </em>&lt;<em>fileN</em>&gt;</span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p><span>Selectively add
+                                    parts of a file to a commit</span></p>
+                        </td>
+                        <td>
+                            <p><span>git add [-p |
+                                    --patch]</span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p><span>Don&rsquo;t add
+                                    the file(s), just show if they exist and/or will be ignored</span></p>
+                        </td>
+                        <td>
+                            <p><span>git add [-n |
+                                    --dry-run] [<em>options</em>] &lt;<em>files</em>&gt;</span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p><span>Sends you into an
+                                    interactive utility where you can perform all the various subcommands in one
+                                    location</span></p>
+                        </td>
+                        <td>
+                            <p>><u>git add -
+                                    -interactive</u></span></p>
+                            <p>&nbsp;</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p><span>Selectively add
+                                    parts of a file for a commit</span></p>
+                        </td>
+                        <td>
+                            <p>><u>git add [-p | -
+                                    -patch]</u></span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <p><span>Advanced
+                                    (add: excluding files)</span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p><span>Add all files, but
+                                    exclude one</span></p>
+                        </td>
+                        <td>
+                            <p>><u>git add --all
+                                    -- :!path/to/file/dontcheckmein.txt</u></span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p><span>Add all files, but
+                                    exclude several</span></p>
+                        </td>
+                        <td>
+                            <p><span>git add --all --
+                                    :!path/to/file1 :!path/to/file2 :!path/to/folder1/*</span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p><span>Store
+                                    changes in a temporary location, providing you with a clean working
+                                    directory</span></p>
+                        </td>
+                        <td>
+                            <p><u>git
+                                    stash</u></span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p><span>Store all your
+                                    untracked and ignored files</span></p>
+                        </td>
+                        <td>
+                            <p><span>git stash</span>
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p><span>Stash
+                                    <em>file</em> and annotate with <em>title</em></span></p>
+                        </td>
+                        <td>
+                            <p><span>git stash push -m
+                                    &ldquo;&lt;<em>title</em>&gt;&rdquo; &lt;<em>file</em>&gt;</span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p><span>Stash untracked
+                                    changes</span></p>
+                        </td>
+                        <td>
+                            <p><span>git stash [-u|-
+                                    -include-untracked]</span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p><span>Stash untracked
+                                    and ignored files</span></p>
+                        </td>
+                        <td>
+                            <p><span>git stash [-a| -
+                                    -all]</span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p><span>Restore your most
+                                    recent local changes to the staging area <em>without</em> removing them from the
+                                    tracked stash list</span></p>
+                        </td>
+                        <td>
+                            <p><span>git stash
+                                    apply</span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p><span>Restore your most
+                                    recent local changes to the staging area and removes them from the tracked stash
+                                    list</span></p>
+                        </td>
+                        <td>
+                            <p><span>git stash pop<span class="Apple-converted-space">&nbsp;</span></span></p>
+                            <p>&nbsp;</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p><span>Empty the stash
+                                    list by removing all the stashes</span></p>
+                        </td>
+                        <td>
+                            <p><span>git stash
+                                    clear</span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p><span>View your stash
+                                    list</span></p>
+                        </td>
+                        <td>
+                            <p><span>git stash
+                                    list<span class="Apple-converted-space">&nbsp;</span></span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p><span>Show a summary of
+                                    diffs between the current stash (i.e., top of the stash stack) and the commit at the
+                                    time the stash was saved</span></p>
+                        </td>
+                        <td>
+                            <p><span>git stash
+                                    show</span></p>
+                            <p>&nbsp;</p>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+        <div class="card">
+
+            <table class="demo">
+                <caption>
+                    <h2>Inspect</h2>
+                </caption>
+                <thead>
+                    <tr>
+                        <th>Action</th>
+                        <th>Command</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <p>>Show what revision and author last modified each line of a file</span>
+                            </p>
+                        </td>
+                        <td>
+                            <p><u>git blame</u></span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p>>Ignore whitespace when comparing the parent&rsquo;s version with the child&rsquo;s to
+                                find where the lines came from</span></p>
+                        </td>
+                        <td>
+                            <p>>git blame -w &lt;<em>file</em>&gt;</span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p>>Detect moved or copied lines within a file</span></p>
+                        </td>
+                        <td>
+                            <p>><u>git blame -M [&lt;<em>num</em>&gt;] &lt;<em>file</em>&gt;</u></span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p>>Detect lines moved or copied from other files that were modified in the same
+                                commit</span></p>
+                        </td>
+                        <td>
+                            <p>><u>git blame -C [&lt;<em>num</em>&gt;] &lt;<em>file</em>&gt;</u></span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p>>Add a new branch to an existing branch, view all existing branches, or delete a
+                                specific branch</span></p>
+                        </td>
+                        <td>
+                            <p><u>git branch</u></span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p>>Display branches</span></p>
+                        </td>
+                        <td>
+                            <p>><u>git branch [- -list]</u></span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p>>Show remote branches in addition to local branches.</span></p>
+                        </td>
+                        <td>
+                            <p>>git branch [-r | - -remotes]</span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p>>Restrict list of displayed branches to those matched by &lt;<em>pattern&gt;</em></span>
+                            </p>
+                        </td>
+                        <td>
+                            <p>><u>git branch - -list &lt;<em>pattern</em>&gt;</u></span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p>>Sort branches by day</span></p>
+                        </td>
+                        <td>
+                            <p>>git branch - -sort=-commiterdate (sort branches by date)</span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p>>See where all your branches are tracking from</span></p>
+                        </td>
+                        <td>
+                            <p>><a href="https://git-scm.com/docs/git-branch#Documentation/git-branch.txt--vv"><u>git
+                                        branch -vv</u><u></u></a></span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p>>List branches merged into main</span></p>
+                        </td>
+                        <td>
+                            <p>><u>git branch - -merged main</u></span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p>>List branches merged into HEAD (i.e., the tip of the current branch)</span></p>
+                        </td>
+                        <td>
+                            <p>><u>git branch - -merged</u></span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p>>List branches that <em>have not been merged</em></span></p>
+                        </td>
+                        <td>
+                            <p>><u>git branch - -no-merged</u></span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p>>See a list of files with conflicts after a merge</span></p>
+                        </td>
+                        <td>
+                            <p>>git diff - -name-only - -diff-filter=U</span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p>>Show commit logs</span></p>
+                        </td>
+                        <td>
+                            <p><u>git log</u></span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p>>Limit the number of commits returned by the command</span></p>
+                        </td>
+                        <td>
+                            <p>>git log -n &lt;<em>numCommits</em>&gt;</span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p>>Return just the commit messages and condense output to one line per commit</span></p>
+                        </td>
+                        <td>
+                            <p>>git commit - -oneline</span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p>>Include which files were altered and the relative number of lines that were added or
+                                deleted</span></p>
+                        </td>
+                        <td>
+                            <p>>git log - -stat</span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p>>Display the patch representing each commit</span></p>
+                        </td>
+                        <td>
+                            <p>><u>git log -p</u></span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p>>Show commits for the specified author</span></p>
+                        </td>
+                        <td>
+                            <p>>git log - -author=&rdquo;&lt;<em>pattern</em>&gt;&rdquo;</span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p>>Show only commits that contain the specified file</span></p>
+                        </td>
+                        <td>
+                            <p>>git log &lt;<em>file</em>&gt;</span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p>>Show only those commits that occurred between &lt;<em>since</em>&gt; and
+                                &lt;<em>until</em>&gt;</span></p>
+                        </td>
+                        <td>
+                            <p>><u>git log &lt;<em>since</em>&gt;..&lt;<em>until</em>&gt;</u></span></p>
+                        </td>
+                    </tr>
+                </tbody>
+                <tbody>
+            </table>
+        </div>
     </div>
 
 </body>
