@@ -65,7 +65,7 @@ window.onload = function () {
   for (var i = 0; i < links.length; i++) {
     var link = links[i].getAttribute("href");
 
-    if (link != "#copy" || link == null) {
+    if (!link.includes("#") || link == null) {
       links[i].setAttribute("target", "_blank");
       console.log(link + " added _blank attribute");
     }
