@@ -163,13 +163,13 @@ window.onload = function () {
 
   try {
     addBlank();
-  } catch {
+  } catch (e) {
     console.log(e);
   }
 
   try {
     removeAria();
-  } catch {
+  } catch (e) {
     console.log(e);
   }
 
