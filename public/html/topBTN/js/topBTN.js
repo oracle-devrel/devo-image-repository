@@ -3,6 +3,7 @@ topBTN = document.getElementById("myBtn");
 
 window.onscroll = function () {
   scrollFunction();
+  adjustPosition()
 };
 
 window.onresize = function () {
