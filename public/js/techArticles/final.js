@@ -151,30 +151,35 @@ function addBlank() {
 window.onload = function () {
   try {
     addPadding();
+    console.log("Padding added");
   } catch (e) {
     console.log(e);
   }
 
   try {
     stickNavBar();
+    console.log("Nav Bar Sticked");
   } catch (e) {
     console.log(e);
   }
 
   try {
     addBlank();
+    console.log("Links updated");
   } catch (e) {
     console.log(e);
   }
 
   try {
     removeAria();
+    console.log("Aria removed");
   } catch (e) {
     console.log(e);
   }
 
   try {
     showMT();
+    console.log("MT updated");
   } catch (e) {
     console.log(e);
   }
