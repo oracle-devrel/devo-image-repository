@@ -149,7 +149,11 @@ function addBlank() {
 }
 
 window.onload = function () {
-  addPadding();
+  try {
+    addPadding();
+  } catch (e) {
+    functionToHandleError(e);
+  }
   stickNavBar();
   addBlank();
   removeAria();
