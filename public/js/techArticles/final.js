@@ -154,10 +154,16 @@ window.onload = function () {
   } catch (e) {
     functionToHandleError(e);
   }
+
   stickNavBar();
   addBlank();
   removeAria();
-  showMT();
+
+  try {
+    showMT();
+  } catch (e) {
+    functionToHandleError(e);
+  }
 };
 
 window.onscroll = function () {
