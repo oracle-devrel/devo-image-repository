@@ -63,13 +63,10 @@ function showMT() {
   }
 
   let MTbtn = document.getElementById("closeMTalert");
-  MTbtn.addEventListener("click","click", function () {
-    let alert = document.getElementById('MachineTranslated');
+  MTbtn.addEventListener("click", function () {
+    let alert = document.getElementById("MachineTranslated");
     alert.remove();
   });
-
-
-  
 }
 
 function addPadding() {
