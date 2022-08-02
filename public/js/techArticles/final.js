@@ -155,9 +155,23 @@ window.onload = function () {
     console.log(e);
   }
 
-  stickNavBar();
-  addBlank();
-  removeAria();
+  try {
+    stickNavBar();
+  } catch (e) {
+    console.log(e);
+  }
+
+  try {
+    addBlank();
+  } catch {
+    console.log(e);
+  }
+
+  try {
+    removeAria();
+  } catch {
+    console.log(e);
+  }
 
   try {
     showMT();
