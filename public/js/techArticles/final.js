@@ -1,6 +1,7 @@
 function showMT() {
   //Crosslinking to Free Tier
   //let topNav = document.getElementById("TopNav");
+  let topNav = document.getElementById("TopNav");
   let url = location.href;
   let freeBTN = document.querySelector(
     "#bd353c82-50c2-4950-8e31-340a3956aa1fcustomComponentDiv > div > div > div > div.ctas > div > div > a"
