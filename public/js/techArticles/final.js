@@ -63,7 +63,7 @@ function showMT() {
   }
 }
 
-window.onload = function () {
+function addPadding() {
   //Adds Padding according to the presence of Topics
   var article = document.querySelector(".technical-content");
   var hero = document.querySelector(".content-container");
@@ -97,7 +97,9 @@ window.onload = function () {
     }
     //End -----------------Sticks Chapters
   }
+}
 
+function stickNavBar() {
   //Sticks Menu Bar
   let topNav = document.getElementById("TopNav");
   let heroNav = document.getElementById("TechnicalContentHero");
@@ -123,7 +125,16 @@ window.onload = function () {
   x.addListener(stickNavBar);
 
   //End -------------Sticks Menu Bar
+}
 
+function removeAria() {
+  //Remove Aria Label
+  let ariaSocialAnkle = document.querySelector("#social-ankle-title");
+  ariaSocialAnkle.removeAttribute("aria-label");
+  //console.log("Aria Label for Social Ankle Removed");
+}
+
+function addBlank() {
   //Add the Blank attribute to Links
   let links = document.querySelectorAll(".technical-content a");
 
@@ -135,12 +146,13 @@ window.onload = function () {
       //console.log(link + " added _blank attribute");
     }
   }
+}
 
-  //Remove Aria Label
-  let ariaSocialAnkle = document.querySelector("#social-ankle-title");
-  ariaSocialAnkle.removeAttribute("aria-label");
-  //console.log("Aria Label for Social Ankle Removed");
-
+window.onload = function () {
+  addPadding();
+  stickNavBar();
+  addBlank();
+  removeAria();
   showMT();
 };
 
