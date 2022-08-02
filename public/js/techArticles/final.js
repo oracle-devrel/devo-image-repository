@@ -152,7 +152,7 @@ window.onload = function () {
   try {
     addPadding();
   } catch (e) {
-    functionToHandleError(e);
+    console.log(e);
   }
 
   stickNavBar();
@@ -162,7 +162,7 @@ window.onload = function () {
   try {
     showMT();
   } catch (e) {
-    functionToHandleError(e);
+    console.log(e);
   }
 };
 
