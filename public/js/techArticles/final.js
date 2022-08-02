@@ -7,7 +7,7 @@ function showMT() {
     "#bd353c82-50c2-4950-8e31-340a3956aa1fcustomComponentDiv > div > div > div > div.ctas > div > div > a"
   );
 
-  console.log("Site: " + url);
+  //console.log("Site: " + url);
 
   if (url.includes("/en/") === true) {
     freeBTN.href = "https://www.oracle.com/cloud/free/";
@@ -69,7 +69,7 @@ window.onload = function () {
   var hero = document.querySelector(".content-container");
   var topicPresent = article.classList.contains("noTopics");
 
-  console.log("Topic detected: " + topicPresent);
+  //console.log("Topic detected: " + topicPresent);
 
   if (topicPresent === true) {
     hero.style.width = "66rem";
@@ -110,7 +110,7 @@ window.onload = function () {
   function stickNavBar(x) {
     if (x.matches) {
       heroNav.style.marginTop = translate + "px";
-      console.log("Hero translated");
+      //console.log("Hero translated");
       topNav.style.position = "fixed";
     } else {
       heroNav.style.marginTop = "auto";
@@ -132,14 +132,14 @@ window.onload = function () {
 
     if (!link?.includes("#")) {
       links[i].setAttribute("target", "_blank");
-      console.log(link + " added _blank attribute");
+      //console.log(link + " added _blank attribute");
     }
   }
 
   //Remove Aria Label
   let ariaSocialAnkle = document.querySelector("#social-ankle-title");
   ariaSocialAnkle.removeAttribute("aria-label");
-  console.log("Aria Label for Social Ankle Removed");
+  //console.log("Aria Label for Social Ankle Removed");
 
   showMT();
 };
