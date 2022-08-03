@@ -40,6 +40,11 @@
       margin-left: 1rem;
 }
 
+.ovideoTwo{
+  margin-bottom: 11px;
+  border: solid 1px #919db8;
+}
+
 /*Modification to space between Title and Article's content */
 .content-container .technical-content {
   gap: 2rem;
