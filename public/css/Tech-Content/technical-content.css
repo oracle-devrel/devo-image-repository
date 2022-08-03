@@ -4,6 +4,28 @@
   top: calc(60px + 2.5rem);
 }
 
+.ovideoOne {
+  margin-bottom: 11px;
+  border: solid 1px #919db8;
+  float: right;
+  margin-left: 1rem;
+}
+
+.ovideoTwo {
+  margin-bottom: 11px;
+  border: solid 1px #919db8;
+}
+
+@media (max-width: 1290px) {
+  .ovideoOne,
+  .ovideoTwo {
+    margin-bottom: 11px;
+    border: solid 1px #919db8;
+    float: none;
+    margin-left: 0rem;
+    width: 100%;
+  }
+}
 
 @media (max-width: 1130px) {
   .sticky {
@@ -33,16 +55,11 @@
   }
 }
 
-.ovideoOne{
-      margin-bottom: 11px;
-      border: solid 1px #919db8;
-      float: right;
-      margin-left: 1rem;
-}
-
-.ovideoTwo{
-  margin-bottom: 11px;
-  border: solid 1px #919db8;
+@media (max-width: 767px) {
+  .ovideoOne,
+  .ovideoTwo {
+    height: 193px;
+  }
 }
 
 /*Modification to space between Title and Article's content */
