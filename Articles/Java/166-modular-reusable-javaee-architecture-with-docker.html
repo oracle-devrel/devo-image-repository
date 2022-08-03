@@ -300,26 +300,8 @@
 
         <p>Here's the <code>index.jsp</code> file:</p>
 
-        <div class="ocode">
-            <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
-                <div><a href="#copy">Copy</a></div>
-            </div>
 
-            <pre>
-    <code>
-    <h1>The Host is</h1>
-    <h1><font color="red"><%=InetAddress.getLocalHost().getHostAddress()%></font></h1>
-    <form action="DataServlet">        
-         <input type="submit" value="Create Data and Show It!!!">
-    </form>     
-    
-    <%if (dataList != null && !dataList.isEmpty()) {%>    
-         <%for(Data data: dataList) {%>        
-              <p><%= data.print() %></p>    
-         <%}%>
-    <%} %>
-    </code></pre>
-        </div>
+        <img src="" alt="index.jsp code">
 
         <p>Here's the DataServlet file:</p>
 
