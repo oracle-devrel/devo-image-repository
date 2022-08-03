@@ -4,6 +4,7 @@
   top: calc(60px + 2.5rem);
 }
 
+
 @media (max-width: 1130px) {
   .sticky {
     top: calc(100px + 2.5rem);
@@ -30,6 +31,13 @@
   .chapters {
     max-width: 200px !important;
   }
+}
+
+.ovideoOne{
+      margin-bottom: 11px;
+      border: solid 1px #919db8;
+      float: right;
+      margin-left: 1rem;
 }
 
 /*Modification to space between Title and Article's content */
