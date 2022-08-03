@@ -470,7 +470,8 @@ public class Traveller {
         <p>This time we also want to push it automatically to Docker hub (unlike with the previous Go example, which we
             kept local). Therefore, we set the environment variable <code>FN_REGISTRY</code> to the
             <code>DOCKER_ID</code> and we also log into Docker hub. In the example below, replace <code>DOCKER_ID</code>
-            with your own Docker login.</p>
+            with your own Docker login.
+        </p>
 
         <div class="ocode">
             <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
@@ -511,7 +512,8 @@ Updating route /fn-recommend using image DOCKER_ID/fn-recommend:0.0.2...umped to
         </div>
 
         <p>From the output above you can tell that a Docker image is created and pushed to the Docker hub under
-            <code>DOCKER_ID/fn-recommend:0.0.2.</code></p>
+            <code>DOCKER_ID/fn-recommend:0.0.2.</code>
+        </p>
 
         <p>Again, you can check for the new application and the new route created within Fn server:</p>
 
@@ -749,10 +751,6 @@ $ curl -X POST --data @testdata/syd.json PUBLIC_IP:8080/r/advtravel/fn-recommend
                     target="_blank">8 Reasons why we built Fn Project </a></li>
             <li><a href="https://medium.com/fnproject/fn-project-helm-chart-for-kubernetes-e97ded6f4f0c"
                     target="_blank">Fn Project with Helm Chart for Kubernetes </a></li>
-            <li><a href="https://blogs.oracle.com/developers/kubernetes-serverless-and-federation-oracle-at-kubecon-2017"
-                    target="">Fn Project on Kubernetes</a></li>
-            <li><a href="https://blogs.oracle.com/developers/announcing-oracle-container-engine-and-oracle-container-registry-service"
-                    target="">Oracle Container Engine</a></li>
             <li><a href="http://www.munzandmore.com/2017/cc/devoxx-2017-serverless" target="_blank">Serverless and Fn
                     Slideset </a></li>
         </ul>

@@ -100,7 +100,8 @@
             platform. To complete the download, you will need to log in to your Oracle Technology Network account.
             Oracle Technology Network accounts are free; simply navigate to the following site and click the
             <strong>Create Account</strong> button: <a
-                href="https://login.oracle.com/mysso/signon.jsp">https://login.oracle.com/mysso/signon.jsp</a>.</p>
+                href="https://profile.oracle.com/myprofile/account/create-account.jspx">https://profile.oracle.com/myprofile/account/create-account.jspx</a>.
+        </p>
 
         <p>Depending on your platform, you might have to also download and install a JDK. JDKs for several different
             platforms can be downloaded <a
@@ -134,15 +135,15 @@
             rows, it&#39;s possible to demonstrate almost any relational database concept with these two tables.</p>
 
         <p>Your schema might or might not include EMP and DEPT. If it does, no further action is required. However, if
-            it does not, you&#39;ll have to create them. This can be done by running the script shown in <a
-                href="#listing3">Listing 3</a> of Appendix A.</p>
+            it does not, you&#39;ll have to create them. This can be done by running the script shown in Listing 3 of
+            Appendix A.</p>
 
         <p>To create the EMP and DEPT tables, do the following:</p>
 
         <ol>
             <li>Start Oracle SQL Developer.</li>
             <li>Connect to the schema defined in the previous step.</li>
-            <li>Locate the script in <a href="#listing3">Listing 3</a> of Appendix A and copy it.</li>
+            <li>Locate the script in Listing 3 of Appendix A and copy it.</li>
             <li>Paste the contents of the script into the <strong>Worksheet</strong> tab of Oracle SQL Developer.</li>
             <li>Click the <strong>Run Script</strong> icon, which is circled in red in Figure 2.<br />
                 <br />
@@ -165,7 +166,8 @@
             to reveal a list of schema objects and other associated services. If you expand the <strong>Tables</strong>
             node, you should see at least two entries: <strong>EMP</strong> and <strong>DEPT</strong>. Simply select
             <strong>EMP</strong> and notice that a new tab called EMP was created in the main section of Oracle SQL
-            Developer. This tab has a number of subtabs.</p>
+            Developer. This tab has a number of subtabs.
+        </p>
         <a name="f3"></a>
 
         <p align="center" class="xsml">Figure 3: The Columns tab of the EMP table.</p>
@@ -397,12 +399,14 @@ http://servername/ords/db/demo/dept</code></pre>
             <li>Locate and right-click the <strong>demo</strong> node in the tree. Select <strong>Add Template</strong>.
             </li>
             <li>Enter <code>emp/{empno}</code> in the <strong>URI Pattern</strong> field and click
-                <strong>Next</strong>.</li>
+                <strong>Next</strong>.
+            </li>
             <li>Click <strong>Finish</strong>.</li>
             <li>Next, locate the <strong>emp/{empno}</strong> node in the tree and right-click it. Select <strong>Add
                     Handler</strong>, and when that expands, select <strong>GET</strong>.</li>
             <li>Set the <strong>Source Type</strong> field to <strong>Query One Row</strong> and click
-                <strong>Apply</strong>.</li>
+                <strong>Apply</strong>.
+            </li>
             <li>In the resulting worksheet, enter the following SQL statement:<br />
                 &nbsp;
                 <div class="ocode">
@@ -431,13 +435,15 @@ WHERE
                 blank. Click the <strong>Name</strong> column and enter <code>empno</code>. Repeat this for the
                 <strong>Bind Parameter</strong> column. Set <strong>Data Type</strong> to <strong>INTEGER</strong>. The
                 end result should resemble the following:<br />
-                &nbsp;</li>
+                &nbsp;
+            </li>
             <li>Click the <strong>SQL Worksheet</strong> tab and then click the single floppy disk icon to save your
                 changes.</li>
         </ol>
 
         <p>Testing this web service is a bit more involved, because we have to manually substitute the value of
-            <code>empno</code> when we test. Thus, a sample URL that we can try looks like this:</p>
+            <code>empno</code> when we test. Thus, a sample URL that we can try looks like this:
+        </p>
 
         <div class="ocode">
             <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
@@ -567,7 +573,7 @@ END;</code></pre>
                 1:<br />
                 <br />
                 <strong>Table 1. Parameters to add</strong>
-                <table border="1" cellpadding="3" cellspacing="0" class="dataTable3padd" style="width:548px">
+                <table class="otable">
                     <tbody>
                         <tr>
                             <th scope="col">Name</th>
@@ -654,7 +660,7 @@ http://servername/ords/db/demo/emp</code></pre>
             <li>Click the <strong>Headers</strong> tab and then enter the six rows of data shown in Table 2:<br />
                 <br />
                 <strong>Table 2. Data to add</strong>
-                <table border="1" cellpadding="3" cellspacing="0" class="dataTable3padd" style="width:548px">
+                <table class="otable">
                     <tbody>
                         <tr>
                             <th scope="col">Key</th>
@@ -712,7 +718,8 @@ http://servername/ords/db/demo/emp</code></pre>
             Using the <code>getJSON</code> function, jQuery will make an asynchronous call to the web service, which
             will in turn return a JSON document. That document will then be parsed and each record will be examined. For
             each record in the document, the values will be extracted and appended to a table tag with an ID of
-            <code>rpt</code>.</p>
+            <code>rpt</code>.
+        </p>
 
         <p>Any JavaScript framework can be used to do this; the only requirement is to use the same URI for the web
             service. Formatting and displaying the data can be done any way you choose.</p>
