@@ -1,0 +1,145 @@
+<section class="cc01 cc01v0 cpad page" id="link1">
+    <div class="cc01w1 cwidth">
+        <p><a href="https://matomo.org/">Matomo</a> is a Google Analytics alternative for tracking metrics on your
+            websites. If you follow my blog, you know how easy it is to deploy popular Open Source web solutions like
+            WordPress, Joomla!, Drupal, Moodle, and Magento on Oracle Cloud Infrastructure (OCI).</p>
+        <p>All these solutions are using MySQL Database Service to store their data.</p>
+        <p>I’ve recently added a <a href="https://github.com/lefred/oci-matomo-mds">new stack</a> to deploy Matomo. Of
+            course, this can be a standalone installation to collect all your analytics from self-hosted websites, but
+            today I’ll describe how to use it with an existing stack we’ve already deployed on OCI.</p>
+        <p>For this example, I deployed WordPress using the following stack: <a
+                href="https://github.com/lefred/oci-wordpress-mds">oci-wordpress-mds</a>.</p>
+        <p>The first step is to <a
+                href="https://www.oracle.com/cloud/sign-in.html?redirect_uri=https%3A%2F%2Fcloud.oracle.com%2Fresourcemanager%2Fstacks%2Fcreate%3FzipUrl%3Dhttps%3A%2F%2Fgithub.com%2Flefred%2Foci-matomo-mds%2Freleases%2Fdownload%2Fv1.0.0%2Fstack_matomo_mds.zip&amp;source=:ex:tb:::::WWMK211125P00016:WW_FY22_DevRel_DotBuild&amp;SC=:ex:tb:::::WWMK211125P00016:WW_FY22_DevRel_DotBuild&amp;pcode=WWMK211125P00016">deploy
+                Matomo on OCI</a>.</p>
+        <p>In the second screen of the Stack’s wizard, we specify that we want to use an existing infrastructure. This
+            way we won’t need to recreate our VCN, subnets, security lists, Internet Gateway, etc. — we want share what
+            we’ve already deployed for WordPress:</p>
+        <figure class="">
+            <picture>
+                <source
+                    srcset="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/matamo-existing-infrastructure.webp 1x, https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/matamo-existing-infrastructure.webp 2x">
+                <img loading="lazy"
+                    src="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/matamo-existing-infrastructure.webp"
+                    data-original="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/matamo-existing-infrastructure.webp"
+                    data-at2x="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/matamo-existing-infrastructure.webp"
+                    title="OCI panel where you can toggle whether or not to use existing infrastructure"
+                    alt="OCI panel">
+            </picture>
+            <figcaption>OCI panel where you can toggle whether or not to use existing infrastructure</figcaption>
+        </figure>
+        <p>As you can see for the majority of the input fields, we need to provide the OCID. These can be found on the
+            OCI’s dashboard. For example the OCID for the MySQL Database can be found here:</p>
+        <figure class="">
+            <picture>
+                <source
+                    srcset="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/matamo-ocid-commandwebp.webp 1x, https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/matamo-ocid-commandwebp.webp 2x">
+                <img loading="lazy"
+                    src="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/matamo-ocid-commandwebp.webp"
+                    data-original="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/matamo-ocid-commandwebp.webp"
+                    data-at2x="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/matamo-ocid-commandwebp.webp"
+                    title="OCI dashboard with callouts highlighting the Copy OCID command" alt="OCI dashboard">
+            </picture>
+            <figcaption>OCI dashboard with callouts highlighting the Copy OCID command</figcaption>
+        </figure>
+        <p>We do this for every resources we want to reuse.</p>
+        <p>Then we create an apply job for the stack and when done we can get the public IP and other necessary
+            information in the output section:</p>
+        <figure class="">
+            <picture>
+                <source
+                    srcset="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/matamo-output-info.webp 1x, https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/matamo-output-info.webp 2x">
+                <img loading="lazy"
+                    src="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/matamo-output-info.webp"
+                    data-original="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/matamo-output-info.webp"
+                    data-at2x="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/matamo-output-info.webp"
+                    title="The Outputs page in OCI, where you can find IP address, username, and other information"
+                    alt="Outputs page">
+            </picture>
+            <figcaption>The Outputs page in OCI, where you can find IP address, username, and other information
+            </figcaption>
+        </figure>
+        <p>We can then enter the public IP in a browser and finish the installation:</p>
+        <figure class="">
+            <picture>
+                <source
+                    srcset="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/matamo-progress-bar.webp 1x, https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/matamo-progress-bar.webp 2x">
+                <img loading="lazy"
+                    src="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/matamo-progress-bar.webp"
+                    data-original="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/matamo-progress-bar.webp"
+                    data-at2x="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/matamo-progress-bar.webp"
+                    title="Matamo dashboard with a halfway-finished progress bar" alt="Matamo dashboard">
+            </picture>
+            <figcaption>Matamo dashboard with a halfway-finished progress bar</figcaption>
+        </figure>
+        <p>It’s important to use the right connector/adapter: <strong>MYSQLI</strong>.</p>
+        <p>Then we follow the wizard and enter the required information.</p>
+        <p>When done, we can add our WordPress in Matomo to start tracking it. The first step is the retrieve its name
+            (in our case, its public IP as I don’t use DNS):</p>
+        <figure class="">
+            <picture>
+                <source
+                    srcset="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/matamo-wordpress-public-ip.webp 1x, https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/matamo-wordpress-public-ip.webp 2x">
+                <img loading="lazy"
+                    src="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/matamo-wordpress-public-ip.webp"
+                    data-original="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/matamo-wordpress-public-ip.webp"
+                    data-at2x="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/matamo-wordpress-public-ip.webp"
+                    title="WordPress public IP is available to be copied from the OCI dashboard"
+                    alt="WordPress public IP">
+            </picture>
+            <figcaption>WordPress public IP is available to be copied from the OCI dashboard</figcaption>
+        </figure>
+        <p>Once added in Matomo, we can retrieve the javascript code used to track our website:</p>
+        <figure class="">
+            <picture>
+                <source
+                    srcset="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/matamo-js-tracking-code.webp 1x, https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/matamo-js-tracking-code.webp 2x">
+                <img loading="lazy"
+                    src="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/matamo-js-tracking-code.webp"
+                    data-original="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/matamo-js-tracking-code.webp"
+                    data-at2x="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/matamo-js-tracking-code.webp"
+                    title="JS tracking code" alt="JS tracking code">
+            </picture>
+            <figcaption>JS tracking code</figcaption>
+        </figure>
+        <p>We copy that code and we go into the admin dashboard of our WordPress site to modify the theme and add the
+            previous code in the header file:</p>
+        <figure class="">
+            <picture>
+                <source
+                    srcset="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/matamo-wp-editor.webp 1x, https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/matamo-wp-editor.webp 2x">
+                <img loading="lazy"
+                    src="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/matamo-wp-editor.webp"
+                    data-original="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/matamo-wp-editor.webp"
+                    data-at2x="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/matamo-wp-editor.webp"
+                    title="WordPress theme editor dashboard" alt="WordPress theme editor dashboard">
+            </picture>
+            <figcaption>WordPress theme editor dashboard</figcaption>
+        </figure>
+        <figure class="">
+            <picture>
+                <source
+                    srcset="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/matamo-wordpress-js-paste.webp 1x, https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/matamo-wordpress-js-paste.webp 2x">
+                <img loading="lazy"
+                    src="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/matamo-wordpress-js-paste.webp"
+                    data-original="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/matamo-wordpress-js-paste.webp"
+                    data-at2x="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/matamo-wordpress-js-paste.webp"
+                    title="JS code pasted into WordPress editor" alt="JS Code">
+            </picture>
+            <figcaption>JS code pasted into WordPress editor</figcaption>
+        </figure>
+        <p>And this is all we needed to be able to get analytics of our website we deployed on OCI.</p>
+        <figure class="">
+            <picture>
+                <source
+                    srcset="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/matamo-dash-final-code.webp 1x, https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/matamo-dash-final-code.webp 2x">
+                <img loading="lazy"
+                    src="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/matamo-dash-final-code.webp"
+                    data-original="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/matamo-dash-final-code.webp"
+                    data-at2x="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/matamo-dash-final-code.webp"
+                    title="Matomo dashboard" alt="Matomo dashboard">
+            </picture>
+            <figcaption>Matomo dashboard</figcaption>
+        </figure>
+    </div>
+</section>
