@@ -42,5 +42,3 @@ function changeHeaderLinks() {
     }
   }
 }
-
-export default changeHeaderLinks();
