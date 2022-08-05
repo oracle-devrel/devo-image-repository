@@ -18,7 +18,6 @@ window.onload = function () {
   let ariaSocialAnkle = document.querySelector("#social-ankle-title");
   ariaSocialAnkle.removeAttribute("aria-label");
   console.log("Aria Label for Social Ankle Removed");
-
   changelinks();
 
   
