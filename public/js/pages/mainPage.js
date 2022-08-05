@@ -1,4 +1,4 @@
-import changelinks from "https://oracle-devrel.github.io/devo-image-repository/public/js/changeHeaderLinks.js";
+//import changelinks from "https://oracle-devrel.github.io/devo-image-repository/public/js/changeHeaderLinks.js";
 
 
 window.onload = function () {
@@ -18,8 +18,7 @@ window.onload = function () {
   let ariaSocialAnkle = document.querySelector("#social-ankle-title");
   ariaSocialAnkle.removeAttribute("aria-label");
   console.log("Aria Label for Social Ankle Removed");
-  changelinks();
+  //changelinks();
 
-  
 };
 
