@@ -1,3 +1,5 @@
+
+
 window.onload = function () {
   let altImage = document.querySelectorAll("img");
 
@@ -14,6 +16,5 @@ window.onload = function () {
   //Remove Aria Label
   let ariaSocialAnkle = document.querySelector("#social-ankle-title");
   ariaSocialAnkle.removeAttribute("aria-label");
-  console.log("Aria Label for Social Ankle Removed")
-  
+  console.log("Aria Label for Social Ankle Removed");
 };
