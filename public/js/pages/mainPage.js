@@ -60,8 +60,10 @@ window.onload = function () {
   ariaSocialAnkle.removeAttribute("aria-label");
   console.log("Aria Label for Social Ankle Removed");
 
-  let closeNavBTN = document.querySelector(
-    "#u30navw1 > ul > li > div > div > button"
-  );
-  closeNavBTN.setAttribute("data-lbl", "close");
+  let closeNavBTN = document.querySelectorAll(".u30navw3 .close");
+
+  for (var i = 0; i < closeNavBTN.length; i++) {
+    closeNavBTN[i].setAttribute("data-lbl", "close");
+    console.log(closeNavBTN[i]);
+  }
 };

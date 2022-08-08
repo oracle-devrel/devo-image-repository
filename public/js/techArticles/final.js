@@ -146,8 +146,9 @@ function addBlank() {
   let linksBread = document.querySelectorAll(".breadcrumbs a");
 
   for (var i = 0; i < linksBread.length; i++) {
-    console.log(linksBread[i].href)
-    linksBread[i].href = "https://orasites-prodapp.cec.ocp.oraclecloud.com/site/devo/"
+    console.log(linksBread[i].href);
+    linksBread[i].href =
+      "https://orasites-prodapp.cec.ocp.oraclecloud.com/site/devo/";
   }
 
   for (var i = 0; i < links.length; i++) {
@@ -159,14 +160,12 @@ function addBlank() {
     }
   }
 
-  let closeNavBTN = document.querySelector(
-    "#u30navw1 > ul > li > div > div > button"
-  );
-  closeNavBTN.setAttribute("data-lbl", "close");
+  let closeNavBTN = document.querySelectorAll(".u30navw3 .close");
 
-
-
-
+  for (var i = 0; i < closeNavBTN.length; i++) {
+    closeNavBTN[i].setAttribute("data-lbl", "close");
+    console.log(closeNavBTN[i]);
+  }
 }
 
 function changeHeaderLinks() {
