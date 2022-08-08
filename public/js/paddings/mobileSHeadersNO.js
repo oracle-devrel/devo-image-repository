@@ -35,7 +35,7 @@ window.onresize = window.onload = function () {
   console.log("Aria Label for Social Ankle Removed");
 
   let closeNavBTN = document.querySelector(
-    "#u30navw1 > ul > li.active > div > div > button"
+    "#u30navw1 > ul > li > div > div > button"
   );
   closeNavBTN.setAttribute("data-lbl", "close");
 };
