@@ -34,6 +34,11 @@ window.onresize = window.onload = function () {
   ariaSocialAnkle.removeAttribute("aria-label");
   console.log("Aria Label for Social Ankle Removed");
 
+  let closeNavBTN = document.querySelector(
+    "#u30navw1 > ul > li.active > div > div > button"
+  );
+  closeNavBTN.setAttribute("data-lbl", "close");
+
   //For Tutorials page:
   let url = location.href;
 
