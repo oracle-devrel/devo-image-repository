@@ -143,6 +143,12 @@ function removeAria() {
 function addBlank() {
   //Add the Blank attribute to Links
   let links = document.querySelectorAll(".technical-content a");
+  let linksBread = document.querySelectorAll(".breadcrumbs a");
+
+  for (var i = 0; i < linksBread.length; i++) {
+    console.log(linksBread[i].href)
+    linksBread[i].href = "https://orasites-prodapp.cec.ocp.oraclecloud.com/site/devo/"
+  }
 
   for (var i = 0; i < links.length; i++) {
     var link = links[i].getAttribute("href");
@@ -152,6 +158,10 @@ function addBlank() {
       //console.log(link + " added _blank attribute");
     }
   }
+
+
+
+
 }
 
 function changeHeaderLinks() {
