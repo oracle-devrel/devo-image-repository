@@ -378,6 +378,10 @@
     {"type": "string","comment": "WCS to OCM","expression": "/languages.html/","location": "/"},
     {"type": "string","comment": "WCS to OCM","expression": "/languages.html","location": "/"},
 
+    {"type": "string","comment": "WCS to OCM","expression": "/site/devo/de","location": "/site/devo/de/index.html"},
+    {"type": "string","comment": "WCS to OCM","expression": "/de","location": "/site/devo/de/index.html"},
+    {"type": "string","comment": "WCS to OCM","expression": "/de/","location": "/site/devo/de/index.html"},
+
     {"type": "string","comment": "WCS to OCM","expression": "/learn/technical-articles/proximasafe-intro","location": "/learn/technical-articles/chapter-1"},
     {"type": "string","comment": "WCS to OCM","expression": "/learn/technical-articles/proximasafe-part-2","location": "/learn/technical-articles/chapter-2"}
     ]

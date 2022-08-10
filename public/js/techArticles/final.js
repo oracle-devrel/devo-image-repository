@@ -217,6 +217,21 @@ function changeHeaderLinks() {
   }
 }
 
+function altImages() {
+  //Add ALT to missing images or Icons
+  let altImage = document.querySelectorAll("img");
+
+  for (var i = 0; i < altImage.length; i++) {
+    var image = altImage[i].getAttribute("alt");
+    //console.log(image)
+
+    if (image == null) {
+      altImage[i].setAttribute("alt", "Developer Resource Center Icon");
+      console.log(image + " ALT updated");
+    }
+  }
+}
+
 window.onload = function () {
   try {
     addPadding();
@@ -242,6 +257,13 @@ window.onload = function () {
   try {
     removeAria();
     console.log("Aria removed");
+  } catch (e) {
+    console.log(e);
+  }
+
+  try {
+    altImages();
+    console.log("ALT images updates");
   } catch (e) {
     console.log(e);
   }

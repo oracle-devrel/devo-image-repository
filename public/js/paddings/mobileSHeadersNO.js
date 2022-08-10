@@ -24,7 +24,7 @@ window.onresize = window.onload = function () {
     //console.log(image)
 
     if (image == null) {
-      altImage[i].setAttribute("alt", " ");
+      altImage[i].setAttribute("alt", "Developer Resource Center Icon");
       console.log(image + " ALT updated");
     }
   }
