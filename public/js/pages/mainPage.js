@@ -73,9 +73,10 @@ window.onload = function () {
   //Accesibility Corrections: u10btn
   let missingBTNsu10 = document.querySelectorAll(".u10btn");
   for (var i = 0; i < missingBTNsu10.length; i++) {
-    missingBTNsu10[i].setAttribute("data-lbl", "Developer Resource Button");
+    missingBTNsu10[i].setAttribute("aria-label", "Developer Resource Button");
     console.log(missingBTNsu10[i])
   }
+
 
   //Remove Aria Label
   let ariaSocialAnkle = document.querySelector("#social-ankle-title");
