@@ -181,6 +181,21 @@ function addBlank() {
     closeNavBTN[i].setAttribute("data-lbl", "close");
     console.log(closeNavBTN[i]);
   }
+
+  //Update missing links
+  let invisibleLinks = document.querySelectorAll("a");
+  for (var i = 0; i < invisibleLinks.length; i++) {
+    var invLink = invisibleLinks[i].getAttribute("href");
+    //console.log(invisibleLinks[i]);
+    //console.log(invisibleLinks[i].href)
+
+    if (invLink == null) {
+      invisibleLinks[i].setAttribute("href", "#");
+      console.log("LINK UPDATED TO #");
+    }
+    //console.log(invisibleLinks[i].href)
+    //console.log(invisibleLinks[i]);
+  }
 }
 
 function changeHeaderLinks() {
