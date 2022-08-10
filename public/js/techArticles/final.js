@@ -3,11 +3,33 @@ function showMT() {
   //let topNav = document.getElementById("TopNav");
   let topNav = document.getElementById("TopNav");
   let url = location.href;
+  let linksBread = document.querySelectorAll(".breadcrumbs a");
   let freeBTN = document.querySelector(
     "#bd353c82-50c2-4950-8e31-340a3956aa1fcustomComponentDiv > div > div > div > div.ctas > div > div > a"
   );
 
   //console.log("Site: " + url);
+  for (var i = 0; i < linksBread.length; i++) {
+    if (url.includes("/en/") === true) {
+      linksBread[i].href = "/site/devo/";
+    } else if (url.includes("/de/") === true) {
+      linksBread[i].href = "/site/devo/de";
+    } else if (url.includes("/es/") === true) {
+      linksBread[i].href = "/site/devo/es";
+    } else if (url.includes("/fr/") === true) {
+      linksBread[i].href = "/site/devo/fr";
+    } else if (url.includes("/it/") === true) {
+      linksBread[i].href = "/site/devo/it";
+    } else if (url.includes("/ja/") === true) {
+      linksBread[i].href = "/site/devo/ja";
+    } else if (url.includes("/ko/") === true) {
+      linksBread[i].href = "/site/devo/ko";
+    } else if (url.includes("/pt-BR/") === true) {
+      linksBread[i].href = "/site/devo/pt-BR";
+    } else if (url.includes("/zh/") === true) {
+      linksBread[i].href = "/site/devo/zh";
+    }
+  }
 
   if (url.includes("/en/") === true) {
     //freeBTN.href = "https://www.oracle.com/cloud/free/";
@@ -143,13 +165,6 @@ function removeAria() {
 function addBlank() {
   //Add the Blank attribute to Links
   let links = document.querySelectorAll(".technical-content a");
-  let linksBread = document.querySelectorAll(".breadcrumbs a");
-
-  for (var i = 0; i < linksBread.length; i++) {
-    console.log(linksBread[i].href);
-    linksBread[i].href =
-      "https://orasites-prodapp.cec.ocp.oraclecloud.com/site/devo/";
-  }
 
   for (var i = 0; i < links.length; i++) {
     var link = links[i].getAttribute("href");
@@ -177,16 +192,9 @@ function changeHeaderLinks() {
     for (var i = 0; i < headerLinks.length; i++) {
       //console.log(headerLinks[i].href);
 
-      if (
-        headerLinks[i].href.includes(
-          "https://orasites-prodapp.cec.ocp.oraclecloud.com"
-        )
-      ) {
+      if (headerLinks[i].href.includes("")) {
         //console.log("Wrong Link");
-        let generateLink = headerLinks[i].href.replace(
-          "https://orasites-prodapp.cec.ocp.oraclecloud.com",
-          "/site/devo"
-        );
+        let generateLink = headerLinks[i].href.replace("", "/site/devo");
         headerLinks[i].href = generateLink;
       }
 
@@ -196,14 +204,10 @@ function changeHeaderLinks() {
     for (var i = 0; i < headerLinks.length; i++) {
       //console.log(headerLinks[i].href);
 
-      if (
-        headerLinks[i].href.includes(
-          "https://orasites-prodapp.cec.ocp.oraclecloud.com"
-        )
-      ) {
+      if (headerLinks[i].href.includes("")) {
         //console.log("Wrong Link");
         let generateLink = headerLinks[i].href.replace(
-          "https://orasites-prodapp.cec.ocp.oraclecloud.com",
+          "",
           "/sites/preview/devo"
         );
         headerLinks[i].href = generateLink;
