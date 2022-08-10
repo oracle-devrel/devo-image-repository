@@ -70,6 +70,13 @@ window.onload = function () {
     //console.log(invisibleLinks[i]);
   }
 
+  //Accesibility Corrections: u10btn
+  let missingBTNsu10 = document.querySelectorAll(".u10btn");
+  for (var i = 0; i < missingBTNsu10.length; i++) {
+    missingBTNsu10[i].setAttribute("data-lbl", "Developer Resource Button");
+    console.log(missingBTNsu10[i])
+  }
+
   //Remove Aria Label
   let ariaSocialAnkle = document.querySelector("#social-ankle-title");
   ariaSocialAnkle.removeAttribute("aria-label");
@@ -79,6 +86,7 @@ window.onload = function () {
 
   for (var i = 0; i < closeNavBTN.length; i++) {
     closeNavBTN[i].setAttribute("data-lbl", "close");
-    console.log(closeNavBTN[i]);
+    //console.log(closeNavBTN[i]);
   }
+  console.log("Close BTN-ARIA updated");
 };
