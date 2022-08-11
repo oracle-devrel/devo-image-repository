@@ -13,7 +13,7 @@ function showMT() {
     if (url.includes("/en/") === true) {
       linksBread[i].href = "/site/devo/";
     } else if (url.includes("/de/") === true) {
-      linksBread[i].href = "/site/devo/de";
+      linksBread[i].href = "/site/devo/de/index.html";
     } else if (url.includes("/es/") === true) {
       linksBread[i].href = "/site/devo/es";
     } else if (url.includes("/fr/") === true) {

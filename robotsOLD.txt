@@ -1,0 +1,16 @@
+User-agent: *
+Disallow: /documents/
+Disallow: /sites/
+Disallow: /authsite/
+Disallow: /content/
+Disallow: /pages/
+Disallow: /_themes/
+Disallow: /_themesdelivery/
+Disallow: /_sitescloud/
+Disallow: /_sitesclouddelivery/
+Disallow: /_comps/
+Disallow: /_components/
+Disallow: /_compsdelivery/
+Disallow: /scstemplate_*/
+Disallow: /site/
+Allow: /content/assets/
