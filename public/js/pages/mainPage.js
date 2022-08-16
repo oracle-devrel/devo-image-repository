@@ -48,6 +48,8 @@ window.onload = function () {
   for (var i = 0; i < altImage.length; i++) {
     var image = altImage[i].getAttribute("alt");
     //console.log(image)
+    altImage[i].setAttribute("height", "auto");
+    altImage[i].setAttribute("width", "auto");
 
     if (image == null) {
       altImage[i].setAttribute("alt", "Developer Resource Center Icon");
@@ -73,11 +75,13 @@ window.onload = function () {
   //Accesibility Corrections: u10btn
   let missingBTNsu10 = document.querySelectorAll(".u10btn");
   for (var i = 0; i < missingBTNsu10.length; i++) {
-    missingBTNsu10[i].role = "button"
-    missingBTNsu10[i].setAttribute("aria-label", "Footer button with no action");
-    console.log(missingBTNsu10[i])
+    missingBTNsu10[i].role = "button";
+    missingBTNsu10[i].setAttribute(
+      "aria-label",
+      "Footer button with no action"
+    );
+    console.log(missingBTNsu10[i]);
   }
-
 
   //Remove Aria Label
   let ariaSocialAnkle = document.querySelector("#social-ankle-title");

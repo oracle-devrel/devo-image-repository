@@ -23,6 +23,8 @@ window.onresize = window.onload = function () {
   for (var i = 0; i < altImage.length; i++) {
     var image = altImage[i].getAttribute("alt");
     //console.log(image)
+    altImage[i].setAttribute("height", "auto");
+    altImage[i].setAttribute("width", "auto");
 
     if (image == null) {
       altImage[i].setAttribute("alt", "Developer Resource Center Icon");
