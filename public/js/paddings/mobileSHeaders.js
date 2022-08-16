@@ -93,4 +93,15 @@ window.onresize = window.onload = function () {
     }
     console.log("Dev.oracle.com links removed");
   }
+
+  //Accesibility Corrections: u10btn
+  let missingBTNsu10 = document.querySelectorAll(".u10btn");
+  for (var i = 0; i < missingBTNsu10.length; i++) {
+    missingBTNsu10[i].role = "button";
+    missingBTNsu10[i].setAttribute(
+      "aria-label",
+      "Footer button with no action"
+    );
+    console.log(missingBTNsu10[i]);
+  }
 };
