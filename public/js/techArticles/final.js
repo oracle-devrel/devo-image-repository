@@ -179,7 +179,7 @@ function addBlank() {
 
   for (var i = 0; i < closeNavBTN.length; i++) {
     closeNavBTN[i].setAttribute("data-lbl", "close");
-    console.log(closeNavBTN[i]);
+    //console.log(closeNavBTN[i]);
   }
 
   //Update missing links
@@ -191,7 +191,7 @@ function addBlank() {
 
     if (invLink == null) {
       invisibleLinks[i].setAttribute("href", "#");
-      console.log("LINK UPDATED TO #");
+      //console.log("LINK UPDATED TO #");
     }
     //console.log(invisibleLinks[i].href)
     //console.log(invisibleLinks[i]);
@@ -213,7 +213,7 @@ function changeHeaderLinks() {
         headerLinks[i].href = generateLink;
       }
 
-      console.log("Header links updated to: /site/devo");
+      //console.log("Header links updated to: /site/devo");
     }
   } else if (headerURL.includes("/sites/preview/devo/") === true) {
     for (var i = 0; i < headerLinks.length; i++) {
@@ -227,7 +227,7 @@ function changeHeaderLinks() {
         );
         headerLinks[i].href = generateLink;
       }
-      console.log("Header links updated to: /sites/preview/devo");
+      //console.log("Header links updated to: /sites/preview/devo");
     }
   }
 }
@@ -242,7 +242,7 @@ function altImages() {
 
     if (image == null) {
       altImage[i].setAttribute("alt", "Developer Resource Center Icon");
-      console.log(image + " ALT updated");
+      //console.log(image + " ALT updated");
     }
   }
 }
@@ -257,7 +257,7 @@ function updateFooterLinks() {
 
     if (invLink == null) {
       invisibleLinks[i].setAttribute("href", "#");
-      console.log("LINK UPDATED TO #");
+      //console.log("LINK UPDATED TO #");
     }
     //console.log(invisibleLinks[i].href)
     //console.log(invisibleLinks[i]);
@@ -271,7 +271,7 @@ function updateFooterLinks() {
       "aria-label",
       "Footer button with no action"
     );
-    console.log(missingBTNsu10[i]);
+    //console.log(missingBTNsu10[i]);
   }
 }
 

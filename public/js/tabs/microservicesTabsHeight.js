@@ -28,7 +28,7 @@ window.onresize = window.onload = function () {
 
     if (image == null) {
       altImage[i].setAttribute("alt", "Developer Resource Center Icon");
-      console.log(image + " ALT updated");
+      //console.log(image + " ALT updated");
     }
   }
 
@@ -41,7 +41,7 @@ window.onresize = window.onload = function () {
 
     if (invLink == null) {
       invisibleLinks[i].setAttribute("href", "#");
-      console.log("LINK UPDATED TO #");
+      //console.log("LINK UPDATED TO #");
     }
     //console.log(invisibleLinks[i].href)
     //console.log(invisibleLinks[i]);
@@ -55,6 +55,6 @@ window.onresize = window.onload = function () {
       "aria-label",
       "Footer button with no action"
     );
-    console.log(missingBTNsu10[i]);
+    //console.log(missingBTNsu10[i]);
   }
 };

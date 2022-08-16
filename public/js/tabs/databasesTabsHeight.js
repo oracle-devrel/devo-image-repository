@@ -27,13 +27,13 @@ window.onresize = window.onload = function () {
       //console.log(title[i]);
       title[i].style.paddingTop = "0rem";
     }
-    console.log("Mobile Headers updated");
+    //console.log("Mobile Headers updated");
   } else {
     for (let i = 0; i < title.length; i++) {
       //console.log(title[i]);
       title[i].style.paddingTop = "5rem";
     }
-    console.log("Desktop Headers updated");
+    //console.log("Desktop Headers updated");
   }
 
   //Add ALT to missing images or Icons
@@ -47,7 +47,7 @@ window.onresize = window.onload = function () {
 
     if (image == null) {
       altImage[i].setAttribute("alt", "Developer Resource Center Icon");
-      console.log(image + " ALT updated");
+      //console.log(image + " ALT updated");
     }
   }
 
@@ -74,6 +74,6 @@ window.onresize = window.onload = function () {
       "aria-label",
       "Footer button with no action"
     );
-    console.log(missingBTNsu10[i]);
+    //console.log(missingBTNsu10[i]);
   }
 };

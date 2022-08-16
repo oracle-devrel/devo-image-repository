@@ -30,5 +30,5 @@ window.onload = function () {
       //console.log(devTutorialsLinks[i]);
     }
   }
-  console.log("Dev.oracle.com links removed");
+  //console.log("Dev.oracle.com links removed");
 };

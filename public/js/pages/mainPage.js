@@ -53,7 +53,7 @@ window.onload = function () {
 
     if (image == null) {
       altImage[i].setAttribute("alt", "Developer Resource Center Icon");
-      console.log(image + " ALT updated");
+      //console.log(image + " ALT updated");
     }
   }
 
@@ -66,7 +66,7 @@ window.onload = function () {
 
     if (invLink == null) {
       invisibleLinks[i].setAttribute("href", "#");
-      console.log("LINK UPDATED TO #");
+      //console.log("LINK UPDATED TO #");
     }
     //console.log(invisibleLinks[i].href)
     //console.log(invisibleLinks[i]);
@@ -80,13 +80,13 @@ window.onload = function () {
       "aria-label",
       "Footer button with no action"
     );
-    console.log(missingBTNsu10[i]);
+    //console.log(missingBTNsu10[i]);
   }
 
   //Remove Aria Label
   let ariaSocialAnkle = document.querySelector("#social-ankle-title");
   ariaSocialAnkle.removeAttribute("aria-label");
-  console.log("Aria Label for Social Ankle Removed");
+  //console.log("Aria Label for Social Ankle Removed");
 
   let closeNavBTN = document.querySelectorAll(".u30navw3 .close");
 
@@ -94,5 +94,5 @@ window.onload = function () {
     closeNavBTN[i].setAttribute("data-lbl", "close");
     //console.log(closeNavBTN[i]);
   }
-  console.log("Close BTN-ARIA updated");
+  //console.log("Close BTN-ARIA updated");
 };
