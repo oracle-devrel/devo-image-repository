@@ -1,0 +1,454 @@
+<section class="cc01 cc01v0 cpad">
+    <div class="cc01w1 cwidth">
+        <h2>Introduction</h2>
+
+        <h3>What is a blockchain?</h3>
+
+        <p>In broad terms, a <i>blockchain</i> is an immutable transaction ledger, maintained within a distributed
+            peer-to-peer (p2p) network of nodes. In essence, blockchains serve as a decentralized way to store
+            information.</p>
+
+
+
+        <p>Each of these distributed nodes maintains a copy of the ledger by aggregating transactional blocks that have
+            been verified by a consensus protocol and signed with a hash (or cryptographic signature) that binds that
+            block to a preceding one. This way, the network maintains an unbroken chain of events.</p>
+
+
+
+        <h3>Key properties of blockchains</h3>
+
+        <ul>
+            <li>Shared and transparent data access</li>
+            <li>Immutable/tamper-evident ledgers</li>
+            <li>Validated /non-repudiable transactions</li>
+            <li>Confidential records and transactions</li>
+        </ul>
+
+        <h2>Types of blockchains</h2>
+
+        <p>Blockchain applications can be used for a variety of operations such as finance, supply chain monitoring, and
+            identity validation. Depending on the application and the need of participating entities (security,
+            performance, etc.) there are two types of blockchains available, permissioned and permissionless.
+            We&rsquo;ll take a brief tour of both below and then explore permissioned blockchains in greater detail
+            below.</p>
+
+
+
+        <p><strong>Permissioned blockchains</strong> - Closed networks with limited decentralization, an additional
+            access control
+            layer, and designated entities</p>
+
+        <p><strong>Permissionless blockchains - </strong>Open, decentralized networks with universal consensus
+            validation; anyone
+            can join the network and possess a copy of the ledger</p>
+
+
+
+        <p>Permissionless and permissioned blockchains compared (overview)</p>
+
+        <table cellpadding="0" cellspacing="0" class="otable">
+            <tbody>
+                <tr>
+                    <td valign="middle">
+
+                    </td>
+                    <td valign="top">
+                        <p><b>Permissioned</b></p>
+                    </td>
+                    <td valign="top">
+                        <p><b>Permissionless</b></p>
+                    </td>
+                </tr>
+                <tr>
+                    <td valign="middle">
+                        <p>Alternate designations</p>
+                    </td>
+                    <td valign="middle">
+                        <p>Private, permissioned sandbox</p>
+                    </td>
+                    <td valign="middle">
+                        <p>Public, trustless</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td valign="middle">
+                        <p>Examples</p>
+                    </td>
+                    <td valign="middle">
+                        <p>Ripple</p>
+                    </td>
+                    <td valign="middle">
+                        <p>Bitcoin, Ethereum</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td valign="middle">
+                        <p>Key attributes</p>
+                    </td>
+                    <td valign="middle">
+                        <ul>
+                            <li>Controlled transparency</li>
+                            <li>Development by private entities</li>
+                            <li>Not anonymous</li>
+                        </ul>
+
+                        <p>Identity of members is known by the operators of the blockchain, but not necessarily by all
+                            participants</p>
+
+                        <ul>
+                            <li>Privacy based on governance decision</li>
+                            <li>No single authority</li>
+                            <li>May or may not involve digital assets</li>
+                        </ul>
+                    </td>
+                    <td valign="middle">
+                        <ul>
+                            <li>Full transparency</li>
+                            <li>Development is open source</li>
+                            <li>Mostly anonymous</li>
+                            <li>Privacy dependent on technological limitations</li>
+                            <li>No control authority</li>
+                            <li>Involves digital assets</li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <td valign="middle">
+                        <p>Benefits</p>
+                    </td>
+                    <td valign="middle">
+                        <ul>
+                            <li>Incremental decentralization</li>
+                            <li>Strong privacy</li>
+                            <li>Customizable</li>
+                            <li><b>Faster, scalable</b></li>
+                        </ul>
+
+                        <p>Since consensus protocols depend on knowing who the members are (e.g., PBFT), less nodes are
+                            needed, allowing for greater performance</p>
+                    </td>
+                    <td valign="middle">
+                        <ul>
+                            <li>Broader decentralization</li>
+                            <li>Highly transparent</li>
+                            <li>Censorship resistant</li>
+                            <li>Security resilience</li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <td valign="middle">
+                        <p>Drawbacks</p>
+                    </td>
+                    <td valign="middle">
+                        <ul>
+                            <li>Limited decentralization</li>
+                            <li>Override risk</li>
+                            <li>Less transparent</li>
+                        </ul>
+                    </td>
+                    <td valign="middle">
+                        <ul>
+                            <li><b>Less energy efficient</b></li>
+                        </ul>
+
+                        <p>Requires computationally and energy-intensive mining processes to cryptographically add
+                            blocks to the chain</p>
+
+                        <ul>
+                            <li><b>Slow and difficult to scale</b></li>
+                        </ul>
+
+                        <p>Consensus models based on computationally expensive algorithms requiring the processing power
+                            of many nodes to ensure security</p>
+
+                        <ul>
+                            <li>Less user privacy</li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <td valign="middle">
+                        <p>Use cases</p>
+                    </td>
+                    <td valign="middle">
+                        <ul>
+                            <li>B2B</li>
+                            <li>B2C</li>
+                            <li>Government to Organizations</li>
+                        </ul>
+                    </td>
+                    <td valign="middle">
+                        <ul>
+                            <li>P2P</li>
+                            <li>B2C</li>
+                            <li>Government to Citizens</li>
+                        </ul>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+
+
+        <h2>Permissioned blockchains</h2>
+
+        <p>Now, let&rsquo;s take a closer look at permissioned blockchains. <i>Permissioned blockchains</i> are
+            blockchains that are closed (i.e., not publicly accessible) or have an access control layer. This additional
+            layer of security means that the blockchain can only be accessed by users with permissions. Permissioned
+            users are only able to perform blockchain operations within the strict confines of roles assigned to them by
+            the ledger administrators and require that they authenticate themselves through certificates or digital
+            identifier methods. In addition, the roles would dictate what information a user would be able to access.
+        </p>
+
+        <h3>Aspects of a permissioned blockchain</h3>
+
+        <p><strong>Decisions are authorized by a private group</strong></p>
+
+        <p>Decisions are made by the owners of the network through a central, pre-defined level.</p>
+
+        <p><strong>Security</strong></p>
+
+        <p>Permissioned blockchains provide the operating organization granular control over permissions, data access,
+            and the scope of user roles.</p>
+
+        <p><strong>Decentralization isn&rsquo;t fixed</strong></p>
+
+        <p>Permissioned blockchains can either be fully centralized or partially decentralized. Its members typically
+            decide on the network&rsquo;s level of decentralization and the mechanisms for consensus.</p>
+
+        <p><strong>Transparency is not required</strong></p>
+
+        <p>Unlike permissionless blockchains, permissioned blockchains do not need to be transparent. Transparency is
+            optional, as most permissioned blockchain networks are specifically intended to not be transparent for
+            security purposes. Levels of transparency usually depend on the goals of the organization running the
+            blockchain network.<br />
+            In the meantime, the ledger maintains a record of every transaction and the identities of the participating
+            parties.</p>
+
+        <p><strong>Lack of anonymity</strong></p>
+
+        <p>Access to the identify of every transactional participant can be crucial information for private entities
+            concerned with accountability and a provable chain of custody. Every change is tracked to a specific user,
+            so network administrators can have instantaneous access to has made a change to the system and when.</p>
+
+        <h3>Consensus mechanisms</h3>
+
+        <p>Because of the structure of permissioned blockchains, they don&rsquo;t use the same types of consensus
+            protocols as permissionless ones. Most commonly, organizations that deploy permissioned blockchains use one
+            (or more) of the following three protocols: Practical Byzantine Fault Tolerance (PBFT), federated, or
+            round-robin consensus.</p>
+
+        <p><strong>PBFT &ndash; </strong>PBFT is an improved version of the original BFT protocol where all voting nodes
+            much
+            reach a consensus, but one or more parties are considered unreliable. In this model, a network&rsquo;s
+            safety and stability are guaranteed so long as the required minimum percentage of nodes are behaving
+            honestly and properly.</p>
+
+        <p><strong>Federated (or Federated Byzantine Consensus) </strong>- In a federated consensus, there&rsquo;s a set
+            of
+            transaction validators trusted by each node in the blockchain that receives and sorts the transactions. Once
+            a minimum number of these validators agree, a consensus is reached.</p>
+
+        <p><strong>Round-robin -</strong> In a round-robin consensus, nodes are selected pseudo-randomly to create
+            blocks. Once
+            chosen, a node must pass through a cooling-off period before it can reenter the pool and be available again
+            for consensus participation.</p>
+
+
+
+        <h3>Advantages of permissioned blockchain</h3>
+
+        <p>One of the most significant advantages of permissioned blockchains is the high level of privacy and security
+            they can provide. Without a verified set of credentials and access, no user can access or alter transaction
+            information without permission.</p>
+
+        <p>Another advantage is flexibility when it comes to decentralization. It can be incremental or fully
+            centralized, giving businesses more freedom to participate without having to worry about the risks
+            associated with a highly centralized network.</p>
+
+        <p>Permissioned blockchains are also highly customizable and can accommodate configurations and integrations
+            based on an organization&rsquo;s needs. And with knowledge of every user and their actions on the network, a
+            verifiable chain of custody can be established for every transaction.</p>
+
+
+
+        <p>Lastly, these types of blockchains are both scalable and highly performant due to the limited number of nodes
+            needed to manage transaction verifications.</p>
+
+        <h3>Disadvantages of permissioned blockchain</h3>
+
+        <p>While lack of transparency can be a potential point of concern for permissioned blockchains, the issue is
+            usually mitigated by the implicit trust placed in the governing authority. In a business context, consensus
+            mechanisms and the smart contracts that moderate transactions on the network are agreed upon by the
+            participating parties and maintained in secure, isolated containers. With this additional layer of
+            computational security and measure of implicit trust, a properly provisioned permissioned blockchain can
+            offset the security risk posed by bad actors.</p>
+
+        <h3>Why permissioned blockchains are ideal for business applications</h3>
+
+        <p>Many enterprise use cases require performance characteristics that permissionless blockchain technologies are
+            presently unable to deliver because of limitations due to inefficiency and scalability. Additionally, in
+            instances where permissioned blockchains are replacing existing secure, centralized networks, the identity
+            of the participants is an essential requirement, such as in the case of financial transactions where
+            Know-Your-Customer (KYC), Anti-Money Laundering (AML), and supply-chain provenance regulations must be
+            followed.</p>
+
+
+
+        <p>In general, then, for a blockchain network to be ready for enterprise use, it should possess the following
+            requirements:</p>
+
+        <ul>
+            <li>Participants must be identified/identifiable</li>
+            <li>Networks need to be permissioned</li>
+            <li>High transaction throughput performance</li>
+            <li>Low latency of transaction confirmation</li>
+            <li>Privacy and confidentiality of transactions and data pertaining to business transactions</li>
+        </ul>
+
+
+
+        <h3>Business value</h3>
+
+        <p>Let&rsquo;s quickly review and see how permissioned blockchains stack up against these requirements. In terms
+            of added value, permissioned blockchains:</p>
+
+        <ul>
+            <li>Increase business velocity by accelerating transactions, enabling new business models and revenue
+                streams</li>
+            <li>Automate multi-party business processes</li>
+            <li>Reduce the cost and risk of using intermediaries</li>
+            <li>Reduce the cost of fraud and regulatory compliance</li>
+            <li>Improve data quality and timeliness by avoiding offline reconciliation and manual exception handling
+            </li>
+            <li>Increase auditability and trust; reduce audit costs</li>
+        </ul>
+
+
+
+        <p>Comparing the two, permissioned blockchains are well positioned to achieve all the stated business
+            requirements.</p>
+
+
+
+        <h3>Use case examples</h3>
+
+        <p>So, how are permissioned blockchains being used by businesses? While still an emerging business model, they
+            have already found a wide variety of applications. Permissioned blockchains have been used to manage supply
+            chains, create contracts, handle claims, verify payment between parties, and administer user identity.</p>
+
+        <h2>Oracle Blockchain Platform (OBP) &ndash; extending the paradigm</h2>
+
+        <p>Now that we&rsquo;ve explored permissioned blockchains and the ways in which they can be ideal for business,
+            let&rsquo;s take a quick look at how Oracle is adding value to the blockchain platform. The Oracle Cloud
+            Infrastructure Blockchain Platform is a tokenless managed blockchain service for running smart contracts and
+            maintaining a tamper-proof distributed ledger. Built on the open source <a
+                href="https://www.hyperledger.org/use/fabric">Hyperledger Fabric</a>, it simplifies the development of
+            secure and verifiable applications that share immutable, trusted data with third parties such as suppliers
+            and financial institutions. OBP goes further by extending Hyperledger Fabric with several enhancements for
+            greater resilience, performance, scalability, security, manageability, and enterprise integration.</p>
+
+
+
+        <p>As a preassembled Platform as a Service (PaaS), OBP includes all the dependencies required to support a
+            blockchain network: compute, storage, containers, identity services, event services, and management
+            services. OBP is deeply integrated with foundational services in Oracle Cloud and provides additional
+            capabilities (e.g., REST proxy for synchronous transactions and an operations console with several
+            configuration, administration, and monitoring capabilities) while maintaining compatibility with Hyperledger
+            Fabric at the protocol and API level.</p>
+
+
+
+        <p>Additionally, OBP includes the blockchain network console to support integrated operations. This helps you
+            start developing applications within minutes and enables you to complete a proof of concept in days or weeks
+            rather than months.</p>
+
+
+
+            <p align="center"><img
+                alt="Figure 1. Physical, Virtualization, Cloud Compute, Containers, Serverless"
+                src="https://oracle-devrel.github.io/devo-image-repository/images/OCI-blockchain-plat.jpeg" /></p>
+
+        <p align="center" class="xsml">Figure 1. OCI Blockchain Platform</p>
+
+
+
+        <p>OBP has had proven successes in a wide variety of settings, including:</p>
+
+        <ul>
+            <li>banking and financial services</li>
+            <li>retail</li>
+            <li>manufacturing and logistics</li>
+            <li>food, agriculture, and Consumer Packaged Goods (CPG)</li>
+            <li>transportation and logistics</li>
+            <li>healthcare and life sciences</li>
+        </ul>
+
+        <h3>How to get started with OBP</h3>
+
+        <p>If you&rsquo;d like to learn more about OBP and begin your development journey, check out some of the
+            following resources:</p>
+
+        <ul>
+            <li><a
+                    href="https://docs.oracle.com/en/cloud/paas/blockchain-cloud/usingoci/whats-oracle-blockchain-cloud-service.html">Using
+                    Oracle Blockchain Platform</a></li>
+            <li><a href="https://docs.oracle.com/en/cloud/paas/blockchain-cloud/tutorials-oci.html">Oracle Blockchain
+                    Platform tutorials</a></li>
+            <li><a href="https://docs.oracle.com/en/cloud/paas/blockchain-cloud/rest-api/index.html">REST API for Oracle
+                    Blockchain Platform on Oracle Cloud Infrastructure</a></li>
+        </ul>
+
+        <h2>Glossary of terms</h2>
+
+        <ul>
+            <li><strong>Consensus protocol</strong></li>
+        </ul>
+
+        <p>A consensus mechanism is the way in which blockchains come into agreement about how transactions are
+            processed and immutably stored on the platform.</p>
+
+
+
+        <p>Since blockchains are dynamic and constantly changing states, the shared ledger technologies that they rely
+            upon require an efficient, reliable, and secure mechanism to ensure that all the transactions occurring on
+            the network are genuine and that all participants agree on the state of the ledger. This way, ledgers are
+            protected against potential threats or anomalous states by reaching a mutual agreement about how the ledger
+            should look.</p>
+
+
+
+        <p>At its core, the consensus mechanism is a fault-tolerant set of rules that decides on the legitimacy of
+            contributions made by the various participants of the blockchain.</p>
+
+        <ul>
+            <li><strong>Distributed ledger</strong></li>
+        </ul>
+
+        <p>A distributed ledger is a database that is synchronously shared across different nodes in a network. It helps
+            retain a record of transactions or contracts that have been created by participants in the system.</p>
+
+        <p>Participating nodes are expected to be able to access the shared ledger and possess an identical copy of it.
+            Any changes or additions made to the ledger are reflected and copied to all participants.</p>
+
+        <ul>
+            <li><strong>Smart contract</strong></li>
+        </ul>
+
+        <p>Smart contracts are essentially self-executing pieces of business logic that mediate a specific transaction
+            on the blockchain.</p>
+
+
+
+        <p>Contained within the code of the transaction is details of the agreement between each of the participants.
+            This code autonomously controls the execution of the smart contract and ensures transactions are trackable
+            and irreversible.</p>
+
+
+
+
+
+    </div>
+</section>
