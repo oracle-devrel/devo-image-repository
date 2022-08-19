@@ -174,7 +174,7 @@ strong {
 .obullets li {
   margin-bottom: 0.5em;
   list-style-position: outside;
-  line-height: 1.375rem;
+  line-height: 30px;
   margin-left: 2rem;
 }
 

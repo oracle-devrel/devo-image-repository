@@ -1,5 +1,17 @@
 <section class="cc01 cc01v0 cpad">
     <div class="cc01w1 cwidth">
+
+        <style>
+            .FigOne {
+                width: 100% !important;
+                margin-bottom: 40px!important;
+            }
+
+            .otable ul li {
+                margin-left: -1.2rem !important;
+            }
+        </style>
+
         <h2>Introduction</h2>
 
         <h3>What is a blockchain?</h3>
@@ -45,7 +57,7 @@
 
 
 
-        <p>Permissionless and permissioned blockchains compared (overview)</p>
+        <h3>Permissionless and permissioned blockchains compared (overview)</h3>
 
         <table cellpadding="0" cellspacing="0" class="otable">
             <tbody>
@@ -54,10 +66,10 @@
 
                     </td>
                     <td valign="top">
-                        <p><b>Permissioned</b></p>
+                        <p><strong>Permissioned</strong></p>
                     </td>
                     <td valign="top">
-                        <p><b>Permissionless</b></p>
+                        <p><strong>Permissionless</strong></p>
                     </td>
                 </tr>
                 <tr>
@@ -90,11 +102,11 @@
                         <ul>
                             <li>Controlled transparency</li>
                             <li>Development by private entities</li>
-                            <li>Not anonymous</li>
+                            <li>Not anonymous <br>Identity of members is known by the operators of the blockchain, but
+                                not necessarily by all
+                                participants</li>
                         </ul>
 
-                        <p>Identity of members is known by the operators of the blockchain, but not necessarily by all
-                            participants</p>
 
                         <ul>
                             <li>Privacy based on governance decision</li>
@@ -122,11 +134,10 @@
                             <li>Incremental decentralization</li>
                             <li>Strong privacy</li>
                             <li>Customizable</li>
-                            <li><b>Faster, scalable</b></li>
+                            <li><strong>Faster, scalable</strong><br>Since consensus protocols depend on knowing who the
+                                members are (e.g., PBFT), less nodes are
+                                needed, allowing for greater performance</li>
                         </ul>
-
-                        <p>Since consensus protocols depend on knowing who the members are (e.g., PBFT), less nodes are
-                            needed, allowing for greater performance</p>
                     </td>
                     <td valign="middle">
                         <ul>
@@ -150,18 +161,20 @@
                     </td>
                     <td valign="middle">
                         <ul>
-                            <li><b>Less energy efficient</b></li>
+                            <li><strong>Less energy efficient</strong><br>Requires computationally and energy-intensive
+                                mining processes to cryptographically add
+                                blocks to the chain</li>
                         </ul>
 
-                        <p>Requires computationally and energy-intensive mining processes to cryptographically add
-                            blocks to the chain</p>
+
 
                         <ul>
-                            <li><b>Slow and difficult to scale</b></li>
+                            <li><strong>Slow and difficult to scale</strong><br>Consensus models based on
+                                computationally expensive algorithms requiring the processing power
+                                of many nodes to ensure security</li>
                         </ul>
 
-                        <p>Consensus models based on computationally expensive algorithms requiring the processing power
-                            of many nodes to ensure security</p>
+
 
                         <ul>
                             <li>Less user privacy</li>
@@ -367,9 +380,8 @@
 
 
 
-            <p align="center"><img
-                alt="Figure 1. Physical, Virtualization, Cloud Compute, Containers, Serverless"
-                src="https://oracle-devrel.github.io/devo-image-repository/images/OCI-blockchain-plat.jpeg" /></p>
+        <img class="FigOne" alt="Figure 1. OCI Blockchain Platform"
+            src="https://oracle-devrel.github.io/devo-image-repository/images/OCI-blockchain-plat.jpeg" />
 
         <p align="center" class="xsml">Figure 1. OCI Blockchain Platform</p>
 
@@ -404,47 +416,62 @@
         <h2>Glossary of terms</h2>
 
         <ul>
-            <li><strong>Consensus protocol</strong></li>
+            <li><strong>Consensus protocol</strong> <br>
+                <p>A consensus mechanism is the way in which blockchains come into agreement about how transactions are
+                    processed and immutably stored on the platform.</p>
+
+
+
+                <p>Since blockchains are dynamic and constantly changing states, the shared ledger technologies that
+                    they rely
+                    upon require an efficient, reliable, and secure mechanism to ensure that all the transactions
+                    occurring on
+                    the network are genuine and that all participants agree on the state of the ledger. This way,
+                    ledgers are
+                    protected against potential threats or anomalous states by reaching a mutual agreement about how the
+                    ledger
+                    should look.</p>
+
+
+
+                <p>At its core, the consensus mechanism is a fault-tolerant set of rules that decides on the legitimacy
+                    of
+                    contributions made by the various participants of the blockchain.</p>
+            </li>
         </ul>
 
-        <p>A consensus mechanism is the way in which blockchains come into agreement about how transactions are
-            processed and immutably stored on the platform.</p>
-
-
-
-        <p>Since blockchains are dynamic and constantly changing states, the shared ledger technologies that they rely
-            upon require an efficient, reliable, and secure mechanism to ensure that all the transactions occurring on
-            the network are genuine and that all participants agree on the state of the ledger. This way, ledgers are
-            protected against potential threats or anomalous states by reaching a mutual agreement about how the ledger
-            should look.</p>
-
-
-
-        <p>At its core, the consensus mechanism is a fault-tolerant set of rules that decides on the legitimacy of
-            contributions made by the various participants of the blockchain.</p>
 
         <ul>
-            <li><strong>Distributed ledger</strong></li>
+            <li><strong>Distributed ledger</strong> <br>
+                <p>A distributed ledger is a database that is synchronously shared across different nodes in a network.
+                    It helps
+                    retain a record of transactions or contracts that have been created by participants in the system.
+                </p>
+
+                <p>Participating nodes are expected to be able to access the shared ledger and possess an identical copy
+                    of it.
+                    Any changes or additions made to the ledger are reflected and copied to all participants.</p>
+            </li>
         </ul>
 
-        <p>A distributed ledger is a database that is synchronously shared across different nodes in a network. It helps
-            retain a record of transactions or contracts that have been created by participants in the system.</p>
-
-        <p>Participating nodes are expected to be able to access the shared ledger and possess an identical copy of it.
-            Any changes or additions made to the ledger are reflected and copied to all participants.</p>
 
         <ul>
-            <li><strong>Smart contract</strong></li>
+            <li><strong>Smart contract</strong> <br>
+                <p>Smart contracts are essentially self-executing pieces of business logic that mediate a specific
+                    transaction
+                    on the blockchain.</p>
+
+
+
+                <p>Contained within the code of the transaction is details of the agreement between each of the
+                    participants.
+                    This code autonomously controls the execution of the smart contract and ensures transactions are
+                    trackable
+                    and irreversible.</p>
+            </li>
         </ul>
 
-        <p>Smart contracts are essentially self-executing pieces of business logic that mediate a specific transaction
-            on the blockchain.</p>
 
-
-
-        <p>Contained within the code of the transaction is details of the agreement between each of the participants.
-            This code autonomously controls the execution of the smart contract and ensures transactions are trackable
-            and irreversible.</p>
 
 
 
