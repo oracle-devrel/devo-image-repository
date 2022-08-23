@@ -49,7 +49,6 @@
                                 data-at2x="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/oci-monitoring-architecture@2x.png"
                                 title="Architecture" alt="Architecture Overview">
                         </picture>
-                        <figcaption>Architecture</figcaption>
                     </figure>
 
                     <ol>
@@ -132,7 +131,7 @@ sudo dnf -y install ansible git
                             to <code class="language-plaintext highlighter-rouge">/home/opc/.ssh</code> temporarily for
                             installaton purposes</li>
                         <li>
-                            <p>Change the Ansible checked out hosts file to:</p>
+                            Change the Ansible checked out hosts file to:
 
                             <div class="language-console highlighter-rouge">
                                 <div class="highlight">
@@ -175,8 +174,8 @@ sudo dnf -y install ansible git
                         <li>Run <code class="language-plaintext highlighter-rouge">ansible-playbook install.yml</code>
                         </li>
                         <li>
-                            <p>As <code class="language-plaintext highlighter-rouge">root</code>, verify that all Docker
-                                containers are running:</p>
+                            As <code class="language-plaintext highlighter-rouge">root</code>, verify that all Docker
+                            containers are running:
 
                             <div class="language-console highlighter-rouge">
                                 <div class="highlight">
@@ -224,9 +223,9 @@ sudo dnf -y install ansible git
                                 class="language-plaintext highlighter-rouge">/home/steampipe/.oci</code>.</li>
                         <li>Replace the dummy values.</li>
                         <li>
-                            <p>Update the file <code
-                                    class="language-plaintext highlighter-rouge">/home/steampipe/config/oci.spc</code>
-                                with the correct SSH key file name:</p>
+                            Update the file <code
+                                class="language-plaintext highlighter-rouge">/home/steampipe/config/oci.spc</code>
+                            with the correct SSH key file name:
 
                             <blockquote class="notice">
                                 <p><strong>Note:</strong> Take care that both the owner and group of the OCI
@@ -280,7 +279,7 @@ sudo dnf -y install ansible git
                             </ol>
                         </li>
                         <li>
-                            <p>Restart the Docker container for Steampipe:</p>
+                            Restart the Docker container for Steampipe:
 
                             <div class="language-console highlighter-rouge">
                                 <div class="highlight">
@@ -366,7 +365,7 @@ sudo dnf -y install ansible git
 
                     <ol>
                         <li>
-                            <p>Add your API key:</p>
+                            Add your API key:<br>
 
                             <picture class="">
                                 <source
@@ -379,7 +378,7 @@ sudo dnf -y install ansible git
                             </picture>
                         </li>
                         <li>
-                            <p>Download the created private key in PEM format:</p>
+                            Download the created private key in PEM format:
 
                             <picture class="">
                                 <source
@@ -392,8 +391,7 @@ sudo dnf -y install ansible git
                             </picture>
                         </li>
                         <li>
-                            <p>Copy the configuration file preview.<br>
-                                The values are used for the Steampipe OCI configuration.</p>
+                            Copy the configuration file preview. The values are used for the Steampipe OCI configuration.
 
                             <picture class="">
                                 <source
@@ -446,7 +444,7 @@ sudo dnf -y install ansible git
 
                     <ul>
                         <li>
-                            <p><strong>list plugins</strong></p>
+                            <strong>list plugins</strong>
 
                             <div class="language-console highlighter-rouge">
                                 <div class="highlight">
@@ -469,8 +467,8 @@ sudo dnf -y install ansible git
                             </div>
                         </li>
                         <li>
-                            <p><strong>confirm <code class="language-plaintext highlighter-rouge">RUNNING</code>
-                                    state</strong></p>
+                            <strong>confirm <code class="language-plaintext highlighter-rouge">RUNNING</code>
+                                state</strong>
 
                             <div class="language-console highlighter-rouge">
                                 <div class="highlight">
@@ -495,7 +493,7 @@ sudo dnf -y install ansible git
                             </div>
                         </li>
                         <li>
-                            <p><strong>confirm home region</strong></p>
+                            <strong>confirm home region</strong>
 
                             <div class="language-console highlighter-rouge">
                                 <div class="highlight">
@@ -559,7 +557,7 @@ sudo dnf -y install ansible git
 
                     <ol>
                         <li>
-                            <p>Manual execution and upload of the query result:</p>
+                            Manual execution and upload of the query result:
 
                             <div class="language-console highlighter-rouge">
                                 <div class="highlight">
@@ -579,8 +577,8 @@ sudo dnf -y install ansible git
                             </div>
                         </li>
                         <li>
-                            <p>Restarting Steampipe as <code class="language-plaintext highlighter-rouge">root</code>:
-                            </p>
+                            Restarting Steampipe as <code class="language-plaintext highlighter-rouge">root</code>:
+
 
                             <div class="language-console highlighter-rouge">
                                 <div class="highlight">
@@ -640,7 +638,7 @@ sudo dnf -y install ansible git
 
                     <ul>
                         <li>
-                            <p>Here’s an example for dashboard <strong>OCI Demo - eu-zurich-1</strong>:</p>
+                            Here’s an example for dashboard <strong>OCI Demo - eu-zurich-1</strong>:
 
                             <figure class="">
                                 <picture>
@@ -669,8 +667,7 @@ sudo dnf -y install ansible git
                             </figure>
                         </li>
                         <li>
-                            <p>And here you can see the pushed metric from the Python script by name:</p>
-
+                            And here you can see the pushed metric from the Python script by name:
                             <picture class="">
                                 <source
                                     srcset="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/oci-monitoring-grafana-metrics-browser.png 1x">
