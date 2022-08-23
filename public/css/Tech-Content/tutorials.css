@@ -36,6 +36,10 @@ strong {
   height: auto !important;
 }
 
+.page .noBorder {
+  border: solid 1px #919db800!important;
+}
+
 pre {
   overflow-x: auto;
 }
