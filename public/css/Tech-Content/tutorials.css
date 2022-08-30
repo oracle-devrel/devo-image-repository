@@ -18,6 +18,10 @@ strong {
   top: calc(60px + 2.5rem);
 }
 
+.chapters {
+  max-width: 512px;
+}
+
 .ovideoOne {
   margin-bottom: 11px;
   border: solid 1px #919db8;
@@ -37,33 +41,33 @@ strong {
     margin-left: 0rem;
     width: 100%;
   }
+
+  .chapters {
+    max-width: 335px!important;
+  }
 }
 
 @media (max-width: 1130px) {
   .sticky {
     top: calc(100px + 2.5rem);
   }
-}
-
-.chapters {
-  max-width: 512px;
-}
-
-@media (max-width: 1130px) {
+  
   .chapters {
-    max-width: 445px !important;
+    max-width: 205px !important;
   }
+  
 }
 
 @media (max-width: 990px) {
   .chapters {
-    max-width: 360px !important;
+    max-width: 190px !important;
   }
 }
 
 @media (max-width: 900px) {
   .chapters {
-    max-width: 200px !important;
+    max-width: 105px !important;
+    overflow-y: hidden!important;
   }
 }
 

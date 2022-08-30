@@ -25,17 +25,15 @@
   }
 }
 
-@media (max-width: 1130px) {
-  .sticky {
-    top: calc(100px + 2.5rem);
-  }
-}
-
 .chapters {
   max-width: 512px;
 }
 
 @media (max-width: 1130px) {
+  .sticky {
+    top: calc(100px + 2.5rem);
+  }
+  
   .chapters {
     max-width: 445px !important;
   }
