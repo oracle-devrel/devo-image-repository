@@ -2,7 +2,11 @@
   gap: 2rem;
 }
 
-
+/* Sticky provisional Content */
+.sticky {
+  position: fixed;
+  top: calc(60px + 2.5rem);
+}
 
 strong {
   font-family: "Oracle Sans Semi Bold";
