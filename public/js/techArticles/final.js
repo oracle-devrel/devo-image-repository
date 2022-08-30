@@ -91,6 +91,20 @@ function showMT() {
   });
 }
 
+function changeBanner() {
+  let url = location.href;
+  let backgroundLink = document.querySelectorAll(".bg-image");
+
+  if (url.includes("/tutorials/") === true) {
+    backgroundLink[0].style.backgroundImage =
+      "url('https://orasites-prodapp.cec.ocp.oraclecloud.com/content/management/api/v1.1/assets/CONT00986721E0F746E487B0A45F4506CD9D/native')";
+  }
+  if (url.includes("/learn/technical-articles/") === true) {
+    backgroundLink[0].style.backgroundImage =
+      "url('https://orasites-prodapp.ocecdn.oraclecloud.com/content/published/api/v1.1/assets/CONT4F1D9901A1D44123905E42AFC6F34E4C/native?cb=_cache_9fa4&channelToken=adb55f7fd96e4d78a95fb208a253216b')";
+  }
+}
+
 function addPadding() {
   //Adds Padding according to the presence of Topics
   var article = document.querySelector(".technical-content");
@@ -325,7 +339,12 @@ window.onload = function () {
     console.log(e);
   }
 
-
+  try {
+    changeBanner();
+    console.log("Banner changed");
+  } catch (e) {
+    console.log(e);
+  }
 };
 
 window.onscroll = function () {
