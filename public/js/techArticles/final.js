@@ -295,6 +295,7 @@ window.onload = function () {
     console.log("Padding added");
   } catch (e) {
     console.log(e);
+    window.location.reload();
   }
 
   try {
@@ -302,6 +303,7 @@ window.onload = function () {
     console.log("Nav Bar Sticked");
   } catch (e) {
     console.log(e);
+    window.location.reload();
   }
 
   try {
@@ -344,9 +346,26 @@ window.onload = function () {
     console.log("Banner changed");
   } catch (e) {
     console.log(e);
+    window.location.reload();
   }
 };
 
+/*
 window.onscroll = function () {
   showMT();
 };
+
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function demo() {
+  console.log('Taking a break...');
+  await sleep(2000);
+  console.log('Two second later');
+}
+
+demo();
+
+*/
