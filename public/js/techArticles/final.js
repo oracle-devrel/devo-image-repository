@@ -290,12 +290,22 @@ function updateFooterLinks() {
 }
 
 window.onload = function () {
+  function sleep(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
+
+  async function reloadDEVO() {
+    console.log("Will reload...")
+    await sleep(5000);
+    window.location.reload();
+  }
+
   try {
     addPadding();
     console.log("Padding added");
   } catch (e) {
     console.log(e);
-    window.location.reload();
+    //window.location.reload();
   }
 
   try {
@@ -303,7 +313,7 @@ window.onload = function () {
     console.log("Nav Bar Sticked");
   } catch (e) {
     console.log(e);
-    window.location.reload();
+    //window.location.reload();
   }
 
   try {
@@ -346,7 +356,7 @@ window.onload = function () {
     console.log("Banner changed");
   } catch (e) {
     console.log(e);
-    window.location.reload();
+    reloadDEVO();
   }
 };
 
