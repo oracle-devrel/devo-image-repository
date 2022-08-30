@@ -295,8 +295,8 @@ window.onload = function () {
   }
 
   async function reloadDEVO() {
-    console.log("Will reload...")
-    await sleep(5000);
+    console.log("Will reload...");
+    await sleep(3000);
     window.location.reload();
   }
 
@@ -351,12 +351,16 @@ window.onload = function () {
     console.log(e);
   }
 
-  try {
-    changeBanner();
-    console.log("Banner changed");
-  } catch (e) {
-    console.log(e);
-    reloadDEVO();
+  let url = location.href;
+
+  if (url.includes("/en/") === false) {
+    try {
+      changeBanner();
+      console.log("Banner changed");
+    } catch (e) {
+      console.log(e);
+      reloadDEVO();
+    }
   }
 };
 
