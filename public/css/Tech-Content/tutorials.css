@@ -43,7 +43,7 @@ strong {
   }
 
   .chapters {
-    max-width: 335px!important;
+    max-width: 335px !important;
   }
 }
 
@@ -51,11 +51,10 @@ strong {
   .sticky {
     top: calc(100px + 2.5rem);
   }
-  
+
   .chapters {
     max-width: 205px !important;
   }
-  
 }
 
 @media (max-width: 990px) {
@@ -67,7 +66,7 @@ strong {
 @media (max-width: 900px) {
   .chapters {
     max-width: 105px !important;
-    overflow-y: hidden!important;
+    overflow-y: hidden !important;
   }
 }
 
@@ -566,4 +565,8 @@ td {
   white-space: normal;
   padding: 1.385em;
   border-bottom: solid #edeff5 1px;
+}
+
+.content-container .chapters ul li a {
+  color: #57637f !important;
 }
