@@ -12,6 +12,68 @@ strong {
   font-family: "Oracle Sans Semi Bold";
 }
 
+/* Sticky provisional Content */
+.sticky {
+  position: fixed;
+  top: calc(60px + 2.5rem);
+}
+
+.ovideoOne {
+  margin-bottom: 11px;
+  border: solid 1px #919db8;
+  float: right;
+  margin-left: 1rem;
+}
+
+.ovideoTwo {
+  margin-bottom: 11px;
+  border: solid 1px #919db8;
+}
+
+@media (max-width: 1290px) {
+  .ovideoOne,
+  .ovideoTwo {
+    float: none;
+    margin-left: 0rem;
+    width: 100%;
+  }
+}
+
+@media (max-width: 1130px) {
+  .sticky {
+    top: calc(100px + 2.5rem);
+  }
+}
+
+.chapters {
+  max-width: 512px;
+}
+
+@media (max-width: 1130px) {
+  .chapters {
+    max-width: 445px !important;
+  }
+}
+
+@media (max-width: 990px) {
+  .chapters {
+    max-width: 360px !important;
+  }
+}
+
+@media (max-width: 900px) {
+  .chapters {
+    max-width: 200px !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .ovideoOne,
+  .ovideoTwo {
+    height: 193px;
+  }
+}
+
 /* ================== TAGS ================== */
 
 /* 
@@ -41,7 +103,7 @@ strong {
 }
 
 .page .noBorder {
-  border: solid 1px #919db800!important;
+  border: solid 1px #919db800 !important;
 }
 
 pre {
@@ -438,7 +500,7 @@ blockquote.notice {
 
 html body .container a {
   text-decoration: none;
-  color: #ffffff!important;
+  color: #ffffff !important;
 }
 
 html body .container .page a {
@@ -448,7 +510,7 @@ html body .container .page a {
 
 html body .container .page a:hover {
   text-decoration: underline !important;
-  color: #0CA29F !important;
+  color: #0ca29f !important;
 }
 
 .otable {
