@@ -300,11 +300,13 @@ window.onload = function () {
     window.location.reload();
   }
 
+
   try {
     addPadding();
     console.log("Padding added");
   } catch (e) {
     console.log(e);
+    reloadDEVO();
     //window.location.reload();
   }
 
