@@ -1,1279 +1,1016 @@
-<article class="page has-sidebar" itemscope="" itemtype="https://schema.org/CreativeWork">
-  <div class="page__inner-wrap">
-    <section class="page__content" itemprop="text">
-      <picture class="alignright">
+<section class="page cc01 cc01v0 cpad" id="link1">
+  <div class="cc01w1 cwidth">
+    <h2>Welcome!</h2>
+    <picture class="alignright">
+      <source
+        srcset="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/verrazzano-logo.png 1x">
+      <img loading="lazy" width="400" height="400"
+        src="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/verrazzano-logo.png"
+        data-original="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/verrazzano-logo.png"
+        data-at2x="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/verrazzano-logo@2x.png"
+        alt="Verrazzano Logo" title="Verrazzano Logo">
+    </picture>
+    <p>In a <a href="/tutorials/multi-cluster-verrazzano-oke/1-deploying-verrazzano-on-oke">previous article</a>, we
+      took a brief look at
+      Verrazzano and took it for a quick spin on Oracle Container Engine for Kubernetes (OKE). In
+      this article, we are going to deploy a multi-cluster Verrazzano on OKE. To make things
+      interesting, we will also do that using different OCI regions.</p>
+    <p>First, a little digression into WebLogic and Kubernetes and then we’ll discuss Verrazzano.
+    </p>
+    <h2 id="from-weblogic-to-kubernetes-to-verrazzano">From WebLogic to Kubernetes to Verrazzano
+    </h2>
+    <p>A few years ago, when I had to explain Kubernetes to folks internally, especially those with
+      a WebLogic background, I made some (grossly simplified) analogies with WebLogic:</p>
+    <figure class="aligncenter">
+      <picture>
         <source
-          srcset="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/verrazzano-logo.png 1x" />
-        <img alt="Verrazzano Logo"
-          data-at2x="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/verrazzano-logo@2x.png"
-          data-original="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/verrazzano-logo.png"
-          height="400" loading="lazy"
-          src="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/verrazzano-logo.png"
-          title="Verrazzano Logo" width="400" />
+          srcset="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/SumRnmK8ZrOCVzWwaAETC3Q.png 1x">
+        <img loading="lazy" width="1200" height="401"
+          src="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/SumRnmK8ZrOCVzWwaAETC3Q.png"
+          data-original="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/SumRnmK8ZrOCVzWwaAETC3Q.png"
+          data-at2x="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/SumRnmK8ZrOCVzWwaAETC3Q@2x.png"
+          title="WebLogic and Kubernetes analogy" alt="WebLogic and Kubernetes analogy">
       </picture>
-      <p>In the <a href="1-deploying-verrazzano-on-oke">previous article</a>, we were introduced to Verrazzano and took
-        it for a quick spin on an Oracle Container Engine for Kubernetes (OKE). As promised, in this article,
-        we&rsquo;re going to deploy a multi-cluster Verrazzano on OKE. And just to make things a little more
-        interesting, we&rsquo;ll also do that using different Oracle Cloud Infrastructure (OCI) regions.</p>
-
-      <p>But first, we&rsquo;ll make a small digression into WebLogic and Kubernetes to set the stage for how
-        we&rsquo;ll be handling this in each of the next two tutorials.</p>
-
-      <p>Key topics covered in this tutorial:</p>
-
-      <ul>
-        <li>An introduction to WebLogic and Kubernetes</li>
-        <li>A discussion about infrastructure</li>
-        <li>Creating Verrazzano clusters</li>
-      </ul>
-
-      <p>For additional information, see:</p>
-
-      <ul>
-        <li><a
-            href="https://docs.oracle.com/iaas/Content/GSG/Tasks/signingup.htm?source=:ex:tb:::::WWMK211123P00031:WW_FY22_DevRel_DotBuild&amp;SC=:ex:tb:::::WWMK211123P00031:WW_FY22_DevRel_DotBuild&amp;pcode=WWMK211123P00031">Signing
-            Up for Oracle Cloud Infrastructure</a></li>
-        <li><a
-            href="https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/terraformgettingstarted.htm?source=:ex:tb:::::WWMK211123P00031:WW_FY22_DevRel_DotBuild&amp;SC=:ex:tb:::::WWMK211123P00031:WW_FY22_DevRel_DotBuild&amp;pcode=WWMK211123P00031">Getting
-            started with Terraform</a></li>
-      </ul>
-
-      <h2 id="getting-started">Getting started<a class="header-link" href="#getting-started" title="Permalink"><span
-            class="sr-only">Permalink</span></a></h2>
-
-      <h3 id="from-weblogic-to-kubernetes-to-verrazzano">From WebLogic to Kubernetes to Verrazzano<a class="header-link"
-          href="#from-weblogic-to-kubernetes-to-verrazzano" title="Permalink"><span class="sr-only">Permalink</span></a>
-      </h3>
-
-      <p>To better frame our understanding of what Kubernetes is and how it fits in with Verrazzano, let&rsquo;s take a
-        step back and apply some simple analogies to its components.</p>
-
-      <p>A good touchstone for us is the WebLogic space, and we can draw from a lot of familiar concepts to help with
-        our understanding here.</p>
-
-      <figure class="aligncenter">
-        <picture>
-          <source
-            srcset="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/SumRnmK8ZrOCVzWwaAETC3Q.png 1x" />
-          <img alt="WebLogic and Kubernetes analogy"
-            data-at2x="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/SumRnmK8ZrOCVzWwaAETC3Q@2x.png"
-            data-original="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/SumRnmK8ZrOCVzWwaAETC3Q.png"
-            height="401" loading="lazy"
-            src="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/SumRnmK8ZrOCVzWwaAETC3Q.png"
-            title="WebLogic and Kubernetes analogy" width="1200" />
-        </picture>
-
-        <figcaption>WebLogic and Kubernetes analogy</figcaption>
-      </figure>
-
-      <p>In WebLogic, a cluster consists of an Admin Server and a group of Managed Servers. In this set up, the Admin
-        Server handles the administration, deployment, and other less silky but nevertheless important tasks, while
-        Managed Servers are utilized for deploying and running the applications, as well as responding to requests. This
-        allows you to run your applications either across your entire cluster or on specific Managed Servers.</p>
-
-      <blockquote class="alert">
-        <p><strong>NOTE:</strong> You could always run your applications on the single Admin Server (in a way
-          that&rsquo;s somewhat equivalent to <a
-            href="https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/">taints and
-            tolerations</a> of the master nodes), but it&rsquo;s not recommended.</p>
-      </blockquote>
-
-      <p>Under this set up, if your application is deployed to the cluster and a Managed Server in the cluster fails
-        (JVM, host, reboot, etc.), other Managed Servers in the cluster will automatically handle the job.</p>
-
-      <p>But, what if the Managed Server where your singleton service is running fails? WebLogic has you covered with
-        Automatic Service Migration (ASM). For a more detailed read on ASM, check out the <a
-          href="https://www.oracle.com/technetwork/middleware/weblogic/weblogic-automatic-service-migratio-133948.pdf?source=:ex:tb:::::WWMK211123P00031:WW_FY22_DevRel_DotBuild&amp;SC=:ex:tb:::::WWMK211123P00031:WW_FY22_DevRel_DotBuild&amp;pcode=WWMK211123P00031">WebLogic
-          ASM guide</a>.</p>
-
-      <p>Now that we have a better sense of the basic cluster infrastructure, let&rsquo;s start connecting this back to
-        Kubernetes. What&rsquo;s the best equivalent in Kubernetes? Essentially, ASM is a bit like a <code
-          class="language-plaintext highlighter-rouge">ReplicaSet</code>. Initially, applications on Kubernetes were
-        stateless until the addition of StatefulSets, but now you can also run stateful applications across the entire
-        cluster.</p>
-
-      <h3 id="geographically-distributed-clusters">Geographically distributed clusters<a class="header-link"
-          href="#geographically-distributed-clusters" title="Permalink"><span class="sr-only">Permalink</span></a></h3>
-
-      <p>What if, for the purpose of high availability, you needed to run your Kubernetes applications in geographically
-        distributed clusters. You could try your luck with <a
-          href="https://github.com/kubernetes-sigs/kubefed">kubefed</a>, although it&rsquo;s currently still in beta and
-        has admittedly been experiencing some growing pains. Or, you could try deploying the same applications to
-        different clusters, implement a kind of global health check, and then use an <a
-          href="https://docs.oracle.com/en-us/iaas/Content/TrafficManagement/Concepts/overview.htm?source=:ex:tb:::::WWMK211123P00031:WW_FY22_DevRel_DotBuild&amp;SC=:ex:tb:::::WWMK211123P00031:WW_FY22_DevRel_DotBuild&amp;pcode=WWMK211123P00031">intelligent
-          load balancer</a> to switch the traffic from one cluster to another. All these approaches are valid, but still
-        fairly limited, error-prone, and risky.</p>
-
-      <p>Enter Verrazzano multi-clustering.</p>
-      <!--
-        <p>How did Verrazzano make our lives a whole lot better? It took the concept of Admin and Managed Servers in
-          WebLogic and applied it to Kubernetes clusters:</p>
+      <figcaption>WebLogic and Kubernetes analogy</figcaption>
+    </figure>
+    <p>Explaining Kubernetes using familiar concepts greatly helped with understanding. In a
+      WebLogic cluster, the Admin server handles the administration, deployment and other less
+      silky but nevertheless important tasks, whereas the managed servers were meant for deploying
+      and running the applications and responding to requests. Of course, you could always run
+      your applications on the single Admin server (somewhat equivalent to <a
+        href="https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/">taints
+        and tolerations</a> of the master nodes) but this is not recommended.</p>
+    <p>The managed servers, on the other hand, could be scaled out and configured to run your
+      applications. Together, the admin and managed servers form a cluster. You can run your
+      applications across your entire cluster or on specific managed servers. If your application
+      is deployed to the cluster and a managed server in the cluster fails (JVM, host, reboot
+      etc), other managed servers in the cluster will automatically handle the job. If the managed
+      server where your singleton service is running fails, WebLogic has got you covered as well
+      with Automatic Service Migration. Check <a
+        href="https://www.oracle.com/technetwork/middleware/weblogic/weblogic-automatic-service-migratio-133948.pdf?source=:ex:tb:::::WWMK211123P00031:WW_FY22_DevRel_DotBuild&amp;SC=:ex:tb:::::WWMK211123P00031:WW_FY22_DevRel_DotBuild&amp;pcode=WWMK211123P00031">this
+        document</a> for a more detailed read. Essentially, it’s a bit like a ReplicaSet in
+      Kubernetes. Applications on Kubernetes were initially stateless until the addition of
+      StatefulSets. You can now also run stateful applications across the entire cluster.</p>
+    <p>What if, for the purpose of high availability, you needed to run your Kubernetes applications
+      in geographically distributed clusters. You could try your luck with <a
+        href="https://github.com/kubernetes-sigs/kubefed">kubefed</a>, whose progress is
+      painfully slow and is still in beta (this is not a criticism — <em>Ed</em>). Or you could
+      try deploying the same applications to different clusters, implement a kind of global health
+      check and then use an <a
+        href="https://docs.oracle.com/en-us/iaas/Content/TrafficManagement/Concepts/overview.htm?source=:ex:tb:::::WWMK211123P00031:WW_FY22_DevRel_DotBuild&amp;SC=:ex:tb:::::WWMK211123P00031:WW_FY22_DevRel_DotBuild&amp;pcode=WWMK211123P00031">intelligent
+        load balancer</a> to switch the traffic from one cluster to another. All these
+      approaches are still error-prone and risky and have several limitations.</p>
+    <p>Enter Verrazzano multi-clustering.</p>
+    <p>Verrazzano took the concept of Admin and managed servers in WebLogic and applied it to
+      Kubernetes clusters:</p>
+    <figure class="aligncenter">
+      <picture>
+        <source
+          srcset="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/86b68f20dd801e9507f86ec6f7c4716c2a857795/multi-cluster-verrazzano-oke/assets/5i_215fK15AiaYSz.png  1x">
+        <img loading="lazy" width="535" height="413"
+          src="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/86b68f20dd801e9507f86ec6f7c4716c2a857795/multi-cluster-verrazzano-oke/assets/5i_215fK15AiaYSz.png "
+          data-original="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/86b68f20dd801e9507f86ec6f7c4716c2a857795/multi-cluster-verrazzano-oke/assets/5i_215fK15AiaYSz.png "
+          data-at2x="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/86b68f20dd801e9507f86ec6f7c4716c2a857795/multi-cluster-verrazzano-oke/assets/5i_215fK15AiaYSz.png @2x.png"
+          title="Verrazzano multi-cluster" alt="Verrazzano multi-cluster">
+      </picture>
+      <figcaption>Verrazzano multi-cluster</figcaption>
+    </figure>
+    <p>Where you had a single Admin server for WebLogic, you now have a single Admin cluster based
+      on Kubernetes for Verrazzano. Where your applications would be deployed on managed servers,
+      your Verrazzano workloads will now be deployed on managed Kubernetes clusters, possibly
+      closer to your users.</p>
+    <h2 id="infrastructure-planning">Infrastructure Planning</h2>
+    <p>In order to achieve this, the Verrazzano managed clusters (a Verrazzano cluster is a
+      Kubernetes cluster administered and managed by the Verrazzano container platform) need to be
+      able to communicate with the Verrazzano Admin cluster and vice-versa. In WebLogic, the
+      managed servers would usually be part of the same network (unless you were doing <a
+        href="https://docs.oracle.com/en/middleware/standalone/weblogic-server/14.1.1.0/wlcag/active-active-stretch-cluster-active-passive-database-tier.html#GUID-66D13F44-200A-45AB-9676-2BF18610554D?source=:ex:tb:::::WWMK211123P00031:WW_FY22_DevRel_DotBuild&amp;SC=:ex:tb:::::WWMK211123P00031:WW_FY22_DevRel_DotBuild&amp;pcode=WWMK211123P00031">stretch
+        clusters</a>) and this would usually be straightforward.</p>
+    <p>However, our aim here is to deploy the different Verrazzano clusters in different cloud
+      regions on OCI and we need to think and plan about networking and security. Note that you
+      can also use Verrazzano to manage clusters deployed in other clouds or on-premise but the
+      networking and security configurations would vary (VPN/FastConnect etc).</p>
+    <p>Below is a map of OCI regions to help us pick a set of regions:</p>
+    <figure class="aligncenter">
+      <picture>
+        <source
+          srcset="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/syLSX57E1bT7_EzYZU_qLGg.png 1x">
+        <img loading="lazy" width="1200" height="508"
+          src="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/syLSX57E1bT7_EzYZU_qLGg.png"
+          data-original="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/syLSX57E1bT7_EzYZU_qLGg.png"
+          data-at2x="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/syLSX57E1bT7_EzYZU_qLGg@2x.png"
+          title="Map of OCI regions" alt="Map of OCI regions">
+      </picture>
+      <figcaption>Map of OCI regions</figcaption>
+    </figure>
+    <p>We will use our newly-minted Singapore region for the Admin cluster and then Mumbai, Tokyo
+      and Sydney as managed clusters in a star architecture:</p>
+    <figure class="aligncenter">
+      <picture>
+        <source
+          srcset="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/rnXSnetqM6oAOJk6bfkyQ.png 1x">
+        <img loading="lazy" width="671" height="549"
+          src="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/rnXSnetqM6oAOJk6bfkyQ.png"
+          data-original="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/rnXSnetqM6oAOJk6bfkyQ.png"
+          data-at2x="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/rnXSnetqM6oAOJk6bfkyQ@2x.png"
+          title="Verrazzano Clusters spread across OCI Asia Pacific regions"
+          alt="Verrazzano Clusters spread across OCI Asia Pacific regions">
+      </picture>
+      <figcaption>Verrazzano Clusters spread across OCI Asia Pacific regions</figcaption>
+    </figure>
+    <h2 id="networking-infrastructure">Networking Infrastructure</h2>
+    <figure class="aligncenter">
+      <picture>
+        <source
+          srcset="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/86b68f20dd801e9507f86ec6f7c4716c2a857795/multi-cluster-verrazzano-oke/assets/bF77x66gHN42zsW_2_9Dxw.png  1x">
+        <img loading="lazy" width="695" height="554"
+          src="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/86b68f20dd801e9507f86ec6f7c4716c2a857795/multi-cluster-verrazzano-oke/assets/bF77x66gHN42zsW_2_9Dxw.png "
+          data-original="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/86b68f20dd801e9507f86ec6f7c4716c2a857795/multi-cluster-verrazzano-oke/assets/bF77x66gHN42zsW_2_9Dxw.png "
+          data-at2x="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/86b68f20dd801e9507f86ec6f7c4716c2a857795/multi-cluster-verrazzano-oke/assets/bF77x66gHN42zsW_2_9Dxw.png @2x.png"
+          title="Remote Peering with different regions" alt="Remote Peering with different regions">
+      </picture>
+      <figcaption>Remote Peering with different regions</figcaption>
+    </figure>
+    <p>We need the clusters to communicate securely using the OCI Backbone so this means we need to
+      set up DRGs in each region, attach them to their VCN and use remote peering. Since the VCNs
+      and the clusters will be eventually be connected, we also need to ensure their respective IP
+      address ranges (VCN, pod and service) do not overlap.</p>
+    <h2 id="creating-the-verrazzano-clusters">Creating the Verrazzano clusters</h2>
+    <p>We are going to the use <a href="https://github.com/oracle-terraform-modules/terraform-oci-oke">terraform-oci-oke
+        module</a> to create our clusters. We could create them individually by cloning the
+      module 4 times and then changing the region parameters. However, you will be pleased to know
+      that 1 of the things we recently improved in the 4.0 release of the module is reusability.
+      We’ll take advantage of this!</p>
+    <p>Create a new terraform project and define your variables as follows:</p>
+    <div class="language-terraform highlighter-rouge">
+      <div class="highlight">
+        <pre class="highlight"><code><span class="c1"># Copyright 2017, 2021 Oracle Corporation and/or affiliates.  All rights reserved.</span>
   
-        <figure class="aligncenter">
-          <picture>
-            <source
-              srcset="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/5i_215fK15AiaYSz.png 1x">
-            <img loading="lazy" width="535" height="413"
-              src="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/5i_215fK15AiaYSz.png"
-              data-original="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/5i_215fK15AiaYSz.png"
-              data-at2x="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/5i_215fK15AiaYSz@2x.png"
-              title="Verrazzano multi-cluster" alt="Verrazzano multi-cluster">
-          </picture>
-          <figcaption>Verrazzano multi-cluster</figcaption>
-        </figure>
-        -->
-
-      <p>Where you previously had a single Admin Server for WebLogic, you now have a single Admin <em>cluster</em> based
-        on Kubernetes for Verrazzano. And where your applications were deployed on managed servers, your Verrazzano
-        workloads are deployed on managed Kubernetes clusters, possibly closer to your users.</p>
-
-      <h3 id="infrastructure-planning">Infrastructure Planning<a class="header-link" href="#infrastructure-planning"
-          title="Permalink"><span class="sr-only">Permalink</span></a></h3>
-
-      <p>In order to achieve this, Verrazzano-managed clusters (i.e., Kubernetes clusters administered and managed by
-        the Verrazzano container platform) need to be able to communicate with the Verrazzano Admin cluster and
-        vice-versa. In WebLogic, the Managed Servers would usually be part of the same network (unless you were using <a
-          href="https://docs.oracle.com/en/middleware/standalone/weblogic-server/14.1.1.0/wlcag/active-active-stretch-cluster-active-passive-database-tier.html#GUID-66D13F44-200A-45AB-9676-2BF18610554D?source=:ex:tb:::::WWMK211123P00031:WW_FY22_DevRel_DotBuild&amp;SC=:ex:tb:::::WWMK211123P00031:WW_FY22_DevRel_DotBuild&amp;pcode=WWMK211123P00031">stretch
-          clusters</a>) and this administration would be fairly straightforward.</p>
-
-      <p>Our ultimate goal though, is to deploy the different Verrazzano clusters in different cloud regions on OCI, so
-        we need to start thinking about our plan for networking and security.</p>
-
-      <blockquote class="alert">
-        <p><strong>NOTE:</strong> You can also use Verrazzano to manage clusters deployed in other clouds or
-          on-premises, but the networking and security configurations would vary (VPN/FastConnect etc).</p>
-      </blockquote>
-
-      <p>Below is a map of OCI regions to help us pick a set of regions:</p>
-
-      <figure class="aligncenter">
-        <picture>
-          <source
-            srcset="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/syLSX57E1bT7_EzYZU_qLGg.png 1x" />
-          <img alt="Map of OCI regions"
-            data-at2x="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/syLSX57E1bT7_EzYZU_qLGg@2x.png"
-            data-original="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/syLSX57E1bT7_EzYZU_qLGg.png"
-            height="508" loading="lazy"
-            src="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/syLSX57E1bT7_EzYZU_qLGg.png"
-            title="Map of OCI regions" width="1200" />
-        </picture>
-
-        <figcaption>Map of OCI regions</figcaption>
-      </figure>
-
-      <p>We&rsquo;ll use our newly-minted Singapore region for the Admin cluster and then Mumbai, Tokyo, and Sydney as
-        managed clusters in a star architecture:</p>
-
-      <figure class="aligncenter">
-        <picture>
-          <source
-            srcset="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/rnXSnetqM6oAOJk6bfkyQ.png 1x" />
-          <img alt="Verrazzano Clusters spread across OCI Asia Pacific regions"
-            data-at2x="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/rnXSnetqM6oAOJk6bfkyQ@2x.png"
-            data-original="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/rnXSnetqM6oAOJk6bfkyQ.png"
-            height="549" loading="lazy"
-            src="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/rnXSnetqM6oAOJk6bfkyQ.png"
-            title="Verrazzano Clusters spread across OCI Asia Pacific regions" width="671" />
-        </picture>
-
-        <figcaption>Verrazzano Clusters spread across OCI Asia Pacific regions</figcaption>
-      </figure>
-
-      <h3 id="networking-infrastructure">Networking Infrastructure<a class="header-link"
-          href="#networking-infrastructure" title="Permalink"><span class="sr-only">Permalink</span></a></h3>
-      <!--
-        <figure class="aligncenter">
-          <picture>
-            <source
-              srcset="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/bF77x66gHN42zsW_2_9Dxw.png 1x">
-            <img loading="lazy" width="695" height="554"
-              src="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/bF77x66gHN42zsW_2_9Dxw.png"
-              data-original="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/bF77x66gHN42zsW_2_9Dxw.png"
-              data-at2x="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/bF77x66gHN42zsW_2_9Dxw@2x.png"
-              title="Remote Peering with different regions" alt="Remote Peering with different regions">
-          </picture>
-          <figcaption>Remote Peering with different regions</figcaption>
-        </figure>
+  <span class="c1"># Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl</span>
   
-        -->
-
-      <p>We need the clusters to communicate securely using the OCI Backbone, so this means we need to set up DRGs in
-        each region, attach them to their respective VCNs, and then use remote peering. Since the VCNs and the clusters
-        will eventually be connected, we also need to ensure that their respective IP address ranges (VCN, pod, and
-        service) do not overlap.</p>
-
-      <h2 id="creating-the-verrazzano-clusters">Creating the Verrazzano clusters<a class="header-link"
-          href="#creating-the-verrazzano-clusters" title="Permalink"><span class="sr-only">Permalink</span></a></h2>
-
-      <p>We&rsquo;re going to the use <a
-          href="https://github.com/oracle-terraform-modules/terraform-oci-oke">terraform-oci-oke module</a> to create
-        our clusters. We could create them individually by cloning the module 4 times and then changing the region
-        parameters, but there&rsquo;s now a much simpler way to do it. You&rsquo;ll be pleased to know that one of the
-        things we improved in the 4.0 release of the module is <em>reusability</em>. We&rsquo;ll take advantage of this!
-      </p>
-
-      <h3 id="create-a-new-terraform-project">Create a new Terraform project<a class="header-link"
-          href="#create-a-new-terraform-project" title="Permalink"><span class="sr-only">Permalink</span></a></h3>
-
-      <ol>
-        <li>
-          <p><strong>Create project</strong> Let&rsquo;s create a new Terraform project and define our variables as
-            follows:</p>
-
-          <pre>
-  <code class="language-JSON">   # Copyright 2017, 2021 Oracle Corporation and/or affiliates.  All rights reserved.
-   # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl
+  <span class="c1"># OCI Provider parameters</span>
+  <span class="k">variable</span> <span class="s2">"api_fingerprint"</span> <span class="p">{</span>
+  <span class="nx">default</span>     <span class="p">=</span> <span class="s2">""</span>
+  <span class="nx">description</span> <span class="p">=</span> <span class="s2">"Fingerprint of the API private key to use with OCI API."</span>
+  <span class="nx">type</span>        <span class="p">=</span> <span class="nx">string</span>
+  <span class="p">}</span>
   
-   # OCI Provider parameters
-   variable &quot;api_fingerprint&quot; {
-     default     = &quot;&quot;
-     description = &quot;Fingerprint of the API private key to use with OCI API.&quot;
-     type        = string
-   }
+  <span class="k">variable</span> <span class="s2">"api_private_key_path"</span> <span class="p">{</span>
+  <span class="nx">default</span>     <span class="p">=</span> <span class="s2">""</span>
+  <span class="nx">description</span> <span class="p">=</span> <span class="s2">"The path to the OCI API private key."</span>
+  <span class="nx">type</span>        <span class="p">=</span> <span class="nx">string</span>
+  <span class="p">}</span>
   
-   variable &quot;api_private_key_path&quot; {
-     default     = &quot;&quot;
-     description = &quot;The path to the OCI API private key.&quot;
-     type        = string
-   }
+  <span class="k">variable</span> <span class="s2">"verrazzano_regions"</span> <span class="p">{</span>
+  <span class="c1"># List of regions: https://docs.cloud.oracle.com/iaas/Content/General/Concepts/regions.htm#ServiceAvailabilityAcrossRegions</span>
+  <span class="nx">description</span> <span class="p">=</span> <span class="s2">"A map Verrazzano regions."</span>
+  <span class="nx">type</span>        <span class="p">=</span> <span class="nx">map</span><span class="p">(</span><span class="nx">string</span><span class="p">)</span>
+  <span class="p">}</span>
   
-   variable &quot;verrazzano_regions&quot; {
-     # List of regions: https://docs.cloud.oracle.com/iaas/Content/General/Concepts/regions.htm#ServiceAvailabilityAcrossRegions
-     description = &quot;A map Verrazzano regions.&quot;
-     type        = map(string)
-   }
+  <span class="k">variable</span> <span class="s2">"tenancy_id"</span> <span class="p">{</span>
+  <span class="nx">description</span> <span class="p">=</span> <span class="s2">"The tenancy id of the OCI Cloud Account in which to create the resources."</span>
+  <span class="nx">type</span>        <span class="p">=</span> <span class="nx">string</span>
+  <span class="p">}</span>
   
-   variable &quot;tenancy_id&quot; {
-     description = &quot;The tenancy id of the OCI Cloud Account in which to create the resources.&quot;
-     type        = string
-   }
+  <span class="k">variable</span> <span class="s2">"user_id"</span> <span class="p">{</span>
+  <span class="nx">description</span> <span class="p">=</span> <span class="s2">"The id of the user that terraform will use to create the resources."</span>
+  <span class="nx">type</span>        <span class="p">=</span> <span class="nx">string</span>
+  <span class="nx">default</span>     <span class="p">=</span> <span class="s2">""</span>
+  <span class="p">}</span>
   
-   variable &quot;user_id&quot; {
-     description = &quot;The id of the user that terraform will use to create the resources.&quot;
-     type        = string
-     default     = &quot;&quot;
-   }
+  <span class="c1"># General OCI parameters</span>
+  <span class="k">variable</span> <span class="s2">"compartment_id"</span> <span class="p">{</span>
+  <span class="nx">description</span> <span class="p">=</span> <span class="s2">"The compartment id where to create all resources."</span>
+  <span class="nx">type</span>        <span class="p">=</span> <span class="nx">string</span>
+  <span class="p">}</span>
   
-   # General OCI parameters
-   variable &quot;compartment_id&quot; {
-     description = &quot;The compartment id where to create all resources.&quot;
-     type        = string
-   }
-  
-   variable &quot;label_prefix&quot; {
-     default     = &quot;none&quot;
-     description = &quot;A string that will be prepended to all resources.&quot;
-     type        = string
-   }
+  <span class="k">variable</span> <span class="s2">"label_prefix"</span> <span class="p">{</span>
+  <span class="nx">default</span>     <span class="p">=</span> <span class="s2">"none"</span>
+  <span class="nx">description</span> <span class="p">=</span> <span class="s2">"A string that will be prepended to all resources."</span>
+  <span class="nx">type</span>        <span class="p">=</span> <span class="nx">string</span>
+  <span class="p">}</span>
   </code></pre>
-        </li>
-        <li>
-          <p><strong>Define regions</strong> In <code
-              class="language-plaintext highlighter-rouge">terraform.tfvars</code>, along with the identity parameters,
-            let&rsquo;s define our regions:</p>
-
-          <pre>
-  <code class="language-JSON">   verrazzano_regions = {  
-     home  = &quot;your-tenancy-home-region&quot; #replace with your tenancy&#39;s home region  
-     admin = &quot;ap-singapore-1&quot;  
-     syd   = &quot;ap-sydney-1&quot;  
-     mum   = &quot;ap-mumbai-1&quot;  
-     tok   = &quot;ap-tokyo-1&quot;  
-   }
-  </code></pre>
-        </li>
-        <li>
-          <p><strong>Define providers</strong> In <code class="language-plaintext highlighter-rouge">provider.tf</code>,
-            let&rsquo;s define the providers for the different regions using aliases:</p>
-
-          <pre>
-  <code class="language-JSON">   provider &quot;oci&quot; {
-     fingerprint      = var.api_fingerprint
-     private_key_path = var.api_private_key_path
-     region           = var.verrazzano_regions[&quot;admin&quot;]
-     tenancy_ocid     = var.tenancy_id
-     user_ocid        = var.user_id
-     alias            = &quot;admin&quot;
-   }
-  
-   provider &quot;oci&quot; {
-     fingerprint      = var.api_fingerprint
-     private_key_path = var.api_private_key_path
-     region           = var.verrazzano_regions[&quot;home&quot;]
-     tenancy_ocid     = var.tenancy_id
-     user_ocid        = var.user_id
-     alias            = &quot;home&quot;
-   }
-  
-   provider &quot;oci&quot; {
-     fingerprint      = var.api_fingerprint
-     private_key_path = var.api_private_key_path
-     region           = var.verrazzano_regions[&quot;syd&quot;]
-     tenancy_ocid     = var.tenancy_id
-     user_ocid        = var.user_id
-     alias            = &quot;syd&quot;
-   }
-  
-   provider &quot;oci&quot; {
-     fingerprint      = var.api_fingerprint
-     private_key_path = var.api_private_key_path
-     region           = var.verrazzano_regions[&quot;mum&quot;]
-     tenancy_ocid     = var.tenancy_id
-     user_ocid        = var.user_id
-     alias            = &quot;mum&quot;
-   }
-  
-   provider &quot;oci&quot; {
-     fingerprint      = var.api_fingerprint
-     private_key_path = var.api_private_key_path
-     region           = var.verrazzano_regions[&quot;tok&quot;]
-     tenancy_ocid     = var.tenancy_id
-     user_ocid        = var.user_id
-     alias            = &quot;tok&quot;
-   }
-  </code></pre>
-        </li>
-        <li>
-          <p><strong>Create clusters</strong> In <code class="language-plaintext highlighter-rouge">main.tf</code>,
-            we&rsquo;ll create the different clusters (note that some of the parameters here have the same values, and
-            you could use the default ones, but it&rsquo;s definitely possible to configure these by regions too):</p>
-
-          <pre>
-  <code class="language-JSON">   module &quot;vadmin&quot; {
-     source  = &quot;oracle-terraform-modules/oke/oci&quot;
-     version = &quot;4.0.1&quot;
-  
-     home_region = var.verrazzano_regions[&quot;home&quot;]
-     region      = var.verrazzano_regions[&quot;admin&quot;]
-  
-     tenancy_id = var.tenancy_id
-  
-     # general oci parameters
-     compartment_id = var.compartment_id
-     label_prefix   = &quot;v8o&quot;
-  
-     # ssh keys
-     ssh_private_key_path = &quot;~/.ssh/id_rsa&quot;
-     ssh_public_key_path  = &quot;~/.ssh/id_rsa.pub&quot;
-  
-     # networking
-     create_drg                   = true
-     internet_gateway_route_rules = []
-     nat_gateway_route_rules = [
-       {
-         destination       = &quot;10.1.0.0/16&quot;
-         destination_type  = &quot;CIDR_BLOCK&quot;
-         network_entity_id = &quot;drg&quot;
-         description       = &quot;To Sydney&quot;
-       },
-       {
-         destination       = &quot;10.2.0.0/16&quot;
-         destination_type  = &quot;CIDR_BLOCK&quot;
-         network_entity_id = &quot;drg&quot;
-         description       = &quot;To Mumbai&quot;
-       },
-       {
-         destination       = &quot;10.3.0.0/16&quot;
-         destination_type  = &quot;CIDR_BLOCK&quot;
-         network_entity_id = &quot;drg&quot;
-         description       = &quot;To Tokyo&quot;
-       },
-     ]
-  
-     vcn_cidrs     = [&quot;10.0.0.0/16&quot;]
-     vcn_dns_label = &quot;admin&quot;
-     vcn_name      = &quot;admin&quot;
-  
-     # bastion host
-     create_bastion_host = true
-     upgrade_bastion     = false
-  
-     # operator host
-     create_operator                    = true
-     enable_operator_instance_principal = true
-     upgrade_operator                   = false
-  
-     # oke cluster options
-     cluster_name                = &quot;admin&quot;
-     control_plane_type          = &quot;private&quot;
-     control_plane_allowed_cidrs = [&quot;0.0.0.0/0&quot;]
-     kubernetes_version          = &quot;v1.20.11&quot;
-     pods_cidr                   = &quot;10.244.0.0/16&quot;
-     services_cidr               = &quot;10.96.0.0/16&quot;
-  
-     # node pools
-     node_pools = {
-       np1 = { shape = &quot;VM.Standard.E4.Flex&quot;, ocpus = 2, memory = 32, node_pool_size = 2, boot_volume_size = 150, label = { app = &quot;frontend&quot;, pool = &quot;np1&quot; } }
-     }
-     node_pool_name_prefix = &quot;np-admin&quot;
-  
-     # oke load balancers
-     load_balancers          = &quot;both&quot;
-     preferred_load_balancer = &quot;public&quot;
-     public_lb_allowed_cidrs = [&quot;0.0.0.0/0&quot;]
-     public_lb_allowed_ports = [80, 443]
-  
-     # freeform_tags
-     freeform_tags = {
-       vcn = {
-         verrazzano = &quot;admin&quot;
-       }
-       bastion = {
-         access     = &quot;public&quot;,
-         role       = &quot;bastion&quot;,
-         security   = &quot;high&quot;
-         verrazzano = &quot;admin&quot;
-       }
-       operator = {
-         access     = &quot;restricted&quot;,
-         role       = &quot;operator&quot;,
-         security   = &quot;high&quot;
-         verrazzano = &quot;admin&quot;
-       }
-     }
-  
-     providers = {
-       oci      = oci.admin
-       oci.home = oci.home
-     }
-   }
-  
-   module &quot;vsyd&quot; {
-     source  = &quot;oracle-terraform-modules/oke/oci&quot;
-     version = &quot;4.0.1&quot;
-  
-     home_region = var.verrazzano_regions[&quot;home&quot;]
-     region      = var.verrazzano_regions[&quot;syd&quot;]
-  
-     tenancy_id = var.tenancy_id
-  
-     # general oci parameters
-     compartment_id = var.compartment_id
-     label_prefix   = &quot;v8o&quot;
-  
-     # ssh keys
-     ssh_private_key_path = &quot;~/.ssh/id_rsa&quot;
-     ssh_public_key_path  = &quot;~/.ssh/id_rsa.pub&quot;
-  
-     # networking
-     create_drg                   = true
-     internet_gateway_route_rules = []
-     nat_gateway_route_rules = [
-       {
-         destination       = &quot;10.0.0.0/16&quot;
-         destination_type  = &quot;CIDR_BLOCK&quot;
-         network_entity_id = &quot;drg&quot;
-         description       = &quot;To Admin&quot;
-       }
-     ]
-  
-     vcn_cidrs     = [&quot;10.1.0.0/16&quot;]
-     vcn_dns_label = &quot;syd&quot;
-     vcn_name      = &quot;syd&quot;
-  
-     # bastion host
-     create_bastion_host = false
-     upgrade_bastion     = false
-  
-     # operator host
-     create_operator                    = false
-     enable_operator_instance_principal = true
-     upgrade_operator                   = false
-  
-     # oke cluster options
-     cluster_name                = &quot;syd&quot;
-     control_plane_type          = &quot;private&quot;
-     control_plane_allowed_cidrs = [&quot;0.0.0.0/0&quot;]
-     kubernetes_version          = &quot;v1.20.11&quot;
-     pods_cidr                   = &quot;10.245.0.0/16&quot;
-     services_cidr               = &quot;10.97.0.0/16&quot;
-  
-     # node pools
-     node_pools = {
-       np1 = { shape = &quot;VM.Standard.E4.Flex&quot;, ocpus = 2, memory = 32, node_pool_size = 2, boot_volume_size = 150 }
-     }
-  
-     # oke load balancers
-     load_balancers          = &quot;both&quot;
-     preferred_load_balancer = &quot;public&quot;
-     public_lb_allowed_cidrs = [&quot;0.0.0.0/0&quot;]
-     public_lb_allowed_ports = [80, 443]
-  
-     # freeform_tags
-     freeform_tags = {
-       vcn = {
-         verrazzano = &quot;syd&quot;
-       }
-       bastion = {
-         access     = &quot;public&quot;,
-         role       = &quot;bastion&quot;,
-         security   = &quot;high&quot;
-         verrazzano = &quot;syd&quot;
-       }
-       operator = {
-         access     = &quot;restricted&quot;,
-         role       = &quot;operator&quot;,
-         security   = &quot;high&quot;
-         verrazzano = &quot;syd&quot;
-       }
-     }
-  
-     providers = {
-       oci      = oci.syd
-       oci.home = oci.home
-     }
-   }
-  
-   module &quot;vmum&quot; {
-     source  = &quot;oracle-terraform-modules/oke/oci&quot;
-     version = &quot;4.0.1&quot;
-  
-     home_region = var.verrazzano_regions[&quot;home&quot;]
-     region      = var.verrazzano_regions[&quot;mum&quot;]
-  
-     tenancy_id = var.tenancy_id
-  
-     # general oci parameters
-     compartment_id = var.compartment_id
-     label_prefix   = &quot;v8o&quot;
-  
-     # ssh keys
-     ssh_private_key_path = &quot;~/.ssh/id_rsa&quot;
-     ssh_public_key_path  = &quot;~/.ssh/id_rsa.pub&quot;
-  
-     # networking
-     create_drg                   = true
-     internet_gateway_route_rules = []
-     nat_gateway_route_rules = [
-       {
-         destination       = &quot;10.0.0.0/16&quot;
-         destination_type  = &quot;CIDR_BLOCK&quot;
-         network_entity_id = &quot;drg&quot;
-         description       = &quot;To Admin&quot;
-       }
-     ]
-  
-     vcn_cidrs     = [&quot;10.2.0.0/16&quot;]
-     vcn_dns_label = &quot;mum&quot;
-     vcn_name      = &quot;mum&quot;
-  
-     # bastion host
-     create_bastion_host = false
-     upgrade_bastion     = false
-  
-     # operator host
-     create_operator                    = false
-     enable_operator_instance_principal = true
-     upgrade_operator                   = false
-  
-     # oke cluster options
-     cluster_name                = &quot;mum&quot;
-     control_plane_type          = &quot;private&quot;
-     control_plane_allowed_cidrs = [&quot;0.0.0.0/0&quot;]
-     kubernetes_version          = &quot;v1.20.11&quot;
-     pods_cidr                   = &quot;10.246.0.0/16&quot;
-     services_cidr               = &quot;10.98.0.0/16&quot;
-  
-     # node pools
-     node_pools = {
-       np1 = { shape = &quot;VM.Standard.E4.Flex&quot;, ocpus = 2, memory = 32, node_pool_size = 2, boot_volume_size = 150 }
-     }
-  
-     # oke load balancers
-     load_balancers          = &quot;both&quot;
-     preferred_load_balancer = &quot;public&quot;
-     public_lb_allowed_cidrs = [&quot;0.0.0.0/0&quot;]
-     public_lb_allowed_ports = [80, 443]
-  
-     # freeform_tags
-     freeform_tags = {
-       vcn = {
-         verrazzano = &quot;mum&quot;
-       }
-       bastion = {
-         access     = &quot;public&quot;,
-         role       = &quot;bastion&quot;,
-         security   = &quot;high&quot;
-         verrazzano = &quot;mum&quot;
-       }
-       operator = {
-         access     = &quot;restricted&quot;,
-         role       = &quot;operator&quot;,
-         security   = &quot;high&quot;
-         verrazzano = &quot;mum&quot;
-       }
-     }
-  
-     providers = {
-       oci      = oci.mum
-       oci.home = oci.home
-     }
-   }
-  
-   module &quot;vtok&quot; {
-     source  = &quot;oracle-terraform-modules/oke/oci&quot;
-     version = &quot;4.0.1&quot;
-  
-     home_region = var.verrazzano_regions[&quot;home&quot;]
-     region      = var.verrazzano_regions[&quot;tok&quot;]
-  
-     tenancy_id = var.tenancy_id
-  
-     # general oci parameters
-     compartment_id = var.compartment_id
-     label_prefix   = &quot;v8o&quot;
-  
-     # ssh keys
-     ssh_private_key_path = &quot;~/.ssh/id_rsa&quot;
-     ssh_public_key_path  = &quot;~/.ssh/id_rsa.pub&quot;
-  
-     # networking
-     create_drg                   = true
-     internet_gateway_route_rules = []
-     nat_gateway_route_rules = [
-       {
-         destination       = &quot;10.0.0.0/16&quot;
-         destination_type  = &quot;CIDR_BLOCK&quot;
-         network_entity_id = &quot;drg&quot;
-         description       = &quot;To Admin&quot;
-       }
-     ]
-  
-     vcn_cidrs     = [&quot;10.3.0.0/16&quot;]
-     vcn_dns_label = &quot;tok&quot;
-     vcn_name      = &quot;tok&quot;
-  
-     # bastion host
-     create_bastion_host = false
-     upgrade_bastion     = false
-  
-     # operator host
-     create_operator                    = false
-     enable_operator_instance_principal = true
-     upgrade_operator                   = false
-  
-     # oke cluster options
-     cluster_name                = &quot;tok&quot;
-     control_plane_type          = &quot;private&quot;
-     control_plane_allowed_cidrs = [&quot;0.0.0.0/0&quot;]
-     kubernetes_version          = &quot;v1.20.11&quot;
-     pods_cidr                   = &quot;10.247.0.0/16&quot;
-     services_cidr               = &quot;10.99.0.0/16&quot;
-  
-     # node pools
-     node_pools = {
-       np1 = { shape = &quot;VM.Standard.E4.Flex&quot;, ocpus = 2, memory = 32, node_pool_size = 2, boot_volume_size = 150 }
-     }
-  
-     # oke load balancers
-     load_balancers          = &quot;both&quot;
-     preferred_load_balancer = &quot;public&quot;
-     public_lb_allowed_cidrs = [&quot;0.0.0.0/0&quot;]
-     public_lb_allowed_ports = [80, 443]
-  
-     # freeform_tags
-     freeform_tags = {
-       vcn = {
-         verrazzano = &quot;tok&quot;
-       }
-       bastion = {
-         access     = &quot;public&quot;,
-         role       = &quot;bastion&quot;,
-         security   = &quot;high&quot;
-         verrazzano = &quot;tok&quot;
-       }
-       operator = {
-         access     = &quot;restricted&quot;,
-         role       = &quot;operator&quot;,
-         security   = &quot;high&quot;
-         verrazzano = &quot;tok&quot;
-       }
-     }
-  
-     providers = {
-       oci      = oci.tok
-       oci.home = oci.home
-     }
-   }
-  </code></pre>
-        </li>
-        <li>
-          <p><strong>Display operators</strong> For convenience, let&rsquo;s display the operator host in each region:
-          </p>
-
-          <pre>
-  <code class="language-JSON">   output &quot;ssh_to_admin_operator&quot; {
-     description = &quot;convenient command to ssh to the Admin operator host&quot;
-     value       = module.vadmin.ssh_to_operator
-   }
-  
-   output &quot;ssh_to_au_operator&quot; {
-     description = &quot;convenient command to ssh to the Sydney operator host&quot;
-     value       = module.vsyd.ssh_to_operator
-   }
-  
-   output &quot;ssh_to_in_operator&quot; {
-     description = &quot;convenient command to ssh to the Mumbai operator host&quot;
-     value       = module.vmum.ssh_to_operator
-   }
-  
-   output &quot;ssh_to_jp_operator&quot; {
-     description = &quot;convenient command to ssh to the Tokyo operator host&quot;
-     value       = module.vtok.ssh_to_operator
-   }
-  </code></pre>
-        </li>
-      </ol>
-
-      <h3 id="create-oke-clusters">Create OKE clusters<a class="header-link" href="#create-oke-clusters"
-          title="Permalink"><span class="sr-only">Permalink</span></a></h3>
-
-      <ol>
-        <li>
-          <p>Run <code class="language-plaintext highlighter-rouge">terraform init</code> and then <code
-              class="language-plaintext highlighter-rouge">terraform plan</code>. The output of <em>plan</em> should
-            indicate the following:</p>
-
-          <div class="language-console highlighter-rouge">
-            <div class="highlight">
-              <pre class="highlight">
-  <code><span class="go">   Plan: 292 to add, 0 to change, 0 to destroy.Changes to Outputs:  
-   + ssh_to_admin_operator = (known after apply)  
-   + ssh_to_au_operator    = &quot;ssh -i ~/.ssh/id_rsa -J opc@ opc@&quot;  
-   + ssh_to_in_operator    = &quot;ssh -i ~/.ssh/id_rsa -J opc@ opc@&quot;  
-   + ssh_to_jp_operator    = &quot;ssh -i ~/.ssh/id_rsa -J opc@ opc@&quot;
-  </span></code></pre>
-            </div>
-          </div>
-        </li>
-        <li>
-          <p>Run <code class="language-plaintext highlighter-rouge">terraform apply</code> and then <code
-              class="language-plaintext highlighter-rouge">terraform relax</code>. Shortly after, you should see the
-            following:</p>
-
-          <figure class="aligncenter">
-            <picture>
-              <source
-                srcset="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/Eeiu_1isUl47wVZAAd1eoA.png 1x" />
-              <img alt="Simultaneous creation of 4 OKE clusters in different regions"
-                data-at2x="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/Eeiu_1isUl47wVZAAd1eoA@2x.png"
-                data-original="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/Eeiu_1isUl47wVZAAd1eoA.png"
-                height="88" loading="lazy"
-                src="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/Eeiu_1isUl47wVZAAd1eoA.png"
-                title="Simultaneous creation of 4 OKE clusters in different regions" width="975" />
-            </picture>
-
-            <figcaption>Simultaneous creation of 4 OKE clusters in different regions</figcaption>
-          </figure>
-
-          <p>This means that our four OKE Clusters are being simultaneously created in 4 different OCI regions. In about
-            15 minutes, you&rsquo;ll have all four clusters created:</p>
-          <picture class="aligncenter">
-            <source
-              srcset="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/1vdOhprGm48QCzDjYBkUQQ.png 1x" />
-            <img alt="Showing outputs after creating clusters"
-              data-at2x="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/1vdOhprGm48QCzDjYBkUQQ@2x.png"
-              data-original="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/1vdOhprGm48QCzDjYBkUQQ.png"
-              height="183" loading="lazy"
-              src="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/1vdOhprGm48QCzDjYBkUQQ.png"
-              title="Showing outputs after creating clusters" width="855" />
-          </picture>
-
-          <blockquote class="notice">
-            <p><strong>NOTE:</strong> The ssh commands to the various operator hosts will also be printed.</p>
-          </blockquote>
-        </li>
-      </ol>
-
-      <h3 id="establish-connections">Establish connections<a class="header-link" href="#establish-connections"
-          title="Permalink"><span class="sr-only">Permalink</span></a></h3>
-
-      <ol>
-        <li><strong>Create remote peering connections</strong>
-
-          <ol>
-            <li>Navigate to the DRGs in <strong><em>each</em></strong> <strong>managed cluster&rsquo;s</strong> region
-              (Mumbai, Tokyo, and Sydney).</li>
-            <li>Select <strong>Remote Peering Attachment</strong> and create a <strong>Remote Peering
-                Connection</strong> (call it <em>rpc_to_admin</em>).</li>
-            <li>
-              <p>In the <strong>Admin region</strong> (<em>Singapore</em> in our selected region), create 3
-                <strong>Remote Peering Connections</strong>:</p>
-
-              <figure class="aligncenter">
-                <picture>
-                  <source
-                    srcset="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/sub6pYSaRFEQumzQLQdDxwg.png 1x" />
-                  <img alt="3 RPCs in the Admin region"
-                    data-at2x="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/sub6pYSaRFEQumzQLQdDxwg@2x.png"
-                    data-original="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/sub6pYSaRFEQumzQLQdDxwg.png"
-                    height="339" loading="lazy"
-                    src="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/sub6pYSaRFEQumzQLQdDxwg.png"
-                    title="3 RPCs in the Admin region" width="1200" />
-                </picture>
-
-                <figcaption>3 RPCs in the Admin region</figcaption>
-              </figure>
-
-              <p>Now, we need to peer them.</p>
-            </li>
-          </ol>
-        </li>
-        <li><strong>Peer the connections</strong>
-          <ol>
-            <li>Select <strong>rpc_to_syd</strong>.</li>
-            <li>Open a new tab in your browser and access the <em>OCI Console</em>.</li>
-            <li>Change the region to <em>Sydney</em>.</li>
-            <li>Navigate to the DRG and then to <strong>rpc_to_syd</strong> page.</li>
-            <li>
-              <p>Copy the RPC&rsquo;s OCID (not the DRG), switch to the <strong>Admin</strong> tab, and then select
-                <strong>Establish Connection</strong>:</p>
-
-              <figure class="aligncenter">
-                <picture>
-                  <source
-                    srcset="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/2g_Oih2j9NBRy_cUoUW9Eg.png 1x" />
-                  <img alt="Establishing RPC"
-                    data-at2x="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/2g_Oih2j9NBRy_cUoUW9Eg@2x.png"
-                    data-original="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/2g_Oih2j9NBRy_cUoUW9Eg.png"
-                    height="216" loading="lazy"
-                    src="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/2g_Oih2j9NBRy_cUoUW9Eg.png"
-                    title="Establishing RPC" width="619" />
-                </picture>
-
-                <figcaption>Establishing RPC</figcaption>
-              </figure>
-            </li>
-          </ol>
-        </li>
-        <li><strong>Establish connection</strong>
-          <ol>
-            <li>Once you&rsquo;ve provided the <em>RPC ID</em> and the <em>region</em> as above, select
-              <strong>Establish Connection</strong> to perform the peering.</li>
-            <li>
-              <p>Repeat the same procedure for the Tokyo and Mumbai regions until all the managed cluster regions are
-                peered with the Admin region. When the peering is performed and completed, you will see its status will
-                change to &ldquo;Pending&rdquo; and eventually &ldquo;Peered&rdquo;:</p>
-
-              <figure class="aligncenter">
-                <picture>
-                  <source
-                    srcset="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/DX7Nv3MRwczRYbmc5aXzlA.png 1x" />
-                  <img alt="RPCs in Pending state"
-                    data-at2x="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/DX7Nv3MRwczRYbmc5aXzlA@2x.png"
-                    data-original="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/DX7Nv3MRwczRYbmc5aXzlA.png"
-                    height="405" loading="lazy"
-                    src="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/DX7Nv3MRwczRYbmc5aXzlA.png"
-                    title="RPCs in Pending state" width="1200" />
-                </picture>
-
-                <figcaption>RPCs in Pending state</figcaption>
-              </figure>
-
-              <figure class="aligncenter">
-                <picture>
-                  <source
-                    srcset="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/TSN09Afrj1KwHSEjFeYQ.png 1x" />
-                  <img alt="RPCs in Peered state"
-                    data-at2x="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/TSN09Afrj1KwHSEjFeYQ@2x.png"
-                    data-original="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/TSN09Afrj1KwHSEjFeYQ.png"
-                    height="471" loading="lazy"
-                    src="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/TSN09Afrj1KwHSEjFeYQ.png"
-                    title="RPCs in Peered state" width="1110" />
-                </picture>
-
-                <figcaption>RPCs in Peered state</figcaption>
-              </figure>
-            </li>
-          </ol>
-        </li>
-      </ol>
-
-      <h3 id="configure">Configure<a class="header-link" href="#configure" title="Permalink"><span
-            class="sr-only">Permalink</span></a></h3>
-
-      <p>At this point, our VCNs are peered but there are three more things we need to do:</p>
-
-      <ol>
-        <li>Configure routing tables so that the Verrazzano managed clusters can communicate to the Admin cluster and
-          vice-versa</li>
-        <li>Configure NSGs for the control plane CIDRs to accept requests from Admin VCN</li>
-        <li>Merge the <code class="language-plaintext highlighter-rouge">kubeconfigs</code></li>
-      </ol>
-
-      <p>In the first step, we&rsquo;re asked to configure the routing table. Previously, you would have had to manually
-        configure rules, but now, they&rsquo;re automagically done for you! &ldquo;How,&rdquo; you ask? Well, one of the
-        <a href="https://github.com/oracle-terraform-modules/terraform-oci-oke/releases">features</a> we&rsquo;ve added
-        is the <a href="https://github.com/oracle-terraform-modules/terraform-oci-oke/issues/279">ability to configure
-          and update routing tables</a>.</p>
-
-      <p>Let&rsquo;s explore this in a little more detail. In your <code
-          class="language-plaintext highlighter-rouge">main.tf</code>, take a look in the the Admin cluster module.
-        Usually, the <code class="language-plaintext highlighter-rouge">nat_gateway_route_rules</code> parameter is an
-        empty list:</p>
-
-      <pre>
-  <code class="language-JSON">nat_gateway_route_rules = []
-  </code></pre>
-
-      <p>However, in our Admin module definition, notice that we had already changed this to:</p>
-
-      <pre>
-  <code class="language-JSON">nat_gateway_route_rules = [
-  {
-  destination       = &quot;10.1.0.0/16&quot;
-  destination_type  = &quot;CIDR_BLOCK&quot;
-  network_entity_id = &quot;drg&quot;       
-  description       = &quot;To Sydney&quot;
-  },
-  {
-  destination       = &quot;10.2.0.0/16&quot;
-  destination_type  = &quot;CIDR_BLOCK&quot;
-  network_entity_id = &quot;drg&quot;       
-  description       = &quot;To Mumbai&quot;
-  },
-  {
-  destination       = &quot;10.3.0.0/16&quot;
-  destination_type  = &quot;CIDR_BLOCK&quot;
-  network_entity_id = &quot;drg&quot;       
-  description       = &quot;To Tokyo&quot;
-  },
-  ]
-  </code></pre>
-
-      <p>Similarly, in the managed cluster definitions, we had also set the routing rules to reach the Admin cluster in
-        Singapore:</p>
-
-      <pre>
-  <code class="language-JSON">nat_gateway_route_rules = [  
-  {  
-    destination       = &quot;10.0.0.0/16&quot;  
-    destination_type  = &quot;CIDR_BLOCK&quot;  
-    network_entity_id = &quot;drg&quot;  
-    description       = &quot;To Admin&quot;  
-  }  
-  ]
-  </code></pre>
-
-      <blockquote class="notice">
-        <p><strong>NOTE:</strong> You can always update these rules later.</p>
-      </blockquote>
-
-      <p><strong>Example - updating routing rules:</strong></p>
-
-      <p>Let&rsquo;s say you add another managed region in Hyderabad (VCN CIDR: 10.4.0.0). There&rsquo;s a couple of
-        things you&rsquo;ll need to do to have this region recognized.</p>
-
-      <ol>
-        <li>
-          <p><strong>Add new rule</strong> In the routing rules for Admin, you&rsquo;ll need to add an additional entry
-            to route traffic to this new region:</p>
-
-          <pre>
-  <code class="language-JSON">   nat_gateway_route_rules = [  
-   {  
-     destination       = &quot;10.4.0.0/16&quot;  
-     destination_type  = &quot;CIDR_BLOCK&quot;  
-     network_entity_id = &quot;drg&quot;  
-     description       = &quot;To Hyderabad&quot;  
-   }  
-   ]
-  </code></pre>
-        </li>
-        <li>
-          <p><strong>Update</strong> After updating the custom rules, run <code
-              class="language-plaintext highlighter-rouge">terraform apply</code> again and the routing rules in the
-            Admin region will be updated.</p>
-        </li>
-        <li>
-          <p><strong>Check rules</strong> Navigate to the <strong>Network Visualizer</strong> page to check your
-            connectivity and routing rules:</p>
-
-          <figure class="aligncenter">
-            <picture>
-              <source
-                srcset="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/oS_bZ4lnAounnM_lgBGELg.png 1x" />
-              <img alt="Network connectivity across regions"
-                data-at2x="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/oS_bZ4lnAounnM_lgBGELg@2x.png"
-                data-original="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/oS_bZ4lnAounnM_lgBGELg.png"
-                height="390" loading="lazy"
-                src="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/oS_bZ4lnAounnM_lgBGELg.png"
-                title="Network connectivity across regions" width="1200" />
-            </picture>
-
-            <figcaption>Network connectivity across regions</figcaption>
-          </figure>
-        </li>
-        <li>
-          <p><strong>TCP requests</strong> Next, in <em>each</em> region-managed VCN&rsquo;s control plane NSG, add an
-            ingress to accept TCP requests from source CIDR 10.0.0.0/16 (Admin) and destination port 6443. This is so
-            that the Admin cluster can be able to communicate with the Managed Cluster&rsquo;s control plane.</p>
-
-          <figure class="aligncenter">
-            <picture>
-              <source
-                srcset="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/UbwGSoe2twNSHayNM4YfRg.png 1x" />
-              <img alt="Additional ingress security rule in each managed cluster's control plane NSG"
-                data-at2x="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/UbwGSoe2twNSHayNM4YfRg@2x.png"
-                data-original="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/UbwGSoe2twNSHayNM4YfRg.png"
-                height="359" loading="lazy"
-                src="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/UbwGSoe2twNSHayNM4YfRg.png"
-                title="Additional ingress security rule in each managed cluster's control plane NSG" width="1200" />
-            </picture>
-
-            <figcaption>Additional ingress security rule in each managed cluster&#39;s control plane NSG</figcaption>
-          </figure>
-        </li>
-      </ol>
-
-      <h2 id="operational-convenience">Operational Convenience<a class="header-link" href="#operational-convenience"
-          title="Permalink"><span class="sr-only">Permalink</span></a></h2>
-
-      <p>For convenience, we&rsquo;d like to be able to execute most of our operations from the Admin operator host. To
-        do this, we first need to obtain the <code class="language-plaintext highlighter-rouge">kubeconfig</code> of
-        each cluster and then merge them together on the Admin operator. At the moment, this step isn&rsquo;t quite so
-        convenient itself, since you&rsquo;ll have to perform it manually, but we&rsquo;re working to improve this in
-        the future.</p>
-
-      <h3 id="obtain-kubeconfigs">Obtain <code class="language-plaintext highlighter-rouge">kubeconfigs</code><a
-          class="header-link" href="#obtain-kubeconfigs" title="Permalink"><span class="sr-only">Permalink</span></a>
-      </h3>
-
-      <ol>
-        <li>Navigate to <em>each</em> managed cluster&rsquo;s page and select <strong>Access cluster</strong>.</li>
-        <li>
-          <p>Copy the second command which allows you get the <code
-              class="language-plaintext highlighter-rouge">kubeconfig</code> for that cluster:</p>
-
-          <div class="language-console highlighter-rouge">
-            <div class="highlight">
-              <pre class="highlight">
-  <code><span class="gp">   oci ce cluster create-kubeconfig --cluster-id ocid1.cluster.... --file $</span>HOME/.kube/configsyd <span class="nt">--region</span> ap-sydney-1 <span class="nt">--token-version</span> 2.0.0  <span class="nt">--kube-endpoint</span> PRIVATE_ENDPOINT
-  <span class="go">
-  </span><span class="gp">   oci ce cluster create-kubeconfig --cluster-id ocid1.cluster.... --file $</span>HOME/.kube/configmum <span class="nt">--region</span> ap-mumbai-1 <span class="nt">--token-version</span> 2.0.0  <span class="nt">--kube-endpoint</span> PRIVATE_ENDPOINT
-  <span class="go">
-  </span><span class="gp">   oci ce cluster create-kubeconfig --cluster-id ocid1.cluster.... --file $</span>HOME/.kube/configtok <span class="nt">--region</span> ap-tokyo-1 <span class="nt">--token-version</span> 2.0.0  <span class="nt">--kube-endpoint</span> PRIVATE_ENDPOINT
-  </code></pre>
-            </div>
-          </div>
-
-          <blockquote class="alert">
-            <p><strong>NOTE:</strong> You also have to rename the file so it won&rsquo;t overwrite the existing config
-              for the Admin region. In our example above, that would be configsyd, configmum, and configtok.</p>
-          </blockquote>
-        </li>
-        <li>
-          <p>Run the commands to get the managed cluster&rsquo;s respective <code
-              class="language-plaintext highlighter-rouge">kubeconfigs</code>. You should have four <code
-              class="language-plaintext highlighter-rouge">kubeconfigs</code>:</p>
-
-          <div class="language-console highlighter-rouge">
-            <div class="highlight">
-              <pre class="highlight">
-  <code><span class="gp">   $</span><span class="w"> </span><span class="nb">ls</span> <span class="nt">-al</span> .kube  
-  <span class="go">   total 16  
-   drwxrwxr-x. 2 opc opc   71 Nov 10 11:40 .  
-   drwx------. 4 opc opc  159 Nov 10 11:15 ..  
-   -rw--w----. 1 opc opc 2398 Nov 10 11:15 config  
-   -rw-rw-r--. 1 opc opc 2364 Nov 10 11:40 configmum  
-   -rw-rw-r--. 1 opc opc 2364 Nov 10 11:40 configsyd  
-   -rw-rw-r--. 1 opc opc 2362 Nov 10 11:40 configtok
-  </span></code></pre>
-            </div>
-          </div>
-
-          <p>We can check access to the clusters from the Admin operator host:</p>
-
-          <div class="language-console highlighter-rouge">
-            <div class="highlight">
-              <pre class="highlight">
-  <code><span class="gp">   cd .kubefor cluster in config configsyd configmum configtok;</span><span class="w"> </span><span class="k">do</span>  
-  <span class="gp">     KUBECONFIG=$</span>CLUSTER kubectl get nodes  
-  <span class="go">   done
-  </span></code></pre>
-            </div>
-          </div>
-
-          <p>This will return us the list of nodes in each cluster:</p>
-
-          <figure class="aligncenter">
-            <picture>
-              <source
-                srcset="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/Wbt9jmrz8pJxxZliPssYBw.png 1x" />
-              <img alt="List of nodes in each cluster"
-                data-at2x="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/Wbt9jmrz8pJxxZliPssYBw@2x.png"
-                data-original="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/Wbt9jmrz8pJxxZliPssYBw.png"
-                height="310" loading="lazy"
-                src="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/Wbt9jmrz8pJxxZliPssYBw.png"
-                title="List of nodes in each cluster" width="818" />
-            </picture>
-
-            <figcaption>List of nodes in each cluster</figcaption>
-          </figure>
-        </li>
-      </ol>
-
-      <h3 id="rename-cluster-content">Rename cluster content<a class="header-link" href="#rename-cluster-content"
-          title="Permalink"><span class="sr-only">Permalink</span></a></h3>
-
-      <p>Again for convenience, another thing we&rsquo;ll want to do is rename each cluster&rsquo;s context. That way,
-        we&rsquo;ll know which region we&rsquo;re dealing with.</p>
-
-      <p>In this exercise, we want 1 context to equate to a Verrazzano cluster.</p>
-
-      <ol>
-        <li>
-          <p>Let&rsquo;s rename all the <code class="language-plaintext highlighter-rouge">kubeconfig</code> files
-            first:</p>
-
-          <ul>
-            <li>config -&gt; admin</li>
-            <li>configmum -&gt; mumbai</li>
-            <li>configsyd -&gt; sydney</li>
-            <li>configtok -&gt; tokyo</li>
-          </ul>
-        </li>
-        <li>
-          <p>Now, let&rsquo;s rename their respective contexts:</p>
-
-          <div class="language-bash highlighter-rouge">
-            <div class="highlight">
-              <pre class="highlight">
-  <code>   <span class="k">for </span>cluster <span class="k">in </span>admin sydney mumbai tokyo<span class="p">;</span> <span class="k">do  
-     </span><span class="nv">current</span><span class="o">=</span><span class="si">$(</span><span class="nv">KUBECONFIG</span><span class="o">=</span><span class="nv">$cluster</span> kubectl config current-context<span class="si">)</span>  
-     <span class="nv">KUBECONFIG</span><span class="o">=</span><span class="nv">$cluster</span> kubectl config rename-context <span class="nv">$current</span> <span class="nv">$cluster</span>  
-   <span class="k">done</span>
-  </code></pre>
-            </div>
-          </div>
-        </li>
-      </ol>
-
-      <h3 id="merge">Merge<a class="header-link" href="#merge" title="Permalink"><span
-            class="sr-only">Permalink</span></a></h3>
-
-      <p>We&rsquo;re now ready to merge!</p>
-
-      <p>To merge the files, run:</p>
-
-      <div class="language-bash highlighter-rouge">
-        <div class="highlight">
-          <pre class="highlight">
-  <code><span class="nv">KUBECONFIG</span><span class="o">=</span>./admin:./sydney:./mumbai:./tokyo kubectl config view <span class="nt">--flatten</span> <span class="o">&gt;</span> ./config
-  </code></pre>
-        </div>
       </div>
-
-      <h4 id="list-contexts">List contexts<a class="header-link" href="#list-contexts" title="Permalink"><span
-            class="sr-only">Permalink</span></a></h4>
-
-      <p>To get a list of the contexts, run:</p>
-
-      <div class="language-console highlighter-rouge">
-        <div class="highlight">
-          <pre class="highlight">
-  <code><span class="go">kubectl config get-contexts
-  </span></code></pre>
-        </div>
+    </div>
+    <p>In your terraform.tfvars, along with your identity parameters, define your regions:</p>
+    <div class="language-terraform highlighter-rouge">
+      <div class="highlight">
+        <pre class="highlight"><code><span class="nx">verrazzano_regions</span> <span class="err">=</span> <span class="p">{</span>
+  
+  <span class="nx">home</span>  <span class="p">=</span> <span class="s2">"your-tenancy-home-region"</span> <span class="c1">#replace with your tenancy's home region  </span>
+  <span class="nx">admin</span> <span class="p">=</span> <span class="s2">"ap-singapore-1"</span>  
+  <span class="nx">syd</span>   <span class="p">=</span> <span class="s2">"ap-sydney-1"</span>  
+  <span class="nx">mum</span>   <span class="p">=</span> <span class="s2">"ap-mumbai-1"</span>  
+  <span class="nx">tok</span>   <span class="p">=</span> <span class="s2">"ap-tokyo-1"</span>  
+  <span class="p">}</span>
+  </code></pre>
       </div>
-
-      <p>This will return the following:</p>
-
-      <div class="language-console highlighter-rouge">
-        <div class="highlight">
-          <pre class="highlight">
-  <code><span class="go">CURRENT   NAME     CLUSTER               AUTHINFO           NAMESPACE
+    </div>
+    <p>In your provider.tf, define the providers for the different regions using aliases:</p>
+    <div class="language-terraform highlighter-rouge">
+      <div class="highlight">
+        <pre class="highlight"><code><span class="k">provider</span> <span class="s2">"oci"</span> <span class="p">{</span>
+  
+  <span class="nx">fingerprint</span>      <span class="p">=</span> <span class="kd">var</span><span class="p">.</span><span class="nx">api_fingerprint</span>
+  <span class="nx">private_key_path</span> <span class="p">=</span> <span class="kd">var</span><span class="p">.</span><span class="nx">api_private_key_path</span>
+  <span class="nx">region</span>           <span class="p">=</span> <span class="kd">var</span><span class="p">.</span><span class="nx">verrazzano_regions</span><span class="p">[</span><span class="s2">"admin"</span><span class="p">]</span>
+  <span class="nx">tenancy_ocid</span>     <span class="p">=</span> <span class="kd">var</span><span class="p">.</span><span class="nx">tenancy_id</span>
+  <span class="nx">user_ocid</span>        <span class="p">=</span> <span class="kd">var</span><span class="p">.</span><span class="nx">user_id</span>
+  <span class="nx">alias</span>            <span class="p">=</span> <span class="s2">"admin"</span>
+  <span class="p">}</span>
+  
+  <span class="k">provider</span> <span class="s2">"oci"</span> <span class="p">{</span>
+  <span class="nx">fingerprint</span>      <span class="p">=</span> <span class="kd">var</span><span class="p">.</span><span class="nx">api_fingerprint</span>
+  <span class="nx">private_key_path</span> <span class="p">=</span> <span class="kd">var</span><span class="p">.</span><span class="nx">api_private_key_path</span>
+  <span class="nx">region</span>           <span class="p">=</span> <span class="kd">var</span><span class="p">.</span><span class="nx">verrazzano_regions</span><span class="p">[</span><span class="s2">"home"</span><span class="p">]</span>
+  <span class="nx">tenancy_ocid</span>     <span class="p">=</span> <span class="kd">var</span><span class="p">.</span><span class="nx">tenancy_id</span>
+  <span class="nx">user_ocid</span>        <span class="p">=</span> <span class="kd">var</span><span class="p">.</span><span class="nx">user_id</span>
+  <span class="nx">alias</span>            <span class="p">=</span> <span class="s2">"home"</span>
+  <span class="p">}</span>
+  
+  <span class="k">provider</span> <span class="s2">"oci"</span> <span class="p">{</span>
+  <span class="nx">fingerprint</span>      <span class="p">=</span> <span class="kd">var</span><span class="p">.</span><span class="nx">api_fingerprint</span>
+  <span class="nx">private_key_path</span> <span class="p">=</span> <span class="kd">var</span><span class="p">.</span><span class="nx">api_private_key_path</span>
+  <span class="nx">region</span>           <span class="p">=</span> <span class="kd">var</span><span class="p">.</span><span class="nx">verrazzano_regions</span><span class="p">[</span><span class="s2">"syd"</span><span class="p">]</span>
+  <span class="nx">tenancy_ocid</span>     <span class="p">=</span> <span class="kd">var</span><span class="p">.</span><span class="nx">tenancy_id</span>
+  <span class="nx">user_ocid</span>        <span class="p">=</span> <span class="kd">var</span><span class="p">.</span><span class="nx">user_id</span>
+  <span class="nx">alias</span>            <span class="p">=</span> <span class="s2">"syd"</span>
+  <span class="p">}</span>
+  
+  <span class="k">provider</span> <span class="s2">"oci"</span> <span class="p">{</span>
+  <span class="nx">fingerprint</span>      <span class="p">=</span> <span class="kd">var</span><span class="p">.</span><span class="nx">api_fingerprint</span>
+  <span class="nx">private_key_path</span> <span class="p">=</span> <span class="kd">var</span><span class="p">.</span><span class="nx">api_private_key_path</span>
+  <span class="nx">region</span>           <span class="p">=</span> <span class="kd">var</span><span class="p">.</span><span class="nx">verrazzano_regions</span><span class="p">[</span><span class="s2">"mum"</span><span class="p">]</span>
+  <span class="nx">tenancy_ocid</span>     <span class="p">=</span> <span class="kd">var</span><span class="p">.</span><span class="nx">tenancy_id</span>
+  <span class="nx">user_ocid</span>        <span class="p">=</span> <span class="kd">var</span><span class="p">.</span><span class="nx">user_id</span>
+  <span class="nx">alias</span>            <span class="p">=</span> <span class="s2">"mum"</span>
+  <span class="p">}</span>
+  
+  <span class="k">provider</span> <span class="s2">"oci"</span> <span class="p">{</span>
+  <span class="nx">fingerprint</span>      <span class="p">=</span> <span class="kd">var</span><span class="p">.</span><span class="nx">api_fingerprint</span>
+  <span class="nx">private_key_path</span> <span class="p">=</span> <span class="kd">var</span><span class="p">.</span><span class="nx">api_private_key_path</span>
+  <span class="nx">region</span>           <span class="p">=</span> <span class="kd">var</span><span class="p">.</span><span class="nx">verrazzano_regions</span><span class="p">[</span><span class="s2">"tok"</span><span class="p">]</span>
+  <span class="nx">tenancy_ocid</span>     <span class="p">=</span> <span class="kd">var</span><span class="p">.</span><span class="nx">tenancy_id</span>
+  <span class="nx">user_ocid</span>        <span class="p">=</span> <span class="kd">var</span><span class="p">.</span><span class="nx">user_id</span>
+  <span class="nx">alias</span>            <span class="p">=</span> <span class="s2">"tok"</span>
+  <span class="p">}</span>
+  </code></pre>
+      </div>
+    </div>
+    <p>Finally, in your main.tf, create the different clusters (note that some of the parameters
+      here have the same values, and you could use the default ones, but I wanted to show it was
+      possible to configure these by regions too):</p>
+    <div class="language-terraform highlighter-rouge">
+      <div class="highlight">
+        <pre class="highlight"><code><span class="k">module</span> <span class="s2">"vadmin"</span> <span class="p">{</span>
+  
+  <span class="nx">source</span>  <span class="p">=</span> <span class="s2">"oracle-terraform-modules/oke/oci"</span>
+  <span class="nx">version</span> <span class="p">=</span> <span class="s2">"4.0.1"</span>
+  
+  <span class="nx">home_region</span> <span class="p">=</span> <span class="kd">var</span><span class="p">.</span><span class="nx">verrazzano_regions</span><span class="p">[</span><span class="s2">"home"</span><span class="p">]</span>
+  <span class="nx">region</span>      <span class="p">=</span> <span class="kd">var</span><span class="p">.</span><span class="nx">verrazzano_regions</span><span class="p">[</span><span class="s2">"admin"</span><span class="p">]</span>
+  
+  <span class="nx">tenancy_id</span> <span class="p">=</span> <span class="kd">var</span><span class="p">.</span><span class="nx">tenancy_id</span>
+  
+  <span class="c1"># general oci parameters</span>
+  <span class="nx">compartment_id</span> <span class="p">=</span> <span class="kd">var</span><span class="p">.</span><span class="nx">compartment_id</span>
+  <span class="nx">label_prefix</span>   <span class="p">=</span> <span class="s2">"v8o"</span>
+  
+  <span class="c1"># ssh keys</span>
+  <span class="nx">ssh_private_key_path</span> <span class="p">=</span> <span class="s2">"~/.ssh/id_rsa"</span>
+  <span class="nx">ssh_public_key_path</span>  <span class="p">=</span> <span class="s2">"~/.ssh/id_rsa.pub"</span>
+  
+  <span class="c1"># networking</span>
+  <span class="nx">create_drg</span>                   <span class="p">=</span> <span class="kc">true</span>
+  <span class="nx">internet_gateway_route_rules</span> <span class="p">=</span> <span class="p">[]</span>
+  <span class="nx">nat_gateway_route_rules</span> <span class="p">=</span> <span class="p">[</span>
+  <span class="p">{</span>
+    <span class="nx">destination</span>       <span class="p">=</span> <span class="s2">"10.1.0.0/16"</span>
+    <span class="nx">destination_type</span>  <span class="p">=</span> <span class="s2">"CIDR_BLOCK"</span>
+    <span class="nx">network_entity_id</span> <span class="p">=</span> <span class="s2">"drg"</span>
+    <span class="nx">description</span>       <span class="p">=</span> <span class="s2">"To Sydney"</span>
+  <span class="p">},</span>
+  <span class="p">{</span>
+    <span class="nx">destination</span>       <span class="p">=</span> <span class="s2">"10.2.0.0/16"</span>
+    <span class="nx">destination_type</span>  <span class="p">=</span> <span class="s2">"CIDR_BLOCK"</span>
+    <span class="nx">network_entity_id</span> <span class="p">=</span> <span class="s2">"drg"</span>
+    <span class="nx">description</span>       <span class="p">=</span> <span class="s2">"To Mumbai"</span>
+  <span class="p">},</span>
+  <span class="p">{</span>
+    <span class="nx">destination</span>       <span class="p">=</span> <span class="s2">"10.3.0.0/16"</span>
+    <span class="nx">destination_type</span>  <span class="p">=</span> <span class="s2">"CIDR_BLOCK"</span>
+    <span class="nx">network_entity_id</span> <span class="p">=</span> <span class="s2">"drg"</span>
+    <span class="nx">description</span>       <span class="p">=</span> <span class="s2">"To Tokyo"</span>
+  <span class="p">},</span>
+  <span class="p">]</span>
+  
+  <span class="nx">vcn_cidrs</span>     <span class="p">=</span> <span class="p">[</span><span class="s2">"10.0.0.0/16"</span><span class="p">]</span>
+  <span class="nx">vcn_dns_label</span> <span class="p">=</span> <span class="s2">"admin"</span>
+  <span class="nx">vcn_name</span>      <span class="p">=</span> <span class="s2">"admin"</span>
+  
+  <span class="c1"># bastion host</span>
+  <span class="nx">create_bastion_host</span> <span class="p">=</span> <span class="kc">true</span>
+  <span class="nx">upgrade_bastion</span>     <span class="p">=</span> <span class="kc">false</span>
+  
+  <span class="c1"># operator host</span>
+  <span class="nx">create_operator</span>                    <span class="p">=</span> <span class="kc">true</span>
+  <span class="nx">enable_operator_instance_principal</span> <span class="p">=</span> <span class="kc">true</span>
+  <span class="nx">upgrade_operator</span>                   <span class="p">=</span> <span class="kc">false</span>
+  
+  <span class="c1"># oke cluster options</span>
+  <span class="nx">cluster_name</span>                <span class="p">=</span> <span class="s2">"admin"</span>
+  <span class="nx">control_plane_type</span>          <span class="p">=</span> <span class="s2">"private"</span>
+  <span class="nx">control_plane_allowed_cidrs</span> <span class="p">=</span> <span class="p">[</span><span class="s2">"0.0.0.0/0"</span><span class="p">]</span>
+  <span class="nx">kubernetes_version</span>          <span class="p">=</span> <span class="s2">"v1.20.11"</span>
+  <span class="nx">pods_cidr</span>                   <span class="p">=</span> <span class="s2">"10.244.0.0/16"</span>
+  <span class="nx">services_cidr</span>               <span class="p">=</span> <span class="s2">"10.96.0.0/16"</span>
+  
+  <span class="c1"># node pools</span>
+  <span class="nx">node_pools</span> <span class="p">=</span> <span class="p">{</span>
+  <span class="nx">np1</span> <span class="p">=</span> <span class="p">{</span> <span class="nx">shape</span> <span class="p">=</span> <span class="s2">"VM.Standard.E4.Flex"</span><span class="p">,</span> <span class="nx">ocpus</span> <span class="p">=</span> <span class="mi">2</span><span class="p">,</span> <span class="nx">memory</span> <span class="p">=</span> <span class="mi">32</span><span class="p">,</span> <span class="nx">node_pool_size</span> <span class="p">=</span> <span class="mi">2</span><span class="p">,</span> <span class="nx">boot_volume_size</span> <span class="p">=</span> <span class="mi">150</span><span class="p">,</span> <span class="nx">label</span> <span class="p">=</span> <span class="p">{</span> <span class="nx">app</span> <span class="p">=</span> <span class="s2">"frontend"</span><span class="p">,</span> <span class="nx">pool</span> <span class="p">=</span> <span class="s2">"np1"</span> <span class="p">}</span> <span class="p">}</span>
+  <span class="p">}</span>
+  <span class="nx">node_pool_name_prefix</span> <span class="p">=</span> <span class="s2">"np-admin"</span>
+  
+  <span class="c1"># oke load balancers</span>
+  <span class="nx">load_balancers</span>          <span class="p">=</span> <span class="s2">"both"</span>
+  <span class="nx">preferred_load_balancer</span> <span class="p">=</span> <span class="s2">"public"</span>
+  <span class="nx">public_lb_allowed_cidrs</span> <span class="p">=</span> <span class="p">[</span><span class="s2">"0.0.0.0/0"</span><span class="p">]</span>
+  <span class="nx">public_lb_allowed_ports</span> <span class="p">=</span> <span class="p">[</span><span class="mi">80</span><span class="p">,</span> <span class="mi">443</span><span class="p">]</span>
+  
+  <span class="c1"># freeform_tags</span>
+  <span class="nx">freeform_tags</span> <span class="p">=</span> <span class="p">{</span>
+  <span class="nx">vcn</span> <span class="p">=</span> <span class="p">{</span>
+    <span class="nx">verrazzano</span> <span class="p">=</span> <span class="s2">"admin"</span>
+  <span class="p">}</span>
+  <span class="nx">bastion</span> <span class="p">=</span> <span class="p">{</span>
+    <span class="nx">access</span>     <span class="p">=</span> <span class="s2">"public"</span><span class="p">,</span>
+    <span class="nx">role</span>       <span class="p">=</span> <span class="s2">"bastion"</span><span class="p">,</span>
+    <span class="nx">security</span>   <span class="p">=</span> <span class="s2">"high"</span>
+    <span class="nx">verrazzano</span> <span class="p">=</span> <span class="s2">"admin"</span>
+  <span class="p">}</span>
+  <span class="nx">operator</span> <span class="p">=</span> <span class="p">{</span>
+    <span class="nx">access</span>     <span class="p">=</span> <span class="s2">"restricted"</span><span class="p">,</span>
+    <span class="nx">role</span>       <span class="p">=</span> <span class="s2">"operator"</span><span class="p">,</span>
+    <span class="nx">security</span>   <span class="p">=</span> <span class="s2">"high"</span>
+    <span class="nx">verrazzano</span> <span class="p">=</span> <span class="s2">"admin"</span>
+  <span class="p">}</span>
+  <span class="p">}</span>
+  
+  <span class="nx">providers</span> <span class="p">=</span> <span class="p">{</span>
+  <span class="nx">oci</span>      <span class="p">=</span> <span class="nx">oci</span><span class="p">.</span><span class="nx">admin</span>
+  <span class="nx">oci</span><span class="p">.</span><span class="nx">home</span> <span class="p">=</span> <span class="nx">oci</span><span class="p">.</span><span class="nx">home</span>
+  <span class="p">}</span>
+  <span class="p">}</span>
+  
+  <span class="k">module</span> <span class="s2">"vsyd"</span> <span class="p">{</span>
+  <span class="nx">source</span>  <span class="p">=</span> <span class="s2">"oracle-terraform-modules/oke/oci"</span>
+  <span class="nx">version</span> <span class="p">=</span> <span class="s2">"4.0.1"</span>
+  
+  <span class="nx">home_region</span> <span class="p">=</span> <span class="kd">var</span><span class="p">.</span><span class="nx">verrazzano_regions</span><span class="p">[</span><span class="s2">"home"</span><span class="p">]</span>
+  <span class="nx">region</span>      <span class="p">=</span> <span class="kd">var</span><span class="p">.</span><span class="nx">verrazzano_regions</span><span class="p">[</span><span class="s2">"syd"</span><span class="p">]</span>
+  
+  <span class="nx">tenancy_id</span> <span class="p">=</span> <span class="kd">var</span><span class="p">.</span><span class="nx">tenancy_id</span>
+  
+  <span class="c1"># general oci parameters</span>
+  <span class="nx">compartment_id</span> <span class="p">=</span> <span class="kd">var</span><span class="p">.</span><span class="nx">compartment_id</span>
+  <span class="nx">label_prefix</span>   <span class="p">=</span> <span class="s2">"v8o"</span>
+  
+  <span class="c1"># ssh keys</span>
+  <span class="nx">ssh_private_key_path</span> <span class="p">=</span> <span class="s2">"~/.ssh/id_rsa"</span>
+  <span class="nx">ssh_public_key_path</span>  <span class="p">=</span> <span class="s2">"~/.ssh/id_rsa.pub"</span>
+  
+  <span class="c1"># networking</span>
+  <span class="nx">create_drg</span>                   <span class="p">=</span> <span class="kc">true</span>
+  <span class="nx">internet_gateway_route_rules</span> <span class="p">=</span> <span class="p">[]</span>
+  <span class="nx">nat_gateway_route_rules</span> <span class="p">=</span> <span class="p">[</span>
+  <span class="p">{</span>
+    <span class="nx">destination</span>       <span class="p">=</span> <span class="s2">"10.0.0.0/16"</span>
+    <span class="nx">destination_type</span>  <span class="p">=</span> <span class="s2">"CIDR_BLOCK"</span>
+    <span class="nx">network_entity_id</span> <span class="p">=</span> <span class="s2">"drg"</span>
+    <span class="nx">description</span>       <span class="p">=</span> <span class="s2">"To Admin"</span>
+  <span class="p">}</span>
+  <span class="p">]</span>
+  
+  <span class="nx">vcn_cidrs</span>     <span class="p">=</span> <span class="p">[</span><span class="s2">"10.1.0.0/16"</span><span class="p">]</span>
+  <span class="nx">vcn_dns_label</span> <span class="p">=</span> <span class="s2">"syd"</span>
+  <span class="nx">vcn_name</span>      <span class="p">=</span> <span class="s2">"syd"</span>
+  
+  <span class="c1"># bastion host</span>
+  <span class="nx">create_bastion_host</span> <span class="p">=</span> <span class="kc">false</span>
+  <span class="nx">upgrade_bastion</span>     <span class="p">=</span> <span class="kc">false</span>
+  
+  <span class="c1"># operator host</span>
+  <span class="nx">create_operator</span>                    <span class="p">=</span> <span class="kc">false</span>
+  <span class="nx">enable_operator_instance_principal</span> <span class="p">=</span> <span class="kc">true</span>
+  <span class="nx">upgrade_operator</span>                   <span class="p">=</span> <span class="kc">false</span>
+  
+  <span class="c1"># oke cluster options</span>
+  <span class="nx">cluster_name</span>                <span class="p">=</span> <span class="s2">"syd"</span>
+  <span class="nx">control_plane_type</span>          <span class="p">=</span> <span class="s2">"private"</span>
+  <span class="nx">control_plane_allowed_cidrs</span> <span class="p">=</span> <span class="p">[</span><span class="s2">"0.0.0.0/0"</span><span class="p">]</span>
+  <span class="nx">kubernetes_version</span>          <span class="p">=</span> <span class="s2">"v1.20.11"</span>
+  <span class="nx">pods_cidr</span>                   <span class="p">=</span> <span class="s2">"10.245.0.0/16"</span>
+  <span class="nx">services_cidr</span>               <span class="p">=</span> <span class="s2">"10.97.0.0/16"</span>
+  
+  <span class="c1"># node pools</span>
+  <span class="nx">node_pools</span> <span class="p">=</span> <span class="p">{</span>
+  <span class="nx">np1</span> <span class="p">=</span> <span class="p">{</span> <span class="nx">shape</span> <span class="p">=</span> <span class="s2">"VM.Standard.E4.Flex"</span><span class="p">,</span> <span class="nx">ocpus</span> <span class="p">=</span> <span class="mi">2</span><span class="p">,</span> <span class="nx">memory</span> <span class="p">=</span> <span class="mi">32</span><span class="p">,</span> <span class="nx">node_pool_size</span> <span class="p">=</span> <span class="mi">2</span><span class="p">,</span> <span class="nx">boot_volume_size</span> <span class="p">=</span> <span class="mi">150</span> <span class="p">}</span>
+  <span class="p">}</span>
+  
+  <span class="c1"># oke load balancers</span>
+  <span class="nx">load_balancers</span>          <span class="p">=</span> <span class="s2">"both"</span>
+  <span class="nx">preferred_load_balancer</span> <span class="p">=</span> <span class="s2">"public"</span>
+  <span class="nx">public_lb_allowed_cidrs</span> <span class="p">=</span> <span class="p">[</span><span class="s2">"0.0.0.0/0"</span><span class="p">]</span>
+  <span class="nx">public_lb_allowed_ports</span> <span class="p">=</span> <span class="p">[</span><span class="mi">80</span><span class="p">,</span> <span class="mi">443</span><span class="p">]</span>
+  
+  <span class="c1"># freeform_tags</span>
+  <span class="nx">freeform_tags</span> <span class="p">=</span> <span class="p">{</span>
+  <span class="nx">vcn</span> <span class="p">=</span> <span class="p">{</span>
+    <span class="nx">verrazzano</span> <span class="p">=</span> <span class="s2">"syd"</span>
+  <span class="p">}</span>
+  <span class="nx">bastion</span> <span class="p">=</span> <span class="p">{</span>
+    <span class="nx">access</span>     <span class="p">=</span> <span class="s2">"public"</span><span class="p">,</span>
+    <span class="nx">role</span>       <span class="p">=</span> <span class="s2">"bastion"</span><span class="p">,</span>
+    <span class="nx">security</span>   <span class="p">=</span> <span class="s2">"high"</span>
+    <span class="nx">verrazzano</span> <span class="p">=</span> <span class="s2">"syd"</span>
+  <span class="p">}</span>
+  <span class="nx">operator</span> <span class="p">=</span> <span class="p">{</span>
+    <span class="nx">access</span>     <span class="p">=</span> <span class="s2">"restricted"</span><span class="p">,</span>
+    <span class="nx">role</span>       <span class="p">=</span> <span class="s2">"operator"</span><span class="p">,</span>
+    <span class="nx">security</span>   <span class="p">=</span> <span class="s2">"high"</span>
+    <span class="nx">verrazzano</span> <span class="p">=</span> <span class="s2">"syd"</span>
+  <span class="p">}</span>
+  <span class="p">}</span>
+  
+  <span class="nx">providers</span> <span class="p">=</span> <span class="p">{</span>
+  <span class="nx">oci</span>      <span class="p">=</span> <span class="nx">oci</span><span class="p">.</span><span class="nx">syd</span>
+  <span class="nx">oci</span><span class="p">.</span><span class="nx">home</span> <span class="p">=</span> <span class="nx">oci</span><span class="p">.</span><span class="nx">home</span>
+  <span class="p">}</span>
+  <span class="p">}</span>
+  
+  <span class="k">module</span> <span class="s2">"vmum"</span> <span class="p">{</span>
+  <span class="nx">source</span>  <span class="p">=</span> <span class="s2">"oracle-terraform-modules/oke/oci"</span>
+  <span class="nx">version</span> <span class="p">=</span> <span class="s2">"4.0.1"</span>
+  
+  <span class="nx">home_region</span> <span class="p">=</span> <span class="kd">var</span><span class="p">.</span><span class="nx">verrazzano_regions</span><span class="p">[</span><span class="s2">"home"</span><span class="p">]</span>
+  <span class="nx">region</span>      <span class="p">=</span> <span class="kd">var</span><span class="p">.</span><span class="nx">verrazzano_regions</span><span class="p">[</span><span class="s2">"mum"</span><span class="p">]</span>
+  
+  <span class="nx">tenancy_id</span> <span class="p">=</span> <span class="kd">var</span><span class="p">.</span><span class="nx">tenancy_id</span>
+  
+  <span class="c1"># general oci parameters</span>
+  <span class="nx">compartment_id</span> <span class="p">=</span> <span class="kd">var</span><span class="p">.</span><span class="nx">compartment_id</span>
+  <span class="nx">label_prefix</span>   <span class="p">=</span> <span class="s2">"v8o"</span>
+  
+  <span class="c1"># ssh keys</span>
+  <span class="nx">ssh_private_key_path</span> <span class="p">=</span> <span class="s2">"~/.ssh/id_rsa"</span>
+  <span class="nx">ssh_public_key_path</span>  <span class="p">=</span> <span class="s2">"~/.ssh/id_rsa.pub"</span>
+  
+  <span class="c1"># networking</span>
+  <span class="nx">create_drg</span>                   <span class="p">=</span> <span class="kc">true</span>
+  <span class="nx">internet_gateway_route_rules</span> <span class="p">=</span> <span class="p">[]</span>
+  <span class="nx">nat_gateway_route_rules</span> <span class="p">=</span> <span class="p">[</span>
+  <span class="p">{</span>
+    <span class="nx">destination</span>       <span class="p">=</span> <span class="s2">"10.0.0.0/16"</span>
+    <span class="nx">destination_type</span>  <span class="p">=</span> <span class="s2">"CIDR_BLOCK"</span>
+    <span class="nx">network_entity_id</span> <span class="p">=</span> <span class="s2">"drg"</span>
+    <span class="nx">description</span>       <span class="p">=</span> <span class="s2">"To Admin"</span>
+  <span class="p">}</span>
+  <span class="p">]</span>
+  
+  <span class="nx">vcn_cidrs</span>     <span class="p">=</span> <span class="p">[</span><span class="s2">"10.2.0.0/16"</span><span class="p">]</span>
+  <span class="nx">vcn_dns_label</span> <span class="p">=</span> <span class="s2">"mum"</span>
+  <span class="nx">vcn_name</span>      <span class="p">=</span> <span class="s2">"mum"</span>
+  
+  <span class="c1"># bastion host</span>
+  <span class="nx">create_bastion_host</span> <span class="p">=</span> <span class="kc">false</span>
+  <span class="nx">upgrade_bastion</span>     <span class="p">=</span> <span class="kc">false</span>
+  
+  <span class="c1"># operator host</span>
+  <span class="nx">create_operator</span>                    <span class="p">=</span> <span class="kc">false</span>
+  <span class="nx">enable_operator_instance_principal</span> <span class="p">=</span> <span class="kc">true</span>
+  <span class="nx">upgrade_operator</span>                   <span class="p">=</span> <span class="kc">false</span>
+  
+  <span class="c1"># oke cluster options</span>
+  <span class="nx">cluster_name</span>                <span class="p">=</span> <span class="s2">"mum"</span>
+  <span class="nx">control_plane_type</span>          <span class="p">=</span> <span class="s2">"private"</span>
+  <span class="nx">control_plane_allowed_cidrs</span> <span class="p">=</span> <span class="p">[</span><span class="s2">"0.0.0.0/0"</span><span class="p">]</span>
+  <span class="nx">kubernetes_version</span>          <span class="p">=</span> <span class="s2">"v1.20.11"</span>
+  <span class="nx">pods_cidr</span>                   <span class="p">=</span> <span class="s2">"10.246.0.0/16"</span>
+  <span class="nx">services_cidr</span>               <span class="p">=</span> <span class="s2">"10.98.0.0/16"</span>
+  
+  <span class="c1"># node pools</span>
+  <span class="nx">node_pools</span> <span class="p">=</span> <span class="p">{</span>
+  <span class="nx">np1</span> <span class="p">=</span> <span class="p">{</span> <span class="nx">shape</span> <span class="p">=</span> <span class="s2">"VM.Standard.E4.Flex"</span><span class="p">,</span> <span class="nx">ocpus</span> <span class="p">=</span> <span class="mi">2</span><span class="p">,</span> <span class="nx">memory</span> <span class="p">=</span> <span class="mi">32</span><span class="p">,</span> <span class="nx">node_pool_size</span> <span class="p">=</span> <span class="mi">2</span><span class="p">,</span> <span class="nx">boot_volume_size</span> <span class="p">=</span> <span class="mi">150</span> <span class="p">}</span>
+  <span class="p">}</span>
+  
+  <span class="c1"># oke load balancers</span>
+  <span class="nx">load_balancers</span>          <span class="p">=</span> <span class="s2">"both"</span>
+  <span class="nx">preferred_load_balancer</span> <span class="p">=</span> <span class="s2">"public"</span>
+  <span class="nx">public_lb_allowed_cidrs</span> <span class="p">=</span> <span class="p">[</span><span class="s2">"0.0.0.0/0"</span><span class="p">]</span>
+  <span class="nx">public_lb_allowed_ports</span> <span class="p">=</span> <span class="p">[</span><span class="mi">80</span><span class="p">,</span> <span class="mi">443</span><span class="p">]</span>
+  
+  <span class="c1"># freeform_tags</span>
+  <span class="nx">freeform_tags</span> <span class="p">=</span> <span class="p">{</span>
+  <span class="nx">vcn</span> <span class="p">=</span> <span class="p">{</span>
+    <span class="nx">verrazzano</span> <span class="p">=</span> <span class="s2">"mum"</span>
+  <span class="p">}</span>
+  <span class="nx">bastion</span> <span class="p">=</span> <span class="p">{</span>
+    <span class="nx">access</span>     <span class="p">=</span> <span class="s2">"public"</span><span class="p">,</span>
+    <span class="nx">role</span>       <span class="p">=</span> <span class="s2">"bastion"</span><span class="p">,</span>
+    <span class="nx">security</span>   <span class="p">=</span> <span class="s2">"high"</span>
+    <span class="nx">verrazzano</span> <span class="p">=</span> <span class="s2">"mum"</span>
+  <span class="p">}</span>
+  <span class="nx">operator</span> <span class="p">=</span> <span class="p">{</span>
+    <span class="nx">access</span>     <span class="p">=</span> <span class="s2">"restricted"</span><span class="p">,</span>
+    <span class="nx">role</span>       <span class="p">=</span> <span class="s2">"operator"</span><span class="p">,</span>
+    <span class="nx">security</span>   <span class="p">=</span> <span class="s2">"high"</span>
+    <span class="nx">verrazzano</span> <span class="p">=</span> <span class="s2">"mum"</span>
+  <span class="p">}</span>
+  <span class="p">}</span>
+  
+  <span class="nx">providers</span> <span class="p">=</span> <span class="p">{</span>
+  <span class="nx">oci</span>      <span class="p">=</span> <span class="nx">oci</span><span class="p">.</span><span class="nx">mum</span>
+  <span class="nx">oci</span><span class="p">.</span><span class="nx">home</span> <span class="p">=</span> <span class="nx">oci</span><span class="p">.</span><span class="nx">home</span>
+  <span class="p">}</span>
+  <span class="p">}</span>
+  
+  <span class="k">module</span> <span class="s2">"vtok"</span> <span class="p">{</span>
+  <span class="nx">source</span>  <span class="p">=</span> <span class="s2">"oracle-terraform-modules/oke/oci"</span>
+  <span class="nx">version</span> <span class="p">=</span> <span class="s2">"4.0.1"</span>
+  
+  <span class="nx">home_region</span> <span class="p">=</span> <span class="kd">var</span><span class="p">.</span><span class="nx">verrazzano_regions</span><span class="p">[</span><span class="s2">"home"</span><span class="p">]</span>
+  <span class="nx">region</span>      <span class="p">=</span> <span class="kd">var</span><span class="p">.</span><span class="nx">verrazzano_regions</span><span class="p">[</span><span class="s2">"tok"</span><span class="p">]</span>
+  
+  <span class="nx">tenancy_id</span> <span class="p">=</span> <span class="kd">var</span><span class="p">.</span><span class="nx">tenancy_id</span>
+  
+  <span class="c1"># general oci parameters</span>
+  <span class="nx">compartment_id</span> <span class="p">=</span> <span class="kd">var</span><span class="p">.</span><span class="nx">compartment_id</span>
+  <span class="nx">label_prefix</span>   <span class="p">=</span> <span class="s2">"v8o"</span>
+  
+  <span class="c1"># ssh keys</span>
+  <span class="nx">ssh_private_key_path</span> <span class="p">=</span> <span class="s2">"~/.ssh/id_rsa"</span>
+  <span class="nx">ssh_public_key_path</span>  <span class="p">=</span> <span class="s2">"~/.ssh/id_rsa.pub"</span>
+  
+  <span class="c1"># networking</span>
+  <span class="nx">create_drg</span>                   <span class="p">=</span> <span class="kc">true</span>
+  <span class="nx">internet_gateway_route_rules</span> <span class="p">=</span> <span class="p">[]</span>
+  <span class="nx">nat_gateway_route_rules</span> <span class="p">=</span> <span class="p">[</span>
+  <span class="p">{</span>
+    <span class="nx">destination</span>       <span class="p">=</span> <span class="s2">"10.0.0.0/16"</span>
+    <span class="nx">destination_type</span>  <span class="p">=</span> <span class="s2">"CIDR_BLOCK"</span>
+    <span class="nx">network_entity_id</span> <span class="p">=</span> <span class="s2">"drg"</span>
+    <span class="nx">description</span>       <span class="p">=</span> <span class="s2">"To Admin"</span>
+  <span class="p">}</span>
+  <span class="p">]</span>
+  
+  <span class="nx">vcn_cidrs</span>     <span class="p">=</span> <span class="p">[</span><span class="s2">"10.3.0.0/16"</span><span class="p">]</span>
+  <span class="nx">vcn_dns_label</span> <span class="p">=</span> <span class="s2">"tok"</span>
+  <span class="nx">vcn_name</span>      <span class="p">=</span> <span class="s2">"tok"</span>
+  
+  <span class="c1"># bastion host</span>
+  <span class="nx">create_bastion_host</span> <span class="p">=</span> <span class="kc">false</span>
+  <span class="nx">upgrade_bastion</span>     <span class="p">=</span> <span class="kc">false</span>
+  
+  <span class="c1"># operator host</span>
+  <span class="nx">create_operator</span>                    <span class="p">=</span> <span class="kc">false</span>
+  <span class="nx">enable_operator_instance_principal</span> <span class="p">=</span> <span class="kc">true</span>
+  <span class="nx">upgrade_operator</span>                   <span class="p">=</span> <span class="kc">false</span>
+  
+  <span class="c1"># oke cluster options</span>
+  <span class="nx">cluster_name</span>                <span class="p">=</span> <span class="s2">"tok"</span>
+  <span class="nx">control_plane_type</span>          <span class="p">=</span> <span class="s2">"private"</span>
+  <span class="nx">control_plane_allowed_cidrs</span> <span class="p">=</span> <span class="p">[</span><span class="s2">"0.0.0.0/0"</span><span class="p">]</span>
+  <span class="nx">kubernetes_version</span>          <span class="p">=</span> <span class="s2">"v1.20.11"</span>
+  <span class="nx">pods_cidr</span>                   <span class="p">=</span> <span class="s2">"10.247.0.0/16"</span>
+  <span class="nx">services_cidr</span>               <span class="p">=</span> <span class="s2">"10.99.0.0/16"</span>
+  
+  <span class="c1"># node pools</span>
+  <span class="nx">node_pools</span> <span class="p">=</span> <span class="p">{</span>
+  <span class="nx">np1</span> <span class="p">=</span> <span class="p">{</span> <span class="nx">shape</span> <span class="p">=</span> <span class="s2">"VM.Standard.E4.Flex"</span><span class="p">,</span> <span class="nx">ocpus</span> <span class="p">=</span> <span class="mi">2</span><span class="p">,</span> <span class="nx">memory</span> <span class="p">=</span> <span class="mi">32</span><span class="p">,</span> <span class="nx">node_pool_size</span> <span class="p">=</span> <span class="mi">2</span><span class="p">,</span> <span class="nx">boot_volume_size</span> <span class="p">=</span> <span class="mi">150</span> <span class="p">}</span>
+  <span class="p">}</span>
+  
+  <span class="c1"># oke load balancers</span>
+  <span class="nx">load_balancers</span>          <span class="p">=</span> <span class="s2">"both"</span>
+  <span class="nx">preferred_load_balancer</span> <span class="p">=</span> <span class="s2">"public"</span>
+  <span class="nx">public_lb_allowed_cidrs</span> <span class="p">=</span> <span class="p">[</span><span class="s2">"0.0.0.0/0"</span><span class="p">]</span>
+  <span class="nx">public_lb_allowed_ports</span> <span class="p">=</span> <span class="p">[</span><span class="mi">80</span><span class="p">,</span> <span class="mi">443</span><span class="p">]</span>
+  
+  <span class="c1"># freeform_tags</span>
+  <span class="nx">freeform_tags</span> <span class="p">=</span> <span class="p">{</span>
+  <span class="nx">vcn</span> <span class="p">=</span> <span class="p">{</span>
+    <span class="nx">verrazzano</span> <span class="p">=</span> <span class="s2">"tok"</span>
+  <span class="p">}</span>
+  <span class="nx">bastion</span> <span class="p">=</span> <span class="p">{</span>
+    <span class="nx">access</span>     <span class="p">=</span> <span class="s2">"public"</span><span class="p">,</span>
+    <span class="nx">role</span>       <span class="p">=</span> <span class="s2">"bastion"</span><span class="p">,</span>
+    <span class="nx">security</span>   <span class="p">=</span> <span class="s2">"high"</span>
+    <span class="nx">verrazzano</span> <span class="p">=</span> <span class="s2">"tok"</span>
+  <span class="p">}</span>
+  <span class="nx">operator</span> <span class="p">=</span> <span class="p">{</span>
+    <span class="nx">access</span>     <span class="p">=</span> <span class="s2">"restricted"</span><span class="p">,</span>
+    <span class="nx">role</span>       <span class="p">=</span> <span class="s2">"operator"</span><span class="p">,</span>
+    <span class="nx">security</span>   <span class="p">=</span> <span class="s2">"high"</span>
+    <span class="nx">verrazzano</span> <span class="p">=</span> <span class="s2">"tok"</span>
+  <span class="p">}</span>
+  <span class="p">}</span>
+  
+  <span class="nx">providers</span> <span class="p">=</span> <span class="p">{</span>
+  <span class="nx">oci</span>      <span class="p">=</span> <span class="nx">oci</span><span class="p">.</span><span class="nx">tok</span>
+  <span class="nx">oci</span><span class="p">.</span><span class="nx">home</span> <span class="p">=</span> <span class="nx">oci</span><span class="p">.</span><span class="nx">home</span>
+  <span class="p">}</span>
+  <span class="p">}</span>
+  </code></pre>
+      </div>
+    </div>
+    <p>For convenience, let’s print out the operator host in each region:</p>
+    <div class="language-terraform highlighter-rouge">
+      <div class="highlight">
+        <pre class="highlight"><code><span class="k">output</span> <span class="s2">"ssh_to_admin_operator"</span> <span class="p">{</span>
+  
+  <span class="nx">description</span> <span class="p">=</span> <span class="s2">"convenient command to ssh to the Admin operator host"</span>
+  <span class="nx">value</span>       <span class="p">=</span> <span class="k">module</span><span class="p">.</span><span class="nx">vadmin</span><span class="p">.</span><span class="nx">ssh_to_operator</span>
+  <span class="p">}</span>
+  
+  <span class="k">output</span> <span class="s2">"ssh_to_au_operator"</span> <span class="p">{</span>
+  <span class="nx">description</span> <span class="p">=</span> <span class="s2">"convenient command to ssh to the Sydney operator host"</span>
+  <span class="nx">value</span>       <span class="p">=</span> <span class="k">module</span><span class="p">.</span><span class="nx">vsyd</span><span class="p">.</span><span class="nx">ssh_to_operator</span>
+  <span class="p">}</span>
+  
+  <span class="k">output</span> <span class="s2">"ssh_to_in_operator"</span> <span class="p">{</span>
+  <span class="nx">description</span> <span class="p">=</span> <span class="s2">"convenient command to ssh to the Mumbai operator host"</span>
+  <span class="nx">value</span>       <span class="p">=</span> <span class="k">module</span><span class="p">.</span><span class="nx">vmum</span><span class="p">.</span><span class="nx">ssh_to_operator</span>
+  <span class="p">}</span>
+  
+  <span class="k">output</span> <span class="s2">"ssh_to_jp_operator"</span> <span class="p">{</span>
+  <span class="nx">description</span> <span class="p">=</span> <span class="s2">"convenient command to ssh to the Tokyo operator host"</span>
+  <span class="nx">value</span>       <span class="p">=</span> <span class="k">module</span><span class="p">.</span><span class="nx">vtok</span><span class="p">.</span><span class="nx">ssh_to_operator</span>
+  <span class="p">}</span>
+  </code></pre>
+      </div>
+    </div>
+    <p>Run terraform init, plan and the plan should indicate the following:</p>
+    <div class="language-console highlighter-rouge">
+      <div class="highlight">
+        <pre class="highlight"><code><span class="go">Plan: 292 to add, 0 to change, 0 to destroy.Changes to Outputs:
+  
+  + ssh_to_admin_operator = (known after apply)  
+  + ssh_to_au_operator    = "ssh -i ~/.ssh/id_rsa -J opc@ opc@"  
+  + ssh_to_in_operator    = "ssh -i ~/.ssh/id_rsa -J opc@ opc@"  
+  + ssh_to_jp_operator    = "ssh -i ~/.ssh/id_rsa -J opc@ opc@"
+  </span></code></pre>
+      </div>
+    </div>
+    <p>Run terraform apply and relax, because soon after you should see the following:</p>
+    <figure class="aligncenter">
+      <picture>
+        <source
+          srcset="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/Eeiu_1isUl47wVZAAd1eoA.png 1x">
+        <img loading="lazy" width="975" height="88"
+          src="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/Eeiu_1isUl47wVZAAd1eoA.png"
+          data-original="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/Eeiu_1isUl47wVZAAd1eoA.png"
+          data-at2x="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/Eeiu_1isUl47wVZAAd1eoA@2x.png"
+          title="Simultaneous creation of 4 OKE clusters in different regions"
+          alt="Simultaneous creation of 4 OKE clusters in different regions">
+      </picture>
+      <figcaption>Simultaneous creation of 4 OKE clusters in different regions</figcaption>
+    </figure>
+    <p>This means our four OKE Clusters are being simultaneously created in 4 different OCI regions.
+      In about 15 minutes, you’ll have all four clusters created:</p>
+    <picture class="aligncenter">
+      <source
+        srcset="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/1vdOhprGm48QCzDjYBkUQQ.png 1x">
+      <img loading="lazy" width="855" height="183"
+        src="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/1vdOhprGm48QCzDjYBkUQQ.png"
+        data-original="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/1vdOhprGm48QCzDjYBkUQQ.png"
+        data-at2x="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/1vdOhprGm48QCzDjYBkUQQ@2x.png"
+        alt="Showing outputs after creating clusters" title="Showing outputs after creating clusters">
+    </picture>
+    <p>The ssh convenience commands to the various operator hosts will also be printed.</p>
+    <p>Next, navigate to the DRGs in <strong><em>each managed cluster</em></strong>’s region i.e.
+      Mumbai, Tokyo, Sydney. Click on Remote Peering Attachment and create a Remote Peering
+      Connection (call it rpc_to_admin). However, in the Admin region (Singapore in our selected
+      region), create 3 Remote Peering Connections:</p>
+    <figure class="aligncenter">
+      <picture>
+        <source
+          srcset="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/sub6pYSaRFEQumzQLQdDxwg.png 1x">
+        <img loading="lazy" width="1200" height="339"
+          src="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/sub6pYSaRFEQumzQLQdDxwg.png"
+          data-original="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/sub6pYSaRFEQumzQLQdDxwg.png"
+          data-at2x="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/sub6pYSaRFEQumzQLQdDxwg@2x.png"
+          title="3 RPCs in the Admin region" alt="3 RPCs in the Admin region">
+      </picture>
+      <figcaption>3 RPCs in the Admin region</figcaption>
+    </figure>
+    <p>We need to peer them. Click on the rpc_to_syd. Open a new tab in your browser and access the
+      OCI Console and change region to Sydney. Then, navigate to the DRG and the rpc_to_syd page.
+      Copy the RPC’s OCID (not the DRG), switch to the Admin tab and click on “Establish
+      Connection”:</p>
+    <figure class="aligncenter">
+      <picture>
+        <source
+          srcset="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/2g_Oih2j9NBRy_cUoUW9Eg.png 1x">
+        <img loading="lazy" width="619" height="216"
+          src="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/2g_Oih2j9NBRy_cUoUW9Eg.png"
+          data-original="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/2g_Oih2j9NBRy_cUoUW9Eg.png"
+          data-at2x="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/2g_Oih2j9NBRy_cUoUW9Eg@2x.png"
+          title="Establishing RPC" alt="Establishing RPC">
+      </picture>
+      <figcaption>Establishing RPC</figcaption>
+    </figure>
+    <p>Once you’ve provided the RPC ID and the region as above, click on “Establish Connection”
+      button to perform the peering. Repeat the same procedure for the Tokyo and Mumbai regions
+      until all the managed cluster regions are peered with the Admin region. When the peering is
+      performed and completed, you will see its status will change to “Pending” and eventually
+      “Peered”:</p>
+    <figure class="aligncenter">
+      <picture>
+        <source
+          srcset="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/DX7Nv3MRwczRYbmc5aXzlA.png 1x">
+        <img loading="lazy" width="1200" height="405"
+          src="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/DX7Nv3MRwczRYbmc5aXzlA.png"
+          data-original="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/DX7Nv3MRwczRYbmc5aXzlA.png"
+          data-at2x="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/DX7Nv3MRwczRYbmc5aXzlA@2x.png"
+          title="RPCs in Pending state" alt="RPCs in Pending state">
+      </picture>
+      <figcaption>RPCs in Pending state</figcaption>
+    </figure>
+    <figure class="aligncenter">
+      <picture>
+        <source
+          srcset="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/TSN09Afrj1KwHSEjFeYQ.png 1x">
+        <img loading="lazy" width="1110" height="471"
+          src="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/TSN09Afrj1KwHSEjFeYQ.png"
+          data-original="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/TSN09Afrj1KwHSEjFeYQ.png"
+          data-at2x="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/TSN09Afrj1KwHSEjFeYQ@2x.png"
+          title="RPCs in Peered state" alt="RPCs in Peered state">
+      </picture>
+      <figcaption>RPCs in Peered state</figcaption>
+    </figure>
+    <p>At this point, our VCNs are peered but there are three more things we need to do:</p>
+    <ol>
+      <li>Configure routing tables so that the Verrazzano managed clusters can communicate to the
+        Admin cluster and vice-versa</li>
+      <li>Configure NSGs for the control plane CIDRs to accept requests from Admin VCN</li>
+      <li>Merge the kubeconfigs</li>
+    </ol>
+    <p>Actually, the configuration of the routing rules have already been done. “How,” you ask?
+      Well, one of the <a href="https://github.com/oracle-terraform-modules/terraform-oci-oke/releases">recent
+        features</a> we added is the <a
+        href="https://github.com/oracle-terraform-modules/terraform-oci-oke/issues/279">ability
+        to configure and update routing tables</a>. In your main.tf, look in the the Admin
+      cluster module, you will find a parameter that is usually an empty list:</p>
+    <div class="language-terraform highlighter-rouge">
+      <div class="highlight">
+        <pre class="highlight"><code><span class="nx">nat_gateway_route_rules</span> <span class="err">=</span> <span class="p">[]</span>
+  
+  </code></pre>
+      </div>
+    </div>
+    <p>Instead, in our Admin module definition, we had already changed this to:</p>
+    <div class="language-terraform highlighter-rouge">
+      <div class="highlight">
+        <pre class="highlight"><code><span class="nx">nat_gateway_route_rules</span> <span class="err">=</span> <span class="p">[</span>
+  
+  <span class="p">{</span>
+  <span class="nx">destination</span>       <span class="p">=</span> <span class="s2">"10.1.0.0/16"</span>
+  <span class="nx">destination_type</span>  <span class="p">=</span> <span class="s2">"CIDR_BLOCK"</span>
+  <span class="nx">network_entity_id</span> <span class="p">=</span> <span class="s2">"drg"</span>       
+  <span class="nx">description</span>       <span class="p">=</span> <span class="s2">"To Sydney"</span>
+  <span class="p">},</span>
+  <span class="p">{</span>
+  <span class="nx">destination</span>       <span class="p">=</span> <span class="s2">"10.2.0.0/16"</span>
+  <span class="nx">destination_type</span>  <span class="p">=</span> <span class="s2">"CIDR_BLOCK"</span>
+  <span class="nx">network_entity_id</span> <span class="p">=</span> <span class="s2">"drg"</span>       
+  <span class="nx">description</span>       <span class="p">=</span> <span class="s2">"To Mumbai"</span>
+  <span class="p">},</span>
+  <span class="p">{</span>
+  <span class="nx">destination</span>       <span class="p">=</span> <span class="s2">"10.3.0.0/16"</span>
+  <span class="nx">destination_type</span>  <span class="p">=</span> <span class="s2">"CIDR_BLOCK"</span>
+  <span class="nx">network_entity_id</span> <span class="p">=</span> <span class="s2">"drg"</span>       
+  <span class="nx">description</span>       <span class="p">=</span> <span class="s2">"To Tokyo"</span>
+  <span class="p">},</span>
+  <span class="p">]</span>
+  </code></pre>
+      </div>
+    </div>
+    <p>Similarly, in the managed cluster definitions, we had also set the routing rules to reach the
+      Admin cluster in Singapore:</p>
+    <div class="language-terraform highlighter-rouge">
+      <div class="highlight">
+        <pre class="highlight"><code><span class="nx">nat_gateway_route_rules</span> <span class="err">=</span> <span class="p">[</span>
+  
+  <span class="p">{</span>  
+  <span class="nx">destination</span>       <span class="p">=</span> <span class="s2">"10.0.0.0/16"</span>  
+  <span class="nx">destination_type</span>  <span class="p">=</span> <span class="s2">"CIDR_BLOCK"</span>  
+  <span class="nx">network_entity_id</span> <span class="p">=</span> <span class="s2">"drg"</span>  
+  <span class="nx">description</span>       <span class="p">=</span> <span class="s2">"To Admin"</span>  
+  <span class="p">}</span>  
+  <span class="p">]</span>
+  </code></pre>
+      </div>
+    </div>
+    <p>Note that you can also update these later. Let’s say you add another managed region in
+      Hyderabad (VCN CIDR: 10.4.0.0). In the routing rules for Admin, you will add ome more entry
+      to route traffic to Hyderabad:</p>
+    <div class="language-terraform highlighter-rouge">
+      <div class="highlight">
+        <pre class="highlight"><code><span class="nx">nat_gateway_route_rules</span> <span class="err">=</span> <span class="p">[</span>
+  
+  <span class="p">{</span>  
+  <span class="nx">destination</span>       <span class="p">=</span> <span class="s2">"10.4.0.0/16"</span>  
+  <span class="nx">destination_type</span>  <span class="p">=</span> <span class="s2">"CIDR_BLOCK"</span>  
+  <span class="nx">network_entity_id</span> <span class="p">=</span> <span class="s2">"drg"</span>  
+  <span class="nx">description</span>       <span class="p">=</span> <span class="s2">"To Hyderabad"</span>  
+  <span class="p">}</span>  
+  <span class="p">]</span>
+  </code></pre>
+      </div>
+    </div>
+    <p>After updating the custom rules, run terraform apply again and the routing rules in the Admin
+      region will be updated.</p>
+    <p>Navigate to the Network Visualizer page to check your connectivity and routing rules:</p>
+    <figure class="aligncenter">
+      <picture>
+        <source
+          srcset="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/oS_bZ4lnAounnM_lgBGELg.png 1x">
+        <img loading="lazy" width="1200" height="390"
+          src="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/oS_bZ4lnAounnM_lgBGELg.png"
+          data-original="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/oS_bZ4lnAounnM_lgBGELg.png"
+          data-at2x="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/oS_bZ4lnAounnM_lgBGELg@2x.png"
+          title="Network connectivity across regions" alt="Network connectivity across regions">
+      </picture>
+      <figcaption>Network connectivity across regions</figcaption>
+    </figure>
+    <p>Next, in each region managed VCN’s control plane NSG, add an ingress to accept TCP requests
+      from source CIDR 10.0.0.0/16 (Admin) and destination port 6443. This is for the Admin
+      cluster to be able to communicate with the Managed Cluster’s control plane.</p>
+    <figure class="aligncenter">
+      <picture>
+        <source
+          srcset="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/UbwGSoe2twNSHayNM4YfRg.png 1x">
+        <img loading="lazy" width="1200" height="359"
+          src="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/UbwGSoe2twNSHayNM4YfRg.png"
+          data-original="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/UbwGSoe2twNSHayNM4YfRg.png"
+          data-at2x="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/UbwGSoe2twNSHayNM4YfRg@2x.png"
+          title="Additional ingress security rule in each managed cluster's control plane NSG"
+          alt="Additional ingress security rule in each managed cluster's control plane NSG">
+      </picture>
+      <figcaption>Additional ingress security rule in each managed cluster's control plane NSG
+      </figcaption>
+    </figure>
+    <h2 id="operational-convenience">Operational Convenience</h2>
+    <p>Finally, for convenience, we want to be able to execute most of our operations from the Admin
+      operator host. We first need to obtain the kubeconfig of each cluster and merge them
+      together on the admin operator. You have to do this step manually today but we will try to
+      improve this in the future:</p>
+    <ol>
+      <li>Navigate to each managed cluster’s page and click on Access cluster.</li>
+      <li>Copy the second command which allows you get the kubeconfig for that cluster</li>
+    </ol>
+    <div class="language-console highlighter-rouge">
+      <div class="highlight">
+        <pre class="highlight"><code><span class="gp">oci ce cluster create-kubeconfig --cluster-id ocid1.cluster.... --file $</span>HOME/.kube/configsyd <span class="nt">--region</span> ap-sydney-1 <span class="nt">--token-version</span> 2.0.0  <span class="nt">--kube-endpoint</span> PRIVATE_ENDPOINT
+  
+  <span class="go">
+  </span><span class="gp">oci ce cluster create-kubeconfig --cluster-id ocid1.cluster.... --file $</span>HOME/.kube/configmum <span class="nt">--region</span> ap-mumbai-1 <span class="nt">--token-version</span> 2.0.0  <span class="nt">--kube-endpoint</span> PRIVATE_ENDPOINT
+  <span class="go">
+  </span><span class="gp">oci ce cluster create-kubeconfig --cluster-id ocid1.cluster.... --file $</span>HOME/.kube/configtok <span class="nt">--region</span> ap-tokyo-1 <span class="nt">--token-version</span> 2.0.0  <span class="nt">--kube-endpoint</span> PRIVATE_ENDPOINT
+  </code></pre>
+      </div>
+    </div>
+    <p>Note that you also have to rename the file so it won’t overwrite the existing config for the
+      Admin region. In our example above, that would be configsyd, configmum, and configtok. Run
+      the commands to get the managed cluster’s respective kubeconfigs. You should have four
+      kubeconfigs:</p>
+    <div class="language-console highlighter-rouge">
+      <div class="highlight">
+        <pre class="highlight"><code><span class="gp">$</span><span class="w"> </span><span class="nb">ls</span> <span class="nt">-al</span> .kube
+  
+  <span class="go">total 16  
+  drwxrwxr-x. 2 opc opc   71 Nov 10 11:40 .  
+  drwx------. 4 opc opc  159 Nov 10 11:15 ..  
+  -rw--w----. 1 opc opc 2398 Nov 10 11:15 config  
+  -rw-rw-r--. 1 opc opc 2364 Nov 10 11:40 configmum  
+  -rw-rw-r--. 1 opc opc 2364 Nov 10 11:40 configsyd  
+  -rw-rw-r--. 1 opc opc 2362 Nov 10 11:40 configtok
+  </span></code></pre>
+      </div>
+    </div>
+    <p>We can check access to the clusters from the Admin operator host:</p>
+    <div class="language-console highlighter-rouge">
+      <div class="highlight">
+        <pre class="highlight"><code><span class="gp">cd .kubefor cluster in config configsyd configmum configtok;</span><span class="w"> </span><span class="k">do</span>
+  
+  <span class="gp">  KUBECONFIG=$</span>CLUSTER kubectl get nodes  
+  <span class="go">done
+  </span></code></pre>
+      </div>
+    </div>
+    <p>This will return us the list of nodes in each cluster:</p>
+    <figure class="aligncenter">
+      <picture>
+        <source
+          srcset="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/Wbt9jmrz8pJxxZliPssYBw.png 1x">
+        <img loading="lazy" width="818" height="310"
+          src="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/Wbt9jmrz8pJxxZliPssYBw.png"
+          data-original="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/Wbt9jmrz8pJxxZliPssYBw.png"
+          data-at2x="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/Wbt9jmrz8pJxxZliPssYBw@2x.png"
+          title="List of nodes in each cluster" alt="List of nodes in each cluster">
+      </picture>
+      <figcaption>List of nodes in each cluster</figcaption>
+    </figure>
+    <p>One thing we also want to do for convenience is rename each cluster’s context for convenience
+      so we know which region we are dealing with. In this exercise, we want 1 context to equate
+      to a Verrazzano cluster. Let’s rename all the kubeconfig files first:</p>
+    <ul>
+      <li>config -&gt; admin</li>
+      <li>configmum -&gt; mumbai</li>
+      <li>configsyd -&gt; sydney</li>
+      <li>configtok -&gt; tokyo</li>
+    </ul>
+    <p>Let’s rename their respective contexts:</p>
+    <div class="language-bash highlighter-rouge">
+      <div class="highlight">
+        <pre class="highlight"><code><span class="k">for </span>cluster <span class="k">in </span>admin sydney mumbai tokyo<span class="p">;</span> <span class="k">do
+  
+  </span><span class="nv">current</span><span class="o">=</span><span class="si">$(</span><span class="nv">KUBECONFIG</span><span class="o">=</span><span class="nv">$cluster</span> kubectl config current-context<span class="si">)</span>  
+  <span class="nv">KUBECONFIG</span><span class="o">=</span><span class="nv">$cluster</span> kubectl config rename-context <span class="nv">$current</span> <span class="nv">$cluster</span>  
+  <span class="k">done</span>
+  </code></pre>
+      </div>
+    </div>
+    <p>We are now ready to merge:</p>
+    <div class="language-bash highlighter-rouge">
+      <div class="highlight">
+        <pre class="highlight"><code><span class="nv">KUBECONFIG</span><span class="o">=</span>./admin:./sydney:./mumbai:./tokyo kubectl config view <span class="nt">--flatten</span> <span class="o">&gt;</span> ./config
+  
+  </code></pre>
+      </div>
+    </div>
+    <p>Let’s get a list of the contexts:</p>
+    <div class="language-console highlighter-rouge">
+      <div class="highlight">
+        <pre class="highlight"><code><span class="go">kubectl config get-contexts
+  
+  </span></code></pre>
+      </div>
+    </div>
+    <p>This will return us the following:</p>
+    <div class="language-console highlighter-rouge">
+      <div class="highlight">
+        <pre class="highlight"><code><span class="go">CURRENT   NAME     CLUSTER               AUTHINFO           NAMESPACE
+  
   *         admin    cluster-cillzxw34tq   user-cillzxw34tqmumbai
   mumbai    cluster-cuvo2ifxe2a   user-cuvo2ifxe2asydney   
   sydney    cluster-cmgb37morjq   user-cmgb37morjqtokyo    
   tokyo     cluster-coxskjynjra   user-coxskjynjra
   </span></code></pre>
-        </div>
       </div>
-
-      <p>Now, this is all rather verbose. Fortunately, there&rsquo;s a way to get nice, succinct output through <a
-          href="https://github.com/ahmetb/kubectx">kubectx</a>. But generating clean output isn&rsquo;t all this tool
-        can do. It can also be used to rename the contexts as well. In the next section, we&rsquo;ll explore this
-        alternative a little further.</p>
-
-      <h4 id="install-and-run-kubectx">Install and run <code
-          class="language-plaintext highlighter-rouge">kubectx</code><a class="header-link"
-          href="#install-and-run-kubectx" title="Permalink"><span class="sr-only">Permalink</span></a></h4>
-
-      <p>First, let&rsquo;s install <code class="language-plaintext highlighter-rouge">kubectx</code>:</p>
-
-      <div class="language-console highlighter-rouge">
-        <div class="highlight">
-          <pre class="highlight">
-  <code><span class="go">wget https://github.com/ahmetb/kubectx/releases/download/v0.9.4/kubectx
+    </div>
+    <p>This is all rather verbose. Instead we will use <a href="https://github.com/ahmetb/kubectx">kubectx </a>(I’m a
+      huge fan). Install kubectx
+      (which we could have used to rename the contexts earlier):</p>
+    <div class="language-console highlighter-rouge">
+      <div class="highlight">
+        <pre class="highlight"><code><span class="go">wget https://github.com/ahmetb/kubectx/releases/download/v0.9.4/kubectx
+  
   chmod +x kubectx  
   sudo mv kubectx /usr/local/bin
   </span></code></pre>
-        </div>
       </div>
-
-      <p>Now, run <code class="language-plaintext highlighter-rouge">kubectx</code>:</p>
-
-      <figure class="aligncenter">
-        <picture>
-          <source
-            srcset="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/DPsupx6c_ADhdwE0TwS-Zw.png 1x" />
-          <img alt="Using kubectx"
-            data-at2x="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/DPsupx6c_ADhdwE0TwS-Zw@2x.png"
-            data-original="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/DPsupx6c_ADhdwE0TwS-Zw.png"
-            height="113" loading="lazy"
-            src="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/DPsupx6c_ADhdwE0TwS-Zw.png"
-            title="Using kubectx" width="397" />
-        </picture>
-
-        <figcaption>Using kubectx</figcaption>
-      </figure>
-
-      <p>The current context (i.e., the current Verrazzano cluster), is highlighted in yellow. We can also easily change
-        contexts in order to perform Verrazzano installations and other operations. For example:</p>
-
-      <figure class="aligncenter">
-        <picture>
-          <source
-            srcset="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/nCSAOCAmUaD-AYTnUDhDpA.png 1x" />
-          <img alt="Changing context to Sydney"
-            data-at2x="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/nCSAOCAmUaD-AYTnUDhDpA@2x.png"
-            data-original="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/nCSAOCAmUaD-AYTnUDhDpA.png"
-            height="160" loading="lazy"
-            src="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/nCSAOCAmUaD-AYTnUDhDpA.png"
-            title="Changing context to Sydney" width="390" />
-        </picture>
-
-        <figcaption>Changing context to Sydney</figcaption>
-      </figure>
-
-      <h2 id="whats-next">What&rsquo;s next<a class="header-link" href="#whats-next" title="Permalink"><span
-            class="sr-only">Permalink</span></a></h2>
-
-      <p>We made it through a lot of material in this article. Let&rsquo;s review everything we covered:</p>
-
-      <ul>
-        <li>Learned how to set up OKE, networking connectivity, and routing.</li>
-        <li>Discovered operational convenience to run multi-cluster Verrazzano in different regions.</li>
-        <li>Got started with <code class="language-plaintext highlighter-rouge">kubectx</code></li>
-      </ul>
-
-      <p>With this, I would like to thank my colleague and friend Shaun Levey for his ever perceptive insights into the
-        intricacies of OCI Networking.</p>
-
-      <p>Our exploration continues in <a href="3-deploy-multi-cluster-verrazzano-oke">Part 2</a>, where we&rsquo;ll take
-        a look at how to install Verrazzano in a multi-cluster configuration.</p>
-
-      <p>To explore more information about development with Oracle products:</p>
-
-      <ul>
-        <li><a
-            href="https://developer.oracle.com/?source=:ex:tb:::::WWMK211123P00031:WW_FY22_DevRel_DotBuild&amp;SC=:ex:tb:::::WWMK211123P00031:WW_FY22_DevRel_DotBuild&amp;pcode=WWMK211123P00031">Oracle
-            Developers Portal</a></li>
-        <li><a
-            href="https://www.oracle.com/cloud/?source=:ex:tb:::::WWMK211123P00031:WW_FY22_DevRel_DotBuild&amp;SC=:ex:tb:::::WWMK211123P00031:WW_FY22_DevRel_DotBuild&amp;pcode=WWMK211123P00031">Oracle
-            Cloud Infrastructure</a></li>
-      </ul>
-    </section>
+    </div>
+    <p>Now when we run kubectx:</p>
+    <figure class="aligncenter">
+      <picture>
+        <source
+          srcset="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/DPsupx6c_ADhdwE0TwS-Zw.png 1x">
+        <img loading="lazy" width="397" height="113"
+          src="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/DPsupx6c_ADhdwE0TwS-Zw.png"
+          data-original="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/DPsupx6c_ADhdwE0TwS-Zw.png"
+          data-at2x="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/DPsupx6c_ADhdwE0TwS-Zw@2x.png"
+          title="Using kubectx" alt="Using kubectx">
+      </picture>
+      <figcaption>Using kubectx</figcaption>
+    </figure>
+    <p>The current context, i.e. the current Verrazzano cluster, is highlighted in yellow. We can
+      also easily change contexts in order to perform Verrazzano installations and other
+      operations e.g.</p>
+    <figure class="aligncenter">
+      <picture>
+        <source
+          srcset="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/nCSAOCAmUaD-AYTnUDhDpA.png 1x">
+        <img loading="lazy" width="390" height="160"
+          src="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/nCSAOCAmUaD-AYTnUDhDpA.png"
+          data-original="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/nCSAOCAmUaD-AYTnUDhDpA.png"
+          data-at2x="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/multi-cluster-verrazzano-oke/assets/nCSAOCAmUaD-AYTnUDhDpA@2x.png"
+          title="Changing context to Sydney" alt="Changing context to Sydney">
+      </picture>
+      <figcaption>Changing context to Sydney</figcaption>
+    </figure>
+    <p>This concludes setting up OKE, networking connectivity and routing and some operational
+      convenience to run multi-cluster Verrazzano in different regions. With this, I would like to
+      thank my colleague and friend Shaun Levey for his ever perceptive insights into the
+      intricacies of OCI Networking.</p>
   </div>
-</article>
+</section>
