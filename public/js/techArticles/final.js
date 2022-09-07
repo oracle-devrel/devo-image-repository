@@ -295,11 +295,27 @@ window.onload = function () {
   }
 
   async function reloadDEVO() {
-    console.log("Will reload...");
     await sleep(3000);
-    window.location.reload();
-  }
+    try {
+      addPadding();
+      console.log("Padding added");
+    } catch (e) {
+      console.log(e);
+      //reloadDEVO();
+      //window.location.reload();
+    }
 
+    let url = location.href;
+    if (url.includes("/en/") === false) {
+      try {
+        changeBanner();
+        console.log("Banner changed");
+      } catch (e) {
+        console.log(e);
+        //reloadDEVO();
+      }
+    }
+  }
 
   try {
     addPadding();
