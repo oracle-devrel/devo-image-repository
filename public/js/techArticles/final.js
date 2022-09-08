@@ -403,14 +403,6 @@ window.onload = function () {
       //window.location.reload();
     }
 
-    try {
-      showMT();
-    } catch (e) {
-      console.log(e);
-      //reloadDEVO();
-      //window.location.reload();
-    }
-
     let url = location.href;
     if (url.includes("/en/") === false) {
       try {
