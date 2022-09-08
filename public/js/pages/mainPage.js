@@ -1,6 +1,6 @@
 function changeHeaderLinks() {
   //Update Header Links: Add Prefix to flowless navigation
-  let headerLinks = document.querySelectorAll("#Header a");
+  let headerLinks = document.querySelectorAll("#Header a, #Footer a");
   let headerURL = location.href;
 
   if (headerURL.includes("/site/devo/") === true) {
@@ -95,4 +95,11 @@ window.onload = function () {
     //console.log(closeNavBTN[i]);
   }
   //console.log("Close BTN-ARIA updated");
+
+  try {
+    changeHeaderLinks();
+    console.log("Links changed");
+  } catch (e) {
+    console.log(e);
+  }
 };
