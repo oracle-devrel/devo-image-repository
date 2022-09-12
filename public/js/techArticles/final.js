@@ -378,6 +378,13 @@ window.onload = function () {
         //reloadDEVO();
       }
     }
+
+    try {
+      addBlank();
+      console.log("Links updated");
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   try {
@@ -402,6 +409,7 @@ window.onload = function () {
     console.log("Links updated");
   } catch (e) {
     console.log(e);
+    reloadDEVO();
   }
 
   try {
