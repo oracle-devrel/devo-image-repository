@@ -16,12 +16,15 @@
 
             <p>At it’s core, Oracle Cloud Infrastructure (OCI) is a programable data center, providing dedicated
                 infrastructure in more than 30 locations worldwide. The <a
-                    href="https://en.wikipedia.org/wiki/Shared-nothing_architecture">share-nothing design</a> allows IT
+                    href="https://en.wikipedia.org/wiki/Shared-nothing_architecture" target="_blank">share-nothing
+                    design</a> allows IT
                 operators to launch <a
-                    href="https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-145.pdf">private
+                    href="https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-145.pdf"
+                    target="_blank">private
                     clouds</a> on demand and enables enterprises to adopt managed services into an existing operation.
                 This framework is inspired by the <a
-                    href="https://docs.oracle.com/en/solutions/cis-oci-benchmark/?source=:ex:tb:::::WWMK211125P00022:WW_FY22_DevRel_DotBuild&amp;SC=:ex:tb:::::WWMK211125P00022:WW_FY22_DevRel_DotBuild&amp;pcode=WWMK211125P00022">Center
+                    href="https://docs.oracle.com/en/solutions/cis-oci-benchmark/?source=:ex:tb:::::WWMK211125P00022:WW_FY22_DevRel_DotBuild&amp;SC=:ex:tb:::::WWMK211125P00022:WW_FY22_DevRel_DotBuild&amp;pcode=WWMK211125P00022"
+                    target="_blank">Center
                     for Internet Security (CIS) landing zone</a> and helps Information Technology Infrastructure Library
                 (ITIL) oriented organizations build and launch both private or public cloud services.</p>
 
@@ -33,28 +36,28 @@
                 this tutorial:</p>
 
             <ul>
-                <li>Compartments, Group-, Policy- and User-Templates <a href="learn_doc_iam">Documentation</a> <a
-                        href="learn_video_iam">Video</a></li>
-                <li>Virtual Cloud Network <a href="learn_doc_network">Documentation</a> <a
-                        href="learn_video_network">Video</a></li>
-                <li>Key Vault <a href="learn_doc_vault">Documentation</a> <a href="learn_video_vault">Video</a></li>
-                <li>Object Store <a href="learn_doc_storage">Documentation</a> <a href="learn_video_storage">Video</a>
+                <li>Compartments, Group-, Policy- and User-Templates</li>
+                <li>Virtual Cloud Network</li>
+                <li>Key Vault</li>
+                <li>Object Store</a>
                 </li>
             </ul>
 
             <h2 id="code-structure">Code Structure<a class="header-link" href="#code-structure" title="Permalink"><span
                         class="sr-only">Permalink</span><i class="fas fa-link"></i></a></h2>
 
-            <p>We employ <a href="https://en.wikipedia.org/wiki/Infrastructure_as_code">Infrastructure as Code</a> (IaC)
+            <p>We employ <a href="https://en.wikipedia.org/wiki/Infrastructure_as_code" target="_blank">Infrastructure
+                    as Code</a> (IaC)
                 to combine dedicated resources with managed cloud- and orchestration services into <a
-                    href="https://pubs.opengroup.org/architecture/togaf9-doc/arch/apdxa.html">custom resources</a>. The
+                    href="https://pubs.opengroup.org/architecture/togaf9-doc/arch/apdxa.html" target="_blank">custom
+                    resources</a>. The
                 code is separated into multiple definition files that Terraform merges into one deployment plan at the
                 time of execution. The following structure uses <a
                     href="https://docs.cloud.oracle.com/en-us/iaas/Content/GSG/Concepts/settinguptenancy.htm#Understa?source=:ex:tb:::::WWMK211125P00022:WW_FY22_DevRel_DotBuild&amp;SC=:ex:tb:::::WWMK211125P00022:WW_FY22_DevRel_DotBuild&amp;pcode=WWMK211125P00022">compartments</a>
                 to reflect shared service center for independent businesses or business units that are separated on the
                 network layer.</p>
 
-            <table>
+            <table class="otable">
                 <thead>
                     <tr>
                         <th style="text-align: center">Nr.</th>
@@ -135,9 +138,11 @@
 
             <p>Using declarative templates provides operators with the flexibility to adjust their service delivery
                 platform as requirements evolve. Global input parameters help maintain readability of the code and avoid
-                <a href="https://en.wikipedia.org/wiki/Don%27t_repeat_yourself">repeating definitions</a>. We use the
+                <a href="https://en.wikipedia.org/wiki/Don%27t_repeat_yourself" target="_blank">repeating
+                    definitions</a>. We use the
                 <code class="language-plaintext highlighter-rouge">~/project/default.tfvars</code> file to define global
-                input parameters for an entire project:</p>
+                input parameters for an entire project:
+            </p>
 
             <div class="language-terraform highlighter-rouge">
                 <div class="highlight">
@@ -270,7 +275,8 @@
             <p>Before provisioning any compute or storage resources we’ll first need to set up a basic network. To do
                 this, we’ll start with the compartment for <em>network operation</em>. One of the unique features of OCI
                 is the <a
-                    href="https://blogs.oracle.com/cloud-infrastructure/first-principles-l2-network-virtualization-for-lift-and-shift?source=:ex:tb:::::WWMK211125P00022:WW_FY22_DevRel_DotBuild&amp;SC=:ex:tb:::::WWMK211125P00022:WW_FY22_DevRel_DotBuild&amp;pcode=WWMK211125P00022">virtual
+                    href="https://blogs.oracle.com/cloud-infrastructure/first-principles-l2-network-virtualization-for-lift-and-shift?source=:ex:tb:::::WWMK211125P00022:WW_FY22_DevRel_DotBuild&amp;SC=:ex:tb:::::WWMK211125P00022:WW_FY22_DevRel_DotBuild&amp;pcode=WWMK211125P00022"
+                    target="_blank">virtual
                     layer 2 network</a> design. Compared to the common network overlays in public clouds, this design
                 provides the necessary control to create an isolated data center on a shared infrastructure pool. Packet
                 encapsulation shields private traffic on a shared network backbone by defining overlapping IP ranges.
@@ -292,7 +298,8 @@
                     title="Permalink"><span class="sr-only">Permalink</span><i class="fas fa-link"></i></a></h4>
 
             <p>A Virtual Cloud Network (VCN) contains a private <a
-                    href="https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing">“Classless Inter-Domain Routing
+                    href="https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing" target="_blank">“Classless
+                    Inter-Domain Routing
                     (CIDR)”</a> and can be extended with publicly addressable IP addresses:</p>
 
             <picture class="">
@@ -307,13 +314,14 @@
 
             <p>Even though we need to distinguish the physical topology of single- and multi-data center regions, the
                 logical network layer remains the same, because the data centers are connected through a close network
-                and packet forwarding relies on <a href="https://networkencyclopedia.com/host-routing/">host routing
+                and packet forwarding relies on <a href="https://networkencyclopedia.com/host-routing/"
+                    target="_blank">host routing
                     mechanisms</a>. Regional subnets enable operators to launch multi-data center networks for both
                 private and public cloud services. In addition to the CIDR, the VCN definition contains the Dynamic
                 Routing Gateway (DRG). The DRG acts as both an IP peer and host for network functions like Internet
                 Connectivity, Network Address Translation (NAT), or Private-Public Service Communication.</p>
 
-            <table>
+            <table class="otable">
                 <thead>
                     <tr>
                         <th style="text-align: center">CIDR</th>
@@ -567,7 +575,8 @@
                     customer-premises equipment.</li>
                 <li>
                     <p><strong>VCN -</strong> For the <em>VCN</em> definition, we rely on a <a
-                            href="https://registry.terraform.io/modules/oracle-terraform-modules/vcn/oci/latest">terraform
+                            href="https://registry.terraform.io/modules/oracle-terraform-modules/vcn/oci/latest"
+                            target="_blank">terraform
                             module</a> that combines the layer three gateways with the CIDR.</p>
 
                     <div class="language-terraform highlighter-rouge">
@@ -651,7 +660,8 @@
                 <li>
                     <p><strong><code class="language-plaintext highlighter-rouge">output.tf</code> -</strong> In the
                         <code class="language-plaintext highlighter-rouge">output.tf</code> file we add the reference to
-                        the module output:</p>
+                        the module output:
+                    </p>
 
                     <div class="language-terraform highlighter-rouge">
                         <div class="highlight">
@@ -676,13 +686,16 @@
                     title="Permalink"><span class="sr-only">Permalink</span><i class="fas fa-link"></i></a></h3>
 
             <p>When we define our compartment structure we need to keep the <a
-                    href="https://www.axelos.com/best-practice-solutions/itil">ITIL</a> model in mind. The first
+                    href="https://www.axelos.com/best-practice-solutions/itil" target="_blank">ITIL</a> model in mind.
+                The first
                 compartment defines the working environment for <a
-                    href="https://wiki.en.it-processmaps.com/index.php/ITIL_Service_Operation">service operators</a> and
+                    href="https://wiki.en.it-processmaps.com/index.php/ITIL_Service_Operation" target="_blank">service
+                    operators</a> and
                 enables processes like incident or problem management. While ITIL distinguishes between <a
-                    href="https://wiki.en.it-processmaps.com/index.php/ITIL_Technical_Management">technical management
-                    services</a> and <a
-                    href="https://wiki.en.it-processmaps.com/index.php/ITIL_Application_Management">application
+                    href="https://wiki.en.it-processmaps.com/index.php/ITIL_Technical_Management"
+                    target="_blank">technical management
+                    services</a> and <a href="https://wiki.en.it-processmaps.com/index.php/ITIL_Application_Management"
+                    target="_blank">application
                     management services</a>, we rely on Infrastructure as a Service and separate network- and
                 database-managers in distinct compartments. On the application layer, we distinguish between application
                 management and application development. The later compromises platform services and allows us to define
@@ -713,8 +726,9 @@
             <h4 id="hcl">HCL<a class="header-link" href="#hcl" title="Permalink"><span
                         class="sr-only">Permalink</span><i class="fas fa-link"></i></a></h4>
 
-            <p>In HashiCorp Configuration Language (<a href="https://github.com/hashicorp/hcl">HCL</a>), we use a <a
-                    href="https://www.terraform.io/docs/language/expressions/type-constraints.html">complex variable
+            <p>In HashiCorp Configuration Language (<a href="https://github.com/hashicorp/hcl" target="_blank">HCL</a>),
+                we use a <a href="https://www.terraform.io/docs/language/expressions/type-constraints.html"
+                    target="_blank">complex variable
                     type</a>, a map, to describe the different roles:</p>
 
             <div class="language-terraform highlighter-rouge">
@@ -850,9 +864,11 @@
                     class="language-plaintext highlighter-rouge">compartment_id</code> argument. While the
                 <em>resource</em> compartments refer to the tenancy_ocid, the <em>service</em> compartments refer to the
                 parent compartment ID. This enables us to use <a
-                    href="https://www.hashicorp.com/blog/hashicorp-terraform-0-12-preview-for-and-for-each/">loops</a>,
+                    href="https://www.hashicorp.com/blog/hashicorp-terraform-0-12-preview-for-and-for-each/"
+                    target="_blank">loops</a>,
                 counts and conditionals. Using lists helps avoid the creation of multiple blocks and allows us to adjust
-                the tree compartment structure without rewriting the code:</p>
+                the tree compartment structure without rewriting the code:
+            </p>
 
             <div class="language-terraform highlighter-rouge">
                 <div class="highlight">
@@ -944,10 +960,12 @@
 
             <p>Next, we’ll need to define 2 properties to establish our overall data management behavior. The first will
                 be the creation of a <em>data management domain</em> to maintain <a
-                    href="https://whatis.techtarget.com/definition/data-gravity">data gravity</a> across the four
+                    href="https://whatis.techtarget.com/definition/data-gravity" target="_blank">data gravity</a> across
+                the four
                 infrastructure deployment models for the application developer and service operator. And the second will
                 be a <a
-                    href="https://medium.com/swlh/terraform-how-to-use-conditionals-for-dynamic-resources-creation-6a191e041857">boolean
+                    href="https://medium.com/swlh/terraform-how-to-use-conditionals-for-dynamic-resources-creation-6a191e041857"
+                    target="_blank">boolean
                     variable</a> to enable/disable the creation of the <em>data</em> compartment:</p>
 
             <div class="language-terraform highlighter-rouge">
@@ -993,10 +1011,12 @@
 
             <p><em>Admin policies</em> define the tasks that a user can perform. We’ll create groups for database
                 administrators and file system managers, as well as <a
-                    href="https://registry.terraform.io/providers/hashicorp/oci/latest/docs/data-sources/identity_policies">assign
+                    href="https://registry.terraform.io/providers/hashicorp/oci/latest/docs/data-sources/identity_policies"
+                    target="_blank">assign
                     policies</a> to them. Group memberships enable domain administrators to perform the tasks associated
                 with these <a
-                    href="https://registry.terraform.io/providers/hashicorp/oci/latest/docs/resources/identity_policy">policies</a>.
+                    href="https://registry.terraform.io/providers/hashicorp/oci/latest/docs/resources/identity_policy"
+                    target="_blank">policies</a>.
             </p>
 
             <div class="language-terraform highlighter-rouge">
@@ -1097,7 +1117,8 @@
                     title="Permalink"><span class="sr-only">Permalink</span><i class="fas fa-link"></i></a></h3>
 
             <p>For the application management domain, we add a <a
-                    href="https://www.terraform.io/docs/language/values/variables.html#list-lt-type-gt-">variable
+                    href="https://www.terraform.io/docs/language/values/variables.html#list-lt-type-gt-"
+                    target="_blank">variable
                     containing list of application domains</a>:</p>
 
             <div class="language-terraform highlighter-rouge">
@@ -1109,8 +1130,8 @@
 
             <p>The <code class="language-plaintext highlighter-rouge">app.tf</code> file contains two resource
                 definitions, one for the main app compartment and one for the sub-compartments. The compartment
-                structure is reflected using a <a
-                    href="https://www.terraform.io/docs/configuration/variables.html">complex variable type</a> that
+                structure is reflected using a <a href="https://www.terraform.io/docs/configuration/variables.html"
+                    target="_blank">complex variable type</a> that
                 enables us to create list of sub-compartments.</p>
 
             <div class="language-terraform highlighter-rouge">
@@ -1170,13 +1191,15 @@
                     title="Permalink"><span class="sr-only">Permalink</span><i class="fas fa-link"></i></a></h4>
 
             <p>We loop over our platform- and the services block, using the <a
-                    href="https://www.terraform.io/docs/configuration/resources.html#count-multiple-resource-instances-by-count">count
+                    href="https://www.terraform.io/docs/configuration/resources.html#count-multiple-resource-instances-by-count"
+                    target="_blank">count
                     method</a>. <code class="language-plaintext highlighter-rouge">Count</code> refers to keys using the
                 respective index number <code class="language-plaintext highlighter-rouge">[count.index]</code>. The
                 <code class="language-plaintext highlighter-rouge">${ }</code> construct allows to use variables inside
                 a string. Freeform tags provide non-harmonized context information. After that, we create data blocks in
                 <code class="language-plaintext highlighter-rouge">sources.tf</code> which return the identifier for the
-                compartments defined in the deployment plan:</p>
+                compartments defined in the deployment plan:
+            </p>
 
             <div class="language-terraform highlighter-rouge">
                 <div class="highlight">
@@ -1207,7 +1230,8 @@
                 </div>
             </div>
 
-            <p>A complete <a href="../code/iam/compartment.tf">compartment.tf</a> example file is stored in the code
+            <p>A complete compartment.tf example file is stored
+                in the code
                 directory.</p>
 
             <h2 id="user-management">User Management<a class="header-link" href="#user-management"
@@ -1215,13 +1239,17 @@
 
             <p>After defining the compartment structure, we create the initial admin users, leveraging the <code
                     class="language-plaintext highlighter-rouge">user.tf</code> template with the basic <a
-                    href="https://registry.terraform.io/providers/hashicorp/oci/latest/docs/resources/identity_user">resource
+                    href="https://registry.terraform.io/providers/hashicorp/oci/latest/docs/resources/identity_user"
+                    target="_blank">resource
                     block</a> and the <a
-                    href="https://registry.terraform.io/providers/hashicorp/oci/latest/docs/data-sources/identity_users">user
+                    href="https://registry.terraform.io/providers/hashicorp/oci/latest/docs/data-sources/identity_users"
+                    target="_blank">user
                     data block</a>. Next, we’ll define a variable that represents the admin profile and insert the
                 variable at the top of our template. Information like the <em>name</em>, <em>email</em> and
                 <em>description</em> is captured in a tuple, another <a
-                    href="https://www.terraform.io/docs/configuration/variables.html">complex variable type</a>.</p>
+                    href="https://www.terraform.io/docs/configuration/variables.html" target="_blank">complex variable
+                    type</a>.
+            </p>
 
             <p>User profiles allow tenant administrators to:</p>
 
@@ -1292,12 +1320,12 @@
                     title="Permalink"><span class="sr-only">Permalink</span><i class="fas fa-link"></i></a></h3>
 
             <p>We defined a number of groups to manage the roles and responsibilities. A common definition of roles and
-                responsibilities is provided by the <a
-                    href="https://wiki.en.it-processmaps.com/index.php/ITIL_Roles">ITIL framework</a>. While the
+                responsibilities is provided by the <a href="https://wiki.en.it-processmaps.com/index.php/ITIL_Roles"
+                    target="_blank">ITIL framework</a>. While the
                 complete model is pretty broad, our specific concern is service operation and initially created the
                 following administrator roles:</p>
 
-            <table>
+            <table class="otable">
                 <thead>
                     <tr>
                         <th style="text-align: left"><strong>Group</strong></th>
@@ -1392,14 +1420,16 @@
             <p>This template will return the user details including the UI password. Passwords will be generated and
                 shown at the <code class="language-plaintext highlighter-rouge">terraform apply</code> stage. When we
                 use the <code class="language-plaintext highlighter-rouge">terraform output</code> command, Terraform
-                will not return the passwords. The complete <a href="../code/iam/user.tf">template</a> is stored in the
+                will not return the passwords. The complete <a href="../code/iam/user.tf" target="_blank">template</a>
+                is stored in the
                 code directory.</p>
 
             <h2 id="whats-next">What’s next<a class="header-link" href="#whats-next" title="Permalink"><span
                         class="sr-only">Permalink</span><i class="fas fa-link"></i></a></h2>
 
             <p>Next up, <strong>Database Infrastructure</strong> in <a
-                    href="getting-started-with-oci-step-3-database-infrastructure.md">Step 3</a>!</p>
+                    href="/tutorials/getting-started-with-oci-step-3-database-infrastructure" target="_blank">Step
+                    3</a>!</p>
 
             <!--- Links -->
 

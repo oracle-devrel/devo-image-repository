@@ -21,7 +21,8 @@
 
             <p>Oracles’s best practice recommendation for workloads on Oracle Cloud Infrastructure (OCI) is to use an
                 <strong>operator host</strong> to install and maintain the service application and configuration for the
-                workload.</p>
+                workload.
+            </p>
 
             <p>As you might imagine, since the number of applications and needed configurations varies, our goal at this
                 step will be to dig deeper into the concept of the operator host and explore which configurations and
@@ -72,7 +73,7 @@
             <p>In this session, we’ll focus on how to use the most common tools like Ansible, Puppet, and Chef. We’ll
                 also take a cloud-native approach, so we’ll show you in a demo how you can leverage Helm charts to
                 deploy workloads via the Oracle Resource Manager onto an OKE cluster deployed <a
-                    href="./getting-started-with-oci-step-4-app-infrastructure.md">previously</a>.</p>
+                    href="/tutorials/getting-started-with-oci-step-4-app-infrastructure">previously</a>.</p>
 
             <h3 id="ansible">Ansible<a class="header-link" href="#ansible" title="Permalink"><span
                         class="sr-only">Permalink</span><i class="fas fa-link"></i></a></h3>
@@ -271,7 +272,7 @@ oci_identity_compartment { 'your_tenant (root)/test_compartment_1':
 
             <p>The following are the available <strong>knife-oci</strong> plugin commands:</p>
 
-            <table>
+            <table class="otable">
                 <thead>
                     <tr>
                         <th>Action</th>
@@ -449,7 +450,8 @@ oci_identity_compartment { 'your_tenant (root)/test_compartment_1':
                 created <a href="#namespaces">namespace</a>.</p>
 
             <p>This can be achieved by storing your Helm files in a sub-directory of your Terraform environment (e.g.,
-                <em>helm_charts</em>) and referencing your charts in your Terraform code as follows:</p>
+                <em>helm_charts</em>) and referencing your charts in your Terraform code as follows:
+            </p>
 
             <div class="language-terraform highlighter-rouge">
                 <div class="highlight">
@@ -678,7 +680,8 @@ service/oss-kafka-connect-service   LoadBalancer   10.96.114.200   129.159.74.13
                         class="sr-only">Permalink</span><i class="fas fa-link"></i></a></h2>
 
             <p>In the sixth and final segment of our series, we’ll discuss how to organize your tenants in a section on
-                <a href="./getting-started-with-oci-step-6-governance.md">governance</a>.</p>
+                <a href="/tutorials/getting-started-with-oci-step-6-governance">governance</a>.
+            </p>
 
             <!--- Links -->
 
