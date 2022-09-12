@@ -379,13 +379,6 @@ window.onload = function () {
         //reloadDEVO();
       }
     }
-
-    try {
-      addCopyBTN();
-      console.log("Copy BTN added");
-    } catch (e) {
-      console.log(e);
-    }
   }
 
   try {
@@ -441,6 +434,7 @@ window.onload = function () {
     console.log(e);
   }
 
+  /*
   try {
     addCopyBTN();
     console.log("Copy BTN added");
@@ -448,6 +442,8 @@ window.onload = function () {
     console.log(e);
     reloadDEVO();
   }
+
+  */
 
   let url = location.href;
 
