@@ -441,6 +441,17 @@ blockquote.notice {
   padding-bottom: 0.5rem;
 }
 
+.page h2 {
+font-family: "Oracle Sans Semi Bold",sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 1.5rem;
+    line-height: 32px;
+    margin-top: 60px;
+    margin-bottom: 16px;
+    padding-bottom: 0.5rem;
+}
+
 .page h3 {
   font-family: "Oracle Sans Semi Bold";
   font-style: normal;

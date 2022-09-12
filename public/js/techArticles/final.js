@@ -56,7 +56,6 @@ function showMT() {
     } else {
       freeBTN.href = "https://www.oracle.com/es/cloud/free/";
     }
-
   } else if (url.includes("/fr/") === true) {
     topNav.insertAdjacentHTML(
       "afterend",
