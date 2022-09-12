@@ -251,40 +251,6 @@ function addBlank() {
   }
 }
 
-function changeHeaderLinks() {
-  //Update Header Links: Add Prefix to flowless navigation
-  let headerLinks = document.querySelectorAll("#Header a");
-  let headerURL = location.href;
-
-  if (headerURL.includes("/site/devo/") === true) {
-    for (var i = 0; i < headerLinks.length; i++) {
-      //console.log(headerLinks[i].href);
-
-      if (headerLinks[i].href.includes("")) {
-        //console.log("Wrong Link");
-        let generateLink = headerLinks[i].href.replace("", "/site/devo");
-        headerLinks[i].href = generateLink;
-      }
-
-      //console.log("Header links updated to: /site/devo");
-    }
-  } else if (headerURL.includes("/sites/preview/devo/") === true) {
-    for (var i = 0; i < headerLinks.length; i++) {
-      //console.log(headerLinks[i].href);
-
-      if (headerLinks[i].href.includes("")) {
-        //console.log("Wrong Link");
-        let generateLink = headerLinks[i].href.replace(
-          "",
-          "/sites/preview/devo"
-        );
-        headerLinks[i].href = generateLink;
-      }
-      //console.log("Header links updated to: /sites/preview/devo");
-    }
-  }
-}
-
 function altImages() {
   //Add ALT to missing images or Icons
   let altImage = document.querySelectorAll("img");
@@ -442,13 +408,6 @@ window.onload = function () {
   try {
     addBlank();
     console.log("Links updated");
-  } catch (e) {
-    console.log(e);
-  }
-
-  try {
-    changeHeaderLinks();
-    console.log("Links changed");
   } catch (e) {
     console.log(e);
   }
