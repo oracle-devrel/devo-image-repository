@@ -442,14 +442,14 @@ blockquote.notice {
 }
 
 .page h2 {
-font-family: "Oracle Sans Semi Bold",sans-serif;
-    font-style: normal;
-    font-weight: 600;
-    font-size: 1.5rem;
-    line-height: 32px;
-    margin-top: 60px;
-    margin-bottom: 16px;
-    padding-bottom: 0.5rem;
+  font-family: "Oracle Sans Semi Bold", sans-serif;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 1.5rem;
+  line-height: 32px;
+  margin-top: 60px;
+  margin-bottom: 16px;
+  padding-bottom: 0.5rem;
 }
 
 .page h3 {
@@ -582,4 +582,7 @@ td {
 
 .content-container .chapters ul li a {
   color: #57637f !important;
+}
+#u10 > div > div.u10w5.u10w10 > ul.u10-links > li > a, #icon-id06861753677157003 {
+  color: #fff;
 }
