@@ -2,6 +2,14 @@
     <div class="page__inner-wrap">
 
         <section class="page__content" itemprop="text">
+            <style>
+                #a7e327aa-30ab-42c4-a61f-709f7ac76775customComponentDiv>div>section>div.technical-content-container>div>article>div>section>ul.notice>li,
+                #a7e327aa-30ab-42c4-a61f-709f7ac76775customComponentDiv>div>section>div.technical-content-container>div>article>div>section>ol:nth-child(128)>li:nth-child(2)>blockquote>ul>li {
+                    font-style: normal;
+                    font-weight: 400;
+                    font-size: 16px !important;
+                }
+            </style>
 
 
             <p>In this tutorial, you’ll use an Oracle Cloud Infrastructure (OCI) account to set up a Kubernetes cluster.
@@ -34,15 +42,15 @@
             <p>For additional information, see:</p>
 
             <ul>
-                <li><a href="https://kubernetes.io/docs/home/">Kubernetes Documentation</a></li>
-                <li><a
-                        href="https://docs.oracle.com/iaas/Content/ContEng/Concepts/contengoverview.htm?source=:ex:tb:::::WWMK211117P00058:WW_FY22_DevRel_DotBuild&amp;SC=:ex:tb:::::WWMK211117P00058:WW_FY22_DevRel_DotBuild&amp;pcode=WWMK211117P00058">OCI
+                <li><a href="https://kubernetes.io/docs/home/" target="_blank">Kubernetes Documentation</a></li>
+                <li><a href="https://docs.oracle.com/iaas/Content/ContEng/Concepts/contengoverview.htm?source=:ex:tb:::::WWMK211117P00058:WW_FY22_DevRel_DotBuild&amp;SC=:ex:tb:::::WWMK211117P00058:WW_FY22_DevRel_DotBuild&amp;pcode=WWMK211117P00058"
+                        target="_blank">OCI
                         Container Engine for Kubernetes</a></li>
-                <li><a
-                        href="https://docs.oracle.com/iaas/Content/Registry/Concepts/registryoverview.htm?source=:ex:tb:::::WWMK211117P00058:WW_FY22_DevRel_DotBuild&amp;SC=:ex:tb:::::WWMK211117P00058:WW_FY22_DevRel_DotBuild&amp;pcode=WWMK211117P00058">OCI
+                <li><a href="https://docs.oracle.com/iaas/Content/Registry/Concepts/registryoverview.htm?source=:ex:tb:::::WWMK211117P00058:WW_FY22_DevRel_DotBuild&amp;SC=:ex:tb:::::WWMK211117P00058:WW_FY22_DevRel_DotBuild&amp;pcode=WWMK211117P00058"
+                        target="_blank">OCI
                         Container Registry</a></li>
-                <li><a
-                        href="https://docs.oracle.com/en-us/iaas/Content/API/Concepts/cloudshellintro.htm?source=:ex:tb:::::WWMK211117P00058:WW_FY22_DevRel_DotBuild&amp;SC=:ex:tb:::::WWMK211117P00058:WW_FY22_DevRel_DotBuild&amp;pcode=WWMK211117P00058">Getting
+                <li><a href="https://docs.oracle.com/en-us/iaas/Content/API/Concepts/cloudshellintro.htm?source=:ex:tb:::::WWMK211117P00058:WW_FY22_DevRel_DotBuild&amp;SC=:ex:tb:::::WWMK211117P00058:WW_FY22_DevRel_DotBuild&amp;pcode=WWMK211117P00058"
+                        target="_blank">Getting
                         started with OCI Cloud Shell</a></li>
             </ul>
 
@@ -58,7 +66,8 @@
             <ul>
                 <li>A <strong>paid</strong> Oracle Cloud Infrastructure account.<br>
                     See: <a
-                        href="https://docs.oracle.com/iaas/Content/GSG/Tasks/signingup.htm?source=:ex:tb:::::WWMK211117P00058:WW_FY22_DevRel_DotBuild&amp;SC=:ex:tb:::::WWMK211117P00058:WW_FY22_DevRel_DotBuild&amp;pcode=WWMK211117P00058">Signing
+                        href="https://docs.oracle.com/iaas/Content/GSG/Tasks/signingup.htm?source=:ex:tb:::::WWMK211117P00058:WW_FY22_DevRel_DotBuild&amp;SC=:ex:tb:::::WWMK211117P00058:WW_FY22_DevRel_DotBuild&amp;pcode=WWMK211117P00058"
+                        target="_blank">Signing
                         Up for Oracle Cloud Infrastructure</a></li>
             </ul>
 
@@ -76,9 +85,10 @@
                             <p>For example:</p>
 
                             <ul>
-                                <li><a href="https://docs.microsoft.com/en-us/windows/wsl/install-win10">Windows
+                                <li><a href="https://docs.microsoft.com/en-us/windows/wsl/install-win10"
+                                        target="_blank">Windows
                                         Subsystem for Linux</a></li>
-                                <li><a href="https://www.virtualbox.org/">Oracle Virtual Box</a></li>
+                                <li><a href="https://www.virtualbox.org/" target="_blank">Oracle Virtual Box</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -107,7 +117,8 @@
                     Shell is that all the required tools to manage your application are already installed and ready to
                     use.<br>
                     If you’d like to go this route, follow the steps in the <a
-                        href="https://docs.oracle.com/iaas/developer-tutorials/tutorials/spring-on-k8s-cs/01oci-spring-cs-k8s-summary.htm?source=:ex:tb:::::WWMK211117P00058:WW_FY22_DevRel_DotBuild&amp;SC=:ex:tb:::::WWMK211117P00058:WW_FY22_DevRel_DotBuild&amp;pcode=WWMK211117P00058">Kubernetes
+                        href="https://docs.oracle.com/iaas/developer-tutorials/tutorials/spring-on-k8s-cs/01oci-spring-cs-k8s-summary.htm?source=:ex:tb:::::WWMK211117P00058:WW_FY22_DevRel_DotBuild&amp;SC=:ex:tb:::::WWMK211117P00058:WW_FY22_DevRel_DotBuild&amp;pcode=WWMK211117P00058"
+                        target="_blank">Kubernetes
                         Using Cloud Shell: Deploy a Spring Boot Application</a> guide.</p>
 
             </blockquote>
@@ -186,6 +197,10 @@
 
                     <div class="language-console highlighter-rouge">
                         <div class="highlight">
+                            <div class="ocode-bttn" data-error="Error: Could not Copy"
+                                data-success="Copied to Clipboard">
+                                <div><a href="#copy">Copy</a></div>
+                            </div>
                             <pre class="highlight"><code><span class="go"> sudo yum update
 </span></code></pre>
                         </div>
@@ -197,6 +212,10 @@
 
                     <div class="language-console highlighter-rouge">
                         <div class="highlight">
+                            <div class="ocode-bttn" data-error="Error: Could not Copy"
+                                data-success="Copied to Clipboard">
+                                <div><a href="#copy">Copy</a></div>
+                            </div>
                             <pre class="highlight"><code><span class="go"> sudo yum install -y oracle-nodejs-release-el7
  sudo yum install -y nodejs
 </span></code></pre>
@@ -214,6 +233,10 @@
 
                     <div class="language-console highlighter-rouge">
                         <div class="highlight">
+                            <div class="ocode-bttn" data-error="Error: Could not Copy"
+                                data-success="Copied to Clipboard">
+                                <div><a href="#copy">Copy</a></div>
+                            </div>
                             <pre class="highlight"><code><span class="go"> sudo apt update
 </span></code></pre>
                         </div>
@@ -225,6 +248,10 @@
 
                     <div class="language-console highlighter-rouge">
                         <div class="highlight">
+                            <div class="ocode-bttn" data-error="Error: Could not Copy"
+                                data-success="Copied to Clipboard">
+                                <div><a href="#copy">Copy</a></div>
+                            </div>
                             <pre class="highlight"><code><span class="go"> sudo apt install -y nodejs
  sudo apt install -y npm
 </span></code></pre>
@@ -236,6 +263,10 @@
 
                     <div class="language-console highlighter-rouge">
                         <div class="highlight">
+                            <div class="ocode-bttn" data-error="Error: Could not Copy"
+                                data-success="Copied to Clipboard">
+                                <div><a href="#copy">Copy</a></div>
+                            </div>
                             <pre class="highlight"><code><span class="go"> node -v
  npm -v
 </span></code></pre>
@@ -261,6 +292,9 @@
 
             <div class="language-console highlighter-rouge">
                 <div class="highlight">
+                    <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                        <div><a href="#copy">Copy</a></div>
+                    </div>
                     <pre class="highlight"><code><span class="go">sudo firewall-cmd --add-service=http --permanent
 sudo firewall-cmd --add-service=https --permanent
 sudo firewall-cmd --reload
@@ -273,6 +307,9 @@ sudo firewall-cmd --reload
 
             <div class="language-console highlighter-rouge">
                 <div class="highlight">
+                    <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                        <div><a href="#copy">Copy</a></div>
+                    </div>
                     <pre class="highlight"><code><span class="go">sudo iptables -I INPUT 6 -m state --state NEW -p tcp --dport 3000 -j ACCEPT
 sudo netfilter-persistent save
 </span></code></pre>
@@ -317,6 +354,10 @@ sudo netfilter-persistent save
 
                     <div class="language-console highlighter-rouge">
                         <div class="highlight">
+                            <div class="ocode-bttn" data-error="Error: Could not Copy"
+                                data-success="Copied to Clipboard">
+                                <div><a href="#copy">Copy</a></div>
+                            </div>
                             <pre class="highlight"><code><span class="go"> Stateless: Checked
  Source Type: CIDR
  Source CIDR: 0.0.0.0/0
@@ -346,6 +387,10 @@ sudo netfilter-persistent save
 
                     <div class="language-console highlighter-rouge">
                         <div class="highlight">
+                            <div class="ocode-bttn" data-error="Error: Could not Copy"
+                                data-success="Copied to Clipboard">
+                                <div><a href="#copy">Copy</a></div>
+                            </div>
                             <pre class="highlight"><code><span class="go"> python3 --version
 </span></code></pre>
                         </div>
@@ -360,6 +405,10 @@ sudo netfilter-persistent save
 
                             <div class="language-console highlighter-rouge">
                                 <div class="highlight">
+                                    <div class="ocode-bttn" data-error="Error: Could not Copy"
+                                        data-success="Copied to Clipboard">
+                                        <div><a href="#copy">Copy</a></div>
+                                    </div>
                                     <pre class="highlight"><code><span class="go">  sudo yum update
 
   sudo yum install -y python3
@@ -372,6 +421,10 @@ sudo netfilter-persistent save
 
                             <div class="language-console highlighter-rouge">
                                 <div class="highlight">
+                                    <div class="ocode-bttn" data-error="Error: Could not Copy"
+                                        data-success="Copied to Clipboard">
+                                        <div><a href="#copy">Copy</a></div>
+                                    </div>
                                     <pre class="highlight"><code><span class="go">  sudo apt update
 
   sudo apt install -y python3
@@ -386,6 +439,10 @@ sudo netfilter-persistent save
 
                     <div class="language-console highlighter-rouge">
                         <div class="highlight">
+                            <div class="ocode-bttn" data-error="Error: Could not Copy"
+                                data-success="Copied to Clipboard">
+                                <div><a href="#copy">Copy</a></div>
+                            </div>
                             <pre class="highlight"><code><span class="go"> pip3 -V
 </span></code></pre>
                         </div>
@@ -395,6 +452,10 @@ sudo netfilter-persistent save
 
                     <div class="language-console highlighter-rouge">
                         <div class="highlight">
+                            <div class="ocode-bttn" data-error="Error: Could not Copy"
+                                data-success="Copied to Clipboard">
+                                <div><a href="#copy">Copy</a></div>
+                            </div>
                             <pre class="highlight"><code><span class="gp"> pip &lt;version&gt;</span><span class="w"> </span>from xxx/lib/python3.x/site-packages/pip   <span class="o">(</span>python 3.x<span class="o">)</span>
 </code></pre>
                         </div>
@@ -409,6 +470,10 @@ sudo netfilter-persistent save
 
                             <div class="language-console highlighter-rouge">
                                 <div class="highlight">
+                                    <div class="ocode-bttn" data-error="Error: Could not Copy"
+                                        data-success="Copied to Clipboard">
+                                        <div><a href="#copy">Copy</a></div>
+                                    </div>
                                     <pre class="highlight"><code><span class="go">  sudo yum update
 
   sudo yum install -y python3-pip
@@ -421,6 +486,10 @@ sudo netfilter-persistent save
 
                             <div class="language-console highlighter-rouge">
                                 <div class="highlight">
+                                    <div class="ocode-bttn" data-error="Error: Could not Copy"
+                                        data-success="Copied to Clipboard">
+                                        <div><a href="#copy">Copy</a></div>
+                                    </div>
                                     <pre class="highlight"><code><span class="go">  sudo apt update
 
   sudo apt install -y python3-pip
@@ -435,6 +504,10 @@ sudo netfilter-persistent save
 
                     <div class="language-console highlighter-rouge">
                         <div class="highlight">
+                            <div class="ocode-bttn" data-error="Error: Could not Copy"
+                                data-success="Copied to Clipboard">
+                                <div><a href="#copy">Copy</a></div>
+                            </div>
                             <pre class="highlight"><code><span class="go"> pip3 -V
 </span></code></pre>
                         </div>
@@ -452,6 +525,10 @@ sudo netfilter-persistent save
 
                     <div class="language-console highlighter-rouge">
                         <div class="highlight">
+                            <div class="ocode-bttn" data-error="Error: Could not Copy"
+                                data-success="Copied to Clipboard">
+                                <div><a href="#copy">Copy</a></div>
+                            </div>
                             <pre class="highlight"><code><span class="go"> kubectl version --client
 </span></code></pre>
                         </div>
@@ -465,6 +542,10 @@ sudo netfilter-persistent save
 
                     <div class="language-console highlighter-rouge">
                         <div class="highlight">
+                            <div class="ocode-bttn" data-error="Error: Could not Copy"
+                                data-success="Copied to Clipboard">
+                                <div><a href="#copy">Copy</a></div>
+                            </div>
                             <pre class="highlight"><code><span class="go"> version.Info{Major:"1", Minor:"20"...
 </span></code></pre>
                         </div>
@@ -473,10 +554,11 @@ sudo netfilter-persistent save
                 <li>To install he <code class="language-plaintext highlighter-rouge">kubectl</code> client, refer to the
                     following links:
                     <ul>
-                        <li><a
-                                href="https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/#install-kubectl-binary-with-curl-on-linux">Install
+                        <li><a href="https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/#install-kubectl-binary-with-curl-on-linux"
+                                target="_blank">Install
                                 Kubernetes client on Linux</a></li>
-                        <li><a href="https://kubernetes.io/docs/tasks/tools/install-kubectl-macos/">Install Kubernetes
+                        <li><a href="https://kubernetes.io/docs/tasks/tools/install-kubectl-macos/"
+                                target="_blank">Install Kubernetes
                                 client on MacOS</a></li>
                     </ul>
                 </li>
@@ -485,6 +567,10 @@ sudo netfilter-persistent save
 
                     <div class="language-console highlighter-rouge">
                         <div class="highlight">
+                            <div class="ocode-bttn" data-error="Error: Could not Copy"
+                                data-success="Copied to Clipboard">
+                                <div><a href="#copy">Copy</a></div>
+                            </div>
                             <pre class="highlight"><code><span class="go"> kubectl version --client
 </span></code></pre>
                         </div>
@@ -501,6 +587,10 @@ sudo netfilter-persistent save
 
                     <div class="language-console highlighter-rouge">
                         <div class="highlight">
+                            <div class="ocode-bttn" data-error="Error: Could not Copy"
+                                data-success="Copied to Clipboard">
+                                <div><a href="#copy">Copy</a></div>
+                            </div>
                             <pre class="highlight"><code><span class="go"> docker -v
 </span></code></pre>
                         </div>
@@ -512,6 +602,10 @@ sudo netfilter-persistent save
 
                             <div class="language-console highlighter-rouge">
                                 <div class="highlight">
+                                    <div class="ocode-bttn" data-error="Error: Could not Copy"
+                                        data-success="Copied to Clipboard">
+                                        <div><a href="#copy">Copy</a></div>
+                                    </div>
                                     <pre class="highlight"><code><span class="go">  sudo yum install docker-engine
            
   sudo systemctl start docker
@@ -529,7 +623,7 @@ sudo netfilter-persistent save
                             <p>Ubuntu Linux</p>
 
                             <p>To install Docker on Ubuntu Linux, refer to the <a
-                                    href="https://docs.docker.com/get-docker/">Get Docker</a> guide.</p>
+                                    href="https://docs.docker.com/get-docker/" target="_blank">Get Docker</a> guide.</p>
                         </li>
                     </ul>
                 </li>
@@ -538,6 +632,10 @@ sudo netfilter-persistent save
 
                     <div class="language-console highlighter-rouge">
                         <div class="highlight">
+                            <div class="ocode-bttn" data-error="Error: Could not Copy"
+                                data-success="Copied to Clipboard">
+                                <div><a href="#copy">Copy</a></div>
+                            </div>
                             <pre class="highlight"><code><span class="go"> docker -v
 </span></code></pre>
                         </div>
@@ -803,7 +901,8 @@ sudo netfilter-persistent save
                                     <strong>Example:</strong> <strong>US East (Ashburn)</strong>.
                                 </li>
                                 <li>Find your <strong>Region Identifier</strong> from the table in <a
-                                        href="https://docs.oracle.com/iaas/Content/General/Concepts/regions.htm?source=:ex:tb:::::WWMK211117P00058:WW_FY22_DevRel_DotBuild&amp;SC=:ex:tb:::::WWMK211117P00058:WW_FY22_DevRel_DotBuild&amp;pcode=WWMK211117P00058">Regions
+                                        href="https://docs.oracle.com/iaas/Content/General/Concepts/regions.htm?source=:ex:tb:::::WWMK211117P00058:WW_FY22_DevRel_DotBuild&amp;SC=:ex:tb:::::WWMK211117P00058:WW_FY22_DevRel_DotBuild&amp;pcode=WWMK211117P00058"
+                                        target="_blank">Regions
                                         and Availability Domains</a>.
                                     <strong>Example:</strong> <code
                                         class="language-plaintext highlighter-rouge">us-ashburn-1</code>.
@@ -814,7 +913,8 @@ sudo netfilter-persistent save
                                 class="language-plaintext highlighter-rouge">&lt;region-key&gt;</code>
                             <ul>
                                 <li>Find your <strong>Region Key</strong> from the table in <a
-                                        href="https://docs.oracle.com/iaas/Content/General/Concepts/regions.htm?source=:ex:tb:::::WWMK211117P00058:WW_FY22_DevRel_DotBuild&amp;SC=:ex:tb:::::WWMK211117P00058:WW_FY22_DevRel_DotBuild&amp;pcode=WWMK211117P00058">Regions
+                                        href="https://docs.oracle.com/iaas/Content/General/Concepts/regions.htm?source=:ex:tb:::::WWMK211117P00058:WW_FY22_DevRel_DotBuild&amp;SC=:ex:tb:::::WWMK211117P00058:WW_FY22_DevRel_DotBuild&amp;pcode=WWMK211117P00058"
+                                        target="_blank">Regions
                                         and Availability Domains</a>.
                                     <strong>Example:</strong> <code
                                         class="language-plaintext highlighter-rouge">iad</code>
@@ -857,6 +957,10 @@ sudo netfilter-persistent save
 
                     <div class="language-console highlighter-rouge">
                         <div class="highlight">
+                            <div class="ocode-bttn" data-error="Error: Could not Copy"
+                                data-success="Copied to Clipboard">
+                                <div><a href="#copy">Copy</a></div>
+                            </div>
                             <pre class="highlight"><code><span class="go"> pip3 install --user virtualenv
 </span></code></pre>
                         </div>
@@ -867,6 +971,10 @@ sudo netfilter-persistent save
 
                     <div class="language-console highlighter-rouge">
                         <div class="highlight">
+                            <div class="ocode-bttn" data-error="Error: Could not Copy"
+                                data-success="Copied to Clipboard">
+                                <div><a href="#copy">Copy</a></div>
+                            </div>
                             <pre class="highlight"><code><span class="go"> pip3 install --user virtualenvwrapper
 </span></code></pre>
                         </div>
@@ -878,6 +986,10 @@ sudo netfilter-persistent save
 
                     <div class="language-console highlighter-rouge">
                         <div class="highlight">
+                            <div class="ocode-bttn" data-error="Error: Could not Copy"
+                                data-success="Copied to Clipboard">
+                                <div><a href="#copy">Copy</a></div>
+                            </div>
                             <pre class="highlight"><code><span class="go"> grep -R virtualenvwrapper.sh
 </span></code></pre>
                         </div>
@@ -902,6 +1014,10 @@ sudo netfilter-persistent save
 
                     <div class="language-console highlighter-rouge">
                         <div class="highlight">
+                            <div class="ocode-bttn" data-error="Error: Could not Copy"
+                                data-success="Copied to Clipboard">
+                                <div><a href="#copy">Copy</a></div>
+                            </div>
                             <pre class="highlight"><code><span class="go"> sudo vi .bashrc
 </span></code></pre>
                         </div>
@@ -913,6 +1029,10 @@ sudo netfilter-persistent save
 
                             <div class="language-console highlighter-rouge">
                                 <div class="highlight">
+                                    <div class="ocode-bttn" data-error="Error: Could not Copy"
+                                        data-success="Copied to Clipboard">
+                                        <div><a href="#copy">Copy</a></div>
+                                    </div>
                                     <pre class="highlight"><code><span class="gp"> #</span><span class="w"> </span><span class="nb">set </span>up Python <span class="nb">env</span>
 <span class="go"> export WORKON_HOME=~/envs
  export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
@@ -943,6 +1063,10 @@ sudo netfilter-persistent save
 
                     <div class="language-console highlighter-rouge">
                         <div class="highlight">
+                            <div class="ocode-bttn" data-error="Error: Could not Copy"
+                                data-success="Copied to Clipboard">
+                                <div><a href="#copy">Copy</a></div>
+                            </div>
                             <pre class="highlight"><code><span class="go"> source ~/.bashrc
 </span></code></pre>
                         </div>
@@ -952,6 +1076,10 @@ sudo netfilter-persistent save
 
                     <div class="language-console highlighter-rouge">
                         <div class="highlight">
+                            <div class="ocode-bttn" data-error="Error: Could not Copy"
+                                data-success="Copied to Clipboard">
+                                <div><a href="#copy">Copy</a></div>
+                            </div>
                             <pre class="highlight"><code><span class="go"> virtualenvwrapper.user_scripts creating /home/ubuntu/envs/premkproject
  virtualenvwrapper.user_scripts creating /home/ubuntu/envs/postmkproject
  virtualenvwrapper.user_scripts creating /home/ubuntu/envs/initialize
@@ -978,6 +1106,10 @@ sudo netfilter-persistent save
 
                     <div class="language-console highlighter-rouge">
                         <div class="highlight">
+                            <div class="ocode-bttn" data-error="Error: Could not Copy"
+                                data-success="Copied to Clipboard">
+                                <div><a href="#copy">Copy</a></div>
+                            </div>
                             <pre class="highlight"><code><span class="go"> workon cli-app
 </span></code></pre>
                         </div>
@@ -998,6 +1130,10 @@ sudo netfilter-persistent save
 
                     <div class="language-console highlighter-rouge">
                         <div class="highlight">
+                            <div class="ocode-bttn" data-error="Error: Could not Copy"
+                                data-success="Copied to Clipboard">
+                                <div><a href="#copy">Copy</a></div>
+                            </div>
                             <pre class="highlight"><code><span class="go"> pip3 install oci-cli
 </span></code></pre>
                         </div>
@@ -1008,6 +1144,10 @@ sudo netfilter-persistent save
 
                     <div class="language-console highlighter-rouge">
                         <div class="highlight">
+                            <div class="ocode-bttn" data-error="Error: Could not Copy"
+                                data-success="Copied to Clipboard">
+                                <div><a href="#copy">Copy</a></div>
+                            </div>
                             <pre class="highlight"><code><span class="go"> oci --version
 </span></code></pre>
                         </div>
@@ -1017,6 +1157,10 @@ sudo netfilter-persistent save
 
                     <div class="language-console highlighter-rouge">
                         <div class="highlight">
+                            <div class="ocode-bttn" data-error="Error: Could not Copy"
+                                data-success="Copied to Clipboard">
+                                <div><a href="#copy">Copy</a></div>
+                            </div>
                             <pre class="highlight"><code><span class="go"> oci --help
 </span></code></pre>
                         </div>
@@ -1033,6 +1177,10 @@ sudo netfilter-persistent save
 
                     <div class="language-console highlighter-rouge">
                         <div class="highlight">
+                            <div class="ocode-bttn" data-error="Error: Could not Copy"
+                                data-success="Copied to Clipboard">
+                                <div><a href="#copy">Copy</a></div>
+                            </div>
                             <pre class="highlight"><code><span class="go"> oci setup config
 </span></code></pre>
                         </div>
@@ -1080,6 +1228,10 @@ sudo netfilter-persistent save
 
                     <div class="language-console highlighter-rouge">
                         <div class="highlight">
+                            <div class="ocode-bttn" data-error="Error: Could not Copy"
+                                data-success="Copied to Clipboard">
+                                <div><a href="#copy">Copy</a></div>
+                            </div>
                             <pre class="highlight"><code><span class="go"> deactivate
 </span></code></pre>
                         </div>
@@ -1101,6 +1253,10 @@ sudo netfilter-persistent save
 
                     <div class="language-console highlighter-rouge">
                         <div class="highlight">
+                            <div class="ocode-bttn" data-error="Error: Could not Copy"
+                                data-success="Copied to Clipboard">
+                                <div><a href="#copy">Copy</a></div>
+                            </div>
                             <pre class="highlight"><code><span class="go"> workon cli-app
 </span></code></pre>
                         </div>
@@ -1111,6 +1267,10 @@ sudo netfilter-persistent save
 
                     <div class="language-console highlighter-rouge">
                         <div class="highlight">
+                            <div class="ocode-bttn" data-error="Error: Could not Copy"
+                                data-success="Copied to Clipboard">
+                                <div><a href="#copy">Copy</a></div>
+                            </div>
                             <pre class="highlight"><code><span class="gp"> cat $</span>HOME/.oci/oci_api_key_public.pem
 </code></pre>
                         </div>
@@ -1167,6 +1327,9 @@ sudo netfilter-persistent save
 
             <div class="language-console highlighter-rouge">
                 <div class="highlight">
+                    <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                        <div><a href="#copy">Copy</a></div>
+                    </div>
                     <pre class="highlight"><code><span class="gp">allow group &lt;the-group-your-username-belongs&gt;</span><span class="w"> </span>to manage compartments <span class="k">in </span>tenancy
 </code></pre>
                 </div>
@@ -1250,6 +1413,9 @@ sudo netfilter-persistent save
 
             <div class="language-console highlighter-rouge">
                 <div class="highlight">
+                    <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                        <div><a href="#copy">Copy</a></div>
+                    </div>
                     <pre class="highlight"><code><span class="gp">allow group &lt;the-group-your-username-belongs&gt;</span><span class="w"> </span>to manage all-resources <span class="k">in </span>compartment &lt;your-compartment-name&gt;
 </code></pre>
                 </div>
@@ -1297,7 +1463,8 @@ sudo netfilter-persistent save
             </ol>
 
             <p><strong>Reference:</strong> <a
-                    href="https://docs.oracle.com/iaas/Content/Identity/Concepts/commonpolicies.htm?source=:ex:tb:::::WWMK211117P00058:WW_FY22_DevRel_DotBuild&amp;SC=:ex:tb:::::WWMK211117P00058:WW_FY22_DevRel_DotBuild&amp;pcode=WWMK211117P00058">Common
+                    href="https://docs.oracle.com/iaas/Content/Identity/Concepts/commonpolicies.htm?source=:ex:tb:::::WWMK211117P00058:WW_FY22_DevRel_DotBuild&amp;SC=:ex:tb:::::WWMK211117P00058:WW_FY22_DevRel_DotBuild&amp;pcode=WWMK211117P00058"
+                    target="_blank">Common
                     Policies</a></p>
 
             <h3 id="create-a-cluster-with-quick-create">Create a Cluster with ‘Quick Create’<a class="header-link"
@@ -1383,6 +1550,10 @@ sudo netfilter-persistent save
 
                             <div class="language-console highlighter-rouge">
                                 <div class="highlight">
+                                    <div class="ocode-bttn" data-error="Error: Could not Copy"
+                                        data-success="Copied to Clipboard">
+                                        <div><a href="#copy">Copy</a></div>
+                                    </div>
                                     <pre class="highlight"><code><span class="go"> oci -v
 </span></code></pre>
                                 </div>
@@ -1394,6 +1565,10 @@ sudo netfilter-persistent save
 
                             <div class="language-console highlighter-rouge">
                                 <div class="highlight">
+                                    <div class="ocode-bttn" data-error="Error: Could not Copy"
+                                        data-success="Copied to Clipboard">
+                                        <div><a href="#copy">Copy</a></div>
+                                    </div>
                                     <pre class="highlight"><code><span class="gp"> mkdir -p $</span>HOME/.kube
 </code></pre>
                                 </div>
@@ -1407,6 +1582,10 @@ sudo netfilter-persistent save
 
                             <div class="language-console highlighter-rouge">
                                 <div class="highlight">
+                                    <div class="ocode-bttn" data-error="Error: Could not Copy"
+                                        data-success="Copied to Clipboard">
+                                        <div><a href="#copy">Copy</a></div>
+                                    </div>
                                     <pre class="highlight"><code><span class="gp"> oci ce cluster create-kubeconfig &lt;use data from dialog&gt;</span><span class="w">
 </span></code></pre>
                                 </div>
@@ -1418,6 +1597,10 @@ sudo netfilter-persistent save
 
                             <div class="language-console highlighter-rouge">
                                 <div class="highlight">
+                                    <div class="ocode-bttn" data-error="Error: Could not Copy"
+                                        data-success="Copied to Clipboard">
+                                        <div><a href="#copy">Copy</a></div>
+                                    </div>
                                     <pre class="highlight"><code><span class="gp">  export KUBECONFIG=$</span>HOME/.kube/config
 </code></pre>
                                 </div>
@@ -1442,6 +1625,10 @@ sudo netfilter-persistent save
 
                             <div class="language-console highlighter-rouge">
                                 <div class="highlight">
+                                    <div class="ocode-bttn" data-error="Error: Could not Copy"
+                                        data-success="Copied to Clipboard">
+                                        <div><a href="#copy">Copy</a></div>
+                                    </div>
                                     <pre class="highlight"><code><span class="go">  kubectl get service
 </span></code></pre>
                                 </div>
@@ -1452,6 +1639,10 @@ sudo netfilter-persistent save
 
                             <div class="language-console highlighter-rouge">
                                 <div class="highlight">
+                                    <div class="ocode-bttn" data-error="Error: Could not Copy"
+                                        data-success="Copied to Clipboard">
+                                        <div><a href="#copy">Copy</a></div>
+                                    </div>
                                     <pre class="highlight"><code><span class="go">   kubectl describe deployment
 </span></code></pre>
                                 </div>
@@ -1465,6 +1656,10 @@ sudo netfilter-persistent save
 
                             <div class="language-console highlighter-rouge">
                                 <div class="highlight">
+                                    <div class="ocode-bttn" data-error="Error: Could not Copy"
+                                        data-success="Copied to Clipboard">
+                                        <div><a href="#copy">Copy</a></div>
+                                    </div>
                                     <pre class="highlight"><code><span class="go">   kubectl get pods
 </span></code></pre>
                                 </div>
@@ -1479,6 +1674,10 @@ sudo netfilter-persistent save
 
                                 <div class="language-console highlighter-rouge">
                                     <div class="highlight">
+                                        <div class="ocode-bttn" data-error="Error: Could not Copy"
+                                            data-success="Copied to Clipboard">
+                                            <div><a href="#copy">Copy</a></div>
+                                        </div>
                                         <pre class="highlight"><code><span class="gp">kubectl --kubeconfig=&lt;/path/to/config/file&gt;</span><span class="w">
 </span></code></pre>
                                     </div>
@@ -1512,6 +1711,10 @@ sudo netfilter-persistent save
 
                     <div class="language-console highlighter-rouge">
                         <div class="highlight">
+                            <div class="ocode-bttn" data-error="Error: Could not Copy"
+                                data-success="Copied to Clipboard">
+                                <div><a href="#copy">Copy</a></div>
+                            </div>
                             <pre class="highlight"><code><span class="go"> mkdir node-hello-app
  cd node-hello-app
 </span></code></pre>
@@ -1523,6 +1726,10 @@ sudo netfilter-persistent save
 
                     <div class="language-console highlighter-rouge">
                         <div class="highlight">
+                            <div class="ocode-bttn" data-error="Error: Could not Copy"
+                                data-success="Copied to Clipboard">
+                                <div><a href="#copy">Copy</a></div>
+                            </div>
                             <pre class="highlight"><code><span class="go"> vi package.json
 </span></code></pre>
                         </div>
@@ -1535,6 +1742,10 @@ sudo netfilter-persistent save
 
                     <div class="language-json highlighter-rouge">
                         <div class="highlight">
+                            <div class="ocode-bttn" data-error="Error: Could not Copy"
+                                data-success="Copied to Clipboard">
+                                <div><a href="#copy">Copy</a></div>
+                            </div>
                             <pre class="highlight"><code><span class="w"> </span><span class="p">{</span><span class="w">
      </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"node-hello-app"</span><span class="p">,</span><span class="w">
      </span><span class="nl">"version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1.0.0"</span><span class="p">,</span><span class="w">
@@ -1565,6 +1776,10 @@ sudo netfilter-persistent save
 
                     <div class="language-console highlighter-rouge">
                         <div class="highlight">
+                            <div class="ocode-bttn" data-error="Error: Could not Copy"
+                                data-success="Copied to Clipboard">
+                                <div><a href="#copy">Copy</a></div>
+                            </div>
                             <pre class="highlight"><code><span class="go"> npm install
 </span></code></pre>
                         </div>
@@ -1579,6 +1794,10 @@ sudo netfilter-persistent save
 
                             <div class="language-console highlighter-rouge">
                                 <div class="highlight">
+                                    <div class="ocode-bttn" data-error="Error: Could not Copy"
+                                        data-success="Copied to Clipboard">
+                                        <div><a href="#copy">Copy</a></div>
+                                    </div>
                                     <pre class="highlight"><code><span class="go"> vi app.js
 </span></code></pre>
                                 </div>
@@ -1589,6 +1808,10 @@ sudo netfilter-persistent save
 
                             <div class="language-javascript highlighter-rouge">
                                 <div class="highlight">
+                                    <div class="ocode-bttn" data-error="Error: Could not Copy"
+                                        data-success="Copied to Clipboard">
+                                        <div><a href="#copy">Copy</a></div>
+                                    </div>
                                     <pre class="highlight"><code>  <span class="kd">const</span> <span class="nx">express</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">express</span><span class="dl">'</span><span class="p">)</span>
   <span class="kd">const</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">express</span><span class="p">()</span>
   <span class="nx">port</span> <span class="o">=</span> <span class="mi">3000</span>
@@ -1622,6 +1845,10 @@ sudo netfilter-persistent save
 
                     <div class="language-console highlighter-rouge">
                         <div class="highlight">
+                            <div class="ocode-bttn" data-error="Error: Could not Copy"
+                                data-success="Copied to Clipboard">
+                                <div><a href="#copy">Copy</a></div>
+                            </div>
                             <pre class="highlight"><code><span class="go"> node app.js
 </span></code></pre>
                         </div>
@@ -1631,6 +1858,10 @@ sudo netfilter-persistent save
 
                     <div class="language-console highlighter-rouge">
                         <div class="highlight">
+                            <div class="ocode-bttn" data-error="Error: Could not Copy"
+                                data-success="Copied to Clipboard">
+                                <div><a href="#copy">Copy</a></div>
+                            </div>
                             <pre class="highlight"><code><span class="go"> Hello World app listening on port 3000
 </span></code></pre>
                         </div>
@@ -1643,6 +1874,10 @@ sudo netfilter-persistent save
 
                             <div class="language-console highlighter-rouge">
                                 <div class="highlight">
+                                    <div class="ocode-bttn" data-error="Error: Could not Copy"
+                                        data-success="Copied to Clipboard">
+                                        <div><a href="#copy">Copy</a></div>
+                                    </div>
                                     <pre class="highlight"><code><span class="go">  curl -X GET http://localhost:3000
 </span></code></pre>
                                 </div>
@@ -1657,6 +1892,10 @@ sudo netfilter-persistent save
 
                             <div class="language-html highlighter-rouge">
                                 <div class="highlight">
+                                    <div class="ocode-bttn" data-error="Error: Could not Copy"
+                                        data-success="Copied to Clipboard">
+                                        <div><a href="#copy">Copy</a></div>
+                                    </div>
                                     <pre class="highlight"><code>  <span class="nt">&lt;h1&gt;</span>Hello World from Node.js!<span class="nt">&lt;/h1&gt;</span>
 </code></pre>
                                 </div>
@@ -1675,7 +1914,8 @@ sudo netfilter-persistent save
             <p>That’s it! You’ve successfully created a Hello World application using Node.js and Express.</p>
 
             <p><strong>Reference:</strong> For detailed information on this example, see <a
-                    href="https://expressjs.com/en/starter/hello-world.html">Getting Started with Express</a>.</p>
+                    href="https://expressjs.com/en/starter/hello-world.html" target="_blank">Getting Started with
+                    Express</a>.</p>
 
             <h2 id="build-a-docker-image">Build a Docker Image<a class="header-link" href="#build-a-docker-image"
                     title="Permalink"><span class="sr-only">Permalink</span><i class="fas fa-link"></i></a></h2>
@@ -1692,6 +1932,10 @@ sudo netfilter-persistent save
 
                     <div class="language-console highlighter-rouge">
                         <div class="highlight">
+                            <div class="ocode-bttn" data-error="Error: Could not Copy"
+                                data-success="Copied to Clipboard">
+                                <div><a href="#copy">Copy</a></div>
+                            </div>
                             <pre class="highlight"><code><span class="go"> docker build -t node-hello-app .
 </span></code></pre>
                         </div>
@@ -1701,6 +1945,10 @@ sudo netfilter-persistent save
 
                     <div class="language-console highlighter-rouge">
                         <div class="highlight">
+                            <div class="ocode-bttn" data-error="Error: Could not Copy"
+                                data-success="Copied to Clipboard">
+                                <div><a href="#copy">Copy</a></div>
+                            </div>
                             <pre class="highlight"><code><span class="go"> [INFO] BUILD SUCCESS
  Successfully tagged node-hello-app:latest
 </span></code></pre>
@@ -1712,6 +1960,10 @@ sudo netfilter-persistent save
 
                     <div class="language-console highlighter-rouge">
                         <div class="highlight">
+                            <div class="ocode-bttn" data-error="Error: Could not Copy"
+                                data-success="Copied to Clipboard">
+                                <div><a href="#copy">Copy</a></div>
+                            </div>
                             <pre class="highlight"><code><span class="go"> docker run --rm -p 3000:3000 node-hello-app:latest
 </span></code></pre>
                         </div>
@@ -1722,6 +1974,10 @@ sudo netfilter-persistent save
 
                     <div class="language-console highlighter-rouge">
                         <div class="highlight">
+                            <div class="ocode-bttn" data-error="Error: Could not Copy"
+                                data-success="Copied to Clipboard">
+                                <div><a href="#copy">Copy</a></div>
+                            </div>
                             <pre class="highlight"><code><span class="go"> curl -X GET http://localhost:3000
 </span></code></pre>
                         </div>
@@ -1731,6 +1987,10 @@ sudo netfilter-persistent save
 
                     <div class="language-html highlighter-rouge">
                         <div class="highlight">
+                            <div class="ocode-bttn" data-error="Error: Could not Copy"
+                                data-success="Copied to Clipboard">
+                                <div><a href="#copy">Copy</a></div>
+                            </div>
                             <pre class="highlight"><code> <span class="nt">&lt;h1&gt;</span>Hello World from Node.js!<span class="nt">&lt;/h1&gt;</span>
 </code></pre>
                         </div>
@@ -1771,6 +2031,10 @@ sudo netfilter-persistent save
 
                     <div class="language-console highlighter-rouge">
                         <div class="highlight">
+                            <div class="ocode-bttn" data-error="Error: Could not Copy"
+                                data-success="Copied to Clipboard">
+                                <div><a href="#copy">Copy</a></div>
+                            </div>
                             <pre class="highlight"><code><span class="gp"> &lt;repo-name&gt;</span><span class="w"> </span><span class="o">=</span> &lt;image-path-name&gt;/&lt;image-name&gt;
 </code></pre>
                         </div>
@@ -1804,6 +2068,10 @@ sudo netfilter-persistent save
 
                     <div class="language-console highlighter-rouge">
                         <div class="highlight">
+                            <div class="ocode-bttn" data-error="Error: Could not Copy"
+                                data-success="Copied to Clipboard">
+                                <div><a href="#copy">Copy</a></div>
+                            </div>
                             <pre class="highlight"><code><span class="gp"> docker login &lt;region-key&gt;</span>.ocir.io
 </code></pre>
                         </div>
@@ -1824,6 +2092,10 @@ sudo netfilter-persistent save
 
                     <div class="language-console highlighter-rouge">
                         <div class="highlight">
+                            <div class="ocode-bttn" data-error="Error: Could not Copy"
+                                data-success="Copied to Clipboard">
+                                <div><a href="#copy">Copy</a></div>
+                            </div>
                             <pre class="highlight"><code><span class="go"> docker images
 </span></code></pre>
                         </div>
@@ -1840,6 +2112,10 @@ sudo netfilter-persistent save
 
                     <div class="language-console highlighter-rouge">
                         <div class="highlight">
+                            <div class="ocode-bttn" data-error="Error: Could not Copy"
+                                data-success="Copied to Clipboard">
+                                <div><a href="#copy">Copy</a></div>
+                            </div>
                             <pre class="highlight"><code><span class="gp"> docker tag &lt;your-local-image&gt;</span><span class="w"> </span>&lt;repo-url&gt;/&lt;repo-name&gt;
 </code></pre>
                         </div>
@@ -1866,6 +2142,10 @@ sudo netfilter-persistent save
 
                     <div class="language-console highlighter-rouge">
                         <div class="highlight">
+                            <div class="ocode-bttn" data-error="Error: Could not Copy"
+                                data-success="Copied to Clipboard">
+                                <div><a href="#copy">Copy</a></div>
+                            </div>
                             <pre class="highlight"><code><span class="go"> docker tag node-hello-app iad.ocir.io/my-namespace/node-apps/node-hello-app
 </span></code></pre>
                         </div>
@@ -1893,6 +2173,10 @@ sudo netfilter-persistent save
 
                     <div class="language-console highlighter-rouge">
                         <div class="highlight">
+                            <div class="ocode-bttn" data-error="Error: Could not Copy"
+                                data-success="Copied to Clipboard">
+                                <div><a href="#copy">Copy</a></div>
+                            </div>
                             <pre class="highlight"><code><span class="go"> docker images
 </span></code></pre>
                         </div>
@@ -1910,6 +2194,10 @@ sudo netfilter-persistent save
 
                     <div class="language-console highlighter-rouge">
                         <div class="highlight">
+                            <div class="ocode-bttn" data-error="Error: Could not Copy"
+                                data-success="Copied to Clipboard">
+                                <div><a href="#copy">Copy</a></div>
+                            </div>
                             <pre class="highlight"><code><span class="gp"> docker push &lt;copied-image-name&gt;</span>:latest
 </code></pre>
                         </div>
@@ -1919,6 +2207,10 @@ sudo netfilter-persistent save
 
                     <div class="language-console highlighter-rouge">
                         <div class="highlight">
+                            <div class="ocode-bttn" data-error="Error: Could not Copy"
+                                data-success="Copied to Clipboard">
+                                <div><a href="#copy">Copy</a></div>
+                            </div>
                             <pre class="highlight"><code><span class="go"> docker push iad.ocir.io/my-namespace/node-apps/node-hello-app:latest
 </span></code></pre>
                         </div>
@@ -1947,6 +2239,10 @@ sudo netfilter-persistent save
 
                     <div class="language-console highlighter-rouge">
                         <div class="highlight">
+                            <div class="ocode-bttn" data-error="Error: Could not Copy"
+                                data-success="Copied to Clipboard">
+                                <div><a href="#copy">Copy</a></div>
+                            </div>
                             <pre class="highlight"><code><span class="gp"> kubectl create secret docker-registry ocirsecret --docker-server=&lt;region-key&gt;</span>.ocir.io  <span class="nt">--docker-username</span><span class="o">=</span><span class="s1">'&lt;tenancy-namespace&gt;/&lt;user-name&gt;'</span> <span class="nt">--docker-password</span><span class="o">=</span><span class="s1">'&lt;auth-token&gt;'</span>  <span class="nt">--docker-email</span><span class="o">=</span><span class="s1">'&lt;email-address&gt;'</span>
 </code></pre>
                         </div>
@@ -1960,6 +2256,10 @@ sudo netfilter-persistent save
 
                     <div class="language-console highlighter-rouge">
                         <div class="highlight">
+                            <div class="ocode-bttn" data-error="Error: Could not Copy"
+                                data-success="Copied to Clipboard">
+                                <div><a href="#copy">Copy</a></div>
+                            </div>
                             <pre class="highlight"><code><span class="go"> kubectl get secret ocirsecret --output=yaml
 </span></code></pre>
                         </div>
@@ -1973,6 +2273,10 @@ sudo netfilter-persistent save
 
                     <div class="language-console highlighter-rouge">
                         <div class="highlight">
+                            <div class="ocode-bttn" data-error="Error: Could not Copy"
+                                data-success="Copied to Clipboard">
+                                <div><a href="#copy">Copy</a></div>
+                            </div>
                             <pre class="highlight"><code><span class="gp"> &lt;region-code&gt;</span>.ocir.io/&lt;tenancy-namespace&gt;/&lt;repo-name&gt;/&lt;image-name&gt;:&lt;tag&gt;
 </code></pre>
                         </div>
@@ -1982,6 +2286,10 @@ sudo netfilter-persistent save
 
                     <div class="language-console highlighter-rouge">
                         <div class="highlight">
+                            <div class="ocode-bttn" data-error="Error: Could not Copy"
+                                data-success="Copied to Clipboard">
+                                <div><a href="#copy">Copy</a></div>
+                            </div>
                             <pre class="highlight"><code><span class="go"> iad.ocir.io/my-namespace/node-apps/node-hello-app:latest
 </span></code></pre>
                         </div>
@@ -2000,6 +2308,10 @@ sudo netfilter-persistent save
 
                     <div class="language-yaml highlighter-rouge">
                         <div class="highlight">
+                            <div class="ocode-bttn" data-error="Error: Could not Copy"
+                                data-success="Copied to Clipboard">
+                                <div><a href="#copy">Copy</a></div>
+                            </div>
                             <pre class="highlight"><code> <span class="na">apiVersion</span><span class="pi">:</span> <span class="s">apps/v1</span>
   <span class="s">kind</span><span class="err">:</span> <span class="s">Deployment</span>
   <span class="s">metadata</span><span class="err">:</span>
@@ -2055,6 +2367,10 @@ sudo netfilter-persistent save
 
                     <div class="language-console highlighter-rouge">
                         <div class="highlight">
+                            <div class="ocode-bttn" data-error="Error: Could not Copy"
+                                data-success="Copied to Clipboard">
+                                <div><a href="#copy">Copy</a></div>
+                            </div>
                             <pre class="highlight"><code><span class="go"> kubectl create -f node-app.yaml
 </span></code></pre>
                         </div>
@@ -2064,6 +2380,10 @@ sudo netfilter-persistent save
 
                     <div class="language-console highlighter-rouge">
                         <div class="highlight">
+                            <div class="ocode-bttn" data-error="Error: Could not Copy"
+                                data-success="Copied to Clipboard">
+                                <div><a href="#copy">Copy</a></div>
+                            </div>
                             <pre class="highlight"><code><span class="go"> deployment.apps/node-app created
  service/node-app-lb created
 </span></code></pre>
@@ -2083,6 +2403,10 @@ sudo netfilter-persistent save
 
                     <div class="language-console highlighter-rouge">
                         <div class="highlight">
+                            <div class="ocode-bttn" data-error="Error: Could not Copy"
+                                data-success="Copied to Clipboard">
+                                <div><a href="#copy">Copy</a></div>
+                            </div>
                             <pre class="highlight"><code><span class="go"> kubectl get service
 </span></code></pre>
                         </div>
@@ -2108,6 +2432,10 @@ sudo netfilter-persistent save
 
                     <div class="language-console highlighter-rouge">
                         <div class="highlight">
+                            <div class="ocode-bttn" data-error="Error: Could not Copy"
+                                data-success="Copied to Clipboard">
+                                <div><a href="#copy">Copy</a></div>
+                            </div>
                             <pre class="highlight"><code><span class="gp"> http://&lt;load-balancer-IP-address&gt;</span>:3000
 </code></pre>
                         </div>
@@ -2123,6 +2451,10 @@ sudo netfilter-persistent save
 
                     <div class="language-console highlighter-rouge">
                         <div class="highlight">
+                            <div class="ocode-bttn" data-error="Error: Could not Copy"
+                                data-success="Copied to Clipboard">
+                                <div><a href="#copy">Copy</a></div>
+                            </div>
                             <pre class="highlight"><code><span class="go"> kubectl delete -f node-app.yaml
 </span></code></pre>
                         </div>
@@ -2132,6 +2464,10 @@ sudo netfilter-persistent save
 
                     <div class="language-console highlighter-rouge">
                         <div class="highlight">
+                            <div class="ocode-bttn" data-error="Error: Could not Copy"
+                                data-success="Copied to Clipboard">
+                                <div><a href="#copy">Copy</a></div>
+                            </div>
                             <pre class="highlight"><code><span class="go"> deployment.apps/node-app deleted
  service "node-app-lb" deleted
 </span></code></pre>
@@ -2150,8 +2486,7 @@ sudo netfilter-persistent save
 
             <p>Check out these sites to explore more information about development with Oracle products:</p>
 
-            <p><a
-                    href="https://www.oracle.com/cloud/?source=:ex:tb:::::WWMK211117P00058:WW_FY22_DevRel_DotBuild&amp;SC=:ex:tb:::::WWMK211117P00058:WW_FY22_DevRel_DotBuild&amp;pcode=WWMK211117P00058">Oracle
+            <p><a href="https://developer.oracle.com/" target="_blank">Oracle
                     Developers Portal</a></p>
 
             <!--- links -->

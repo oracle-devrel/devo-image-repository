@@ -586,3 +586,10 @@ td {
 #u10 > div > div.u10w5.u10w10 > ul.u10-links > li > a, #icon-id06861753677157003 {
   color: #fff;
 }
+
+
+.oracleDepBTN{
+  max-width: 400px!important;
+  border: none;
+  margin: 0px;
+}

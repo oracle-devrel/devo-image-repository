@@ -90,15 +90,14 @@
                     </div>
 
                     <p>And finally, follow the <a
-                            href="https://github.com/oracle/sample-oke-for-terraform/blob/master/docs/instructions.md">instructions</a>
+                            href="https://github.com/oracle-terraform-modules/terraform-oci-oke/blob/main/docs/instructions.adoc">instructions</a>
                         to create your Terraform variable file.</p>
 
                 </div>
 
                 <div class="slide" id="slide-3">
 
-                    <h2 class="slide__title"><span class="slide__num">4</span> Adding the helm provider and repository
-                    </h2>
+                    <h2 class="slide__title"><span class="slide__num">4</span> Adding the helm provider and repository</h2>
 
                     <p>In the OKE module, create a <code class="language-plaintext highlighter-rouge">redis.tf</code>
                         file. First, we need to configure the helm provider. Since we already have the <code
@@ -149,7 +148,7 @@
                         become active, so we’ll have to make sure to check their status before proceeding.</p>
 
                     <p>Let’s get started setting up our release. In the <a
-                            href="https://github.com/oracle/sample-oke-for-terraform/blob/master/modules/oke/activeworker.tf">sample
+                            href="https://github.com/oracle-terraform-modules/terraform-oci-oke/tree/main/modules/oke">sample
                             repo</a>, there’s a null_resource <code
                             class="language-plaintext highlighter-rouge">is_worker_active</code> that you can use to set
                         an explicit dependency.</p>
@@ -294,9 +293,7 @@
 
                     <h2 class="slide__title"><span class="slide__num">6</span> Interacting with the Redis Cluster</h2>
 
-                    <p>After you’ve run <code class="language-plaintext highlighter-rouge">helm status</code> (see <a
-                            href="#download-the-helm-provider-and-check-status">previous section</a>), the following are
-                        available to you:</p>
+                    <p>After you’ve run <code class="language-plaintext highlighter-rouge">helm status</code>, the following are available to you:</p>
 
                     <ol>
                         <li>

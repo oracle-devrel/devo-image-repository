@@ -3,10 +3,10 @@
 
         <section class="page__content" itemprop="text">
 
-            <p>In <a href="extending-terraform-oke-helm-chart.md">another article</a>, we deployed a helm chart (Redis)
+            <p>In <a href="/tutorials/extending-terraform-oke-helm-chart">another article</a>, we deployed a helm chart (Redis)
                 into Oracle Container Engine (OKE) which we pulled from the stable repository.</p>
 
-            <p>We’ve <a href="oci-iac-framework/getting-started-with-oci-step-4-app-infrastructure.md">already
+            <p>We’ve <a href="/tutorials/getting-started-with-oci-step-4-app-infrastructure">already
                     described</a> how to host the container images privately on Oracle Registry Service (OCIR). What if
                 we want to do the same for our helm charts?</p>
 
@@ -17,9 +17,10 @@
 
             <h2 id="additional-information">Additional information<a class="header-link" href="#additional-information"
                     title="Permalink"><span class="sr-only">Permalink</span><i class="fas fa-link"></i></a></h2>
-
+                <!--
             <p>By default, the stable repo is hosted at <a
                     href="https://kubernetes-charts.storage.googleapis.com/">here</a>.</p>
+                -->
 
             <p>We can also manually add the <a href="https://github.com/helm/charts/tree/master/incubator">incubator
                     repository</a> if we want to:</p>
@@ -580,7 +581,7 @@
                 management and issuance of TLS certificates from various issuing sources.”</p>
 
             <p>At this point, you can follow along with the <a
-                    href="https://docs.cert-manager.io/en/latest/getting-started/install/kubernetes.html">cert-manager
+                    href="https://cert-manager.io/docs/">cert-manager
                     installation guide</a> or read on.</p>
 
             <ol>
@@ -743,7 +744,7 @@
                         class="fas fa-link"></i></a></h3>
 
             <p>For reference, you can follow <a
-                    href="https://docs.cert-manager.io/en/latest/tutorials/acme/quick-start/index.html">the quick-start
+                    href="https://cert-manager.io/docs/">the quick-start
                     guide</a> for using cert-manager with Nginx Ingress.</p>
 
             <ol>
@@ -1200,9 +1201,7 @@ tls.key:  1679 bytes
                 <li><a href="https://chartmuseum.com/docs/">Chartmuseum docs</a></li>
                 <li><a href="https://github.com/helm/charts/tree/master/stable/chartmuseum">Chartmuseum helm package
                         docs</a></li>
-                <li><a href="https://docs.cert-manager.io/en/latest/getting-started/install/kubernetes.html">cert-manager
-                        installation guide</a></li>
-                <li><a href="https://docs.cert-manager.io/en/latest/tutorials/acme/quick-start/index.html">cert-manager
+                <li><a href="https://cert-manager.io/docs/">cert-manager
                         with Nginx Ingress</a></li>
             </ul>
 
