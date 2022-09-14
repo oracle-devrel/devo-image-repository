@@ -94,6 +94,12 @@ strong {
   margin-bottom: 24px;
 }
 
+.oracleDepBTN{
+  max-width: 400px!important;
+  border: none;
+  margin: 0px;
+}
+
 .page img {
   /* margin-top: 24px; */
   margin-bottom: 11px;
@@ -588,8 +594,4 @@ td {
 }
 
 
-.oracleDepBTN{
-  max-width: 400px!important;
-  border: none;
-  margin: 0px;
-}
+
