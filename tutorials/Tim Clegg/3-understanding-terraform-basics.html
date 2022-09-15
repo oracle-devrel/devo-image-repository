@@ -10,7 +10,8 @@
 
                     <figure class="aligncenter">
                         <picture>
-                            <source srcset="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/tf-101/assets//terraform-101.png 1x" />
+                            <source
+                                srcset="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/tf-101/assets//terraform-101.png 1x" />
                             <img loading="lazy" width="400" height="400"
                                 src="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/tf-101/assets//terraform-101.png"
                                 data-original="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/tf-101/assets//terraform-101.png"
@@ -20,11 +21,13 @@
                         <figcaption>Terraform 101</figcaption>
                     </figure>
 
-                    <p>In our <a href="1-why-iac">first lesson</a>, we covered why you should care about Infrastructure
+                    <p>In our <a href="/tutorials/1-why-iac">first lesson</a>, we covered why you should care about
+                        Infrastructure
                         as Code (IaC). We also touched on a few of the many tools in this space, and finally, we decided
                         to narrow our focus down to Terraform.</p>
 
-                    <p>The <a href="2-experiencing-terraform">last lesson</a> took you through a really quick and simple
+                    <p>The <a href="/tutorials/2-experiencing-terraform">last lesson</a> took you through a really quick
+                        and simple
                         scenario using Terraform, setting up a virtual cloud network (VCN) and a subnet. It was short
                         but powerful, and hopefully helped you understand a bit of why Terraform (and IaC) is such a
                         great tool.</p>
@@ -73,7 +76,7 @@
                         <li>A MacOS, Linux, or Windows computer with <code
                                 class="language-plaintext highlighter-rouge">ssh</code> support installed.</li>
                         <li>Terraform CLI</li>
-                        <li><a href="(https://docs.oracle.com/en-us/iaas/Content/API/Concepts/cloudshellintro.htm)">OCI
+                        <li><a href="https://docs.oracle.com/en-us/iaas/Content/API/Concepts/cloudshellintro.htm">OCI
                                 Cloud Shell</a></li>
                     </ul>
 
@@ -94,10 +97,10 @@
                     <p>Terraform has several core components that you should become familiar with:</p>
 
                     <ul>
-                        <li><a href="#terraform-executable">Terraform executable</a></li>
-                        <li><a href="#terraform-providers">Terraform providers</a></li>
-                        <li><a href="#terraform-code">Terraform code</a></li>
-                        <li><a href="#terraform-state">Terraform state</a></li>
+                        <li>Terraform executable</li>
+                        <li>Terraform providers</li>
+                        <li>Terraform code</li>
+                        <li>Terraform state</li>
                     </ul>
 
                     <h3 id="terraform-executable">Terraform executable</h3>
@@ -274,32 +277,53 @@
                         commands that it accepts. Here are some of the most common ones that you’ll find yourself using:
                     </p>
 
-                    <dl>
-                        <dt><code class="language-plaintext highlighter-rouge">terraform init</code></dt>
-                        <dd><strong>This must be run at least once for a Terraform project.</strong> During the init
-                            process, Terraform downloads any needed providers, sets up the state (if it doesn’t already
-                            exist), and performs any other necessary start-up tasks.</dd>
-                        <dt><code class="language-plaintext highlighter-rouge">terraform plan</code></dt>
-                        <dd>Prompts Terraform to do a dry run, non-destructively determining what it would do if it was
-                            to apply the configuration settings. Terraform simply tells you what it thinks
-                            <em>should</em> be done and lets you review the outcomes without any changes being
-                            made.<br />
-                            It’s always a good idea to run <code
-                                class="language-plaintext highlighter-rouge">terraform plan</code> and review the output
-                            before applying. This way you can make sure that you fully understand what Terraform is
-                            intending to do.
-                        </dd>
-                        <dt><code class="language-plaintext highlighter-rouge">terraform apply</code></dt>
-                        <dd><strong>Changes are made with this command.</strong> By default, it will show you the same
-                            output as <code class="language-plaintext highlighter-rouge">terraform plan</code>, but will
-                            additionally prompt you to enact the proposed changes.<br />
-                            There are ways you can short-circuit this process and automatically accept all of the
-                            changes, but it’s generally a good idea to review the recommendations before applying them,
-                            especially when you’re running Terraform manually.</dd>
-                        <dt><code class="language-plaintext highlighter-rouge">terraform console</code></dt>
-                        <dd>Gives you an interactive console where you can enter different Terraform commands. This is
-                            particularly useful for building and testing logic in Terraform code.</dd>
-                    </dl>
+                    <div class="ocode">
+                        <pre><code>
+terraform init</code></pre>
+                    </div>
+
+
+                    <p><strong>This must be run at least once for a Terraform project.</strong> During the init
+                        process, Terraform downloads any needed providers, sets up the state (if it doesn’t already
+                        exist), and performs any other necessary start-up tasks.</p>
+
+
+                    <div class="ocode">
+                        <pre><code>
+terraform plan</code></pre>
+                    </div>
+
+                    <p>Prompts Terraform to do a dry run, non-destructively determining what it would do if it was
+                        to apply the configuration settings. Terraform simply tells you what it thinks
+                        <em>should</em> be done and lets you review the outcomes without any changes being
+                        made.<br />
+                        It’s always a good idea to run <code
+                            class="language-plaintext highlighter-rouge">terraform plan</code> and review the output
+                        before applying. This way you can make sure that you fully understand what Terraform is
+                        intending to do.
+                    </p>
+
+
+                    <div class="ocode">
+                        <pre><code>
+terraform apply</code></pre>
+                    </div>
+
+                    <p><strong>Changes are made with this command.</strong> By default, it will show you the same
+                        output as <code class="language-plaintext highlighter-rouge">terraform plan</code>, but will
+                        additionally prompt you to enact the proposed changes.<br />
+                        There are ways you can short-circuit this process and automatically accept all of the
+                        changes, but it’s generally a good idea to review the recommendations before applying them,
+                        especially when you’re running Terraform manually.</p>
+                    
+                        <div class="ocode">
+                            <pre><code>
+terraform console</code></pre>
+                        </div>
+                        
+                    <p>Gives you an interactive console where you can enter different Terraform commands. This is
+                        particularly useful for building and testing logic in Terraform code.</p>
+
 
                 </div>
 
