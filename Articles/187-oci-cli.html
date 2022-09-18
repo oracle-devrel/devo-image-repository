@@ -5,7 +5,6 @@
             <p><strong>Reference page</strong></p>
         </blockquote>
 
-        <p></p>
         <h2><strong>Introduction</strong></h2>
         <p>The <em>CLI </em>is a small-footprint tool that you can use on its own or with the Console to complete Oracle
             Cloud
@@ -16,11 +15,11 @@
             third-party content is separately licensed as described in the code.</p>
         <p>The CLI is built on the Oracle Cloud Infrastructure SDK for Python and runs on <a
                 href="https://docs.oracle.com/en-us/iaas/Content/API/Concepts/cliconcepts.htm#Requirements__SupportedPythonVersionsandOperatingSystems">Mac,
-                Windows, or Linux</a> (for more information about SDKs, see the <a href="#_SDKs">Other Resources</a>
+                Windows, or Linux</a> (for more information about SDKs, see: the <a href="#_SDKs">Other Resources</a>
             section
             below). The Python code makes calls to Oracle Cloud Infrastructure APIs to provide the functionality
             implemented for
-            the various services. These are REST APIs that use HTTPS requests and responses. For more information, see
+            the various services. These are REST APIs that use HTTPS requests and responses. For more information, see:
             <a href="https://docs.oracle.com/en-us/iaas/Content/API/Concepts/usingapi.htm#REST_APIs">About the API.</a>
         </p>
         <h2><strong>Installation</strong></h2>
@@ -46,12 +45,13 @@
         </ul>
         <h3>OCI CLI container image</h3>
         <p>OCI also supports running a container image version of the CLI.</p>
-        <p><a
+        <h3 style="color: #000;"><a
                 href="https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/clicontainer.htm#clicontainer_requirements"><strong>Requirements</strong></a>
-        </p>
-        <p><strong>Set up: </strong>for details on how to install and configure OCI CLI by using a container image, see
+        </h3>
+        <p><strong>Set up: </strong>for details on how to install and configure OCI CLI by using a container image, see:
             <a href="https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/clicontainer.htm">Working with the OCI CLI
-                container image</a>.</p>
+                container image</a>.
+        </p>
         <h3><strong>Troubleshooting</strong></h3>
         <p>If you should encounter issues either during installation (Python or CLI) or when using the CLI itself, refer
             to the
@@ -73,25 +73,46 @@
         <p><strong>Note</strong><strong>:</strong> There is still a way to start a token-based CLI session even if you
             <a
                 href="https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/clitoken.htm#Starting_a_Tokenbased_CLI_Session_without_a_Browser">don&rsquo;t
-                have access to a browser</a>.</p>
+                have access to a browser</a>.
+        </p>
         <h3>Starting a token-based CLI session</h3>
         <p>To use token-based authentication for the CLI on a computer with a web browser:</p>
         <ol>
-            <li>In the CLI, run the following command. This will launch a web browser.</li>
+            <li>In the CLI, run the following command. This will launch a web browser.
+
+                <div class="ocode">
+                    <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                        <div><a href="#copy">Copy</a></div>
+                    </div>
+
+                    <pre><code>
+oci session authenticate
+        </code></pre>
+                </div>
+
+
+            </li>
         </ol>
         <p><strong>oci session authenticate</strong></p>
         <ol start="2">
-            <li>In the browser, enter your user credentials.</li>
+            <li>In the browser, enter your user credentials.
+                <blockquote class="notice">
+                    <p><strong>Note: </strong>This authentication information is saved to the <strong>.config</strong>
+                        file.</p>
+                </blockquote>
+            </li>
         </ol>
-        <p><strong>Note: </strong>This authentication information is saved to the <strong>.config</strong> file.</p>
+
+
         <h3>Other actions</h3>
-        <h4>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a
-                href="https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/clitoken.htm#Refreshing_a_Token">Refreshing
-                a
-                token</a></h4>
-        <h4>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a
-                href="https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/clitoken.htm#Validati">Validating a
-                token</a></h4>
+
+        <ul>
+            <li><a href="https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/clitoken.htm#Refreshing_a_Token">Refreshing
+                    a token</a></li>
+            <li><a href="https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/clitoken.htm#Validati">Validating a
+                    token</a></li>
+        </ul>
+
         <h2><strong>Configuration</strong></h2>
         <p>The CLI supports using a <a href="#_Configuration_file">file</a> for CLI-specific configurations. You can use
             these
@@ -108,11 +129,18 @@
                 line.
             </li>
         </ul>
-        <p><strong>Note: </strong>The CLI also supports the use of environment variables to specify defaults for some
-            options.
-            See <a
-                href="https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/clienvironmentvariables.htm#CLI_Environment_Variables">CLI
-                Environment Variables</a> for more information.</p>
+
+
+        <blockquote class="notice">
+            <p><strong>Note: </strong>The CLI also supports the use of environment variables to specify defaults for
+                some
+                options.
+                see: <a
+                    href="https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/clienvironmentvariables.htm#CLI_Environment_Variables">CLI
+                    Environment Variables</a> for more information.</p>
+        </blockquote>
+
+
         <h3>Configuration file</h3>
         <h4>Location</h4>
         <p><strong>Default location:</strong> ~/.oci/oci_cli_rc</p>
@@ -248,7 +276,8 @@
         <ul>
             <li><strong>Command options - </strong>For a command option, use
                 <strong>--generate-param-json-input</strong> and
-                specify the command option that you want to get the JSON for.</li>
+                specify the command option that you want to get the JSON for.
+            </li>
         </ul>
         <p><strong>Example: </strong>To generate the JSON for creating or updating a security rule, run the following
             command:
@@ -283,7 +312,7 @@
             <li><a href="https://ruepprich.com/oci-jq-tricks/">OCI jq tricks</a></li>
         </ul>
         <h5>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Search and query functions</h5>
-        <p>For helpful insights and use cases, see <a
+        <p>For helpful insights and use cases, see: <a
                 href="https://blogs.oracle.com/cloud-infrastructure/post/exploring-the-search-and-query-features-of-oracle-cloud-infrastructure-command-line-interface">Exploring
                 the search and query features of the Oracle Cloud Infrastructure command line interface</a>.</p>
         <h5>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; o, the OCI CLI wrapper utility</h5>
@@ -699,7 +728,8 @@
         <p>Where <strong>$T</strong> is the <a href="#_Locate_tenancy_OCID"><em>tenancy OCID</em></a>,
             <strong>$C</strong> is
             the <a href="#UE_table_listCompartments"><em>compartment</em> <em>OCID</em></a>, and <strong>$G</strong> is
-            the <a href="#UE_table_listGroup"><em>group OCID</em></a></p>
+            the <a href="#UE_table_listGroup"><em>group OCID</em></a>
+        </p>
         <p><strong>Note:</strong> the tenancy is always considered to be the root compartment; this means that when the
             <strong>user-id</strong> flag isn&rsquo;t used the command will default to using the tenancy as the
             compartment OCID
@@ -729,7 +759,8 @@
             "$compname" '.data[] | select(."name"==$compname)' | jq -r ."id")</p>
         <p>echo $compocid</p>
         <h5>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Obtain FN-OCID from COMPARTMENT OCID + APP-NAME + FN-NAME</h5>
-        <p><strong>compartment</strong>="ocid1.compartment.oc1......aea" # see <a href="#_Obtain_OCID_from">above</a> to
+        <p><strong>compartment</strong>="ocid1.compartment.oc1......aea" # see: <a href="#_Obtain_OCID_from">above</a>
+            to
             obtain
             the OCID</p>
         <p><strong>appname</strong>="&lt;<em>appName</em>&gt; "</p>
@@ -791,7 +822,7 @@
             Infrastructure Object Storage service.</p>
         <p>oci compute image create --compartment-id &lt;<em>compartmentID</em>&gt;</p>
         <h5>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Launch an instance from an image</h5>
-        <p>(see <a href="#_Launch_an_instance">above</a>)</p>
+        <p>(see: <a href="#_Launch_an_instance">above</a>)</p>
         <h4>Instances</h4>
         <h5>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Lists the shapes that can be used to launch a VM instance</h5>
         <p><strong>Note:</strong> this applies to a dedicated virtual machine host within the specified compartment</p>
@@ -862,7 +893,7 @@
             &lt;<em>file://path/to/file.json</em>&gt; --size &lt;<em>NUMBER_OF_INSTANCES</em>&gt;</p>
         <p>Where <em>&lt;file://path/to/file.json&gt;</em> is the path to a JSON file that defines the placement
             configuration.
-            For information about how to generate an example of the JSON file, see <a
+            For information about how to generate an example of the JSON file, see: <a
                 href="https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSON">Advanced JSON
                 Options</a>.</p>
         <h5>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a
@@ -878,7 +909,7 @@
                 starting
                 instances in an instance pool</a></h5>
         <p>You can stop and start individual instances in an instance pool as needed to update software or resolve error
-            conditions (see <a href="#_Actions_(stop/start/reset)">above</a>).</p>
+            conditions (see: <a href="#_Actions_(stop/start/reset)">above</a>).</p>
         <p><strong>Note: </strong>To stop all instances in an instance pool, stop the instance pool itself.</p>
         <p>If you manually stop all instances in an instance pool instead of stopping the instance pool itself, the
             instance
@@ -1007,7 +1038,7 @@
             large files are uploaded using multipart operations. You can override this default by using the
             <strong>--no-multipart</strong> option.
         </p>
-        <p>For more information about uploading large files, see <a
+        <p>For more information about uploading large files, see: <a
                 href="https://docs.oracle.com/en-us/iaas/Content/Object/Tasks/usingmultipartuploads.htm#Using_Multipart_Uploads">Using
                 Multipart Uploads</a>.</p>
         <p>Related options for the <a
@@ -1025,7 +1056,8 @@
                 specify must
                 be greater than 10 MiB. If the object is larger than the value specified by
                 <strong>--part-size</strong>, it is
-                uploaded in multiple parts.</li>
+                uploaded in multiple parts.
+            </li>
             <li><a
                     href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/os/object/put.html#cmdoption-parallel-upload-count"><strong>--parallel-upload-count</strong></a>,
                 to specify the number of parallel operations to perform. You can use this value to balance resources and
@@ -1154,7 +1186,7 @@
         <p>oci threat-intelligence indicator-summaries list-indicators --compartment-id
             &lt;<em>root_compartment_OCID</em>&gt;
             --threat-type-name phishing --confidence-above 50</p>
-        <p>See <a href="https://docs.oracle.com/en-us/iaas/Content/threat-intel/using/database.htm#threat_types">Threat
+        <p>see: <a href="https://docs.oracle.com/en-us/iaas/Content/threat-intel/using/database.htm#threat_types">Threat
                 Types</a> or use:</p>
         <p>oci threat-intelligence threat-types-collection list-threat-types --compartment-id
             &lt;<em>root_compartment_OCID</em>&gt;</p>

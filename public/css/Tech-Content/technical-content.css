@@ -8,7 +8,7 @@
 */
 
 blockquote.notice {
-  background: #8fe3ff;
+  background: #CDF9F1;
 }
 
 .notice {
@@ -16,7 +16,7 @@ blockquote.notice {
   padding: 1em;
   color: #000000;
   font-family: "Oracle Sans", "Noto Sans Hebrew", -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
-  font-size: 0.75em !important;
+
 }
 
 
@@ -102,7 +102,7 @@ blockquote.notice {
   font-size: 1.25rem;
   line-height: 32px;
   margin-top: 30px !important;
-  margin-bottom: 16px;
+  margin-bottom: -5px!important;
   padding-bottom: 0.5rem;
 }
 
