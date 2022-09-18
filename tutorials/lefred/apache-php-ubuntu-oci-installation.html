@@ -37,7 +37,7 @@
 
                     <p>Here’s a simplified diagram for setting up your Linux VM.</p>
 
-                    <p>![] ![](</p>
+                    <p>
                     <figure class="aligncenter">
                         <picture>
                             <source
@@ -49,8 +49,8 @@
                                 title=""
                                 alt="Within OCI is the Compute VM, connected to the VCN, connected to the Internet">
                         </picture>
-                        &lt;figcaption&gt;&lt;/figcaption&gt;
-                    </figure>)<p></p>
+                   
+                    </figure>
 
                     <p>For additional information, see:</p>
 
@@ -87,8 +87,7 @@
 
                 <div class="slide" id="slide-2">
 
-                    <h2 class="slide__title"><span class="slide__num">3</span> 1. Set up a Compartment for Development
-                    </h2>
+                    <h2 class="slide__title"><span class="slide__num">3</span> Set up a Compartment for Development</h2>
 
                     <p>First, let’s configure a compartment for your development.</p>
 
@@ -127,8 +126,7 @@
 
                 <div class="slide" id="slide-3">
 
-                    <h2 class="slide__title"><span class="slide__num">4</span> 2. Install your Ubuntu Linux Instance
-                    </h2>
+                    <h2 class="slide__title"><span class="slide__num">4</span> Install your Ubuntu Linux Instance</h2>
 
                     <p>Use the <strong>Create a VM Instance</strong> wizard to create a new compute instance.</p>
 
@@ -151,7 +149,7 @@
 
                     <ol>
                         <li>
-                            <p>From the main landing page, select <strong>Create a VM Instance</strong> wizard. ![](</p>
+                            <p>From the main landing page, select <strong>Create a VM Instance</strong> wizard. 
                             <figure class="aligncenter">
                                 <picture>
                                     <source
@@ -163,8 +161,8 @@
                                         title=""
                                         alt="Quick Actions in the VM Instance Wizard, choose Create a VM Instance">
                                 </picture>
-                                &lt;figcaption&gt;&lt;/figcaption&gt;
-                            </figure>)<p></p>
+                           
+                            </figure>
 
                             <p>The <strong>Create Compute Instance</strong> page is displayed. It has a section for
                                 <strong>Placement</strong>, Image and shape, <strong>Networking</strong>, <strong>Add
@@ -300,7 +298,7 @@
 
                 <div class="slide" id="slide-4">
 
-                    <h2 class="slide__title"><span class="slide__num">5</span> 3. Enable Internet Access</h2>
+                    <h2 class="slide__title"><span class="slide__num">5</span> Enable Internet Access</h2>
 
                     <p>The <strong>Create a VM Instance</strong> wizard automatically creates a VCN for your VM. You add
                         an ingress rule to your subnet to allow internet connections on port 80.</p>
@@ -365,7 +363,7 @@
 
                 <div class="slide" id="slide-5">
 
-                    <h2 class="slide__title"><span class="slide__num">6</span> 4. Set up Apache and PHP</h2>
+                    <h2 class="slide__title"><span class="slide__num">6</span> Set up Apache and PHP</h2>
 
                     <p>Next, install and configure Apache web server and PHP to run on your Ubuntu Linux instance.</p>
 
@@ -453,7 +451,7 @@
                                 connect your browser to your public IP address assigned to your instance:
                                 <strong>http://<code
                                         class="language-plaintext highlighter-rouge">&lt;x.x.x.x&gt;</code></strong>.
-                                The page looks similar to: ![](
+                                The page looks similar to:
                             </p>
                             <figure class="aligncenter">
                                 <picture>
@@ -465,8 +463,8 @@
                                         data-at2x="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/apache-php-ubuntu-06apache-ubun@2x.png"
                                         title="" alt="Default Apache2 Ubuntu welcome page">
                                 </picture>
-                                &lt;figcaption&gt;&lt;/figcaption&gt;
-                            </figure>)<p></p>
+                        
+                            </figure>
                         </li>
                         <li>
                             <p>Install PHP 7 with the following commands.</p>
@@ -521,7 +519,7 @@
                             <p>The browser produces a listing of PHP configuration on your instance similar to the
                                 following.</p>
 
-                            <p>![](</p>
+                         
                             <figure class="aligncenter">
                                 <picture>
                                     <source
@@ -532,8 +530,8 @@
                                         data-at2x="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/apache-php-ubuntu-07php@2x.png"
                                         title="" alt="PHP configuration information screen">
                                 </picture>
-                                &lt;figcaption&gt;&lt;/figcaption&gt;
-                            </figure>)<p></p>
+                    
+                            </figure>
 
                             <blockquote class="notice">
                                 <p><strong>Note:</strong> After you are done testing, remove <strong>info.php</strong>
