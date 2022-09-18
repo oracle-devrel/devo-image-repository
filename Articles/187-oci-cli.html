@@ -1,0 +1,1396 @@
+<section class="cc01 cc01v0 cpad">
+    <div class="cc01w1 cwidth">
+
+        <blockquote class="notice">
+            <p><strong>Reference page</strong></p>
+        </blockquote>
+
+        <p></p>
+        <h2><strong>Introduction</strong></h2>
+        <p>The <em>CLI </em>is a small-footprint tool that you can use on its own or with the Console to complete Oracle
+            Cloud
+            Infrastructure tasks. The CLI provides the same core functionality as the Console, plus additional commands.
+            Some of
+            these, such as the ability to run scripts, extend Console functionality.</p>
+        <p>This CLI and sample are dual licensed under the Universal Permissive License 1.0 and the Apache License 2.0;
+            third-party content is separately licensed as described in the code.</p>
+        <p>The CLI is built on the Oracle Cloud Infrastructure SDK for Python and runs on <a
+                href="https://docs.oracle.com/en-us/iaas/Content/API/Concepts/cliconcepts.htm#Requirements__SupportedPythonVersionsandOperatingSystems">Mac,
+                Windows, or Linux</a> (for more information about SDKs, see the <a href="#_SDKs">Other Resources</a>
+            section
+            below). The Python code makes calls to Oracle Cloud Infrastructure APIs to provide the functionality
+            implemented for
+            the various services. These are REST APIs that use HTTPS requests and responses. For more information, see
+            <a href="https://docs.oracle.com/en-us/iaas/Content/API/Concepts/usingapi.htm#REST_APIs">About the API.</a>
+        </p>
+        <h2><strong>Installation</strong></h2>
+        <h3>Quick start</h3>
+        <p>Select an OS-specific version below to install a local version of the OCI CLI.</p>
+        <p><strong>OCI CLI currently supports:</strong> <a
+                href="https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#InstallingCLI__oraclelinux8">Oracle
+                Linux 8</a>, <a
+                href="https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#InstallingCLI__oraclelinux7">Oracle
+                Linux 7</a>, <a
+                href="https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#InstallingCLI__macos_homebrew">Mac
+                OS</a>, <a
+                href="https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#InstallingCLI__windows">Windows</a>,
+            and <a
+                href="https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#InstallingCLI__linux_and_unix">Linux
+                and Unix</a></p>
+        <h3>Special cases</h3>
+        <ul>
+            <li><a
+                    href="https://kqeducationgroup.com/installation-of-oci-cli-on-wsl-windows-subsystem-for-linux-in-windows-10-or-above/">WSL
+                    (Windows Subsystem for Linux) in Windows 10 or above</a></li>
+            <li><a href="https://qiita.com/liu-wei/items/ff455a12a0f2580d48ce">Oracle DBCS instance</a></li>
+        </ul>
+        <h3>OCI CLI container image</h3>
+        <p>OCI also supports running a container image version of the CLI.</p>
+        <p><a
+                href="https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/clicontainer.htm#clicontainer_requirements"><strong>Requirements</strong></a>
+        </p>
+        <p><strong>Set up: </strong>for details on how to install and configure OCI CLI by using a container image, see
+            <a href="https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/clicontainer.htm">Working with the OCI CLI
+                container image</a>.</p>
+        <h3><strong>Troubleshooting</strong></h3>
+        <p>If you should encounter issues either during installation (Python or CLI) or when using the CLI itself, refer
+            to the
+            page, <a
+                href="https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/clitroubleshooting.htm">Troubleshooting the
+                CLI</a> for assistance.</p>
+        <h2><strong>Authentication</strong></h2>
+        <p><a href="https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/clitoken.htm">Token-based authentication</a>
+            for the
+            CLI allows customers to authenticate their session interactively, then use the CLI for a single session
+            without an
+            API signing key. This enables customers using an identity provider that is not <a
+                href="https://docs.oracle.com/en/cloud/paas/identity-cloud/uaids/use-scim-interface-integrate-oracle-identity-cloud-service-custom-applications.html#GUID-B883A440-9726-4219-8C0C-A906B821AB46">SCIM</a>-supported
+            to use a federated user account with the CLI and SDKs.</p>
+        <h3>Requirements</h3>
+        <p>The requirements are the same as those listed for the CLI in <a
+                href="https://docs.oracle.com/en-us/iaas/Content/API/Concepts/cliconcepts.htm#Requirements">Requirements</a>,
+            except that instead of an SSH keypair, you need a web browser for the authentication process.</p>
+        <p><strong>Note</strong><strong>:</strong> There is still a way to start a token-based CLI session even if you
+            <a
+                href="https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/clitoken.htm#Starting_a_Tokenbased_CLI_Session_without_a_Browser">don&rsquo;t
+                have access to a browser</a>.</p>
+        <h3>Starting a token-based CLI session</h3>
+        <p>To use token-based authentication for the CLI on a computer with a web browser:</p>
+        <ol>
+            <li>In the CLI, run the following command. This will launch a web browser.</li>
+        </ol>
+        <p><strong>oci session authenticate</strong></p>
+        <ol start="2">
+            <li>In the browser, enter your user credentials.</li>
+        </ol>
+        <p><strong>Note: </strong>This authentication information is saved to the <strong>.config</strong> file.</p>
+        <h3>Other actions</h3>
+        <h4>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a
+                href="https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/clitoken.htm#Refreshing_a_Token">Refreshing
+                a
+                token</a></h4>
+        <h4>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a
+                href="https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/clitoken.htm#Validati">Validating a
+                token</a></h4>
+        <h2><strong>Configuration</strong></h2>
+        <p>The CLI supports using a <a href="#_Configuration_file">file</a> for CLI-specific configurations. You can use
+            these
+            optional configurations to extend CLI functionality.</p>
+        <p>With this configuration file you can:</p>
+        <ul>
+            <li>Specify a <a href="#_Setting_up_a">default profile</a></li>
+            <li>Set <a href="#_Specifying_default_values">default values</a> for command options</li>
+            <li>Define <a href="#_Specifying_command_aliases">aliases for commands</a></li>
+            <li>Define <a href="#_Specifying_option_aliases">aliases for options</a></li>
+            <li>Define <a href="#_Specifying_named_queries">named queries</a> that are passed to the
+                <strong>--query</strong>
+                option instead of typing a <a href="#_JMESPath"><strong>JMESPath</strong></a> expression on the command
+                line.
+            </li>
+        </ul>
+        <p><strong>Note: </strong>The CLI also supports the use of environment variables to specify defaults for some
+            options.
+            See <a
+                href="https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/clienvironmentvariables.htm#CLI_Environment_Variables">CLI
+                Environment Variables</a> for more information.</p>
+        <h3>Configuration file</h3>
+        <h4>Location</h4>
+        <p><strong>Default location:</strong> ~/.oci/oci_cli_rc</p>
+        <p>Specify the location via:</p>
+        <ul>
+            <li><strong>Environment variable: </strong>OCI_CLI_RC_FILE</li>
+            <li><strong>Command-line option:</strong> --cli-rc-file</li>
+        </ul>
+        <p><strong>Example:</strong></p>
+        <p>&lt;<em>CLI command</em>&gt; --cli-rc-file path/to/my/cli/rc/file</p>
+        <h4>Setting up the <strong>oci_cli_rc</strong> file</h4>
+        <p>In a new CLI window, run:</p>
+        <p><strong>oci setup oci-cli-rc --file path/to/target/file</strong></p>
+        <p><strong>Note:</strong> This command creates the file you specify that includes examples of default command
+            aliases,
+            parameter aliases, and named queries.</p>
+        <h4>Working with your configuration file</h4>
+        <h5>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a
+                href="https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliconfigure.htm#Specifying_a_Default_Profile">Setting
+                up a default profile</a></h5>
+        <p><strong>Section:</strong> OCI_CLI_SETTINGS</p>
+        <p><strong>Format:</strong> default_profile=&lt;<em>profile name</em>&gt;</p>
+        <h5>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a
+                href="https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliconfigure.htm#Specifying_Default_Values">Specifying
+                default values</a></h5>
+        <p>The <strong>--cli-RC-file</strong> file can be divided into different sections with one or more keys per
+            section.</p>
+        <p><strong>Note: </strong>Keys are named after command line options, but do not use a leading double hyphen
+            (--).</p>
+        <p>For example, the key for <strong>--image-id</strong> is image-id.</p>
+        <p>You can specify keys for single values, multiple values, and flags.</p>
+        <h4>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a
+                href="https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliconfigure.htm#Specifying_Command_Aliases">Specifying
+                command aliases</a></h4>
+        <p>There are two types of aliases: <em>global aliases</em> and <em>command sequence aliases</em>.</p>
+        <h4>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a
+                href="https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliconfigure.htm#Specifying_Option_Aliases">Specifying
+                option aliases</a></h4>
+        <p><strong>Section:</strong> OCI_CLI_PARAM_ALIASES</p>
+        <p><strong>Format: </strong>&lt;<em>option alias</em>&gt; = &lt;<em>original option</em>&gt;</p>
+        <p><strong>Example:</strong></p>
+        <p>--ad = --availability-domain</p>
+        <p><strong>Note: </strong>Option aliases are applied globally.</p>
+        <h4>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a
+                href="https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliconfigure.htm#Specifying_Named_Queries">Specifying
+                named queries</a></h4>
+        <p>If you use the <strong>--query</strong> parameter to filter or manipulate the output, you can define named
+            queries
+            instead of using a <strong>JMESPath</strong> expression on the command line.</p>
+        <p><strong>Section: </strong>OCI_CLI_CANNED_QUERIES</p>
+        <h4>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; autocomplete</h4>
+        <p><strong>Note:</strong> If you used the CLI installer, autocomplete was already installed by default.</p>
+        <p>However, if you manually installed the CLI or only wish to enable auto-complete on a per-session basis, use
+            one of
+            the commands below.</p>
+        <ul>
+            <li><strong>Manual installation - </strong>Run the following command:</li>
+        </ul>
+        <p><strong>oci setup autocomplete</strong></p>
+        <ul>
+            <li><strong>Session-by-session basis</strong> &ndash; Run the following command:</li>
+        </ul>
+        <p><strong>eval "$(_OCI_COMPLETE=source oci)"</strong></p>
+        <p>&nbsp;</p>
+        <h2><strong>Using the CLI</strong></h2>
+        <p><a href="https://docs.oracle.com/en-us/iaas/Content/API/Concepts/cliconcepts.htm">Reference documentation</a>
+        </p>
+        <h3>Basic command line syntax</h3>
+        <p>Most commands must specify a service, followed by a resource type and then an action.</p>
+        <p>The basic command line syntax is:</p>
+        <p><strong>oci &lt;<em>service</em>&gt; &lt;<em>type</em>&gt; &lt;<em>action</em>&gt;
+                &lt;<em>options</em>&gt;</strong>
+        </p>
+        <p><strong>Example: </strong></p>
+        <p>The following command to launch an instance shows a typical command line construct:</p>
+        <p>oci compute instance launch --availability-domain "EMIr:PHX-AD-1" -c &lt;<em>compartment</em>&gt; --shape
+            "VM.Standard1.1"&nbsp; --display-name "Instance 1 for sandbox" --image-id &lt;<em>imageID</em>&gt;
+            --subnet-id&nbsp;
+            &lt;<em>subnetID</em>&gt;</p>
+        <p>Here, <strong>compute </strong>is the <em>service</em>, <strong>instance </strong>is the <em>type</em>,
+            <strong>launch</strong> is the <em>action</em>, and the balance of the command represents the
+            <em>options</em>.
+        </p>
+        <p><strong>Note: </strong>Throughout this document, the term <em>oci</em> will be used to refer to commands
+            executed
+            within the CLI environment.&nbsp; This is to be distinguished from <em>OCI</em>, which is about the Oracle
+            Cloud
+            Infrastructure platform.</p>
+        <h4>Getting help with commands</h4>
+        <p>For help with a specific command, you can enter <strong>help
+            </strong><strong><em>&lt;command&gt;</em></strong> on
+            the command line or view the <a
+                href="https://docs.oracle.com/iaas/tools/oci-cli/latest/oci_cli_docs/">Command Line
+                Reference</a>.</p>
+        <p>In addition, you can get help for any command by using the <strong>--help</strong>, <strong>-h</strong>, or
+            <strong>-? </strong>flag.
+        </p>
+        <p><strong>Examples:</strong></p>
+        <ul>
+            <li>oci - -help</li>
+            <li>oci os bucket -h</li>
+            <li>oci os bucket create -?</li>
+        </ul>
+        <p>For a full list of commands, refer to the <a
+                href="https://docs.oracle.com/iaas/tools/oci-cli/latest/oci_cli_docs/">OCI CLI help documentation</a>.
+        </p>
+        <h4>Output formats</h4>
+        <ul>
+            <li><strong>JSON (--output JSON) &ndash; </strong>(default) The output is formatted as JSON string.</li>
+        </ul>
+        <p>For additional information about working with JSON, the <a href="#_Advanced_JSON_options">Advanced JSON
+                options</a>
+            section below.</p>
+        <ul>
+            <li><strong>Table (--output table) - </strong>The output is formatted as a table with headings derived from
+                the
+                query parameters. It typically presents in an easier-to-read, human-friendly format.</li>
+            <li><strong>--raw-output - </strong>You can supply this argument to the CLI if you know that the output is a
+                single
+                string value; any surrounding quotes are removed for you in the output.</li>
+        </ul>
+        <h3>Additional features</h3>
+        <h5>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a
+                href="https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliusing.htm#cliusing_topic_Using_Interactive_Mode">Interactive
+                mode</a></h5>
+        <p>In this mode, the oci helps guide you through command usage with auto-complete.</p>
+        <h5>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a
+                href="https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSON">Advanced JSON
+                options</a></h5>
+        <h6>Correct JSON format</h6>
+        <p>The OCI CLI provides a built-in method to get the correct JSON format for both command options and commands.
+        </p>
+        <ul>
+            <li><strong>Command options - </strong>For a command option, use
+                <strong>--generate-param-json-input</strong> and
+                specify the command option that you want to get the JSON for.</li>
+        </ul>
+        <p><strong>Example: </strong>To generate the JSON for creating or updating a security rule, run the following
+            command:
+        </p>
+        <p>oci network security-list create --generate-param-json-input ingress-security-rules</p>
+        <ul>
+            <li><strong>Entire command - </strong>For an entire command, use<strong>
+                    --generate-full-command-json-input</strong>.</li>
+        </ul>
+        <p><strong>Example:</strong> To generate the JSON for launching an instance, run the following command:</p>
+        <p>oci compute instance launch --generate-full-command-json-input</p>
+        <h6>JMESPath</h6>
+        <p>JMESPath is a query language for JSON that allows you to extract and transform elements from a JSON document.
+        </p>
+        <p><strong>For additional references, see:</strong></p>
+        <ul>
+            <li><a href="https://jmespath.org/">JMESPath project page</a></li>
+            <li><a href="https://jmespath.org/tutorial.html">JMESPath tutorial</a></li>
+        </ul>
+        <h6>jq</h6>
+        <p>jq is a command-line JSON processor which can be utilized in conjunction with OCI CLI input and output.</p>
+        <p>&ldquo;jq is like sed for JSON data - you can use it to slice and filter and map and transform structured
+            data.&rdquo;</p>
+        <p><strong>For additional references, see:</strong></p>
+        <ul>
+            <li><a href="https://stedolan.github.io/jq/">jq project page</a></li>
+            <li><a href="https://docs.oracle.com/cd/E88353_01/html/E37839/jq-1.html">jq man page</a></li>
+        </ul>
+        <p><strong>For some ways to use jq with the OCI CLI, see:</strong></p>
+        <ul>
+            <li><a href="#_General">Useful examples (advanced)</a></li>
+            <li><a href="https://ruepprich.com/oci-jq-tricks/">OCI jq tricks</a></li>
+        </ul>
+        <h5>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Search and query functions</h5>
+        <p>For helpful insights and use cases, see <a
+                href="https://blogs.oracle.com/cloud-infrastructure/post/exploring-the-search-and-query-features-of-oracle-cloud-infrastructure-command-line-interface">Exploring
+                the search and query features of the Oracle Cloud Infrastructure command line interface</a>.</p>
+        <h5>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; o, the OCI CLI wrapper utility</h5>
+        <p>o is a smart wrapper for the oci command in Oracle Cloud&rsquo;s CLI. o knows all the oci commands, and it
+            learns
+            about your resources. With this knowledge, o helps you use oci to manage your cloud resources. Tasks that
+            used to
+            require scripting can now be performed directly from the command line.</p>
+        <p>To learn more about o, see:</p>
+        <ul>
+            <li><a href="https://blogs.oracle.com/cloud-infrastructure/post/introducing-o-the-easy-way-to-use-the-cli">Introducing
+                    o, the easy way to use the CLI</a></li>
+            <li>o project repo <a
+                    href="https://github.com/oracle/oci-cli/blob/master/scripts/examples/project_o/README.md">README</a>
+            </li>
+        </ul>
+        <h3>Useful examples (General)</h3>
+        <h4><a href="#UE_table_service_db">db</a></h4>
+        <h4><a href="#UE_table_service_IAM">IAM</a></h4>
+        <h5><a href="#UE_table_IAM_compartment">Compartment</a></h5>
+        <h5><a href="#UE_table_IAM_group">Group</a></h5>
+        <h5><a href="#UE_table_IAM_user">User</a></h5>
+        <h4><a href="#UE_table_service_OS">OS</a></h4>
+        <p>&nbsp;</p>
+        <table>
+            <tbody>
+                <tr>
+                    <td width="312">
+                        <p><strong>Service</strong></p>
+                    </td>
+                    <td width="312">
+                        <p><strong>Command</strong></p>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" width="623">
+                        <p><strong><a
+                                    href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/db.html">db</a></strong>
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="312">
+                        <p><a
+                                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/db/database/create.html">Create
+                                a database</a></p>
+                    </td>
+                    <td width="312">
+                        <p>oci db database create <a
+                                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/db/database/create.html#cmdoption-db-system-id">--db-system-id</a>
+                            &lt;<em>dbSystemID</em>&gt; <a
+                                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/db/database/create.html#cmdoption-db-version">--db-version</a>
+                            &lt;<em>DB_VERSION</em>&gt; <a
+                                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/db/database/create.html#cmdoption-admin-password">--admin-password</a>
+                            &lt;<em>ADMIN_PASSWORD</em>&gt; <a
+                                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/db/database/create.html#cmdoption-db-name">--db-name</a>
+                            &lt;<em>dbName</em>&gt;</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="312">
+                        <p><a
+                                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/db/database/list.html">List
+                                databases in a compartment</a></p>
+                    </td>
+                    <td width="312">
+                        <p>oci db database list -c $C</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" width="623">
+                        <p><strong><a
+                                    href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/iam.html">IAM</a></strong>
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" width="623">
+                        <p><a
+                                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/iam/group.html"><strong>Group</strong></a>
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="312">
+                        <p><a
+                                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/iam/group/add-user.html">Add
+                                a user to a group</a></p>
+                    </td>
+                    <td width="312">
+                        <p>oci iam group add-user --user-id &lt;<em>userID</em>&gt; --group-id &lt;<em>groupID</em>&gt;
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="312">
+                        <p><a
+                                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/iam/group/create.html">Create
+                                a group</a></p>
+                    </td>
+                    <td width="312">
+                        <p>oci iam group create - -description &lt;<em>group description</em>&gt; - -name &lt;<em>name
+                                of the
+                                group</em>&gt;</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="312">
+                        <p><a
+                                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/iam/group/delete.html">Delete
+                                a group</a></p>
+                    </td>
+                    <td width="312">
+                        <p>oci iam group delete - -group-id $G</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="312">
+                        <p><a
+                                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/iam/group/get.html">Get
+                                the information for a group</a></p>
+                    </td>
+                    <td width="312">
+                        <p>oci iam group get - -group-id $G</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" width="623">
+                        <p><a
+                                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/iam/group/list.html"><strong>List</strong></a>
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="312">
+                        <p><a
+                                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/iam/group/list.html">List
+                                all the groups in your tenancy</a> sorted by name</p>
+                    </td>
+                    <td width="312">
+                        <p>oci iam group list <a
+                                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/iam/group/list.html#cmdoption-sort-by">-
+                                -sort-by</a> NAME</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="312">
+                        <p>List all the groups in a compartment<a href="#UE_note_root">*</a></p>
+                    </td>
+                    <td width="312">
+                        <p>oci iam group list <a
+                                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/iam/group/list.html#cmdoption-compartment-id">-
+                                -compartment-id</a> $C</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" width="623">
+                        <p><a
+                                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/iam/group/list-users.html"><strong>List-users</strong></a>
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="312">
+                        <p>List the users in a specified group</p>
+                    </td>
+                    <td width="312">
+                        <p>oci iam group list-users - -group-id $G</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="312">
+                        <p>List the users in a specified compartment<a href="#UE_note_root">*</a></p>
+                    </td>
+                    <td width="312">
+                        <p>oci iam group list-users - -group-id $G <a
+                                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/iam/group/list-users.html#cmdoption-compartment-id">-
+                                -compartment-id</a> $C</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" width="623">
+                        <p><a
+                                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/iam/group/remove-user.html"><strong>Remove-user</strong></a>
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="312">
+                        <p>Remove a user from a group</p>
+                    </td>
+                    <td width="312">
+                        <p>oci iam group remove-user - -group-id $G - -user-id &lt;<em>userID</em>&gt;</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="312">
+                        <p>Remove a user from a group in a particular compartment<a href="#UE_note_root">*</a></p>
+                    </td>
+                    <td width="312">
+                        <p>oci iam group remove-user - -group-id $G <a
+                                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/iam/group/remove-user.html#cmdoption-compartment-id">-
+                                -compartment-id</a> $C - -user-id &lt;<em>userID</em>&gt;</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" width="623">
+                        <p><a
+                                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/iam/group/update.html"><strong>Update</strong></a>
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="312">
+                        <p>Update the specified group</p>
+                    </td>
+                    <td width="312">
+                        <p>oci iam group update - -group-id $G</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="312">
+                        <p>Update the description of the specified group</p>
+                    </td>
+                    <td width="312">
+                        <p>oci iam group update - -group-id $G <a
+                                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/iam/group/update.html#cmdoption-description">-
+                                -description</a> &lt;<em>newDescription</em>&gt;</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" width="623">
+                        <p><strong><a
+                                    href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/iam/compartment.html">Compartment</a></strong>
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="312">
+                        <p><a
+                                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/iam/compartment/create.html">Create
+                                a compartment</a></p>
+                    </td>
+                    <td width="312">
+                        <p>oci iam compartment create - -compartment-id $C - -description &lt;<em>text</em>&gt; - -name
+                            &lt;<em>name for the compartment</em>&gt;</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="312">
+                        <p><a
+                                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/iam/compartment/delete.html">Delete
+                                a compartment</a></p>
+                    </td>
+                    <td width="312">
+                        <p>oci iam compartment delete - -compartment-id $C</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="312">
+                        <p><a
+                                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/iam/compartment/recover.html">Recover
+                                a compartment</a> (change compartment state from <strong>DELETED</strong> to
+                            <strong>ACTIVE</strong>)
+                        </p>
+                    </td>
+                    <td width="312">
+                        <p>oci iam compartment recover - -compartment-id $C</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="312">
+                        <p><a
+                                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/iam/compartment/get.html">Get
+                                a list of all the resources inside the compartment</a></p>
+                    </td>
+                    <td width="312">
+                        <p>oci iam compartment get - -compartment-id $C</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="312">
+                        <p><a
+                                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/iam/compartment/list.html">List
+                                compartments</a></p>
+                    </td>
+                    <td width="312">
+                        <p>oci iam compartment list -c $T</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="312">
+                        <p><a
+                                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/iam/availability-domain/list.html">List
+                                all availability domains within a compartment</a></p>
+                    </td>
+                    <td width="312">
+                        <p>oci iam availability-domain list&ndash;c $C</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" width="623">
+                        <p><a
+                                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/iam/compartment/update.html"><strong>Update</strong></a>
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="312">
+                        <p>Update the <strong>name</strong> of a compartment<br /> <strong>Note: </strong>the name must
+                            be
+                            unique across all compartments in the parent compartment</p>
+                    </td>
+                    <td width="312">
+                        <p>oci iam compartment update - -compartment-id $C - -name &lt;<em>new name&gt;</em></p>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="312">
+                        <p>Update the <strong>description</strong> of a compartment</p>
+                    </td>
+                    <td width="312">
+                        <p>oci iam compartment update - -compartment-id $C <a
+                                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/iam/compartment/update.html#cmdoption-description">-
+                                -description</a> &lt;<em>new description</em>&gt;</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" width="623">
+                        <p><strong><a
+                                    href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/iam/user.html">User</a></strong><a
+                                href="#UE_note_root"><strong>*</strong></a></p>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="312">
+                        <p><a
+                                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/iam/user/list-groups.html">List</a>
+                            all the groups to which a user belongs</p>
+                    </td>
+                    <td width="312">
+                        <p>oci iam user list-groups - -user-id &lt;<em>userID</em>&gt;</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="312">
+                        <p><a
+                                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/iam/user/list.html">List
+                                users and output</a></p>
+                    </td>
+                    <td width="312">
+                        <p>oci iam user list --compartment-id $T --limit &lt;<em>#</em>&gt;</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="312">
+                        <p><a
+                                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/iam/user/get.html">Get
+                                user details</a></p>
+                    </td>
+                    <td width="312">
+                        <p>oci iam user get --user-id &lt;<em>userID</em>&gt;</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="312">
+                        <p><a
+                                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/iam/user/create.html">Create
+                                a new user in a tenancy</a></p>
+                    </td>
+                    <td width="312">
+                        <p>oci iam user create -c &lt;<em>rootCompartmentID</em>&gt; --name &lt;<em>userName</em>&gt;
+                            --description "&lt;<em>description</em>&gt;"</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="312">
+                        <p><a
+                                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/iam/user/api-key/delete.html">Delete
+                                specific API signing keys</a></p>
+                    </td>
+                    <td width="312">
+                        <p>oci iam user api-key list &lt;<em>userID</em> &gt;</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" width="623">
+                        <p><strong>OS</strong></p>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="312">
+                        <p><a
+                                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/os/ns/get.html">Get
+                                a namespace</a></p>
+                    </td>
+                    <td width="312">
+                        <p>oci os ns get</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="312">
+                        <p>Get a <a
+                                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/os/bucket/list.html">list
+                                of buckets</a></p>
+                    </td>
+                    <td width="312">
+                        <p>oci os bucket list -ns mynamespace --compartment-id $C</p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <p>Where <strong>$T</strong> is the <a href="#_Locate_tenancy_OCID"><em>tenancy OCID</em></a>,
+            <strong>$C</strong> is
+            the <a href="#UE_table_listCompartments"><em>compartment</em> <em>OCID</em></a>, and <strong>$G</strong> is
+            the <a href="#UE_table_listGroup"><em>group OCID</em></a></p>
+        <p><strong>Note:</strong> the tenancy is always considered to be the root compartment; this means that when the
+            <strong>user-id</strong> flag isn&rsquo;t used the command will default to using the tenancy as the
+            compartment OCID
+        </p>
+        <h3><strong>Useful examples (Advanced)</strong></h3>
+        <h4>General</h4>
+        <h5>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Locate tenancy OCID</h5>
+        <p>oci iam availability-domain list --all | jq -r '.data[0]."compartment-id"'</p>
+        <h5>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Retrieve the home region</h5>
+        <p>oci iam region-subscription list | jq -r '.data[0]."region-name"'</p>
+        <h5>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the base URL of an object stored in the home region</h5>
+        <p><strong>namespace</strong>=$(oci os ns get | jq -r .data)</p>
+        <p>home=$(oci iam region-subscription list | jq -r '.data[0]."region-name"')</p>
+        <p>echo https://objectstorage.$home.oraclecloud.com/n/$namespace/b/&lt;bucketname&gt;"</p>
+        <h5>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get a list of subscribed region names and keys</h5>
+        <p>oci iam region-subscription list | jq '.data[]."region-name" | .data[]."region-key"'</p>
+        <h5>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Create policy at the root level</h5>
+        <p><strong>TENANCY</strong>=$(oci iam availability-domain list --all | jq -r '.data[0]."compartment-id"')</p>
+        <p>oci iam policy create --compartment-id $TENANCY --name &lt;<em>policyname</em>&gt; --statements
+            '["sentence1",
+            "sentence2"]' --description &lt;<em>policydescription</em>&gt;</p>
+        <h5>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Obtain OCID from compartment name</h5>
+        <p><strong>Note: </strong>Compartment names are case sensitive.</p>
+        <p><strong>compname</strong>="&lt;<em>compartmentName</em>&gt;"</p>
+        <p><strong>compocid</strong>=$(oci iam compartment list --compartment-id-in-subtree true --all | jq --arg
+            compname
+            "$compname" '.data[] | select(."name"==$compname)' | jq -r ."id")</p>
+        <p>echo $compocid</p>
+        <h5>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Obtain FN-OCID from COMPARTMENT OCID + APP-NAME + FN-NAME</h5>
+        <p><strong>compartment</strong>="ocid1.compartment.oc1......aea" # see <a href="#_Obtain_OCID_from">above</a> to
+            obtain
+            the OCID</p>
+        <p><strong>appname</strong>="&lt;<em>appName</em>&gt; "</p>
+        <p><strong>fnname</strong>="&lt;<em>functionName</em>&gt;"</p>
+        <p><strong>appid</strong>=$(oci fn application list -c $compartment&nbsp; --all | jq --arg appname "$appname"
+            '.data[] |
+            select(."display-name"==$appname)' | jq -r ."id")</p>
+        <p><strong>fnid</strong>=$(oci fn function list --application-id $appid | jq --arg fnname "$fnname" '.data[] |
+            select(."display-name"==$fnname)' | jq -r ."id")</p>
+        <p>echo $fnid</p>
+        <h5>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a
+                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/artifacts/container/image/list.html">List
+                container images in a compartment</a></h5>
+        <p>oci artifacts container image list --compartment-id &lt;<em>compartmentOCID</em>&gt;</p>
+        <h4>Functions (fn)</h4>
+        <p>CLI for the <a
+                href="https://docs.oracle.com/en-us/iaas/Content/Functions/Concepts/functionsoverview.htm">Functions
+                service</a>.</p>
+        <p>Full set of OCI CLI <a
+                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/fn.html">fn
+                commands</a>.</p>
+        <h5><a
+                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/fn/function.html">Function</a>
+        </h5>
+        <p>A function resource defines the code (Docker image) and configuration for a specific function. Functions are
+            defined
+            in applications.</p>
+        <h6>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a
+                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/fn/function/create.html">Create</a>
+        </h6>
+        <p>oci fn function create --application-id &lt;<em>applicationID</em>&gt; <a
+                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/fn/function/create.html#cmdoption-display-name">--display-name</a>
+            &lt;<em>displayName</em>&gt; <a
+                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/fn/function/create.html#cmdoption-image">--image</a>
+            &lt;<em>imageName</em>&gt; --memory-in-mbs &lt;<em>integer</em>&gt;</p>
+        <h6>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a
+                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/fn/function/delete.html">Delete</a>
+        </h6>
+        <p>oci fn function delete --function-id &lt;<em>functionID</em>&gt;</p>
+        <h6>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a
+                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/fn/function/list.html">List</a>
+        </h6>
+        <p>List the functions associated with an <a href="#_Application">application</a>.</p>
+        <p>oci fn function list --application-id &lt;<em>applicationID</em>&gt;</p>
+        <h5><a
+                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/fn/application.html">Application</a>
+        </h5>
+        <p>An application contains functions and defined attributes shared between those functions, such as network
+            configuration and configuration.</p>
+        <h6>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a
+                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/fn/application/list.html">List</a>
+        </h6>
+        <p>oci fn application list -c &lt;<em>compartmentID</em>&gt;</p>
+        <h4>Images</h4>
+        <h5>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a
+                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/compute/image/create.html">Create
+                an image</a></h5>
+        <p>Creates a boot disk image for the specified instance or imports an exported image from the Oracle Cloud
+            Infrastructure Object Storage service.</p>
+        <p>oci compute image create --compartment-id &lt;<em>compartmentID</em>&gt;</p>
+        <h5>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Launch an instance from an image</h5>
+        <p>(see <a href="#_Launch_an_instance">above</a>)</p>
+        <h4>Instances</h4>
+        <h5>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Lists the shapes that can be used to launch a VM instance</h5>
+        <p><strong>Note:</strong> this applies to a dedicated virtual machine host within the specified compartment</p>
+        <p>oci compute dedicated-vm-host instance-shape list --compartment-id &lt;<em>compartment_OCID</em>&gt;</p>
+        <h5>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a
+                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/compute/instance/list.html">List
+                instances</a></h5>
+        <p>oci compute instance list --compartment-id &lt;<em>compartment_OCID</em>&gt;</p>
+        <h5>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a
+                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/compute/instance/action.html">Actions</a>
+            (stop/start/reset)</h5>
+        <p>oci compute instance action <a
+                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/compute/instance/action.html#cmdoption-action">--action</a>
+            [<em>text</em>] --instance-id [<em>instanceID</em>]</p>
+        <p>where the values of the <strong>action</strong> flag are:</p>
+        <p>STOP, START, SOFTRESET, RESET, SOFTSTOP, SENDDIAGNOSTICINTERRUPT, DIAGNOSTICREBOOT, REBOOTMIGRATE</p>
+        <h5>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a
+                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/compute/instance/launch.html">Launch</a>
+        </h5>
+        <p>Creates a new instance in the specified compartment and the specified availability domain.</p>
+        <p>oci compute instance launch --availability-domain &lt;<em>availability_domain</em>&gt; --compartment-id
+            &lt;<em>compartment_OCID</em>&gt; --shape &lt;<em>shape</em>&gt; --subnet-id [<em>subnetID</em>]</p>
+        <p>Where <strong>shape </strong>refers to the shape of the instance. The shape determines the number of CPUs,
+            amount of
+            memory, and other resources allocated to the instance.</p>
+        <p>You can enumerate all available shapes by calling <a href="#_Lists_the_shapes_1">ListShapes</a>.</p>
+        <h5>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Launch an instance from an image</h5>
+        <p>oci compute instance launch --availability-domain &lt;<em>availability_domain</em>&gt; --compartment-id
+            &lt;<em>compartment_OCID</em>&gt; --shape &lt;<em>shape</em>&gt; --subnet-id [<em>subnetID</em>] --image-id
+            [<em>imageID</em>]</p>
+        <p>Where <em>imageID </em>is the OCID of the image used to boot the instance.</p>
+        <p><strong>Note: </strong>This is a shortcut for specifying an image source via the <a
+                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/compute/instance/launch.html#cmdoption-source-details">--source-details</a>
+            complex JSON parameter.</p>
+        <p>If the i<strong>mage-id</strong> parameter is used, you <strong>cannot</strong> provide <strong>the
+                --source-details</strong> or <a
+                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/compute/instance/launch.html#cmdoption-source-boot-volume-id"><strong>--source-boot-volume-id</strong></a>
+            parameters.</p>
+        <h5>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a
+                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/compute/instance/terminate.html">Terminate</a>
+        </h5>
+        <p>Terminates the specified instance. Any attached VNICs and volumes are automatically detached when the
+            instance
+            terminates.</p>
+        <p>oci compute instance terminate &ndash;instance-id &lt;<em>instanceID</em>&gt;</p>
+        <h5>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a
+                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/appmgmt-control/monitored-instance/activate-plugin.html">Monitor</a>
+        </h5>
+        <h6>o&nbsp;&nbsp; Activate instance monitoring</h6>
+        <p>Activate Resource Plugin for compute instance identified by the instance ocid. Stores monitored instances Id
+            and its
+            state. Tries to enable <a
+                href="https://docs.oracle.com/en-us/iaas/os-management/osms/osms-resource-discovery-monitoring.htm">Resource
+                Monitoring</a> plugin by making remote calls to Oracle Cloud Agent and Management Agent Cloud Service.
+        </p>
+        <p>oci appmgmt-control monitored-instance activate-plugin --monitored-instance-id &lt;<em>instanceID</em>&gt;
+        </p>
+        <h6>o&nbsp;&nbsp; List monitored instances</h6>
+        <p>oci appmgmt-control monitored-instance-collection list-monitored-instances --compartment-id
+            &lt;<em>COMPARTMENT_OCID</em>&gt;</p>
+        <h4>Instance pools</h4>
+        <h5>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a
+                href="https://docs.oracle.com/en-us/iaas/Content/Compute/Tasks/creatinginstancepool.htm">Creating</a>
+        </h5>
+        <p>Use instance pools to create and manage multiple compute instances within the same region as a group.</p>
+        <p>oci compute-management instance-pool create --compartment-id &lt;<em>COMPARTMENT_OCID</em>&gt;
+            --instance-configuration-id &lt;<em>INSTANCE_CONFIGURATION_OCID</em>&gt; --placement-configurations
+            &lt;<em>file://path/to/file.json</em>&gt; --size &lt;<em>NUMBER_OF_INSTANCES</em>&gt;</p>
+        <p>Where <em>&lt;file://path/to/file.json&gt;</em> is the path to a JSON file that defines the placement
+            configuration.
+            For information about how to generate an example of the JSON file, see <a
+                href="https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliusing.htm#AdvancedJSON">Advanced JSON
+                Options</a>.</p>
+        <h5>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a
+                href="https://docs.oracle.com/en-us/iaas/Content/Compute/Tasks/deletinginstancepool.htm">Deleting</a>
+        </h5>
+        <p>Permanently delete instance pools that you no longer need.</p>
+        <p><strong>Note: </strong>When you delete an instance pool, the <strong>resources that are associated with the
+                pool are
+                permanently deleted.</strong></p>
+        <p>oci compute-management instance-pool terminate --instance-pool-id &lt;<em>INSTANCE_POOL_OCID</em>&gt;</p>
+        <h5>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a
+                href="https://docs.oracle.com/en-us/iaas/Content/Compute/Tasks/restartinginstancepool.htm">Stopping and
+                starting
+                instances in an instance pool</a></h5>
+        <p>You can stop and start individual instances in an instance pool as needed to update software or resolve error
+            conditions (see <a href="#_Actions_(stop/start/reset)">above</a>).</p>
+        <p><strong>Note: </strong>To stop all instances in an instance pool, stop the instance pool itself.</p>
+        <p>If you manually stop all instances in an instance pool instead of stopping the instance pool itself, the
+            instance
+            pool will try to relaunch the individual instances.</p>
+        <h6>o&nbsp;&nbsp; Start all instances</h6>
+        <p>oci compute-management instance-pool start --instance-pool-id &lt;<em>INSTANCE_POOL_OCID</em>&gt;</p>
+        <h6>o&nbsp;&nbsp; Stop all instances</h6>
+        <p>oci compute-management instance-pool stop --instance-pool-id &lt;<em>INSTANCE_POOL_OCID</em>&gt;</p>
+        <h5>o&nbsp;&nbsp; Reset all instances</h5>
+        <p>oci compute-management instance-pool reset --instance-pool-id &lt;<em>INSTANCE_POOL_OCID</em>&gt;</p>
+        <h5>o&nbsp;&nbsp; Softreset all instances</h5>
+        <p>oci compute-management instance-pool softreset --instance-pool-id &lt;<em>INSTANCE_POOL_OCID</em>&gt;</p>
+        <h5>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; List instances in an instance pool</h5>
+        <p>oci compute-management instance-pool list-instances --compartment-id &lt;<em>compartmentID</em>&gt;
+            --instance-pool-id &lt;<em>INSTANCE_POOL_OCID</em>&gt;</p>
+        <h5>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; List instance pools in a compartment</h5>
+        <p>oci compute-management instance-pool list --compartment-id &lt;<em>compartmentID</em>&gt;</p>
+        <h4>Object storage</h4>
+        <p><a href="https://docs.oracle.com/en-us/iaas/Content/Object/home.htm">Object Storage</a> is a fully
+            programmable,
+            scalable, and durable cloud storage service</p>
+        <p>You can use the CLI for object operations within the Object Storage service.</p>
+        <p><strong>Note: </strong>In the OCI Object Storage service, a <a
+                href="https://docs.oracle.com/en-us/iaas/Content/Object/Tasks/managingbuckets.htm"><em>bucket</em></a>
+            is a
+            container for storing objects in a compartment within an Object Storage namespace.</p>
+        <p>For more information, see:</p>
+        <ul>
+            <li>Complete list of OCI CLI <a
+                    href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/os/object.html">Object
+                    commands</a></li>
+            <li><a href="https://bakingclouds.com/working-with-oracle-cloud-storage-from-the-command-line/">Working with
+                    Oracle
+                    Cloud Storage from the Command Line</a></li>
+        </ul>
+        <h5>Uploading/downloading files</h5>
+        <p>Objects can be uploaded from a file or from the command line (STDIN) and can be downloaded to a file or to
+            the
+            command line (STDOUT).</p>
+        <h6>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Upload an object (file)</h6>
+        <p><a href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/os/object/put.html">oci
+                os
+                object put</a> -ns &lt;<em>mynamespace</em>&gt; <a
+                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/os/object/put.html#cmdoption-bn">-bn</a>
+            &lt;<em>mybucket</em>&gt; <a
+                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/os/object/put.html#cmdoption-name">--name</a>
+            myfile.txt <a
+                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/os/object/put.html#cmdoption-file">--file</a>
+            /Users/me/myfile.txt --metadata '{"key1":"value1","key2":"value2"}'</p>
+        <h6>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Upload object contents (STDIN)</h6>
+        <p><a href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/os/object/put.html">oci
+                os
+                object put</a> -ns &lt;<em>mynamespace</em>&gt; <a
+                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/os/object/put.html#cmdoption-bn">-bn</a>
+            &lt;<em>mybucket</em>&gt; <a
+                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/os/object/put.html#cmdoption-name">--name</a>
+            myfile.txt <a
+                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/os/object/put.html#cmdoption-file">--file</a>
+            &lt;--'object content'</p>
+        <h6>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Download an object (file)</h6>
+        <p><a href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/os/object/get.html">oci
+                os
+                object get</a> <a
+                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/os/object/get.html#cmdoption-ns">-ns</a>
+            &lt;<em>mynamespace</em>&gt; <a
+                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/os/object/get.html#cmdoption-bn">-bn</a>
+            &lt;<em>mybucket</em>&gt; <a
+                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/os/object/get.html#cmdoption-name">--name</a>
+            myfile.txt <a
+                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/os/object/get.html#cmdoption-file">--file</a>
+            /Users/me/myfile.txt</p>
+        <h6>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Output object contents (STDOUT)</h6>
+        <p><a href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/os/object/get.html">oci
+                os
+                object get</a> <a
+                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/os/object/get.html#cmdoption-ns">-ns</a>
+            &lt;<em>mynamespace</em>&gt; <a
+                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/os/object/get.html#cmdoption-bn">-bn</a>
+            &lt;<em>mybucket</em>&gt; <a
+                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/os/object/get.html#cmdoption-name">--name</a>
+            myfile.txt <a
+                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/os/object/get.html#cmdoption-file">--file</a>
+            &ndash;</p>
+        <p><strong>Note: </strong>The &ldquo;-&ldquo; parameter tells the <strong>file</strong> flag to output to
+            <strong>STDOUT</strong>.
+        </p>
+        <h6>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Misc</h6>
+        <p><a href="#_Get_the_base">Get the base URL of object storage in home region</a></p>
+        <h5>Bulk operations</h5>
+        <h6>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Uploading files in a directory and all its subdirectories to a bucket
+        </h6>
+        <p><a
+                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/os/object/bulk-upload.html">oci
+                os object bulk-upload</a> -ns &lt;<em>mynamespace</em>&gt; -bn &lt;<em>mybucket</em>&gt; <a
+                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/os/object/bulk-upload.html#cmdoption-src-dir">--src-dir</a>
+            path/to/upload/directory</p>
+        <h6>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Downloading all objects in a bucket</h6>
+        <p><a
+                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/os/object/bulk-download.html">oci
+                os object bulk-download</a> -ns &lt;<em>mynamespace</em>&gt; -bn &lt;<em>mybucket</em>&gt; <a
+                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/os/object/bulk-download.html#cmdoption-dest-dir">--download-dir</a>
+            path/to/download/directory</p>
+        <h6>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Download all object that match a specified prefix</h6>
+        <p><a
+                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/os/object/bulk-download.html">oci
+                os object bulk-download</a> -ns &lt;<em>mynamespace</em>&gt; -bn &lt;<em>mynamespace</em>&gt;
+            --download-dir
+            path/to/download/directory <a
+                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/os/object/bulk-download.html#cmdoption-prefix">--prefix</a>
+            &lt;<em>myprefix</em>&gt;</p>
+        <h6>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Delete all objects in a bucket</h6>
+        <p><a
+                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/os/object/bulk-delete.html">oci
+                os object bulk-delete</a> -ns &lt;<em>mynamespace</em>&gt; -bn &lt;<em>mynamespace</em>&gt;</p>
+        <h6>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Delete objects that match the specified prefix</h6>
+        <p><a
+                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/os/object/bulk-delete.html">oci
+                os object bulk-del</a>ete -ns &lt;<em>mynamespace</em>&gt; -bn &lt;<em>mynamespace</em>&gt;</p>
+        <p>&nbsp;<a
+                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/os/object/bulk-delete.html#cmdoption-prefix">--prefix</a>
+            &lt;<em>myprefix</em>&gt;</p>
+        <h5>Multipart operations</h5>
+        <h6>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Uploads (large files)</h6>
+        <p>Large files (&gt;128 MiB) can be uploaded to Object Storage in multiple parts to speed up the upload. By
+            default,
+            large files are uploaded using multipart operations. You can override this default by using the
+            <strong>--no-multipart</strong> option.
+        </p>
+        <p>For more information about uploading large files, see <a
+                href="https://docs.oracle.com/en-us/iaas/Content/Object/Tasks/usingmultipartuploads.htm#Using_Multipart_Uploads">Using
+                Multipart Uploads</a>.</p>
+        <p>Related options for the <a
+                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/os/object/put.html"><strong>oci
+                    os object put</strong></a> command:</p>
+        <ul>
+            <li><a
+                    href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/os/object/put.html#cmdoption-no-multipart"><strong>--no-multipart</strong></a>
+                overrides an automatic multipart upload if the object is larger than 128 MiB. The object is uploaded as
+                a single
+                part, regardless of size.</li>
+            <li><a
+                    href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/os/object/put.html#cmdoption-part-size"><strong>--part-size</strong></a>
+                in MiB, to use in a multipart operation. The default part size is 128 MiB and a part size that you
+                specify must
+                be greater than 10 MiB. If the object is larger than the value specified by
+                <strong>--part-size</strong>, it is
+                uploaded in multiple parts.</li>
+            <li><a
+                    href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/os/object/put.html#cmdoption-parallel-upload-count"><strong>--parallel-upload-count</strong></a>,
+                to specify the number of parallel operations to perform. You can use this value to balance resources and
+                upload
+                times. A higher value may improve times but consume more system resources and network bandwidth. The
+                default
+                value is 10.</li>
+        </ul>
+        <p><strong>Note: </strong>The <a
+                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/os/object/resume-put.html"><strong>oci
+                    cs object resume-put</strong></a> command allows you to resume a large file upload in cases where
+            the upload
+            was interrupted.</p>
+        <h6>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Downloads (large files)</h6>
+        <p>Likewise, large files can be download from Object Storage in multiple parts to accelerate the process.</p>
+        <p>Related options for the <a
+                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/os/object/get.html"><strong>oci
+                    os object get</strong></a> command:</p>
+        <ul>
+            <li><a
+                    href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/os/object/get.html#cmdoption-multipart-download-threshold"><strong>--multipart-download-threshold</strong></a>
+                lets you specify the size, in MiB at which an object should be downloaded in multiple parts. This size
+                must be
+                at least 128 MiB.</li>
+            <li><a
+                    href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/os/object/get.html#cmdoption-part-size"><strong>--part-size</strong></a>,
+                in MiB, to use for a download part. This gives you the flexibility to use more (smaller size) or fewer
+                (larger
+                size) parts as appropriate for your requirements. For example, compute power and network bandwidth. The
+                default
+                minimum part size is 120 MiB.</li>
+            <li><a
+                    href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/os/object/get.html#cmdoption-parallel-download-count"><strong>--parallel-download-count</strong></a>
+                lets you specify how many parts are downloaded at the same time. A higher value may improve times but
+                consume
+                more system resources and network bandwidth. The default value is 10.</li>
+        </ul>
+        <h4>OKE (Container Engine for Kubernetes)</h4>
+        <p>CLI <a
+                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/ce.html">reference</a>
+            for
+            <a href="https://docs.oracle.com/en-us/iaas/Content/ContEng/Concepts/contengoverview.htm">OKE</a>
+        </p>
+        <h5><a
+                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/ce/cluster.html">Clusters</a>
+        </h5>
+        <h6>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a
+                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/ce/cluster/create.html">Create
+                a Kubernetes cluster</a></h6>
+        <p>oci ce cluster create --compartment-id &lt;<em>compartmentID</em>&gt; --kubernetes-version
+            &lt;<em>version</em>&gt;
+            --name &lt;<em>clusterName</em>&gt; --vcn-id &lt;<em>VCN_OCID</em>&gt;</p>
+        <h6>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a
+                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/ce/cluster/delete.html">Delete
+                a Kubernetes cluster</a></h6>
+        <p>oci ce cluster delete --cluster-id &lt;<em>clusterOCID</em>&gt;</p>
+        <h6>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a
+                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/ce/cluster/generate-token.html">Generate
+                token</a></h6>
+        <p>Generate an ExecCredential based token for Kubernetes SDK/CLI authentication</p>
+        <p>oci ce cluster generate-token --cluster-id &lt;<em>clusterOCID</em>&gt;</p>
+        <h6>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a
+                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/ce/cluster/list.html">List
+                Kubernetes clusters in a compartment</a></h6>
+        <p>oci ce cluster list --compartment-id &lt;<em>compartmentOCID</em>&gt;</p>
+        <h5><a
+                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/ce/node-pool.html">Node-pools</a>
+        </h5>
+        <h6>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a
+                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/ce/node-pool/create.html">Create
+                node pool</a></h6>
+        <p>oci ce node-pool create --cluster-id &lt;<em>clusterOCID</em>&gt; --compartment-id
+            &lt;<em>compartmentID</em>&gt;
+            --name &lt;<em>clusterName</em>&gt; --node-shape &lt;<em>nodeShapeName</em>&gt;</p>
+        <h6>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a
+                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/ce/node-pool/delete.html">Delete
+                node pool</a></h6>
+        <p>oci ce node-pool delete --node-pool-id &lt;<em>nodePoolID</em>&gt;</p>
+        <h6>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a
+                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/ce/node-pool/delete-node.html">Delete
+                node</a></h6>
+        <p>oci ce node-pool delete-node --node-id &lt;<em>computeInstanceID</em>&gt; --node-pool-id
+            &lt;<em>nodePoolID</em>&gt;
+        </p>
+        <h6>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a
+                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/ce/node-pool/list.html">List
+                all pools in a compartment</a></h6>
+        <p>oci ce node-pool list --compartment-id &lt;<em>compartmentID</em>&gt;</p>
+        <h5>Automation</h5>
+        <ul>
+            <li><a href="https://blog.bytequalia.com/scheduling-oci-cli-commands-to-run-via-a-kubernetes-cronjob/">Scheduling
+                    OCI CLI commands to run via a Kubernetes CronJob</a></li>
+        </ul>
+        <h4>Security</h4>
+        <h5>Threat Intelligence</h5>
+        <p>When <a href="https://docs.oracle.com/en-us/iaas/cloud-guard/home.htm">Cloud Guard</a> is enabled in your
+            tenancy, it
+            provides threat detection using Threat Intelligence data.</p>
+        <p>The <a href="https://docs.oracle.com/en-us/iaas/Content/threat-intel/home.htm">Threat Intelligence</a>
+            service is
+            used to search for information about known threat indicators, including suspicious IP addresses, domain
+            names, and
+            other digital fingerprints.</p>
+        <p><strong>For more information, see:</strong></p>
+        <p><a href="https://docs.oracle.com/en-us/iaas/Content/threat-intel/using/overview.htm">Overview</a> of the
+            Threat
+            Intelligence service.</p>
+        <h6>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a
+                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/threat-intelligence/indicator-summaries/list-indicators.html">List
+                threat indicators</a></h6>
+        <p>oci threat-intelligence indicator-summaries list-indicators --compartment-id &lt;<em>compartmentID</em>&gt;
+        </p>
+        <h6>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a
+                href="https://docs.oracle.com/en-us/iaas/Content/threat-intel/using/database.htm#use_cli">List threat
+                indicators
+                for a particular IP address</a></h6>
+        <p>oci threat-intelligence indicator-summaries list-indicators --compartment-id
+            &lt;<em>root_compartment_OCID</em>&gt;
+            --type IP_ADDRESS --value &lt;<em>indicator_IP_address</em>&gt;</p>
+        <p><strong>The supported indicator types are:</strong></p>
+        <p>IP_ADDRESS, DOMAIN_NAME, URL, MD5_HASH, SHA1_HASH, SHA256_HASH, and FILE_NAME.</p>
+        <h6>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a
+                href="https://docs.oracle.com/en-us/iaas/Content/threat-intel/using/database.htm#use_cli">List threat
+                indicators
+                of a particular thread type and a minimum confidence score</a></h6>
+        <p>oci threat-intelligence indicator-summaries list-indicators --compartment-id
+            &lt;<em>root_compartment_OCID</em>&gt;
+            --threat-type-name phishing --confidence-above 50</p>
+        <p>See <a href="https://docs.oracle.com/en-us/iaas/Content/threat-intel/using/database.htm#threat_types">Threat
+                Types</a> or use:</p>
+        <p>oci threat-intelligence threat-types-collection list-threat-types --compartment-id
+            &lt;<em>root_compartment_OCID</em>&gt;</p>
+        <h4>Virtual Machine (VM) hosts</h4>
+        <h5>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a
+                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/compute/dedicated-vm-host/list.html">List
+                VMs</a></h5>
+        <p>Returns a list of dedicated virtual machine hosts that match the specified criteria in the specified
+            compartment.</p>
+        <p>oci compute dedicated-vm-host list --compartment-id &lt;<em>compartment_OCID</em>&gt;</p>
+        <h5>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a
+                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/compute/dedicated-vm-host-instance/list.html">List
+                VM host instances</a></h5>
+        <p>oci compute dedicated-vm-host-instance list --compartment-id &lt;<em>compartment_OCID</em>&gt;
+            --dedicated-vm-host-id
+            &lt;<em>dedicatedVMhost_OCID</em>&gt;</p>
+        <h5>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a
+                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/compute/dedicated-vm-host/get.html">Get
+                information about a VM</a></h5>
+        <p>oci compute dedicated-vm-host get --dedicated-vm-host-id &lt;<em>dedicatedVMhost_OCID</em>&gt;</p>
+        <h5>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a
+                href="https://docs.oracle.com/en-us/iaas/Content/Compute/Concepts/dedicatedvmhosts.htm#create">Create a
+                VM</a>
+        </h5>
+        <p>oci compute dedicated-vm-host create --dedicated-vm-host-shape &lt;<em>shape_name</em>&gt; --wait-for-state
+            ACTIVE
+            --display-name &lt;<em>display_name</em>&gt; --availability-domain &lt;<em>availability_domain</em>&gt;
+            --compartment-id &lt;<em>compartment_OCID</em>&gt;</p>
+        <p>where <em>&lt;shape_name&gt;</em> is the <a
+                href="https://docs.oracle.com/en-us/iaas/Content/Compute/References/computeshapes.htm#dedicatedvmhost">shape</a>
+            for the dedicated virtual machine host</p>
+        <p><strong>Note: </strong>It can take up to 15 minutes for the dedicated virtual machine host to be fully
+            created. It
+            must be in the <strong>ACTIVE</strong> state before you can launch an instance on it.</p>
+        <h5>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a
+                href="https://docs.oracle.com/en-us/iaas/Content/Compute/Concepts/dedicatedvmhosts.htm#delete">Delete a
+                VM</a>
+        </h5>
+        <p>oci compute dedicated-vm-host delete --dedicated-vm-host-id &lt;<em>dedicated_VM_host_OCID</em>&gt;</p>
+        <h5>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Query the current state of a VM</h5>
+        <p>oci compute dedicated-vm-host get --dedicated-vm-host-id &lt;<em>dedicatedVMhost_OCID</em>&gt;</p>
+        <h5>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a
+                href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/compute/dedicated-vm-host/change-compartment.html">Move
+                a VM to another compartment</a></h5>
+        <p>oci compute dedicated-vm-host change-compartment - -compartment-id &lt;<em>compartmentID</em>&gt;
+            --dedicated-vm-host-id &lt;<em>dedicatedVMhost_OCID</em>&gt;</p>
+        <h2>Other resources</h2>
+        <h3>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a
+                href="https://docs.oracle.com/en-us/iaas/Content/API/Concepts/devopstools_topic-DevOps_Tools_and_Plugins.htm"><strong>DevOps
+                    Tools and Plug-Ins</strong></a></h3>
+        <ul>
+            <li><a href="https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/powershell.htm">OCI Module for
+                    PowerShell</a>
+            </li>
+            <li><a href="https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/terraform.htm#Terraform_Provider">Terraform
+                    Provider</a></li>
+            <li><a href="https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/ansible.htm">Ansible Collection</a></li>
+            <li><a href="https://docs.ansible.com/ansible/latest/scenario_guides/guide_oracle.html">Ansible OCI
+                    Guide</a></li>
+        </ul>
+        <h3>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>Open Source at Oracle</strong></h3>
+        <ul>
+            <li><a href="https://developer.oracle.com/open-source/">Open Source at Oracle &ndash; Developer Resource
+                    Center</a>
+            </li>
+            <li><a href="https://github.com/oracle">Open Source at Oracle - GitHub resources</a></li>
+        </ul>
+        <h3>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>Scripts and Automation</strong></h3>
+        <p><strong>Disclaimer:</strong> All code in this section should be considered as a proof-of-concept, used
+            primarily for
+            demonstration purposes, and is not supported by Oracle. The code here should not be used in its present form
+            for
+            Production purposes.</p>
+        <h4>o&nbsp;&nbsp; General</h4>
+        <ul>
+            <li><a href="https://www.oc-blog.com/oci-scripts-and-example-code/">OCI Scripts and example code</a> (list
+                of links,
+                various contributors)</li>
+            <li><a href="https://github.com/cpauliat/my-oci-scripts">OCI scripts</a> (GitHub repo)</li>
+        </ul>
+        <p><strong>Contributors: </strong>Christophe Pauliat (<strong>cpauliat</strong>) and &Ccedil;etin Ardal
+            (<strong>kral2</strong>)</p>
+        <ul>
+            <li><a
+                    href="https://s3.amazonaws.com/bizzabo.file.upload/vWcLJPyQe2escA6r6gPW_MarzOCI%20CLI%20Scritping.pdf">OCI
+                    scripting with OCI CLI</a> (pdf slide deck)</li>
+        </ul>
+        <p><strong>Note: </strong>parts of this could be used as a CHEAT SHEET, although there are few OCI CLI command
+            examples
+            (other than installation and upgrading).</p>
+        <h4>o&nbsp;&nbsp; Specific applications</h4>
+        <ul>
+            <li><a
+                    href="https://medium.com/oracledevs/writing-python-scripts-to-run-from-the-oci-console-cloud-shell-a0be1091384c">How
+                    to list all Oracle Cloud Infrastructure instances and their IP addresses</a></li>
+        </ul>
+        <p><strong>Contributor:</strong> Stephen Cross (Product Manager, Oracle Cloud Infrastructure)</p>
+        <ul>
+            <li><a
+                    href="https://www.ateam-oracle.com/post/oracle-cloud-infrastructure-cli-scripting-how-to-quickly-override-the-default-configuration">Oracle
+                    Cloud Infrastructure CLI Scripting: How to Quickly Override the Default Configuration</a></li>
+        </ul>
+        <p><strong>Contributor: </strong><a href="https://blogs.oracle.com/authors/olaf-heimburger">Olaf Heimburger</a>
+        </p>
+        <h5>&sect;&nbsp; Databases</h5>
+        <ul>
+            <li><a href="https://www.ateam-oracle.com/post/automated-cli-scripts-to-scale-autonomous-database-cpus">Automated
+                    CLI Scripts to Scale Autonomous Database CPUs</a></li>
+        </ul>
+        <p><strong>Contributor: </strong><a href="https://blogs.oracle.com/authors/vivek-singh">Vivek Singh</a></p>
+        <ul>
+            <li><a
+                    href="https://database-heartbeat.com/2021/01/14/automate-patching-and-upgrade-your-cloud-databases-using-oci-cli/">Automate
+                    Patching and Upgrade your Cloud Databases using OCI CLI</a></li>
+        </ul>
+        <p><strong>Contributor: </strong>Sinan Petrus Toma</p>
+        <ul>
+            <li><a
+                    href="https://blog.pythian.com/oci-database-cloud-service-patching-of-database-and-grid-infrastructure-using-oci-cli/">OCI
+                    Database Cloud Service Patching of Database and Grid Infrastructure Using OCI CLI</a></li>
+        </ul>
+        <p><strong>Contributor: </strong>Abhilash Kumar</p>
+        <h5>&sect;&nbsp; Infrastructure</h5>
+        <ul>
+            <li><a href="http://www.brokedba.com/2022/03/oci-bastion-service-part-ii-create.html">OCI Bastion Service
+                    Part II:
+                    Create Bastion service using OCI CLI &amp; Terraform</a></li>
+        </ul>
+        <p><strong>Contributor: </strong>Kosseila Hd</p>
+        <ul>
+            <li><a href="https://recursive.codes/blog/post/1788">IaC in the Cloud: Integrating Terraform and Resource
+                    Manager
+                    into your CI/CD Pipeline - Building with the OCI CLI</a></li>
+        </ul>
+        <p><strong>Contributor: </strong>Todd Sharp</p>
+        <h3>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>SDKs</strong></h3>
+        <ul>
+            <li><a href="https://docs.oracle.com/en-us/iaas/Content/API/Concepts/sdks.htm">SDKs for the CLI</a></li>
+        </ul>
+        <p>Oracle Cloud Infrastructure provides several Software Development Kits (SDKs) and a Command Line Interface
+            (CLI) to
+            facilitate the development of custom solutions.</p>
+        <p><strong>SDKs:</strong> Java, Python, TypeScript and JavaScript, .NET, Go, Ruby, PL/SQL</p>
+        <p><strong>Note: </strong>The <strong>PL/SQL SDK</strong> enables you to write code to manage OCI resources. The
+            latest
+            PL/SQL SDK version is pre-installed by Oracle for all Autonomous Databases using shared Exadata
+            infrastructure.</p>
+        <ul>
+            <li><a href="https://github.com/oracle/oci-python-sdk/tree/master/examples">Main Oracle Python SDK
+                    examples</a></li>
+            <li><a href="https://blogs.oracle.com/cloud-infrastructure/post/automating-developer-setup-in-oci">Automating
+                    developer setup in Oracle Cloud Infrastructure</a> (Oracle blog)</li>
+        </ul>
+        <p><strong>Contributor:</strong> Philip Wilkins</p>
+        <p><strong>Note: </strong>some of the images in this blog post from 2021 appear to be broken</p>
+        <h3>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>Services</strong></h3>
+        <h4>o&nbsp;&nbsp; Anomaly Detection Service</h4>
+        <ul>
+            <li><a
+                    href="https://oracle.github.io/learning-library/oci-library/oci-hol/oci-artificial-intelligence/anomaly-detection/workshops/freetier/?lab=anomaly-detection-oci-cli">Access
+                    Anomaly Detection Service with OCI CLI</a></li>
+            <li><a href="https://www.oracle.com/artificial-intelligence/anomaly-detection/">Anomaly Detection
+                    Service</a></li>
+        </ul>
+        <h4>o&nbsp;&nbsp; Databases</h4>
+        <h5>&sect;&nbsp; MySQL Database Service</h5>
+        <ul>
+            <li><a href="https://www.mortensi.com/2020/11/manage-mysql-database-service-mds-db-systems-with-oci-cli/">Manage
+                    MySQL Database Service (MDS) DB Systems with OCI CLI</a></li>
+            <li><a href="https://qiita.com/liu-wei/items/ff455a12a0f2580d48ce">How to install OCI-CLI on Oracle DBCS
+                    instance</a></li>
+        </ul>
+        <h5>&sect;&nbsp; Oracle Database Service</h5>
+        <ul>
+            <li><a href="https://docs.oracle.com/en-us/iaas/Content/Database/Concepts/databaseoverview.htm">Oracle
+                    Database on
+                    OCI</a></li>
+            <li><a href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.15.1/oci_cli_docs/cmdref/db.html">OCI CLI db
+                    commands</a></li>
+        </ul>
+        <h4>o&nbsp;&nbsp; IAM (Identity and Access Management)</h4>
+        <ul>
+            <li><a href="https://www.ateam-oracle.com/post/calling-oci-cli-using-instance-principal">Calling OCI CLI
+                    Using
+                    Instance Principal</a></li>
+        </ul>
+        <h4>o&nbsp;&nbsp; <a href="https://www.oracle.com/artificial-intelligence/vision/">Vision</a></h4>
+        <p>OCI Vision is a serverless, cloud-native service that provides deep learning-based, prebuilt, and custom
+            computer
+            vision models over REST APIs. OCI Vision helps you identify and locate objects, extract text, and identify
+            tables,
+            document types, and key-value pairs from business documents like receipts. No data science experience is
+            required to
+            use the prebuilt or custom features of OCI Vision.</p>
+        <p>You can access the service through the Oracle Cloud Console, OCI software developer kits (SDKs) in Python and
+            Java,
+            or the OCI CLI.</p>
+        <p>For more information, see:</p>
+        <ul>
+            <li><a href="https://docs.oracle.com/en-us/iaas/vision/vision/using/home.htm">Service documentation and
+                    Tutorials</a></li>
+            <li><a href="https://docs.oracle.com/en-us/iaas/Content/API/Concepts/sdks.htm">SDKs and CLI</a></li>
+            <li><a href="https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.16.0/oci_cli_docs/cmdref/ai-vision.html">Vision
+                    OCI
+                    CLI commands</a></li>
+        </ul>
+        <h3><strong>&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </strong><strong>Training</strong></h3>
+        <ul>
+            <li><a href="https://github.com/oracle-livelabs">Oracle LiveLabs</a></li>
+        </ul>
+        <p><a href="https://apexapps.oracle.com/pls/apex/dbpm/r/livelabs/home">LiveLabs</a><strong> is the place to
+                explore
+                Oracle's products and services using workshops designed to enhance your experience building and
+                deploying
+                applications on the Cloud and On-Premises. Use your existing Oracle Cloud account, a Free Tier account,
+                or a
+                LiveLabs Sandbox reservation to build, test and deploy applications on Oracle's Cloud.</strong></p>
+        <ul>
+            <li><a href="https://apexapps.oracle.com/pls/apex/f?p=133:100:29934050917174::::SEARCH:OCI%20cli">OCI
+                    Workshops and
+                    Sprints</a></li>
+            <li><a href="https://github.com/oracle-quickstart"><strong>Oracle Quick Start</strong> - Automated
+                    deployments of
+                    enterprise software on OCI</a></li>
+        </ul>
+        <ul>
+            <li><a href="https://education.oracle.com/learn/oracle-cloud-infrastructure/pPillar_640">Oracle Cloud
+                    Infrastructure
+                    &ndash; build your OCI knowledge with free digital training</a></li>
+            <li><a href="https://docs.oracle.com/learn/?q=OCI%20CLI&amp;sort=&amp;lang=en">Oracle Help Center
+                    <strong>Learn
+                    </strong>&ndash; OCI CLI</a></li>
+            <li><a href="https://www.youtube.com/user/OracleLearning/search?query=oci%20cli"><strong>Oracle
+                        Learning</strong>
+                    Videos &ndash; OCI CLI</a><br /> </li>
+        </ul>
+
+    </div>
+</section>
