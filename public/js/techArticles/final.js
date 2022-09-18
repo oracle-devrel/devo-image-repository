@@ -387,6 +387,7 @@ window.onload = function () {
     }
   }
 
+
   try {
     addPadding();
     console.log("Padding added");
@@ -396,6 +397,7 @@ window.onload = function () {
     //window.location.reload();
   }
 
+  /*
   try {
     stickNavBar();
     console.log("Nav Bar Sticked");
@@ -403,6 +405,7 @@ window.onload = function () {
     console.log(e);
     //window.location.reload();
   }
+  */
 
   try {
     addBlank();
@@ -426,6 +429,7 @@ window.onload = function () {
     console.log(e);
   }
 
+  /*
   try {
     showMT();
     console.log("MT updated");
@@ -433,6 +437,7 @@ window.onload = function () {
     console.log(e);
     reloadDEVO();
   }
+  */
 
   try {
     updateFooterLinks();
@@ -450,8 +455,8 @@ window.onload = function () {
     reloadDEVO();
   }
 
+  /*
   let url = location.href;
-
   if (url.includes("/en/") === false) {
     try {
       changeBanner();
@@ -461,4 +466,6 @@ window.onload = function () {
       reloadDEVO();
     }
   }
+  */
+
 };
