@@ -1,8 +1,11 @@
 /* Sticky provisional Content */
+
+/*
 .sticky {
   position: fixed;
   top: calc(60px + 2.5rem);
 }
+*/
 
 .ovideoOne {
   margin-bottom: 11px;
@@ -24,7 +27,7 @@
     width: 100%;
   }
 }
-
+/*
 .chapters {
   max-width: 512px;
 }
@@ -50,6 +53,7 @@
     max-width: 200px !important;
   }
 }
+*/
 
 @media (max-width: 767px) {
   .ovideoOne,
@@ -201,7 +205,7 @@ p > img {
 }
 
 .maxWidthScreen {
-  max-width: 1056px!important;
+  max-width: 1056px !important;
 }
 
 /*Image Description*/

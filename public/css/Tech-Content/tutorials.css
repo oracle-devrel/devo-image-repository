@@ -3,24 +3,22 @@
 }
 
 /* Sticky provisional Content */
+/*
 .sticky {
   position: fixed;
   top: calc(60px + 2.5rem);
 }
+*/
 
 strong {
   font-family: "Oracle Sans Semi Bold";
 }
 
-/* Sticky provisional Content */
-.sticky {
-  position: fixed;
-  top: calc(60px + 2.5rem);
-}
-
+/*
 .chapters {
   max-width: 512px;
 }
+*/
 
 .ovideoOne {
   margin-bottom: 11px;
@@ -41,12 +39,14 @@ strong {
     margin-left: 0rem;
     width: 100%;
   }
-
+  /*
   .chapters {
     max-width: 335px !important;
   }
+  */
 }
 
+/*
 @media (max-width: 1130px) {
   .sticky {
     top: calc(100px + 2.5rem);
@@ -69,6 +69,7 @@ strong {
     overflow-y: hidden !important;
   }
 }
+  */
 
 @media (max-width: 767px) {
   .ovideoOne,
@@ -94,8 +95,8 @@ strong {
   margin-bottom: 24px;
 }
 
-.oracleDepBTN{
-  max-width: 400px!important;
+.oracleDepBTN {
+  max-width: 400px !important;
   border: none;
   margin: 0px;
 }
@@ -589,9 +590,7 @@ td {
 .content-container .chapters ul li a {
   color: #57637f !important;
 }
-#u10 > div > div.u10w5.u10w10 > ul.u10-links > li > a, #icon-id06861753677157003 {
+#u10 > div > div.u10w5.u10w10 > ul.u10-links > li > a,
+#icon-id06861753677157003 {
   color: #fff;
 }
-
-
-
