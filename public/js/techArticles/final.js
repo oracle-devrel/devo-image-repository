@@ -368,6 +368,7 @@ window.onload = function () {
       //window.location.reload();
     }
 
+    /*
     let url = location.href;
     if (url.includes("/en/") === false) {
       try {
@@ -378,6 +379,7 @@ window.onload = function () {
         //reloadDEVO();
       }
     }
+    */
 
     try {
       addBlank();

@@ -1,5 +1,14 @@
 <section class="cc01 cc01v0 cpad page" id="link1">
     <div class="cc01w1 cwidth">
+
+        <style>
+            .oracleDepBTN {
+                max-width: 400px !important;
+                border: none !important;
+                margin: 0px !important;
+            }
+        </style>
+
         <h2>Welcome!</h2>
         <p>It’s easy to deploy solutions on OCI (Oracle Cloud Infrastructure) using Terraform and
             Resource Manager’s Stack. I’ve published several resources available on <a
@@ -19,17 +28,15 @@
             source for the data visualization.</p>
         <h2 id="preparation">Preparation</h2>
         <p>The easiest way to install Apache Superset on OCI is to click this button:</p>
-        <p><a
-                href="https://cloud.oracle.com/resourcemanager/stacks/create?zipUrl=https://github.com/lefred/oci-superset-mds/releases/download/v1.0.0/stack_superset_mds.zip&amp;source=:ex:tb:::::WWMK211123P00031:WW_FY22_DevRel_DotBuild&amp;SC=:ex:tb:::::WWMK211123P00031:WW_FY22_DevRel_DotBuild&amp;pcode=WWMK211123P00031">
-                <picture class="aligncenter">
-                    <source
-                        srcset="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/mds_superset/deploy_on_oci.svg 1x, https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/mds_superset/deploy_on_oci.svg 2x">
-                    <img loading="lazy"
-                        src="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/mds_superset/deploy_on_oci.svg"
-                        data-original="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/mds_superset/deploy_on_oci.svg"
-                        data-at2x="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/assets/mds_superset/deploy_on_oci.svg">
-                </picture>
-            </a></p>
+
+        <p style="text-align: center;"><a
+                href="https://cloud.oracle.com/resourcemanager/stacks/create?zipUrl=https://github.com/lefred/oci-superset-mds/releases/download/v1.0.0/stack_superset_mds.zip&amp;source=:ex:tb:::::WWMK211123P00031:WW_FY22_DevRel_DotBuild&amp;SC=:ex:tb:::::WWMK211123P00031:WW_FY22_DevRel_DotBuild&amp;pcode=WWMK211123P00031"
+                target="_blank"><img class="oracleDepBTN"
+                    src="https://oci-resourcemanager-plugin.plugins.oci.oraclecloud.com/latest/deploy-to-oracle-cloud.svg?source=:ex:tb:::::WWMK211125P00021:WW_FY22_DevRel_DotBuild&amp;SC=:ex:tb:::::WWMK211125P00021:WW_FY22_DevRel_DotBuild&amp;pcode=WWMK211125P00021"
+                    alt="Deploy to Oracle Cloud" style="
+            max-width: 400px!important;
+        "></a></p>
+
         <p>You can also use the Terraform modules available on <a href="https://github.com/lefred/oci-superset-mds">this
                 GitHub repo</a>.</p>
         <p>If you use the Red Pill (by clicking on the image above), you will redirected to OCI’s

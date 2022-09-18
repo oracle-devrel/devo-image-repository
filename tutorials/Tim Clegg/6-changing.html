@@ -17,7 +17,8 @@
 
                     <figure class="aligncenter">
                         <picture>
-                            <source srcset="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/tf-101/assets/terraform-101.png 1x" />
+                            <source
+                                srcset="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/tf-101/assets/terraform-101.png 1x" />
                             <img loading="lazy" width="400" height="400"
                                 src="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/tf-101/assets/terraform-101.png"
                                 data-original="https://raw.githubusercontent.com/oracle-devrel/devo.tutorials/main/tf-101/assets/terraform-101.png"
@@ -95,7 +96,8 @@
                     <h2 class="slide__title"><span class="slide__num">4</span> Adding a Resource</h2>
 
                     <p>To start, let’s add three new Subnets to the Virtual Cloud Network (VCN) which was created in the
-                        <a href="5-creating">previous tutorial</a>.</p>
+                        <a href="5-creating">previous tutorial</a>.
+                    </p>
 
                     <p>Add the following to your <code class="language-plaintext highlighter-rouge">main.tf</code> file:
                     </p>
@@ -540,7 +542,7 @@ Successfully moved 1 object(s).
                             href="https://www.terraform.io/docs/cli/commands/state/mv.html">Terraform documentation</a>
                         for more information.</p>
 
-                    <blockquote>
+                    <blockquote class="notice">
                         <p><strong>NOTE:</strong> When referencing resources in Terraform, both the type of resource and
                             its name must be used. This is why in the above command, <code
                                 class="language-plaintext highlighter-rouge">oci_core_subnet.dev_1</code> is used
@@ -659,7 +661,8 @@ Apply complete! Resources: 0 added, 1 changed, 0 destroyed.
 
 
             <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong>
-                <time datetime="2021-09-30T20:22:00+00:00">September 30, 2021</time></p>
+                <time datetime="2021-09-30T20:22:00+00:00">September 30, 2021</time>
+            </p>
 
 
         </footer>
