@@ -45,8 +45,7 @@
         </ul>
         <h3>OCI CLI container image</h3>
         <p>OCI also supports running a container image version of the CLI.</p>
-        <h3><a style="color: #000!important;"
-                href="https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/clicontainer.htm#clicontainer_requirements"><strong>Requirements</strong></a>
+        <h3><a href="https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/clicontainer.htm#clicontainer_requirements"><strong>Requirements</strong></a>
         </h3>
         <p><strong>Set up: </strong>for details on how to install and configure OCI CLI by using a container image, see:
             <a href="https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/clicontainer.htm">Working with the OCI CLI
@@ -386,18 +385,38 @@ oci compute instance launch --availability-domain "EMIr:PHX-AD-1" -c &lt;<em>com
             <li><strong>Command options - </strong>For a command option, use
                 <strong>--generate-param-json-input</strong> and
                 specify the command option that you want to get the JSON for.
+                <p><strong>Example: </strong>To generate the JSON for creating or updating a security rule, run the following
+                    command:
+                </p>
+
+                <div class="ocode">
+                    <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                        <div><a href="#copy">Copy</a></div>
+                    </div>
+        
+                    <pre><code>
+oci network security-list create --generate-param-json-input ingress-security-rules</code></pre>
+                </div>
+
             </li>
+            <li>
+                <strong>Entire command - </strong>For an entire command, use<strong>
+                --generate-full-command-json-input</strong>.
+                <p><strong>Example:</strong> To generate the JSON for launching an instance, run the following command:</p>
+            
+                <div class="ocode">
+                    <div class="ocode-bttn" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                        <div><a href="#copy">Copy</a></div>
+                    </div>
+        
+                    <pre><code>
+oci compute instance launch --generate-full-command-json-input</code></pre>
+                </div>
+            </li>
+
         </ul>
-        <p><strong>Example: </strong>To generate the JSON for creating or updating a security rule, run the following
-            command:
-        </p>
-        <p>oci network security-list create --generate-param-json-input ingress-security-rules</p>
-        <ul>
-            <li><strong>Entire command - </strong>For an entire command, use<strong>
-                    --generate-full-command-json-input</strong>.</li>
-        </ul>
-        <p><strong>Example:</strong> To generate the JSON for launching an instance, run the following command:</p>
-        <p>oci compute instance launch --generate-full-command-json-input</p>
+
+       
         <h3>JMESPath</h3>
         <p>JMESPath is a query language for JSON that allows you to extract and transform elements from a JSON document.
         </p>
@@ -439,6 +458,7 @@ oci compute instance launch --availability-domain "EMIr:PHX-AD-1" -c &lt;<em>com
             </li>
         </ul>
         <h3>Useful examples (General)</h3>
+        <!--
         <h3><a href="#UE_table_service_db">db</a></h3>
         <h3><a href="#UE_table_service_IAM">IAM</a></h3>
         <h3><a href="#UE_table_IAM_compartment">Compartment</a></h3>
@@ -446,6 +466,7 @@ oci compute instance launch --availability-domain "EMIr:PHX-AD-1" -c &lt;<em>com
         <h3><a href="#UE_table_IAM_user">User</a></h3>
         <h3><a href="#UE_table_service_OS">OS</a></h3>
         <p>&nbsp;</p>
+        -->
         <table class="otable">
             <tbody>
                 <tr>

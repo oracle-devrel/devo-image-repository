@@ -1,0 +1,16 @@
+.content-container ul li,
+.card-container ul li {
+  list-style-position: outside;
+  margin-left: 1.825rem;
+}
+
+.content-container .body ul,
+.card-container .body ul {
+  margin-top: 1.25rem;
+}
+
+.content-container .body li,
+.card-container .body li {
+  line-height: 1.375rem;
+  margin-bottom: 0.8rem;
+}

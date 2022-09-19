@@ -1,0 +1,55 @@
+#dee30464-4e6a-499d-8d59-46f21b574401,
+#d2340f3b-6e26-4cdd-a976-e9dd7f34c173,
+#db790457-9813-4b57-a5e4-7fd91ad89f98,
+#b4fdd087-444c-4310-b72d-238399c95ad3 {
+  background-color: rgb(255 255 255 / 10%);
+}
+
+.scs-image-default-style,
+.scs-paragraph-default-style {
+  margin: 0 0rem !important;
+}
+
+.card.image .media-container img.aspect-16-9,
+.card.image .media-container video.aspect-16-9,
+#f23ce7b2-4414-44fe-9cf5-082936978d12customComponentDiv
+  > section
+  > div
+  > div.bg.left-text-position
+  > img,
+#bc9eaf22-e07d-493e-8a3a-580e83abada4customComponentDiv
+  > section
+  > div
+  > div.bg.left-text-position
+  > img {
+  aspect-ratio: auto !important;
+}
+
+.banner .banner-content-container .body-content-def .banner-text-content {
+  max-width: 100% !important;
+}
+
+.tabs-layout {
+  height: auto !important;
+}
+
+.tabs-layout .content-container .tabs-content {
+  background-color: #1e232f00 !important;
+}
+
+#cb462d9b-642d-46ff-82a0-25a56a2cd119customComponentDiv
+  > div
+  > div
+  > div
+  > div.banner-text-content
+  > p
+  > ul {
+  margin-top: 1.25rem !important;
+}
+
+
+@media (min-width: 1999px) {
+  .banner .banner-content-container .body-content-def.left-align {
+    margin: auto auto !important;
+  }
+}

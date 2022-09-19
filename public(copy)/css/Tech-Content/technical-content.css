@@ -1,0 +1,415 @@
+/* Sticky provisional Content */
+
+/*
+.sticky {
+  position: fixed;
+  top: calc(60px + 2.5rem);
+}
+*/
+
+blockquote.notice {
+  background: #DDE3FF;
+}
+
+.notice {
+  margin: 1em 0 !important;
+  padding: 1em;
+  color: #000000;
+  font-family: "Oracle Sans", "Noto Sans Hebrew", -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+
+}
+
+
+
+.ovideoOne {
+  margin-bottom: 11px;
+  border: solid 1px #919db8;
+  float: right;
+  margin-left: 1rem;
+}
+
+.ovideoTwo {
+  margin-bottom: 11px;
+  border: solid 1px #919db8;
+}
+
+@media (max-width: 1290px) {
+  .ovideoOne,
+  .ovideoTwo {
+    float: none;
+    margin-left: 0rem;
+    width: 100%;
+  }
+}
+/*
+.chapters {
+  max-width: 512px;
+}
+
+@media (max-width: 1130px) {
+  .sticky {
+    top: calc(100px + 2.5rem);
+  }
+  
+  .chapters {
+    max-width: 445px !important;
+  }
+}
+
+@media (max-width: 990px) {
+  .chapters {
+    max-width: 360px !important;
+  }
+}
+
+@media (max-width: 900px) {
+  .chapters {
+    max-width: 200px !important;
+  }
+}
+*/
+
+@media (max-width: 767px) {
+  .ovideoOne,
+  .ovideoTwo {
+    height: 193px;
+  }
+}
+
+/*Modification to space between Title and Article's content */
+.content-container .technical-content {
+  gap: 2rem;
+}
+
+/*Styles to Headers an P*/
+.cc01w1 h2,
+.rc24w1 h2 {
+  font-family: "Oracle Sans Semi Bold";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 1.5rem;
+  line-height: 32px;
+  margin-top: 60px;
+  margin-bottom: 16px;
+  padding-bottom: 0.5rem;
+}
+
+.cc01w1 h3,
+.rc24w1 h3 {
+  font-family: "Oracle Sans Semi Bold";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 1.25rem;
+  line-height: 32px;
+  margin-top: 30px !important;
+  margin-bottom: -5px!important;
+  padding-bottom: 0.5rem;
+}
+
+.cc01w1 h4,
+.rc24w1 h4 {
+  font-family: "Oracle Sans Semi Bold";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 1rem;
+  line-height: 32px;
+  margin-top: 15px;
+  margin-bottom: 16px;
+  padding-bottom: 0.5rem;
+}
+
+.rc24w1 > p,
+.cc01w1 > p {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 30px;
+  margin-bottom: 24px;
+}
+
+strong {
+  font-family: "Oracle Sans Semi Bold";
+}
+
+/*For Links -> Changes the color of links in the Footer*/
+.cc01w1 p > a,
+.cc01w1 li > a {
+  color: #00747a !important;
+}
+
+/*Internla Btns*/
+.obttns a,
+.obttns button {
+  border: none;
+  display: flex;
+  align-items: center;
+  background-color: #00747a;
+  text-decoration: none;
+  color: #fff !important;
+  padding: 0.75rem 1.875rem;
+  text-align: center;
+  margin-right: 1.25rem;
+}
+
+.obttns a:hover,
+.obttns button {
+  text-decoration: underline;
+  background-color: #004f59;
+}
+
+.obttns {
+  width: 100%;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-direction: row;
+  -ms-flex-wrap: wrap;
+  flex-flow: row wrap;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+  -ms-flex-align: stretch;
+  align-items: stretch;
+}
+
+/*Lists, margins, etc.*/
+.cc01w1 ul {
+  display: block;
+  list-style-type: disc;
+  margin-block-end: 1em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  padding-inline-start: 40px;
+}
+
+.cc01w1 ul li,
+.cc01w1 ol li,
+.obullets li {
+  margin-bottom: 0.5em;
+  list-style-position: outside;
+  line-height: 30px;
+  margin-left: 2rem;
+}
+
+.cc01w1 ol {
+  margin-left: 5vh;
+}
+
+.cc01w1 li::marker {
+  unicode-bidi: isolate;
+  font-variant-numeric: tabular-nums;
+  text-transform: none;
+  text-indent: 0px !important;
+  text-align: start !important;
+  text-align-last: start !important;
+}
+
+/*Image Sizing*/
+p > img {
+  margin-top: 24px;
+  margin-bottom: 11px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100% !important;
+  max-width: 800px !important;
+  border: solid 1px #919db8;
+}
+
+.maxWidthScreen {
+  max-width: 1056px !important;
+}
+
+/*Image Description*/
+.cc01w1 > .xsml {
+  font-style: normal;
+  text-align: center;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  margin: 0px;
+  margin-top: -35px;
+  margin-bottom: 48px;
+}
+
+ol > li > p.xsml {
+  font-style: normal;
+  text-align: center;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  margin: 0;
+  margin-top: -10px;
+  margin-bottom: 48px;
+}
+
+/*Codes Section */
+.ocode:not(code):not(.ocode-simple) {
+  margin-top: 39px;
+  margin-bottom: 24px;
+}
+
+.ocode {
+  position: relative;
+  width: 100%;
+  background-color: #2b3244;
+}
+
+p > .ocode,
+td > .ocode,
+strong > .ocode,
+li > code,
+directory > code,
+em > code,
+.ocode2,
+table > tbody > tr > th > code {
+  position: relative;
+  width: 100%;
+  padding: 0.1em 0.25em 0.1em 0.25em;
+  background-color: #efefef !important;
+  color: #000;
+}
+
+.ocode pre {
+  font-style: normal;
+  padding: 0 24px 24px 24px;
+  overflow: auto;
+  line-height: 22px;
+  color: #fff;
+  font-weight: 400;
+  font-size: 16px;
+}
+
+.ocode-bttn {
+  text-align: right;
+  position: absolute;
+}
+
+.ocode-bttn a {
+  font-style: normal;
+  display: block;
+  text-decoration: none;
+  padding: 0.25em 0em;
+  color: #00747a !important;
+  background: transparent;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 22px;
+}
+
+.ocode-bttn a:hover {
+  text-decoration: underline;
+}
+
+.ocode-bttn {
+  transform: translateY(calc(-100% - 0.2em));
+  text-align: right;
+  position: absolute;
+  right: -1px;
+}
+
+/*HERO MODIFICATIONS */
+
+/*
+  
+  .hero.heightShort {
+    height: 12.5rem !important;
+  }
+  
+  .hero .content-container .content .title {
+    margin-bottom: -0.5rem !important;
+  }
+  
+  .hero .content-container .content {
+    max-width: 60% !important;
+  }
+  
+  #c27e1038-2284-486c-8d50-cbdded31c492customComponentDiv
+    > section
+    > div.content-container
+    > div
+    > div.body
+    > p:nth-child(2) {
+    font-weight: 400;
+    line-height: 26px;
+  }
+  */
+
+/* Tables */
+
+.otable {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  width: 100%;
+  display: block;
+  overflow-x: auto;
+}
+
+td {
+  min-height: 2.5rem;
+  padding: 1.385em;
+}
+
+.cpad .cwidth,
+.cpad .cwidth > :last-child {
+  margin-bottom: 0;
+}
+
+.otable .otable-w2 {
+  width: 100%;
+  margin-bottom: 2rem;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.otable tr {
+  border-bottom: 1px solidrgba(22, 21, 19, 0.1);
+}
+
+.otable th {
+  text-align: left;
+  background: #edeff5;
+  border-top-color: transparent;
+}
+
+.otable th {
+  padding: 1.385em;
+  font-family: "Oracle Sans Bold";
+}
+
+.otable tr td:first-child {
+  border-left-color: transparent;
+}
+
+.otable td {
+  white-space: normal;
+  padding: 1.385em;
+  border-bottom: solid #edeff5 1px;
+}
+
+.cc01w1 a,
+.rc24w1 a {
+  text-decoration: none !important;
+  color: #0ca29f !important;
+}
+
+.cc01w1 a:hover,
+.rc24w1 a:hover {
+  text-decoration: underline !important;
+}
+
+/* Download BTN */
+
+#bd353c82-50c2-4950-8e31-340a3956aa1fcustomComponentDiv
+  > div
+  > div
+  > div
+  > div.banner-text-content
+  > p:nth-child(3) {
+  font-family: "Oracle Sans Light", sans-serif;
+  line-height: 1.375rem;
+  font-weight: 400 !important;
+  font-size: 1rem !important;
+}

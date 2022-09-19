@@ -1,0 +1,15 @@
+#e2d996c5-d19d-44a2-ad89-c25c8f15e62fcustomComponentDiv
+  > section
+  > div
+  > div.message-container.left-text-position
+  > p
+  > a:hover {
+  text-decoration: underline !important;
+}
+
+@media (max-width: 768px) {
+  #b0311691-baf3-4da8-bd36-a90de87701e5 > div.scs-container-styles > div > div {
+    padding-top: 0rem !important;
+    padding-bottom: 0rem !important;
+  }
+}
