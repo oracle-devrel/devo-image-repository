@@ -154,3 +154,8 @@
   font-size: 16px;
   line-height: 30px;
 }
+
+/* Section Header Articles */
+#f9156608-2e75-4e41-87d6-8c6131c90d01_content_undefined > div > div > p.title, #f9156608-2e75-4e41-87d6-8c6131c90d01_content_undefined > div > div > p.body{
+    color: #000000;
+}
