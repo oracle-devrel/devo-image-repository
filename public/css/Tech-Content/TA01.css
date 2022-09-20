@@ -49,7 +49,7 @@
   font-weight: 400;
   font-size: 12px;
   line-height: 16px;
-  margin-top: 11px;
+  margin-top: 12px;
 }
 
 /*  CODES */
@@ -74,6 +74,7 @@
   grid-template-areas: ". .";
   justify-content: space-between;
   align-items: center;
+  margin-top: 12px;
 }
 
 .codeLanguageText,
@@ -84,7 +85,7 @@
   font-weight: 600;
   font-size: 16px;
   line-height: 22px;
-  color: #00747a;
+  color: #00747a!important;
 }
 
 .codeLanguageText {
@@ -125,7 +126,7 @@
 }
 
 .listTypeOneLI > a {
-  color: #00747a;
+  color: #00747a!important;
   text-decoration: none;
 }
 
