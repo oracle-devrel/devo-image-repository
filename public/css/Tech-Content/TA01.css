@@ -146,6 +146,9 @@
   padding: 0px;
   margin: 0px;
 }
+.listTypeTwo {
+  list-style-position: inside;
+}
 
 .listTypeOneLI,
 .listTypeTwoLI {
