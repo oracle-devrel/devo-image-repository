@@ -2,6 +2,15 @@
   font-family: "Oracle Sans";
 }
 
+.alignCenter {
+  display: flex;
+  align-items: center;
+}
+
+.marginLeftTA01 {
+  margin-left: 5px;
+}
+
 /* Headers and paragraph styling */
 .TA01 > h2,
 .authorTA01 > h2,
@@ -177,7 +186,8 @@
 
 /* NOTICES */
 .noticeTA01,
-.exampleTA01 {
+.exampleTA01,
+.referenceDocTA01 {
   padding: 24px;
   margin: 12px 0px 24px 0px;
 }
@@ -214,6 +224,27 @@
 
 .exampleTitleTA01 {
   margin-top: 0px;
+}
+
+/* Reference Documentation */
+.referenceDocLinkTA01 {
+  text-decoration: none;
+  color: #2b3244 !important;
+  color: #2b3244 !important;
+  fill: #2b3244;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+}
+
+.referenceDocLinkTA01:hover {
+  color: #57637f !important;
+  fill: #57637f !important;
+  text-decoration: underline;
+}
+
+.referenceDocTA01 {
+  background-color: #edeff5;
 }
 
 /* Section Header Articles */
