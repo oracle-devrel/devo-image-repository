@@ -15,6 +15,10 @@
   margin-left: 5px;
 }
 
+.spacer20 {
+  height: 20px;
+}
+
 /* Headers and paragraph styling */
 .TA01 > h2,
 .authorTA01 > h2,
