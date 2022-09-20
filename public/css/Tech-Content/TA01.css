@@ -16,7 +16,7 @@
 }
 
 .spacer20 {
-  height: 20px;
+  height: 24px;
 }
 
 /* Headers and paragraph styling */
@@ -260,7 +260,7 @@
 
 /* Accordion*/
 .accordionTA01 {
-  margin: 12px 0px 24px 0px;
+  margin: 12px 0px 48px 0px;
 }
 
 .accordion {
@@ -312,6 +312,7 @@
   font-weight: 400;
   font-size: 20px;
   line-height: 36px;
+  margin-bottom: 12px;
 }
 
 /* Section Header Articles */
