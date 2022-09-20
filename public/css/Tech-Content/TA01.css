@@ -85,7 +85,7 @@
   font-weight: 600;
   font-size: 16px;
   line-height: 22px;
-  color: #00747a!important;
+  color: #00747a !important;
 }
 
 .codeLanguageText {
@@ -126,10 +126,21 @@
 }
 
 .listTypeOneLI > a {
-  color: #00747a!important;
+  color: #00747a !important;
   text-decoration: none;
 }
 
 .listTypeOneLI > a:hover {
   text-decoration: underline;
+}
+
+/* NOTICES */
+.noticeTA01 {
+  background-color: #dde3ff;
+  padding: 12px;
+  margin-top: -12px;
+}
+
+.noteTA01 {
+  color: #4631a1;
 }
