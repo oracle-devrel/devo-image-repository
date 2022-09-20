@@ -1,7 +1,11 @@
+.techArticleContainer {
+  font-family: "Oracle Sans";
+}
+
 /* Headers and paragraph styling */
 .TA01 > h2,
-.authorTA01 > h2 {
-  font-family: "Oracle Sans";
+.authorTA01 > h2,
+.TA01 > h2 > a {
   font-style: normal;
   font-weight: 600;
   font-size: 24px;
@@ -9,9 +13,25 @@
   margin: 24px 0px;
 }
 
+.TA01 > h2.openingTitle {
+  margin-top: 0px;
+}
+
+.TA01 > h2 > a,
+.TA01 > h3 > a {
+  color: #000000;
+  text-decoration: none;
+  margin-top: 0px;
+}
+
+.TA01 > h2 > a:hover,
+.TA01 > h3 > a:hover {
+  text-decoration: underline;
+}
+
 .TA01 > h3,
-.authorTA01 > h3 {
-  font-family: "Oracle Sans";
+.authorTA01 > h3,
+.TA01 > h3 > a {
   font-style: normal;
   font-weight: 600;
   font-size: 20px;
@@ -19,19 +39,24 @@
   margin: 18px 0px;
 }
 
-.TA01 > h2.openingTitle {
-  margin-top: 0px;
-}
-
 .TA01 > .textTA01,
 .authorTA01 .textTA01 {
-  font-family: "Oracle Sans";
   font-style: normal;
   font-weight: 400;
   font-size: 16px;
   line-height: 30px;
   color: #000000;
   padding-bottom: 24px;
+}
+
+.textLinkTA01 {
+  color: #00747a;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.textLinkTA01:hover {
+  text-decoration: underline;
 }
 
 /* Images */
@@ -44,7 +69,6 @@
 }
 
 .TA01 p.fullImageDescription {
-  font-family: "Oracle Sans";
   font-style: normal;
   font-weight: 400;
   font-size: 12px;
@@ -79,7 +103,6 @@
 
 .codeLanguageText,
 .codeCopyBTNCont a {
-  font-family: "Oracle Sans";
   text-align: right;
   font-style: normal;
   font-weight: 600;
@@ -101,8 +124,8 @@
   text-decoration: underline;
 }
 
-.codeTA02{
-  background-color: #EDEFF5;
+.codeTA02 {
+  background-color: #edeff5;
   padding: 5px 7px;
 }
 
@@ -122,7 +145,6 @@
 }
 
 .listTypeOneLI {
-  font-family: "Oracle Sans";
   font-style: normal;
   font-weight: 400;
   font-size: 16px;
@@ -141,21 +163,30 @@
 
 /* NOTICES */
 .noticeTA01 {
-  background-color: #dde3ff;
+  background-color: #caebff;
   padding: 24px;
   margin: 12px 0px 24px 0px;
 }
 
 .noteTA01 {
-  color: #4631a1;
-  font-family: "Oracle Sans";
+  color: #003167;
   font-style: normal;
   font-weight: 400;
   font-size: 16px;
   line-height: 30px;
 }
 
+.noteLinkTA01 {
+  color: #003167;
+  font-weight: 600;
+}
+
+.noteLinkTA01:hover {
+  color: #0069ab;
+}
+
 /* Section Header Articles */
-#f9156608-2e75-4e41-87d6-8c6131c90d01_content_undefined > div > div > p.title, #f9156608-2e75-4e41-87d6-8c6131c90d01_content_undefined > div > div > p.body{
-    color: #000000;
+#f9156608-2e75-4e41-87d6-8c6131c90d01_content_undefined > div > div > p.title,
+#f9156608-2e75-4e41-87d6-8c6131c90d01_content_undefined > div > div > p.body {
+  color: #000000;
 }
