@@ -7,6 +7,10 @@
   align-items: center;
 }
 
+.adjustmentSVG-H {
+  padding-top: 5px;
+}
+
 .marginLeftTA01 {
   margin-left: 5px;
 }
