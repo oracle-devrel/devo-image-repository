@@ -1,0 +1,133 @@
+/* Headers and paragraph styling */
+.TA01 > h2,
+.authorTA01 > h2 {
+  font-family: "Oracle Sans";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 32px;
+  margin: 24px 0px;
+}
+
+.TA01 > h3,
+.authorTA01 > h3 {
+  font-family: "Oracle Sans";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 26px;
+  margin: 18px 0px;
+}
+
+.TA01 > h2.openingTitle {
+  margin-top: 0px;
+}
+
+.TA01 > .textTA01,
+.authorTA01 .textTA01 {
+  font-family: "Oracle Sans";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 30px;
+  color: #000000;
+}
+
+/* Images */
+.TA01 .imageContainer {
+  padding: 24px 0px;
+}
+
+.TA01 .imageFullWidth {
+  width: 100%;
+}
+
+.TA01 p.fullImageDescription {
+  font-family: "Oracle Sans";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  margin-top: 11px;
+}
+
+/*  CODES */
+
+.codeContainerTA01 {
+  padding: 24px 0px;
+}
+
+.codeTA01 {
+  background-color: #2b3244;
+  padding: 24px;
+  color: #fff;
+  font-size: 16px;
+}
+
+.codeCopyBTN {
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: 1fr;
+  gap: 0px 0px;
+  grid-template-areas: ". .";
+  justify-content: space-between;
+  align-items: center;
+}
+
+.codeLanguageText,
+.codeCopyBTNCont a {
+  font-family: "Oracle Sans";
+  text-align: right;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 22px;
+  color: #00747a;
+}
+
+.codeLanguageText {
+  border-bottom: 3px solid #00747a;
+  cursor: pointer;
+}
+
+.codeCopyBTNCont a {
+  text-decoration: none;
+}
+
+.codeCopyBTNCont a:hover {
+  text-decoration: underline;
+}
+
+/*  AUTHOR */
+
+.authorTA01 {
+  border-top: 1px solid #000000;
+  margin-top: 24px;
+}
+
+/* LISTS */
+
+.listTypeOne {
+  list-style-type: none;
+  padding: 0px;
+  margin: 0px;
+}
+
+.listTypeOneLI {
+  font-family: "Oracle Sans";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 22px;
+  padding-bottom: 12px;
+}
+
+.listTypeOneLI > a {
+  color: #00747a;
+  text-decoration: none;
+}
+
+.listTypeOneLI > a:hover {
+  text-decoration: underline;
+}
