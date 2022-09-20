@@ -137,10 +137,15 @@
 /* NOTICES */
 .noticeTA01 {
   background-color: #dde3ff;
-  padding: 12px;
-  margin-top: -12px;
+  padding: 24px;
+  margin: 12px 0px 24px 0px;
 }
 
 .noteTA01 {
   color: #4631a1;
+  font-family: "Oracle Sans";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 30px;
 }
