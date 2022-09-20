@@ -31,7 +31,9 @@
 
 .TA01 > h3,
 .authorTA01 > h3,
-.TA01 > h3 > a {
+.TA01 > h3 > a,
+.exampleTitleTA01,
+.noteTitleTA01 {
   font-style: normal;
   font-weight: 600;
   font-size: 20px;
@@ -40,7 +42,8 @@
 }
 
 .TA01 > .textTA01,
-.authorTA01 .textTA01 {
+.authorTA01 .textTA01,
+.exampleTA01 > .textTA01 {
   font-style: normal;
   font-weight: 400;
   font-size: 16px;
@@ -50,7 +53,7 @@
 }
 
 .textLinkTA01 {
-  color: #00747a!important;
+  color: #00747a;
   font-weight: 600;
   text-decoration: none;
 }
@@ -144,7 +147,8 @@
   margin: 0px;
 }
 
-.listTypeOneLI {
+.listTypeOneLI,
+.listTypeTwoLI {
   font-style: normal;
   font-weight: 400;
   font-size: 16px;
@@ -152,22 +156,35 @@
   padding-bottom: 12px;
 }
 
-.listTypeOneLI > a {
+.listTypeOneLI > a,
+.listTypeTwoLI > a {
   color: #00747a !important;
   text-decoration: none;
 }
 
-.listTypeOneLI > a:hover {
+.listTypeOneLI > a:hover,
+.listTypeTwoLI > a:hover {
   text-decoration: underline;
 }
 
+.listTypeTwo {
+  margin-top: -12px;
+}
+
 /* NOTICES */
-.noticeTA01 {
-  background-color: #caebff;
+.noticeTA01,
+.exampleTA01 {
   padding: 24px;
   margin: 12px 0px 24px 0px;
 }
 
+.noticeTA01 {
+  background-color: #caebff;
+}
+
+.noteTitleTA01 {
+  color: #003167;
+}
 .noteTA01 {
   color: #003167;
   font-style: normal;
@@ -183,6 +200,11 @@
 
 .noteLinkTA01:hover {
   color: #0069ab!important;
+}
+
+/* Example */
+.exampleTA01 {
+  background-color: #cdf9f1;
 }
 
 /* Section Header Articles */
