@@ -188,6 +188,7 @@
 
 .noteTitleTA01 {
   color: #003167;
+  margin-top: 0px;
 }
 .noteTA01 {
   color: #003167;
@@ -209,6 +210,10 @@
 /* Example */
 .exampleTA01 {
   background-color: #cdf9f1;
+}
+
+.exampleTitleTA01 {
+  margin-top: 0px;
 }
 
 /* Section Header Articles */
