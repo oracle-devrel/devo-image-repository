@@ -19,7 +19,7 @@
 
 .TA01 > h2 > a,
 .TA01 > h3 > a {
-  color: #000000;
+  color: #000000!important;
   text-decoration: none;
   margin-top: 0px;
 }
@@ -50,7 +50,7 @@
 }
 
 .textLinkTA01 {
-  color: #00747a;
+  color: #00747a!important;
   font-weight: 600;
   text-decoration: none;
 }
@@ -177,12 +177,12 @@
 }
 
 .noteLinkTA01 {
-  color: #003167;
+  color: #003167!important;
   font-weight: 600;
 }
 
 .noteLinkTA01:hover {
-  color: #0069ab;
+  color: #0069ab!important;
 }
 
 /* Section Header Articles */
