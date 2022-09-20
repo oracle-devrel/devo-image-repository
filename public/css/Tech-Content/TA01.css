@@ -56,7 +56,8 @@
 
 .TA01 > .textTA01,
 .authorTA01 .textTA01,
-.exampleTA01 > .textTA01 {
+.exampleTA01 > .textTA01,
+.accordionTextTA01 {
   font-style: normal;
   font-weight: 400;
   font-size: 16px;
@@ -65,13 +66,15 @@
   padding-bottom: 24px;
 }
 
-.textLinkTA01 {
+.textLinkTA01,
+.accordionTextTA01 > a {
   color: #00747a !important;
   font-weight: 600;
   text-decoration: none;
 }
 
-.textLinkTA01:hover {
+.textLinkTA01:hover,
+.accordionTextTA01 > a:hover {
   text-decoration: underline;
 }
 
@@ -249,6 +252,62 @@
 
 .referenceDocTA01 {
   background-color: #edeff5;
+}
+
+/* Accordion*/
+.accordionTA01 {
+  margin: 12px 0px 24px 0px;
+}
+
+.accordion {
+  background-color: #b6b6b600;
+  color: rgb(0, 0, 0);
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  border: none;
+  border-top: 1px solid #edeff5;
+  border-bottom: 1px solid #edeff5;
+  text-align: left;
+  outline: none;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 22px;
+  transition: 0.4s;
+}
+
+.accordion:hover,
+.active {
+  background-color: #edeff5;
+}
+
+.accordion:after {
+  content: "\002B";
+  color: rgb(0, 0, 0);
+  font-weight: bold;
+  float: right;
+  margin-left: 5px;
+}
+
+.active:after {
+  color: #00747a;
+  content: "\2212";
+}
+
+.panel {
+  padding: 0 18px;
+  background-color: white;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease-out;
+}
+
+.accordionTitleTA01 {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 36px;
 }
 
 /* Section Header Articles */
