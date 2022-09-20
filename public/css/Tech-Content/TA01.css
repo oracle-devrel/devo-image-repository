@@ -19,7 +19,7 @@
 
 .TA01 > h2 > a,
 .TA01 > h3 > a {
-  color: #000000!important;
+  color: #000000 !important;
   text-decoration: none;
   margin-top: 0px;
 }
@@ -53,7 +53,7 @@
 }
 
 .textLinkTA01 {
-  color: #00747a;
+  color: #00747a !important;
   font-weight: 600;
   text-decoration: none;
 }
@@ -167,8 +167,9 @@
   text-decoration: underline;
 }
 
-.listTypeTwo {
-  margin-top: -12px;
+.listTypeTwo,
+.listTypeThree {
+  margin: 12px 0px 24px 24px;
 }
 
 /* NOTICES */
@@ -194,12 +195,12 @@
 }
 
 .noteLinkTA01 {
-  color: #003167!important;
+  color: #003167 !important;
   font-weight: 600;
 }
 
 .noteLinkTA01:hover {
-  color: #0069ab!important;
+  color: #0069ab !important;
 }
 
 /* Example */
