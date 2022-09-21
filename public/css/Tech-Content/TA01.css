@@ -22,7 +22,8 @@
 /* Headers and paragraph styling */
 .TA01 > h2,
 .authorTA01 > h2,
-.TA01 > h2 > a {
+.TA01 > h2 > a,
+.noteTitleTA02 {
   font-style: normal;
   font-weight: 600;
   font-size: 24px;
@@ -63,7 +64,8 @@
 .authorTA01 .textTA01,
 .exampleTA01 > .textTA01,
 .accordionTextTA01,
-.warningTA01 > .textTA01 {
+.warningTA01 > .textTA01,
+.tipTA01 > .textTA01 {
   font-style: normal;
   font-weight: 400;
   font-size: 16px;
@@ -219,7 +221,8 @@
 .exampleTA01,
 .referenceDocTA01,
 .warningTA01,
-.referenceDocTA02 {
+.referenceDocTA02,
+.tipTA01 {
   padding: 24px;
   margin: 12px 0px 24px 0px;
 }
@@ -363,7 +366,8 @@
 
 /* Video */
 .videoAlign,
-.videoFooter {
+.videoFooter,
+.ociBTN {
   text-align: center;
 }
 
@@ -384,19 +388,27 @@
   font-size: 16px;
 }
 
-.videoTA02 {
-  float: left;
+/* TIP */
+
+.tipTA01 {
+  background-color: #dde3ff;
+  width: 100%;
+  max-width: 300px;
+  float: right;
+  margin: 0px 0px 12px 12px;
 }
 
-/* Position the "next button" to the right */
-.next {
-  right: 0;
-  border-radius: 3px 0 0 3px;
+.TipColorP {
+  stroke: #32217b;
+  fill: #32217b;
 }
 
-/* On hover, add a grey background color */
-.prev:hover,
-.next:hover {
-  background-color: #f1f1f1;
-  color: black;
+.noteTitleTA02,
+.Purple80 {
+  color: #32217b !important;
+}
+
+.ociBTN-Container {
+  margin: 12px auto;
+  max-width: 350px;
 }
