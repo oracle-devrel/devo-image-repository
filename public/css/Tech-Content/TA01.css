@@ -52,7 +52,8 @@
 .TA01 > h3 > a,
 .exampleTitleTA01,
 .noteTitleTA01,
-.warningTitleTA01 {
+.warningTitleTA01,
+.doubleColumnTitleTA01 {
   font-style: normal;
   font-weight: 600;
   font-size: 20px;
@@ -75,14 +76,20 @@
 }
 
 .textLinkTA01,
-.accordionTextTA01 > a {
+.accordionTextTA01 > a,
+.textLinkTA02 {
   color: #00747a !important;
   font-weight: 600;
   text-decoration: none;
 }
 
+.textLinkTA02 {
+  font-weight: 400;
+}
+
 .textLinkTA01:hover,
-.accordionTextTA01 > a:hover {
+.accordionTextTA01 > a:hover,
+.textLinkTA02:hover {
   text-decoration: underline;
 }
 
@@ -101,6 +108,10 @@
   font-size: 12px;
   line-height: 16px;
   margin-top: 12px;
+}
+
+.borderImage {
+  border: 1px solid #919db8;
 }
 
 /*  CODES */
@@ -411,4 +422,47 @@
 .ociBTN-Container {
   margin: 12px auto;
   max-width: 350px;
+}
+
+/* Double Column */
+.doubleColumnTA01 {
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr;
+  gap: 0px 0px;
+  grid-template-areas: ". .";
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 68px;
+  margin-bottom: 33px;
+  border-bottom: 1px solid #919db8;
+}
+
+/* Image with Download */
+
+.architectTextImageTA01 {
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 22px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: #00747a;
+}
+
+.architectTextImageTA01-BTN {
+  text-decoration: none;
+  color: #00747a;
+}
+
+.architectTextImageTA01-BTN:hover {
+  text-decoration: underline;
+}
+
+/* Legal Notice */
+.legalTitle,
+.legalDescription {
+  color: #3e475e !important;
 }
