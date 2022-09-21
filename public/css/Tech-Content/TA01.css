@@ -466,8 +466,9 @@
 }
 
 .architectTextImageTA01-BTN {
+  margin-top: 12px;
   text-decoration: none;
-  color: #00747a;
+  color: #00747a !important;
 }
 
 .architectTextImageTA01-BTN:hover {
