@@ -112,6 +112,7 @@
   padding: 24px;
   color: #fff;
   font-size: 16px;
+  overflow-x: scroll;
 }
 
 .codeCopyBTN {
@@ -183,7 +184,8 @@
   padding: 0px;
   margin: 0px;
 }
-.listTypeTwo {
+.listTypeTwo,
+.listTypeThree {
   list-style-position: outside !important;
 }
 
