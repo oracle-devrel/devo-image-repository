@@ -389,7 +389,6 @@ window.onload = function () {
     }
   }
 
-
   try {
     addPadding();
     console.log("Padding added");
@@ -448,7 +447,6 @@ window.onload = function () {
     console.log(e);
   }
 
-  
   try {
     addCopyBTN();
     console.log("Copy BTN added");
@@ -457,24 +455,47 @@ window.onload = function () {
     reloadDEVO();
   }
 
-  
   //Accordion -------START
   var acc = document.getElementsByClassName("accordion");
   var i;
 
   for (i = 0; i < acc.length; i++) {
-      acc[i].addEventListener("click", function () {
-          this.classList.toggle("active");
-          var panel = this.nextElementSibling;
-          if (panel.style.maxHeight) {
-              panel.style.maxHeight = null;
-          } else {
-              panel.style.maxHeight = panel.scrollHeight + "px";
-          }
-      });
+    acc[i].addEventListener("click", function () {
+      this.classList.toggle("active");
+      var panel = this.nextElementSibling;
+      if (panel.style.maxHeight) {
+        panel.style.maxHeight = null;
+      } else {
+        panel.style.maxHeight = panel.scrollHeight + "px";
+      }
+    });
   }
   //Accordion -------END
+  //Slideshow -------START
+  let slideIndex = [1, 1];
+  let slideId = ["mySlides1", "mySlides2"];
+  showSlides(1, 0);
+  showSlides(1, 1);
 
+  function plusSlides(n, no) {
+    showSlides((slideIndex[no] += n), no);
+  }
+
+  function showSlides(n, no) {
+    let i;
+    let x = document.getElementsByClassName(slideId[no]);
+    if (n > x.length) {
+      slideIndex[no] = 1;
+    }
+    if (n < 1) {
+      slideIndex[no] = x.length;
+    }
+    for (i = 0; i < x.length; i++) {
+      x[i].style.display = "none";
+    }
+    x[slideIndex[no] - 1].style.display = "block";
+  }
+  //Slideshow -------END
 
   /*
   let url = location.href;
@@ -488,5 +509,4 @@ window.onload = function () {
     }
   }
   */
-
 };
