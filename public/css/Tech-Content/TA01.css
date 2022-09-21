@@ -167,7 +167,7 @@
   margin: 0px;
 }
 .listTypeTwo {
-  list-style-position: inside;
+  list-style-position: outside;
 }
 
 .listTypeOneLI,
@@ -329,7 +329,7 @@
 }
 
 .videoFooter {
-  padding: 12px 0px 24px 0px;
+  padding: 12px 0px 12px 0px;
 }
 
 .videoTA01 {
