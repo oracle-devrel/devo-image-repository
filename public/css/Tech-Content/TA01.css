@@ -50,7 +50,8 @@
 .authorTA01 > h3,
 .TA01 > h3 > a,
 .exampleTitleTA01,
-.noteTitleTA01 {
+.noteTitleTA01,
+.warningTitleTA01 {
   font-style: normal;
   font-weight: 600;
   font-size: 20px;
@@ -61,7 +62,8 @@
 .TA01 > .textTA01,
 .authorTA01 .textTA01,
 .exampleTA01 > .textTA01,
-.accordionTextTA01 {
+.accordionTextTA01,
+.warningTA01 > .textTA01 {
   font-style: normal;
   font-weight: 400;
   font-size: 16px;
@@ -125,7 +127,9 @@
 }
 
 .codeLanguageText,
-.codeCopyBTNCont a {
+.codeCopyBTNCont a,
+.codeLanguageText2,
+.codeCopyBTNCont2 a {
   text-align: right;
   font-style: normal;
   font-weight: 600;
@@ -134,16 +138,29 @@
   color: #00747a !important;
 }
 
+.codeLanguageText2,
+.codeCopyBTNCont2 a {
+  color: #ff6477 !important;
+  stroke: #ff6477 !important;
+}
+
 .codeLanguageText {
   border-bottom: 3px solid #00747a;
   cursor: pointer;
 }
 
-.codeCopyBTNCont a {
+.codeLanguageText2 {
+  border-bottom: 3px solid #ff6477;
+  cursor: pointer;
+}
+
+.codeCopyBTNCont a,
+.codeCopyBTNCont2 a {
   text-decoration: none;
 }
 
-.codeCopyBTNCont a:hover {
+.codeCopyBTNCont a:hover,
+.codeCopyBTNCont2 a:hover {
   text-decoration: underline;
 }
 
@@ -198,7 +215,9 @@
 /* NOTICES */
 .noticeTA01,
 .exampleTA01,
-.referenceDocTA01 {
+.referenceDocTA01,
+.warningTA01,
+.referenceDocTA02 {
   padding: 24px;
   margin: 12px 0px 24px 0px;
 }
@@ -233,14 +252,22 @@
   background-color: #cdf9f1;
 }
 
-.exampleTitleTA01 {
+.warningTA01 {
+  background-color: rgba(255, 102, 120, 0.1);
+}
+
+.exampleTitleTA01,
+.warningTitleTA01 {
   margin-top: 0px;
+}
+
+.warningTitleTA01 {
+  color: #ff6477;
 }
 
 /* Reference Documentation */
 .referenceDocLinkTA01 {
   text-decoration: none;
-  color: #2b3244 !important;
   color: #2b3244 !important;
   fill: #2b3244;
   font-weight: 600;
@@ -254,8 +281,25 @@
   text-decoration: underline;
 }
 
+.referenceDocLinkTA02 {
+  text-decoration: none;
+  color: #ffffff !important;
+  fill: #ffffff;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+}
+
+.referenceDocLinkTA02:hover {
+  text-decoration: underline;
+}
+
 .referenceDocTA01 {
   background-color: #edeff5;
+}
+
+.referenceDocTA02 {
+  background-color: #ff6477;
 }
 
 /* Accordion*/
@@ -340,39 +384,6 @@
 
 .videoTA02 {
   float: left;
-}
-
-/* Slideshow */
-.mySlides1,
-.mySlides2 {
-  display: none;
-}
-img {
-  vertical-align: middle;
-}
-
-/* Slideshow container */
-.slideshow-container {
-  max-width: 1000px;
-  position: relative;
-  margin: auto;
-}
-
-/* Next & previous buttons */
-.prev,
-.next {
-  cursor: pointer;
-  position: absolute;
-  top: 50%;
-  width: auto;
-  padding: 16px;
-  margin-top: -22px;
-  color: white;
-  font-weight: bold;
-  font-size: 18px;
-  transition: 0.6s ease;
-  border-radius: 0 3px 3px 0;
-  user-select: none;
 }
 
 /* Position the "next button" to the right */
