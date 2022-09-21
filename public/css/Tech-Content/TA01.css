@@ -315,6 +315,33 @@
   margin-bottom: 12px;
 }
 
+/* Video */
+.videoAlign,
+.videoFooter {
+  text-align: center;
+}
+
+.videoTA01 {
+  margin: 12px 0px 24px 24px;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.videoFooter {
+  padding: 12px 0px 24px 0px;
+}
+
+.videoTA01 {
+  background-color: #cfd5e3;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.videoTA02 {
+  float: left;
+}
+
 /* Section Header Articles */
 #f9156608-2e75-4e41-87d6-8c6131c90d01_content_undefined > div > div > p.title,
 #f9156608-2e75-4e41-87d6-8c6131c90d01_content_undefined > div > div > p.body {
