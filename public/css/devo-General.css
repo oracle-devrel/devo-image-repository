@@ -1,4 +1,167 @@
+/*
+.container {
+  overflow-x: hidden;
+}
+*/
+
+/* Banners problems - Multiple CSS classes */
+.banner .banner-content-container .body-content-def .banner-text-content {
+  font-size: 1rem !important;
+  line-height: 1.375rem !important;
+  font-family: "Oracle Sans regular", sans-serif !important;
+}
+
+.banner .banner-content-container .left-align {
+  margin: 0 auto !important;
+}
+
+/* Primary BTNs gets black on Mobile -ALL*/
+.cta-btn.primary.bg-primary,
+.cta-btn.primary.bg-white {
+  color: #000000;
+}
+
+.feature .content-container .message-container.left-text-position {
+  margin: 5.96875rem 2rem 5.96875rem 0rem !important;
+}
+
+/* Isolated cases for Some features -BULLETS*/
+#e2d996c5-d19d-44a2-ad89-c25c8f15e62fcustomComponentDiv
+  > section
+  > div
+  > div.message-container.left-text-position
+  > ul {
+  margin-top: 1.25rem;
+}
+
+#e2d996c5-d19d-44a2-ad89-c25c8f15e62fcustomComponentDiv
+  > section
+  > div
+  > div.message-container.left-text-position
+  > ul
+  > li {
+  list-style-position: outside;
+  margin-left: 1.825rem;
+}
+
+#e2d996c5-d19d-44a2-ad89-c25c8f15e62fcustomComponentDiv
+  > section
+  > div
+  > div.message-container.left-text-position
+  > li {
+  line-height: 1.375rem;
+  margin-bottom: 0.8rem;
+}
+/* END of Isolated cases for Some features -BULLETS*/
+@media (max-width: 1999px) {
+  .feature .content-container .message-container.left-text-position {
+    margin: 1rem !important;
+  }
+}
+
+@media screen and (max-width: 1671px) {
+  .banner .banner-content-container .left-align {
+    margin: 0 2.25rem !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .banner .banner-content-container .body-content-def .banner-text-content {
+    text-align: center !important;
+  }
+  col-section {
+    padding-bottom: 1rem !important;
+  }
+
+  /* Increase bottom space on cards -ALL*/
+  .col-section-list {
+    gap: 2rem !important;
+  }
+
+  /* Big texts causes overlapping 
+  .hero .content-container .content .body p {
+    font-size: 1rem !important;
+  }
+  */
+
+  /* Extra Space from title removed -FOOTER*/
+  #social-ankle-title {
+    margin-bottom: 0rem !important;
+  }
+
+  /* Removes Space from languages -FOOTER*/
+  #u10 > div > div.u10w5.u10w10 > div {
+    margin-top: 0rem !important ;
+    padding-top: 0rem !important;
+  }
+
+  /* Hides Extra Social Icons -FOOTER*/
+  #u10 > div > div.u10w5.u10w10 > ul.scl-icons {
+    display: none !important;
+  }
+
+  .social-ankle-container .links {
+    max-width: 23rem !important;
+  }
+}
+
+.list-container {
+  padding: 0rem 0 !important;
+}
+
+/*
+  .card .no-padding {
+    padding-top: 1rem!important;
+  }
+  */
+
+.card-container p a:hover,
+.card-container h3 a:hover {
+  text-decoration: underline #fff;
+}
+
+strong {
+  font-family: "Oracle Sans Bold";
+}
+
+/*
+  ul {
+    margin: 0.5rem 0rem 0.5rem 0rem;
+    line-height: 22px !important;
+  }
+  */
+
+.feature .content-container .message-container,
+.banner .banner-content-container .body-content-def .banner-text-content .body {
+  font-family: "Oracle Sans Regular" !important;
+}
+
+.feature .content-container {
+  gap: 0rem !important;
+}
+
+/*
+  .col-section-list.cols-2 {
+    grid-template-columns: 1fr 1fr !important;
+  }
+  
+  .col-section-list.cols-3 {
+    grid-template-columns: 1fr 1fr 1fr !important;
+  }
+  
+  .col-section-list.cols-4 {
+    grid-template-columns: 1fr 1fr 1fr 1fr !important;
+  }
+  
+  @media (max-width: 1199px) {
+    .hero .bg.pinBackgroundCenter .bg-image {
+      background-position: left!important;
+    }
+  }
+  */
+
 /* Card Mobile Alligment */
+
 #b5ae7abb-556e-4dfd-a6d2-55b81d9cd031customComponentDiv
   > div
   > div.card-container
@@ -174,12 +337,7 @@
 #ace1ad90-cf1c-4988-b15e-2d94f4c15695customComponentDiv
   > div
   > div.card-container
-  > div.content.padding,
-#a9c7d4d9-7e33-4333-8fdd-82d79b6a62edcustomComponentDiv
-  > div
-  > div.card-container
-  > div.content.padding
-  > span {
+  > div.content.padding {
   margin-top: auto !important;
   margin-bottom: auto !important;
 }
