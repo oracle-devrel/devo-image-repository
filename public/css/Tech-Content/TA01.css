@@ -61,12 +61,21 @@
   margin: 18px 0px;
 }
 
+.TA01 > h4 {
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 26px;
+  margin: 18px 0px;
+}
+
 .TA01 > .textTA01,
 .authorTA01 .textTA01,
 .exampleTA01 > .textTA01,
 .accordionTextTA01,
 .warningTA01 > .textTA01,
-.tipTA01 > .textTA01 {
+.tipTA01 > .textTA01,
+.listTypeThreeText {
   font-style: normal;
   font-weight: 400;
   font-size: 16px;
@@ -225,6 +234,10 @@
 .listTypeTwo,
 .listTypeThree {
   margin: 12px 0px 24px 24px;
+}
+
+.listTypeThreeText {
+  padding-bottom: 12px;
 }
 
 /* NOTICES */
