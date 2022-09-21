@@ -15,6 +15,10 @@
   margin-left: 5px;
 }
 
+.spacer12 {
+  height: 12px;
+}
+
 .spacer20 {
   height: 24px;
 }
@@ -466,7 +470,6 @@
 }
 
 .architectTextImageTA01-BTN {
-  margin-top: 12px;
   text-decoration: none;
   color: #00747a !important;
 }
