@@ -1,17 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
+<script>
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Apache server ~ New Dir</title>
-</head>
+    function changeSH() {
+        let communityImage = document.querySelector("#b8ff85b0-15cf-433c-9bab-4549f0fe891c > div > div > div > div.background > img");
+        communityImage.setAttribute('src', 'https://orasites-prodapp.cec.ocp.oraclecloud.com/content/management/api/v1.1/assets/CONT0CB5035A1277468CAD9D387719D33C39/native')
 
-<body>
-    <h1>Hello!</h1>
-    <p>This is a Dir from my APACHE page</p>
+        let communityImageSH = document.querySelector("#b58488ae-2359-4ad0-9075-baeedbcdba25customComponentDiv > div");
+        communityImageSH.style.backgroundImage = "url('https://orasites-prodapp.cec.ocp.oraclecloud.com/content/management/api/v1.1/assets/CONT3A37F7457B8B4AA187A7AC1FED20F690/native')";
+    }
 
-</body>
+    window.onload = (event) => {
 
-</html>
+        async function reloadDEVO() {
+            await sleep(3000);
+            changeSH()
+        }
+
+        try {
+            changeSH()
+
+        } catch (error) {
+            reloadDEVO()
+        }
+    }
+
+</script>

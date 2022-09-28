@@ -1,0 +1,9 @@
+.page picture{
+    margin-bottom: 0rem!important;
+}
+
+@media (max-width: 1675px) {
+    #b822e6da-667e-42be-8b4c-f7f20001c916 {
+        transform: translateY(-260px);
+    }
+}
