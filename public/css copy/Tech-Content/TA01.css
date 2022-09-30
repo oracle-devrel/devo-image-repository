@@ -1,0 +1,485 @@
+.techArticleContainer {
+  font-family: "Oracle Sans";
+}
+
+.alignCenter {
+  display: flex;
+  align-items: center;
+}
+
+.adjustmentSVG-H {
+  padding-top: 5px;
+}
+
+.marginLeftTA01 {
+  margin-left: 5px;
+}
+
+.spacer12 {
+  height: 12px;
+}
+
+.spacer20 {
+  height: 24px;
+}
+
+/* Headers and paragraph styling */
+.TA01 > h2,
+.authorTA01 > h2,
+.TA01 > h2 > a,
+.noteTitleTA02 {
+  font-style: normal;
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 32px;
+  margin: 24px 0px;
+}
+
+.TA01 > h2.openingTitle {
+  margin-top: 0px;
+}
+
+.TA01 > h2 > a,
+.TA01 > h3 > a {
+  color: #000000 !important;
+  text-decoration: none;
+  margin-top: 0px;
+}
+
+.TA01 > h2 > a:hover,
+.TA01 > h3 > a:hover {
+  text-decoration: underline;
+}
+
+.TA01 > h3,
+.authorTA01 > h3,
+.TA01 > h3 > a,
+.exampleTitleTA01,
+.noteTitleTA01,
+.warningTitleTA01,
+.doubleColumnTitleTA01 {
+  font-style: normal;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 26px;
+  margin: 18px 0px;
+}
+
+.TA01 > h4 {
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 26px;
+  margin: 18px 0px;
+}
+
+.TA01 > .textTA01,
+.authorTA01 .textTA01,
+.exampleTA01 > .textTA01,
+.accordionTextTA01,
+.warningTA01 > .textTA01,
+.tipTA01 > .textTA01,
+.listTypeThreeText {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 30px;
+  color: #000000;
+  padding-bottom: 24px;
+}
+
+.textLinkTA01,
+.accordionTextTA01 > a,
+.textLinkTA02 {
+  color: #00747a !important;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.textLinkTA02 {
+  font-weight: 400;
+}
+
+.textLinkTA01:hover,
+.accordionTextTA01 > a:hover,
+.textLinkTA02:hover {
+  text-decoration: underline;
+}
+
+/* Images */
+.TA01 .imageContainer {
+  padding: 24px 0px;
+}
+
+.TA01 .imageFullWidth {
+  width: 100%;
+}
+
+.TA01 p.fullImageDescription {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  margin-top: 12px;
+}
+
+.borderImage {
+  border: 1px solid #919db8;
+}
+
+/*  CODES */
+
+.codeContainerTA01 {
+  padding: 24px 0px;
+}
+
+.codeTA01 {
+  background-color: #2b3244;
+  padding: 24px;
+  color: #fff;
+  font-size: 16px;
+  overflow-x: scroll;
+}
+
+.codeCopyBTN {
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: 1fr;
+  gap: 0px 0px;
+  grid-template-areas: ". .";
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+}
+
+.codeLanguageText,
+.codeCopyBTNCont a,
+.codeLanguageText2,
+.codeCopyBTNCont2 a {
+  text-align: right;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 22px;
+  color: #00747a !important;
+}
+
+.codeLanguageText2,
+.codeCopyBTNCont2 a {
+  color: #ff6477 !important;
+  stroke: #ff6477 !important;
+}
+
+.codeLanguageText {
+  border-bottom: 3px solid #00747a;
+  cursor: pointer;
+}
+
+.codeLanguageText2 {
+  border-bottom: 3px solid #ff6477;
+  cursor: pointer;
+}
+
+.codeCopyBTNCont a,
+.codeCopyBTNCont2 a {
+  text-decoration: none;
+}
+
+.codeCopyBTNCont a:hover,
+.codeCopyBTNCont2 a:hover {
+  text-decoration: underline;
+}
+
+.codeTA02 {
+  background-color: #edeff5;
+  padding: 5px 7px;
+}
+
+/*  AUTHOR */
+
+.authorTA01 {
+  border-top: 1px solid #000000;
+  margin-top: 24px;
+}
+
+/* LISTS */
+
+.listTypeOne {
+  list-style-type: none;
+  padding: 0px;
+  margin: 0px;
+}
+.listTypeTwo,
+.listTypeThree {
+  list-style-position: outside !important;
+}
+
+.listTypeOneLI,
+.listTypeTwoLI {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 22px;
+  padding-bottom: 12px;
+}
+
+.listTypeOneLI > a,
+.listTypeTwoLI > a {
+  color: #00747a !important;
+  text-decoration: none;
+}
+
+.listTypeOneLI > a:hover,
+.listTypeTwoLI > a:hover {
+  text-decoration: underline;
+}
+
+.listTypeTwo,
+.listTypeThree {
+  margin: 12px 0px 24px 24px;
+}
+
+.listTypeThreeText {
+  padding-bottom: 12px;
+}
+
+/* NOTICES */
+.noticeTA01,
+.exampleTA01,
+.referenceDocTA01,
+.warningTA01,
+.referenceDocTA02,
+.tipTA01 {
+  padding: 24px;
+  margin: 12px 0px 24px 0px;
+}
+
+.noticeTA01 {
+  background-color: #caebff;
+}
+
+.noteTitleTA01 {
+  color: #003167;
+  margin-top: 0px;
+}
+.noteTA01 {
+  color: #003167;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 30px;
+}
+
+.noteLinkTA01 {
+  color: #003167 !important;
+  font-weight: 600;
+}
+
+.noteLinkTA01:hover {
+  color: #0069ab !important;
+}
+
+/* Example */
+.exampleTA01 {
+  background-color: #cdf9f1;
+}
+
+.warningTA01 {
+  background-color: rgba(255, 102, 120, 0.1);
+}
+
+.exampleTitleTA01,
+.warningTitleTA01 {
+  margin-top: 0px;
+}
+
+.warningTitleTA01 {
+  color: #ff6477;
+}
+
+/* Reference Documentation */
+.referenceDocLinkTA01 {
+  text-decoration: none;
+  color: #2b3244 !important;
+  fill: #2b3244;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+}
+
+.referenceDocLinkTA01:hover {
+  color: #57637f !important;
+  fill: #57637f !important;
+  text-decoration: underline;
+}
+
+.referenceDocLinkTA02 {
+  text-decoration: none;
+  color: #ffffff !important;
+  fill: #ffffff;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+}
+
+.referenceDocLinkTA02:hover {
+  text-decoration: underline;
+}
+
+.referenceDocTA01 {
+  background-color: #edeff5;
+}
+
+.referenceDocTA02 {
+  background-color: #ff6477;
+}
+
+/* Accordion*/
+.accordionTA01 {
+  margin: 12px 0px 48px 0px;
+}
+
+.accordion {
+  background-color: #b6b6b600;
+  color: rgb(0, 0, 0);
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  border: none;
+  border-top: 1px solid #edeff5;
+  border-bottom: 1px solid #edeff5;
+  text-align: left;
+  outline: none;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 22px;
+  transition: 0.4s;
+}
+
+.accordion:hover,
+.active {
+  background-color: #edeff5;
+}
+
+.accordion:after {
+  content: "\002B";
+  color: rgb(0, 0, 0);
+  font-weight: bold;
+  float: right;
+  margin-left: 5px;
+}
+
+.active:after {
+  color: #00747a;
+  content: "\2212";
+}
+
+.panel {
+  padding: 0 18px;
+  background-color: white;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease-out;
+}
+
+.accordionTitleTA01 {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 36px;
+  margin-bottom: 12px;
+}
+
+/* Video */
+.videoAlign,
+.videoFooter,
+.ociBTN {
+  text-align: center;
+}
+
+.videoTA01 {
+  margin: 12px 0px 24px 24px;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.videoFooter {
+  padding: 12px 0px 12px 0px;
+}
+
+.videoTA01 {
+  background-color: #cfd5e3;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+/* TIP */
+
+.tipTA01 {
+  background-color: #dde3ff;
+  width: 100%;
+  max-width: 300px;
+  float: right;
+  margin: 0px 0px 12px 12px;
+}
+
+.TipColorP {
+  stroke: #32217b;
+  fill: #32217b;
+}
+
+.noteTitleTA02,
+.Purple80 {
+  color: #32217b !important;
+}
+
+.ociBTN-Container {
+  margin: 12px auto;
+  max-width: 350px;
+}
+
+/* Double Column */
+.doubleColumnTA01 {
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr;
+  gap: 0px 0px;
+  grid-template-areas: ". .";
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 68px;
+  margin-bottom: 33px;
+  border-bottom: 1px solid #919db8;
+}
+
+/* Image with Download */
+
+.architectTextImageTA01 {
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 22px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: #00747a;
+}
+
+.architectTextImageTA01-BTN {
+  text-decoration: none;
+  color: #00747a !important;
+}
+
+.architectTextImageTA01-BTN:hover {
+  text-decoration: underline;
+}
+
+/* Legal Notice */
+.legalTitle,
+.legalDescription {
+  color: #3e475e !important;
+}
