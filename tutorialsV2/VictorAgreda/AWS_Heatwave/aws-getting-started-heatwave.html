@@ -1,0 +1,233 @@
+<div class="techArticleContainer TA01">
+
+    <p class="textTA01">If you&#39;re developing database applications on AWS and need a massively parallel, high
+        performance, in-memory
+        query accelerator for the MySQL Database Service, that&#39;s what MySQL HeatWave on AWS was built to do. Instead
+        of crafting complicated ETL pipelines to move data around, HeatWave accelerates MySQL performance by orders of
+        magnitude for combined analytics and transactional workloads (OLAP and OLTP). The MySQL Database Service is
+        built on MySQL Enterprise Edition, which allows developers to quickly create and deploy secure cloud native
+        applications using the world&#39;s most popular open source database. </p>
+
+    <p class="textTA01">HeatWave can perform analytics in real time, and MySQL HeatWave for Amazon Web Services (AWS) is
+        a fully managed
+        service, developed and supported by the MySQL team in Oracle. </p>
+
+    <p class="textTA01">One of the best things about Oracle MySQL HeatWave is the ability to <a target="_blank"
+            class="textLinkTA01" href="https://www.oracle.com/mysql/heatwave/">run analytics</a> directly against your
+        existing transactional
+        data, so there&#39;s no need to shuffle that data off to a separate system when you need to perform massively
+        parallel analysis.</p>
+
+    <p class="textTA01">To get started, let&#39;s set up a MySQL database on AWS so we can connect to HeatWave for
+        analysis. </p>
+
+    <p class="textTA01">{% imgx assets/aws-creatingdb-devrel0922.png %}</p>
+
+    <p class="textTA01">Note that HeatWave on AWS is integrated with OCI&#39;s Identity and Access Management system.
+        When you sign up
+        for HeatWave on AWS, you&#39;ll be directed to the OCI login page where you must sign in with an OCI Cloud
+        Account. After signing in, you&#39;ll be directed to the OCI Console to complete the MySQL HeatWave on AWS
+        sign-up process. When signing into the HeatWave Console, you are directed to OCI for authentication and then
+        back to the HeatWave Console. To keep things simple, billing is still managed and monitored in OCI.</p>
+
+    <p class="textTA01">Since it&#39;s a multi-cloud world, in this article we&#39;re looking at creating an AWS
+        database we can connect
+        to MySQL HeatWave on AWS.</p>
+
+    <h2 id="prerequisites">PREREQUISITES</h2>
+
+    <ul>
+        <li>An Oracle Cloud Account name</li>
+        <li>An AWS account and root user credentials</li>
+        <li>A compatible browser (Chrome 69+, Safari 12.1+, or Firefox 62+ or any browser that is Oracle Jet-approved)
+        </li>
+    </ul>
+
+    <h2 id="overview">OVERVIEW</h2>
+
+    <p class="textTA01">We are assuming you&#39;re creating the database and administering it, or at least getting the
+        prep work done. Or
+        maybe you&#39;ve already set something up in AWS -- either way, this is a quick-and-dirty overview of getting
+        started.</p>
+
+    <ol>
+        <li>IAM User Keys</li>
+        <li>Create a VPC</li>
+        <li>Create a database instance</li>
+        <li>Connect to database</li>
+        <li>Activate HeatWave on AWS</li>
+    </ol>
+
+    <p class="textTA01">In our example, we’re using a quick and dirty approach to set things up to use HeatWave. </p>
+
+    <p class="textTA01">Basically we&#39;ll lean on the &quot;easy mode&quot; in AWS to create a compute instance,
+        network access, and
+        database. Once we have the endpoint for our database we can activate MySQL HeatWave on AWS which we can use to
+        run analytics. Easy! </p>
+
+    <ol>
+        <li>
+            <p class="textTA01"><strong>Identity Access Management on AWS</strong></p>
+            <p class="textTA01"> If you&#39;ve set up your own AWS account, you&#39;ve already got admin access. Of
+                course, for best
+                practices we wouldn&#39;t want to do everything as root, so here we should go to Users and choose Add
+                Users. Go ahead and create an Administrator account and check the box next to AWS Management Console
+                access. Use a custom password. </p>
+            <p class="textTA01"> Choose, Next: Permissions. In Set permissions select Add user to group. You&#39;ll then
+                Create group,
+                and for the name let&#39;s be descriptive and call it Administrators.</p>
+            <p class="textTA01"> Select filter policies and then AWS managed - job function. In that policy list, check
+                AdministratorAccess. Now you can Create group!</p>
+            <p class="textTA01"> You may need to refresh the page, but select this new group and choose Next: Tags. You
+                can now add tags
+                much as in OCI, helping you organize and manage projects. </p>
+            <p class="textTA01"> Using Next: Review you can see the groups to be added for this new user -- so
+                you&#39;re basically done
+                and can click Create User.</p>
+            <p class="textTA01"> AWS uses access keys much like OCI when signing in with keys. To get the keys for this
+                new user, go to
+                the IAM console &gt; Users &gt; and choose the name of the new user. Chose the Security credentials tab.
+                In the Access keys section, select Create access key.</p>
+            <p class="textTA01"> Just like on OCI, you won&#39;t get another chance to grab the secret key, so select
+                Show. You can now
+                Download the .csv file and close the dialog box. You&#39;re all set to use the key pair. </p>
+        </li>
+
+        <li>
+            <p class="textTA01"><strong>Create a a VPC and configure for database access</strong></p>
+            <p class="textTA01"> Now that we&#39;ve created an admin, let&#39;s create a security group and some network
+                access. You can
+                read all about creating a new VPC here: <a target="_blank" class="textLinkTA01"
+                    href="https://docs.aws.amazon.com/directoryservice/latest/admin-guide/gsg_create_vpc.html">https://docs.aws.amazon.com/directoryservice/latest/admin-guide/gsg_create_vpc.html</a>
+            </p>
+            <p class="textTA01"> Much like OCI, this tool allows us to create and configure network access with full
+                firewall controls so
+                we can open up an endpoint for our database. But we&#39;ll also need to set up some security controls.
+            </p>
+            <p class="textTA01"> Head to the VPC console at <a target="_blank" class="textLinkTA01"
+                    href="https://console.aws.amazon.com/vpc">https://console.aws.amazon.com/vpc</a></p>
+            <p class="textTA01"> In the upper-right corner you&#39;ll choose the region. MySQL HeatWave on AWS supports
+                all availability
+                zones within supported AWS regions with the exception of those that do not support the Amazon EC2
+                instance types used by MySQL HeatWave on AWS.</p>
+            <p class="textTA01"> The AWS regions where MySQL HeatWave on AWS is available include: US East (Northern
+                Virginia) Region
+                (us-east-1).</p>
+            <p class="textTA01"> Now, in Navigation, choose Security Groups. Choose Create... and add the basic details
+                as you see fit.
+                Choose the VPC you want to create your database in. </p>
+            <p class="textTA01"> For Inbound rules, choose Add rule and for Type, choose Custom TCP. Next is Port range,
+                so enter the
+                port value to use for your DB instance and for Source, choose a security group name or type the IP
+                address range (CIDR value) from where you access the DB instance. Choosing My IP, will allow access to
+                the DB instance from the IP address detected in your browser.</p>
+            <p class="textTA01"> If you need to add more IP addresses or different port ranges, choose Add rule and
+                enter the information
+                for the rule. In our case, we want to add some ingress rules needed to enable the right ports, 3306 and
+                33060. Here&#39;s the details:</p>
+            <pre><code> Source CIDR: <span class="hljs-number">0.0</span>.<span class="hljs-number">0.0</span>/<span class="hljs-number">0</span>
+    
+     Destination <span class="hljs-keyword">Port</span> <span class="hljs-keyword">Range</span>: <span class="hljs-number">3306</span>,<span class="hljs-number">33060</span>
+    
+     Description: MySQL <span class="hljs-keyword">Port</span>
+    </code></pre>
+            <p class="textTA01"> (Optional) In Outbound rules, add rules for outbound traffic. By default, all outbound
+                traffic is
+                allowed. </p>
+            <p class="textTA01"> Choose Create security group.</p>
+            <p class="textTA01"> Looking good so far!</p>
+        </li>
+    </ol>
+    <ol>
+        <li>
+            <p class="textTA01"><strong>Create a MySQL database instance</strong></p>
+            <p class="textTA01"> In point of fact, you can create a VPC along with an EC2 instance and have connectivity
+                along with a
+                database <a target="_blank" class="textLinkTA01"
+                    href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_GettingStarted.CreatingConnecting.SQLServer.html">in
+                    a few simple steps</a>. Not only that, it&#39;ll be a MySQL database. The sticking point is that the
+                VPC you create won&#39;t be configured to allow incoming outside traffic. Thus, if you go the
+                &quot;easy&quot; route, you&#39;ll need to edit the access list on the VPC it creates. That&#39;s not
+                difficult, just be aware of the extra steps.</p>
+            <p class="textTA01"> {% imgx assets/aws-dbchoices-panel-devrel0922.png %}</p>
+            <p class="textTA01"> Instead, we&#39;ll leap straight into a MySQL database instance. Go to the RDS console,
+                and choose the
+                region you used above. Click Create Database and choose Standard Create. Choose MySQL (that seems
+                obvious).</p>
+            <p class="textTA01"> Configure the database ID and credentials -- you know how important these will be, as
+                we&#39;ll use them
+                to wire up our HeatWave cluster to the database.</p>
+            <p class="textTA01"> In Additional conncectivity configurations, set Public Accessible to yes and the VPC
+                security group will
+                need to open Database port 3306.</p>
+            <p class="textTA01"> We&#39;ll set the authentication to password auth, and enter a name for the initial
+                database. The rest
+                is largely set, so we can create our datbase now.</p>
+            <p class="textTA01"> Don&#39;t forget that in our security group rules we should set CIDR inbound and
+                outbound rules to
+                0.0.0.0/0.</p>
+            <p class="textTA01"> It may take several minutes for this to finish setting up. Below is one example of a
+                database
+                configuration.</p>
+            <p class="textTA01"> {% imgx assets/aws-hw-db-config-devrel0922.png %}</p>
+        </li>
+    </ol>
+    <ol>
+        <li>
+            <p class="textTA01"><strong>Connect to the database</strong></p>
+            <p class="textTA01"> Go To Databases on RDS. Click on your db instance to find your DB Endpoints in
+                Connectivity &amp;
+                Security.</p>
+            <p class="textTA01"> For the password, you should have this somewhere from when you created the instance.
+                You may now use
+                these credentials from within the MySQL HeatWave on AWS console, which we&#39;ll set up now. Just
+                remember that your database will need some data in it! </p>
+            <p class="textTA01"> Before proceeding, feel free to download some demo data and pop it in the database to
+                play around on
+                HeatWave -- the hard part is done!</p>
+            <p class="textTA01"> Just remember that in RDS &gt; Databases &gt; (your database) you&#39;ll find endpoint
+                info under
+                Connectivity &amp; security. Of course, you&#39;ll need the DNS name, username and password before
+                activating HeatWave as you&#39;ll use those to connect.</p>
+        </li>
+        <li>
+            <p class="textTA01"><strong>Activate MySQL HeatWave on AWS</strong></p>
+            <p class="textTA01"> To connect our HeatWave cluster to our MySQL AWS database, first we&#39;ll need to
+                activate it.</p>
+            <p class="textTA01"> Navigate your browser to <a target="_blank" class="textLinkTA01"
+                    href="http://cloud.mysql.com/">http://cloud.mysql.com/</a>.</p>
+            <p class="textTA01"> Click Sign Up.
+                A field is displayed for entering your email address. Once you enter your email, you are directed to an
+                Account Information page for creating an Oracle Cloud account, which is required to use MySQL HeatWave
+                on AWS. Once you verify your email you&#39;ll go to a page for verifying the email address and providing
+                initial account information. Follow the prompts.</p>
+            <p class="textTA01"> After providing the initial account information, you are directed to a Get Started page
+                in the Oracle
+                Cloud Infrastructure (OCI) Console, which includes an Enable MySQL HeatWave on AWS link in the
+                Quickstarts section of the page. Click Enable MySQL HeatWave on AWS.</p>
+            <p class="textTA01"> You are directed to a MySQL HeatWave on AWS Administration page where you are presented
+                with
+                a dialog that guides you through the setup process. Note that a paid account is required. Once your
+                upgrade is complete you&#39;ll wind up on the OCI Console.</p>
+            <p class="textTA01"> From the OCI Console navigation menu, select Databases. MySQL HeatWave on AWS appears
+                on the Home tab
+                under the Featured label.</p>
+            <p class="textTA01"> Under MySQL HeatWave on AWS, click Administration.</p>
+            <p class="textTA01"> Click Provision to provision MySQL HeatWave on AWS.</p>
+            <p class="textTA01"> After the provisioning operation is completed, a message appears stating that MySQL
+                HeatWave on AWS is
+                ready and you are presented with options to open the MySQL HeatWave console, set up users, and view
+                billing information.</p>
+        </li>
+    </ol>
+    <h3 id="summary-so-far-">Summary - So far!</h3>
+    <p class="textTA01">Thus far we&#39;ve created a MySQL database on AWS and activated an OCI account and MySQL
+        HeatWave on AWS using
+        our shiny new Oracle account. Using our login for our database, we can use this tool to run queries impossibly
+        fast -- and we&#39;re just getting started!</p>
+    <p class="textTA01">Want to know more? Join the discussion in our <a target="_blank" class="textLinkTA01"
+            href="https://bit.ly/odevrel_slack">public Slack channel</a>!
+    </p>
+
+
+</div>
