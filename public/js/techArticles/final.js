@@ -158,12 +158,14 @@ function addPadding() {
 
     //Sticks Chapters
     //User scrolls the page
+    /*
     window.onscroll = function () {
       stickChapters();
     };
+    */
 
     // Get the Chapters
-    var navbar = document.querySelector(".chapters");
+    //var navbar = document.querySelector(".chapters");
 
     // Add the sticky class
     function stickChapters() {
