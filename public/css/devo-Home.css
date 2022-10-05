@@ -1,39 +1,11 @@
-/*
-.container {
-  overflow-x: hidden;
-}
-*/
+/* ------------------- GRADIENTS ------------------- */
 
-.cta-btn.primary.bg-primary,
-.cta-btn.primary.bg-white {
-  color: #000000;
-}
-
-#d5a38ca0-9bfe-4c3b-b2c8-115009f54d7fcustomComponentDiv
-  > section
-  > div
-  > div.bg
-  > img {
-  aspect-ratio: auto !important;
-}
-
+/* Header Last Element  */
 .textGradientV1 {
   background: linear-gradient(90deg, #06bbfa 7%, #877eff 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-}
-
-.card .padding {
-  padding: 1.25rem !important;
-}
-
-.card.bg-standard {
-  min-height: 20rem !important;
-}
-
-.background-layout .background.angled {
-  clip-path: polygon(0 0, 100% 10%, 100% 100%, 0 100%) !important;
 }
 
 #cb4b34a9-e4d5-4d10-ab8c-3e6a4eb1e6de
@@ -51,55 +23,6 @@
   ) !important;
 }
 
-.card {
-  max-width: 955px !important;
-}
-
-.bg-glass-white {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(15px);
-}
-
-.card .padding {
-  margin-top: auto;
-  margin-bottom: auto;
-}
-
-.link-with-image .link .image-container.colorBackgroundLight {
-  background: rgba(255, 255, 255, 0.1) !important;
-  backdrop-filter: blur(15px) !important;
-}
-
-.link-with-image .link .image-container .image {
-  padding: 0rem !important;
-}
-
-.logo-soup {
-  padding: 2.375rem 0 !important;
-}
-
-/*
-.mosaic-col-section-list {
-    margin: 2.375rem auto !important;
-}
-*/
-
-#bbadd00f-5a8f-4321-8a78-20296cd3977a {
-  margin-bottom: -210px;
-}
-
-#e823f609-d5dc-406f-b0dc-9b86756dc730
-  > div
-  > div
-  > div
-  > div.background.angled {
-  clip-path: polygon(0 0, 100% 35%, 100% 100%, 0 100%) !important;
-}
-
-#e823f609-d5dc-406f-b0dc-9b86756dc730 {
-  margin-top: -205px;
-}
-
 #e823f609-d5dc-406f-b0dc-9b86756dc730
   > div
   > div
@@ -113,34 +36,60 @@
   ) !important;
 }
 
+/* ------------------- END OF GRADIENTS ------------------- */
+
+/* ------------------- PATHS AND TRANSLATIONS ------------------- */
+
+#e823f609-d5dc-406f-b0dc-9b86756dc730
+  > div
+  > div
+  > div
+  > div.background.angled {
+  clip-path: polygon(0 0, 100% 35%, 100% 100%, 0 100%) !important;
+}
+
+#bbadd00f-5a8f-4321-8a78-20296cd3977a {
+  margin-bottom: -210px;
+}
+
+#e823f609-d5dc-406f-b0dc-9b86756dc730 {
+  margin-top: -205px;
+}
+
 #d2286608-ec58-44b6-8397-62e00ef2f8f4 {
   margin-top: -90px;
   margin-bottom: -750px;
 }
 
-.feature .content-container .message-container {
-  font-family: "Oracle Sans regular", sans-serif !important;
-}
-
-.card.bg-standard .card-container {
-  padding: 3rem 1.875rem !important;
-}
-
-/*
+/* News Margin */
 #b904b7df-b20e-45fa-8e8d-e9c10f6c55e0 {
-margin-bottom: -180px !important;
+  margin-bottom: -10rem;
 }
-*/
 
+/* Background overlapping */
 #d26fd39c-54b5-40e5-bc95-849d9988ad1dcustomComponentDiv > div > div.background,
 #dcf412a1-10df-4cf2-a70c-b4128a9baf54customComponentDiv > div > div.background {
   z-index: 1 !important;
 }
 
+/* ------------------- END OFPATHS AND TRANSLATIONS ------------------- */
+
+/* Missing LIGHT BACKGROUNDS */
+.bg-glass-white {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(15px);
+}
+
+/* For events CARD alligment */
 .card .background {
   background-position: left !important;
 }
 
+#e31323a2-a5a2-4a91-aaff-763b1f99c86dcustomComponentDiv > div > div.background {
+  background-position: right !important;
+}
+
+/* ------------------- MEDIA Q ------------------- */
 @media (max-width: 1820px) {
   #e823f609-d5dc-406f-b0dc-9b86756dc730 {
     margin-top: -205px;
@@ -234,9 +183,6 @@ margin-bottom: -180px !important;
     padding-left: 10px !important;
   }
 
-
-
-
   /* Footer Aligments Ad Choices and Careers */
   #u10 > div > div.u10w5.u10w10 > ul.u10-links > li:nth-child(5),
   #u10 > div > div.u10w5.u10w10 > ul.u10-links > li:nth-child(6) {
@@ -281,10 +227,10 @@ margin-bottom: -180px !important;
   }
 
   /* Big texts causes overlapping 
-  .hero .content-container .content .body p {
-    font-size: 1rem !important;
-  }
-  */
+    .hero .content-container .content .body p {
+      font-size: 1rem !important;
+    }
+    */
 
   /* Adjust of spaces between More Resources and upper table*/
   #a7a7976e-445a-4a89-a47c-0af7674061e0 > div > div > div {
@@ -442,26 +388,4 @@ margin-bottom: -180px !important;
   .logo-soup-container .logo-soup-sections > .scs-component-container {
     aspect-ratio: 0;
   }
-
-  /*
-    #aa1f3a6b-d995-4429-bb65-262db20abc7a>div>div>div>div>div {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    */
-}
-
-#b904b7df-b20e-45fa-8e8d-e9c10f6c55e0 {
-  margin-bottom: -10rem;
-}
-
-@media (max-width: 480px) {
-  /*
-    #aa1f3a6b-d995-4429-bb65-262db20abc7a>div>div>div>div>div {
-        grid-template-columns: repeat(1, 1fr);
-    }
-    */
-}
-
-#e31323a2-a5a2-4a91-aaff-763b1f99c86dcustomComponentDiv > div > div.background{
-  background-position: right !important;
 }

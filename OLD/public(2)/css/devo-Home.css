@@ -1,0 +1,61 @@
+.cta-btn.primary.bg-primary,
+.cta-btn.primary.bg-white {
+  color: #000000;
+}
+
+#d5a38ca0-9bfe-4c3b-b2c8-115009f54d7fcustomComponentDiv
+  > section
+  > div
+  > div.bg
+  > img {
+  aspect-ratio: auto !important;
+}
+
+.card .padding {
+  padding: 1.25rem !important;
+}
+
+.card.bg-standard {
+  min-height: 20rem !important;
+}
+
+.background-layout .background.angled {
+  clip-path: polygon(0 0, 100% 10%, 100% 100%, 0 100%) !important;
+}
+
+.card {
+  max-width: 955px !important;
+}
+
+.card .padding {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.link-with-image .link .image-container .image {
+  padding: 0rem !important;
+}
+
+.logo-soup {
+  padding: 2.375rem 0 !important;
+}
+
+/*
+.mosaic-col-section-list {
+    margin: 2.375rem auto !important;
+}
+*/
+
+.feature .content-container .message-container {
+  font-family: "Oracle Sans regular", sans-serif !important;
+}
+
+.card.bg-standard .card-container {
+  padding: 3rem 1.875rem !important;
+}
+
+/*
+#b904b7df-b20e-45fa-8e8d-e9c10f6c55e0 {
+margin-bottom: -180px !important;
+}
+*/

@@ -352,6 +352,7 @@ function changeHeaderLinks() {
   }
 }
 
+/*
 window.onload = function () {
   function sleep(ms) {
     return new Promise((resolve) => setTimeout(resolve, ms));
@@ -368,7 +369,7 @@ window.onload = function () {
       //window.location.reload();
     }
 
-    /*
+    
     let url = location.href;
     if (url.includes("/en/") === false) {
       try {
@@ -379,7 +380,7 @@ window.onload = function () {
         //reloadDEVO();
       }
     }
-    */
+    
 
     try {
       addBlank();
@@ -399,7 +400,7 @@ window.onload = function () {
     //window.location.reload();
   }
 
-  /*
+  
   try {
     stickNavBar();
     console.log("Nav Bar Sticked");
@@ -407,7 +408,7 @@ window.onload = function () {
     console.log(e);
     //window.location.reload();
   }
-  */
+  
 
   try {
     addBlank();
@@ -431,7 +432,7 @@ window.onload = function () {
     console.log(e);
   }
 
-  /*
+  
   try {
     showMT();
     console.log("MT updated");
@@ -439,7 +440,7 @@ window.onload = function () {
     console.log(e);
     reloadDEVO();
   }
-  */
+  
 
   try {
     updateFooterLinks();
@@ -457,7 +458,7 @@ window.onload = function () {
     reloadDEVO();
   }
 
-  /*
+  
   let url = location.href;
   if (url.includes("/en/") === false) {
     try {
@@ -468,6 +469,5 @@ window.onload = function () {
       reloadDEVO();
     }
   }
-  */
-
 };
+*/

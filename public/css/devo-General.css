@@ -1,18 +1,25 @@
-/*
-.container {
-  overflow-x: hidden;
-}
-*/
-
 /* Banners problems - Multiple CSS classes */
-.banner .banner-content-container .body-content-def .banner-text-content {
-  font-size: 1rem !important;
-  line-height: 1.375rem !important;
-  font-family: "Oracle Sans regular", sans-serif !important;
+.feature .content-container .message-container,
+.banner .banner-content-container .body-content-def .banner-text-content .body, .banner .banner-content-container .body-content-def .banner-text-content {
+  font-family: "Oracle Sans Regular" !important;
+}
+
+strong {
+  font-family: "Oracle Sans Bold";
 }
 
 .banner .banner-content-container .left-align {
   margin: 0 auto !important;
+}
+
+.banner .banner-content-container .body-content-def .banner-text-content {
+  font-size: 1rem !important;
+  line-height: 1.375rem !important;
+}
+
+/* Removes Padding on Lists */
+.list-container {
+  padding: 0rem 0 !important;
 }
 
 /* Primary BTNs gets black on Mobile -ALL*/
@@ -52,13 +59,9 @@
   line-height: 1.375rem;
   margin-bottom: 0.8rem;
 }
+
 /* END of Isolated cases for Some features -BULLETS*/
 @media (max-width: 1999px) {
-  .container {
-    overflow-x: hidden;
-    overflow-y: hidden;
-  }
-
   .feature .content-container .message-container.left-text-position {
     margin: 1rem !important;
   }
@@ -83,12 +86,6 @@
     gap: 2rem !important;
   }
 
-  /* Big texts causes overlapping 
-  .hero .content-container .content .body p {
-    font-size: 1rem !important;
-  }
-  */
-
   /* Extra Space from title removed -FOOTER*/
   #social-ankle-title {
     margin-bottom: 0rem !important;
@@ -110,63 +107,16 @@
   }
 }
 
-.list-container {
-  padding: 0rem 0 !important;
-}
-
-/*
-  .card .no-padding {
-    padding-top: 1rem!important;
-  }
-  */
-
 .card-container p a:hover,
 .card-container h3 a:hover {
   text-decoration: underline #fff;
-}
-
-strong {
-  font-family: "Oracle Sans Bold";
-}
-
-/*
-  ul {
-    margin: 0.5rem 0rem 0.5rem 0rem;
-    line-height: 22px !important;
-  }
-  */
-
-.feature .content-container .message-container,
-.banner .banner-content-container .body-content-def .banner-text-content .body {
-  font-family: "Oracle Sans Regular" !important;
 }
 
 .feature .content-container {
   gap: 0rem !important;
 }
 
-/*
-  .col-section-list.cols-2 {
-    grid-template-columns: 1fr 1fr !important;
-  }
-  
-  .col-section-list.cols-3 {
-    grid-template-columns: 1fr 1fr 1fr !important;
-  }
-  
-  .col-section-list.cols-4 {
-    grid-template-columns: 1fr 1fr 1fr 1fr !important;
-  }
-  
-  @media (max-width: 1199px) {
-    .hero .bg.pinBackgroundCenter .bg-image {
-      background-position: left!important;
-    }
-  }
-  */
-
-/* Card Mobile Alligment */
-
+/* 
 #b5ae7abb-556e-4dfd-a6d2-55b81d9cd031customComponentDiv
   > div
   > div.card-container
@@ -346,3 +296,4 @@ strong {
   margin-top: auto !important;
   margin-bottom: auto !important;
 }
+*/

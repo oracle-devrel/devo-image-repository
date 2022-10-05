@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+
+
+</head>
+
+<body>
+
+    <h1>Holi</h1>
+    <ul class="Names">
+
+    </ul>
+
+    <script>
+        window.onload = function () {
+            function callResults() {
+                //fetch("https://jsonplaceholder.typicode.com/users")
+                fetch("https://g2f4dc3e5463897-ocwredbull.adb.us-phoenix-1.oraclecloudapps.com/ords/ocw2022/redbull/")
+                    .then((res) => {
+                        return res.json();
+                    })
+                    .then((data) => {
+                        data.items.forEach((test) => {
+                            const markup = `<li class="newScore">${test.name}</li>`;
+                            document.querySelector(".Names").insertAdjacentHTML("beforeend", markup);
+                            //console.log(test)
+                        });
+                    })
+                    .catch((error) => {
+                        console.log(error)
+                        console.log('API request failed')
+                    });
+            }
+
+            function deleteScores() {
+                const pastScores = document.querySelectorAll(".newScore");
+                for (let i = 0; i < pastScores.length; i++) {
+                    pastScores[i].remove();
+                }
+            }
+
+            callResults()
+
+            setInterval(function () {
+                deleteScores()
+                callResults()
+                console.log('Scores Updated')
+            }, 10000);
+
+        }
+    </script>
+
+    <style>
+        #ba725b4b-f366-4864-b6b5-c3115f8eab55customComponentDiv>div>section>div.detail-container {
+            display: none!important;
+        }
+
+        #ba725b4b-f366-4864-b6b5-c3115f8eab55customComponentDiv > div > section{
+            padding-top: 0rem!important;
+        }
+        body{
+            background-color: #021a2f!important;
+        }
+    </style>
+
+</body>
+
+
+
+</html>
