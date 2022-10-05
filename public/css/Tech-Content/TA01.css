@@ -241,6 +241,10 @@
   margin: 12px 0px 24px 24px;
 }
 
+.adjustTypeThreePre {
+  margin: 12px 0px 0px 24px!important;
+}
+
 .listTypeThreeText {
   padding-bottom: 12px;
 }

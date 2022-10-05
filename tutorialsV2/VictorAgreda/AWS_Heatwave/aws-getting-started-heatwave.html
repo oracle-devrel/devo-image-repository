@@ -23,7 +23,7 @@
 
     <div class="imageContainer">
         <img src="https://raw.githubusercontent.com/oracle-devrel/devo-image-repository/Devo/images/AWS_Heatwave/aws-creatingdb-devrel0922.png"
-            alt="" class="imageFullWidth" loading="lazy">
+            alt="" class="imageFullWidth borderImage" loading="lazy">
         <p class="fullImageDescription">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent sed diam
             interdum, posuere quam
             sed, faucibu.</p>
@@ -42,7 +42,7 @@
 
     <div class="exampleTA01">
         <p class="exampleTitleTA01">Prerequisites:</p>
-        <ul class="listTypeThree">
+        <ul class="listTypeThree adjustTypeThreePre">
             <li class="listTypeTwoLI">An AWS account and root user credentials</li>
             <li class="listTypeTwoLI">An Oracle Cloud Account name</li>
             <li class="listTypeTwoLI">A compatible browser (Chrome 69+, Safari 12.1+, or Firefox 62+ or any browser that
@@ -134,12 +134,32 @@
                 enter the information
                 for the rule. In our case, we want to add some ingress rules needed to enable the right ports, 3306 and
                 33060. Here&#39;s the details:</p>
-            <pre><code> Source CIDR: <span class="hljs-number">0.0</span>.<span class="hljs-number">0.0</span>/<span class="hljs-number">0</span>
+
+            <div class="codeContainerTA01">
+                <div class="codeTA01">
+                    <code><pre>
+Source CIDR: <span class="hljs-number">0.0</span>.<span class="hljs-number">0.0</span>/<span class="hljs-number">0</span>
     
-     Destination <span class="hljs-keyword">Port</span> <span class="hljs-keyword">Range</span>: <span class="hljs-number">3306</span>,<span class="hljs-number">33060</span>
-    
-     Description: MySQL <span class="hljs-keyword">Port</span>
-    </code></pre>
+    Destination <span class="hljs-keyword">Port</span> <span class="hljs-keyword">Range</span>: <span class="hljs-number">3306</span>,<span class="hljs-number">33060</span>
+                           
+    Description: MySQL <span class="hljs-keyword">Port</span>
+</pre></code>
+                </div>
+                <div class="codeCopyBTN">
+                    <div class="codeCopyBTNCont" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                        <a target="_blank" href="#copy" class="alignCenter">
+                            <svg width="14" height="17" viewBox="0 0 14 17" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <rect x="4.88623" y="3.8999" width="7.80423" height="12.6" stroke="#00747A" />
+                                <path d="M4.04762 14.6H1V1H9.80423V3" stroke="#00747A" />
+                            </svg>
+                            <span class="marginLeftTA01">Copy</span>
+                        </a>
+                    </div>
+                    <p class="codeLanguageText">Configuration</p>
+                </div>
+            </div>
+
             <p class="textTA01"> (Optional) In Outbound rules, add rules for outbound traffic. By default, all outbound
                 traffic is
                 allowed. </p>
@@ -161,7 +181,7 @@
 
             <div class="imageContainer">
                 <img src=" https://raw.githubusercontent.com/oracle-devrel/devo-image-repository/Devo/images/AWS_Heatwave/aws-dbchoices-panel-devrel0922.png"
-                    alt="" class="imageFullWidth" loading="lazy">
+                    alt="" class="imageFullWidth borderImage" loading="lazy">
                 <p class="fullImageDescription">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent sed
                     diam
                     interdum, posuere quam
