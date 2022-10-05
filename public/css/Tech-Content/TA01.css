@@ -79,7 +79,8 @@
 .accordionTextTA01,
 .warningTA01 > .textTA01,
 .tipTA01 > .textTA01,
-.listTypeThreeText {
+.listTypeThreeText,
+.listTypeThree > .listTypeTwoLI > .textTA01 {
   font-style: normal;
   font-weight: 400;
   font-size: 16px;
@@ -483,3 +484,4 @@
 .legalDescription {
   color: #3e475e !important;
 }
+
