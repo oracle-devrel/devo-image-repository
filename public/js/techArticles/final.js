@@ -352,8 +352,31 @@ function changeHeaderLinks() {
   }
 }
 
-/*
 window.onload = function () {
+  function sleep(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
+
+  async function reloadDEVO() {
+    await sleep(3000);
+
+    try {
+      addPadding();
+      console.log("Padding added");
+    } catch (e) {
+      console.log(e);
+    }
+
+  }
+
+  try {
+    addPadding();
+  } catch (e) {
+    console.log(e);
+    reloadDEVO();
+  }
+
+  /*
   function sleep(ms) {
     return new Promise((resolve) => setTimeout(resolve, ms));
   }
@@ -469,5 +492,5 @@ window.onload = function () {
       reloadDEVO();
     }
   }
+  */
 };
-*/

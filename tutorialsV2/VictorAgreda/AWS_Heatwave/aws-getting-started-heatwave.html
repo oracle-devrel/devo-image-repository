@@ -21,7 +21,13 @@
     <p class="textTA01">To get started, let&#39;s set up a MySQL database on AWS so we can connect to HeatWave for
         analysis. </p>
 
-    <p class="textTA01">{% imgx assets/aws-creatingdb-devrel0922.png %}</p>
+    <div class="imageContainer">
+        <img src="https://raw.githubusercontent.com/oracle-devrel/devo-image-repository/Devo/images/AWS_Heatwave/aws-creatingdb-devrel0922.png"
+            alt="" class="imageFullWidth" loading="lazy">
+        <p class="fullImageDescription">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent sed diam
+            interdum, posuere quam
+            sed, faucibu.</p>
+    </div>
 
     <p class="textTA01">Note that HeatWave on AWS is integrated with OCI&#39;s Identity and Access Management system.
         When you sign up
@@ -34,28 +40,31 @@
         database we can connect
         to MySQL HeatWave on AWS.</p>
 
-    <h2 id="prerequisites">PREREQUISITES</h2>
+    <div class="exampleTA01">
+        <p class="exampleTitleTA01">Prerequisites:</p>
+        <ul class="listTypeThree">
+            <li class="listTypeTwoLI">An AWS account and root user credentials</li>
+            <li class="listTypeTwoLI">An Oracle Cloud Account name</li>
+            <li class="listTypeTwoLI">A compatible browser (Chrome 69+, Safari 12.1+, or Firefox 62+ or any browser that
+                is Oracle Jet-approved)</li>
+        </ul>
+    </div>
 
-    <ul>
-        <li>An Oracle Cloud Account name</li>
-        <li>An AWS account and root user credentials</li>
-        <li>A compatible browser (Chrome 69+, Safari 12.1+, or Firefox 62+ or any browser that is Oracle Jet-approved)
-        </li>
-    </ul>
 
-    <h2 id="overview">OVERVIEW</h2>
+
+    <h2>Overview</h2>
 
     <p class="textTA01">We are assuming you&#39;re creating the database and administering it, or at least getting the
         prep work done. Or
         maybe you&#39;ve already set something up in AWS -- either way, this is a quick-and-dirty overview of getting
         started.</p>
 
-    <ol>
-        <li>IAM User Keys</li>
-        <li>Create a VPC</li>
-        <li>Create a database instance</li>
-        <li>Connect to database</li>
-        <li>Activate HeatWave on AWS</li>
+    <ol class="listTypeThree">
+        <li class="listTypeTwoLI">IAM User Keys</li>
+        <li class="listTypeTwoLI">Create a VPC</li>
+        <li class="listTypeTwoLI">Create a database instance</li>
+        <li class="listTypeTwoLI">Connect to database</li>
+        <li class="listTypeTwoLI">Activate HeatWave on AWS</li>
     </ol>
 
     <p class="textTA01">In our example, we’re using a quick and dirty approach to set things up to use HeatWave. </p>
@@ -65,8 +74,8 @@
         database. Once we have the endpoint for our database we can activate MySQL HeatWave on AWS which we can use to
         run analytics. Easy! </p>
 
-    <ol>
-        <li>
+    <ol class="listTypeThree">
+        <li class="listTypeTwoLI">
             <p class="textTA01"><strong>Identity Access Management on AWS</strong></p>
             <p class="textTA01"> If you&#39;ve set up your own AWS account, you&#39;ve already got admin access. Of
                 course, for best
@@ -93,7 +102,7 @@
                 Download the .csv file and close the dialog box. You&#39;re all set to use the key pair. </p>
         </li>
 
-        <li>
+        <li class="listTypeTwoLI">
             <p class="textTA01"><strong>Create a a VPC and configure for database access</strong></p>
             <p class="textTA01"> Now that we&#39;ve created an admin, let&#39;s create a security group and some network
                 access. You can
@@ -138,8 +147,8 @@
             <p class="textTA01"> Looking good so far!</p>
         </li>
     </ol>
-    <ol>
-        <li>
+    <ol class="listTypeThree">
+        <li class="listTypeTwoLI">
             <p class="textTA01"><strong>Create a MySQL database instance</strong></p>
             <p class="textTA01"> In point of fact, you can create a VPC along with an EC2 instance and have connectivity
                 along with a
@@ -149,7 +158,18 @@
                 VPC you create won&#39;t be configured to allow incoming outside traffic. Thus, if you go the
                 &quot;easy&quot; route, you&#39;ll need to edit the access list on the VPC it creates. That&#39;s not
                 difficult, just be aware of the extra steps.</p>
-            <p class="textTA01"> {% imgx assets/aws-dbchoices-panel-devrel0922.png %}</p>
+
+            <div class="imageContainer">
+                <img src=" https://raw.githubusercontent.com/oracle-devrel/devo-image-repository/Devo/images/AWS_Heatwave/aws-dbchoices-panel-devrel0922.png"
+                    alt="" class="imageFullWidth" loading="lazy">
+                <p class="fullImageDescription">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent sed
+                    diam
+                    interdum, posuere quam
+                    sed, faucibu.</p>
+            </div>
+
+
+
             <p class="textTA01"> Instead, we&#39;ll leap straight into a MySQL database instance. Go to the RDS console,
                 and choose the
                 region you used above. Click Create Database and choose Standard Create. Choose MySQL (that seems
@@ -169,11 +189,22 @@
             <p class="textTA01"> It may take several minutes for this to finish setting up. Below is one example of a
                 database
                 configuration.</p>
-            <p class="textTA01"> {% imgx assets/aws-hw-db-config-devrel0922.png %}</p>
+
+            <div class="imageContainer">
+                <img src="https://raw.githubusercontent.com/oracle-devrel/devo-image-repository/Devo/images/AWS_Heatwave/aws-hw-db-config-devrel0922.png"
+                    alt="" class="imageFullWidth" loading="lazy">
+                <p class="fullImageDescription">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent sed
+                    diam
+                    interdum, posuere quam
+                    sed, faucibu.</p>
+            </div>
+
+
+
         </li>
     </ol>
-    <ol>
-        <li>
+    <ol class="listTypeThree">
+        <li class="listTypeTwoLI">
             <p class="textTA01"><strong>Connect to the database</strong></p>
             <p class="textTA01"> Go To Databases on RDS. Click on your db instance to find your DB Endpoints in
                 Connectivity &amp;
@@ -190,7 +221,7 @@
                 Connectivity &amp; security. Of course, you&#39;ll need the DNS name, username and password before
                 activating HeatWave as you&#39;ll use those to connect.</p>
         </li>
-        <li>
+        <li class="listTypeTwoLI">
             <p class="textTA01"><strong>Activate MySQL HeatWave on AWS</strong></p>
             <p class="textTA01"> To connect our HeatWave cluster to our MySQL AWS database, first we&#39;ll need to
                 activate it.</p>
