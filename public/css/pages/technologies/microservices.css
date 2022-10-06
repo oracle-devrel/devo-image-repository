@@ -10,6 +10,7 @@
   margin: 0 0rem !important;
 }
 
+/* 
 .card.image .media-container img.aspect-16-9,
 .card.image .media-container video.aspect-16-9,
 #f23ce7b2-4414-44fe-9cf5-082936978d12customComponentDiv
@@ -24,6 +25,7 @@
   > img {
   aspect-ratio: auto !important;
 }
+*/
 
 .banner .banner-content-container .body-content-def .banner-text-content {
   max-width: 100% !important;
