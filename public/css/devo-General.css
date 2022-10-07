@@ -1,3 +1,9 @@
+
+/* SAFARI problem on NAV */
+#b79e0b15-398a-4503-820a-4d0fbc85dd0bcustomComponentDiv > section > div.u30navBg.navexpand{
+  z-index: revert-layer;
+}
+
 /* Banners problems - Multiple CSS classes */
 .feature .content-container .message-container,
 .banner .banner-content-container .body-content-def .banner-text-content .body, .banner .banner-content-container .body-content-def .banner-text-content {
