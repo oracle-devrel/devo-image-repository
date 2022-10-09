@@ -224,6 +224,11 @@ table.redTable thead th {
 }
 
 @media (max-width: 710px) {
+
+  table.redTable {
+    width: 765px;
+}
+
   .maxVersScore-secundary {
     margin-top: 60px;
     display: flex !important;
