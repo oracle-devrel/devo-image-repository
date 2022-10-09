@@ -13,65 +13,260 @@
 
 <body>
 
-    <h1>Holi</h1>
-    <ul class="Names">
 
-    </ul>
+    <div class="RedBull-Dash">
+        <div class="maxVersScore">
+            <div>
+                <img src="https://raw.githubusercontent.com/oracle-devrel/devo-image-repository/Devo/images/MaxVer-Profile.png"
+                    alt="">
+            </div>
+            <div>
+                <h3 class="RedBullHeader">Lorem race against Max on the Circuit of the Americas</h3>
+                <p class="RedBullDescription-white">Lorem this year at Cloud World 2022, Max Verstappen will take the
+                    drivers seat and set the fastest lap at
+                    the Circuit of the Americas. Do you have what it takes to beat him? Try to beat Max’s fastest lap
+                    time
+                    at the Red Bull Racing F1 simulator located in the DevNucleus.</p>
+                <div class="maxVersScore-secundary">
+                    <div>
+                        <p class="RedBullDescription-yellow">Can you beat the best?</p>
+                        <h3 class="ScoreTableNames">Max Verstappen</h3>
+                        <p class="FastestLap-Desc">Max’s fastest lap time:</p>
+                        <p class="FastestLap-Score">1:23:456</p>
 
-    <script>
-        window.onload = function () {
-            function callResults() {
-                //fetch("https://jsonplaceholder.typicode.com/users")
-                fetch("https://g2f4dc3e5463897-ocwredbull.adb.us-phoenix-1.oraclecloudapps.com/ords/ocw2022/redbull/")
-                    .then((res) => {
-                        return res.json();
-                    })
-                    .then((data) => {
-                        data.items.forEach((test) => {
-                            const markup = `<li class="newScore">${test.name}</li>`;
-                            document.querySelector(".Names").insertAdjacentHTML("beforeend", markup);
-                            //console.log(test)
-                        });
-                    })
-                    .catch((error) => {
-                        console.log(error)
-                        console.log('API request failed')
-                    });
-            }
 
-            function deleteScores() {
-                const pastScores = document.querySelectorAll(".newScore");
-                for (let i = 0; i < pastScores.length; i++) {
-                    pastScores[i].remove();
-                }
-            }
+                    </div>
 
-            callResults()
+                    <div>
+                        <p class="RedBullDescription-yellow">Can you beat the best?</p>
+                        <h3 class="ScoreTableNames">Firstname L.</h3>
+                        <p class="FastestLap-Desc">Fastest competitors lap time:</p>
+                        <div class="beatBest">
+                            <p class="FastestLap-Score">1:23:456</p>
+                            <p class="FastestLap-ScoroDifference">+3.022</p>
+                        </div>
 
-            setInterval(function () {
-                deleteScores()
-                callResults()
-                console.log('Scores Updated')
-            }, 10000);
+                    </div>
 
-        }
-    </script>
+                </div>
+            </div>
+        </div>
+
+
+        <div style="text-align: center;">
+            <h3 class="RedBullHeader">The latest lap times</h3>
+            <p class="RedBullDescription-white">Lorem see the top 20 lap times straight from the floor of Oracle Cloud
+                World
+                2022</p>
+
+            <div class="tableScores">
+                <table class="redTable">
+                    <thead>
+                        <tr>
+                            <th>Pos</th>
+                            <th>Driver</th>
+                            <th>Sector 1</th>
+                            <th>Sector 2</th>
+                            <th>Sector 3</th>
+                            <th>Lap time</th>
+                            <th>Gap</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="maxVerScore-Table">
+                            <td>1</td>
+                            <td class="strong">MAX VERSTAPPEN</td>
+                            <td>89.042</td>
+                            <td>89.042</td>
+                            <td>89.042</td>
+                            <td class="strong">3:49.042</td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+        <!--
+        <div class="tableScores">
+            <ul class="Names">
+
+            </ul>
+        </div>
+        -->
+    </div>
 
     <style>
-        #ba725b4b-f366-4864-b6b5-c3115f8eab55customComponentDiv>div>section>div.detail-container {
-            display: none!important;
+        .RedBull-Dash {
+            font-family: 'Oracle Sans';
+            color: #FFFFFF;
         }
 
-        #ba725b4b-f366-4864-b6b5-c3115f8eab55customComponentDiv > div > section{
-            padding-top: 0rem!important;
+        .RedBullHeader {
+            font-style: normal;
+            font-weight: 600;
+            font-size: 32px;
+            line-height: 42px;
+            margin-bottom: 10px;
         }
-        body{
-            background-color: #021a2f!important;
+
+        .ScoreTableNames {
+            font-style: normal;
+            font-weight: 600;
+            font-size: 40px;
+            line-height: 52px;
+            margin: 0px;
+        }
+
+        .RedBullDescription-white {
+            font-style: normal;
+            font-weight: 400;
+            font-size: 16px;
+            line-height: 22px;
+        }
+
+        .FastestLap-Desc {
+            font-style: normal;
+            font-weight: 400;
+            font-size: 20px;
+            line-height: 26px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .FastestLap-Score {
+            font-style: normal;
+            font-weight: 700;
+            font-size: 40px;
+            line-height: 26px;
+            margin: 0px;
+        }
+
+        .FastestLap-ScoroDifference {
+            font-style: normal;
+            font-weight: 300;
+            font-size: 23px;
+            color: #EA1D2D;
+            margin: 0px;
+        }
+
+        .RedBullDescription-yellow {
+            font-style: normal;
+            font-weight: 700;
+            font-size: 14px;
+            line-height: 18px;
+            color: #F3F320;
+            margin-bottom: 20px;
+        }
+
+        .maxVersScore {
+            display: grid;
+            grid-template-columns: 1.2fr 3fr;
+            grid-template-rows: 1fr;
+            gap: 0px 60px;
+            grid-template-areas:
+                ". .";
+            justify-content: center;
+            align-content: center;
+            justify-items: center;
+            align-items: center;
+            margin-bottom: 10rem;
+        }
+
+        .maxVersScore-secundary {
+            margin-top: 60px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr;
+            gap: 0px 25px;
+            grid-template-areas:
+                ". .";
+            justify-content: start;
+            align-content: start;
+            justify-items: start;
+            align-items: start;
+        }
+
+        .beatBest {
+            display: flex;
+            gap: 15px;
+            flex-direction: row;
+            align-items: center;
+        }
+
+        .tableScores {
+            min-height: 50rem;
+        }
+
+
+        /*  TABLE*/
+        table.redTable {
+            width: 100%;
+            margin-top: 3rem;
+            text-align: left;
+            border-collapse: collapse;
+
+        }
+
+        table.redTable td,
+        table.redTable th {
+            padding: 10px 10px;
+        }
+
+        table.redTable tbody td {
+            font-size: 16px;
+        }
+
+        table.redTable tr:nth-child(even) {
+            background: #0C355E;
+        }
+
+        table.redTable thead {
+            background: #000000;
+            height: 48px;
+        }
+
+        table.redTable thead th {
+            font-size: 16px;
+            font-weight: bold;
+            color: #FFFFFF;
+            text-align: left;
+        }
+
+        .gapRED {
+            font-style: normal;
+            font-weight: 400;
+            font-size: 20px;
+            line-height: 26px;
+            color: #FF0000;
+        }
+
+        .strong {
+            font-weight: 800;
+        }
+
+        .gray {
+            color: #9F9F9F;
         }
     </style>
 
+
 </body>
 
+<style>
+    #ba725b4b-f366-4864-b6b5-c3115f8eab55customComponentDiv>div>section>div.detail-container {
+        display: none !important;
+    }
 
+    #ba725b4b-f366-4864-b6b5-c3115f8eab55customComponentDiv>div>section {
+        padding-top: 0rem !important;
+    }
+
+    body {
+        background-color: #021a2f !important;
+    }
+</style>
+
+<script src="/RedBullDashboard/RedBullAPI.js"></script>
 
 </html>
