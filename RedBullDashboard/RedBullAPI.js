@@ -24,7 +24,7 @@ function callResults() {
           .querySelector(".maxVerScore-Table")
           .insertAdjacentHTML(
             "afterend",
-            "<tr>" +
+            "<tr class='newScore'>" +
               pos +
               name +
               sector1 +
