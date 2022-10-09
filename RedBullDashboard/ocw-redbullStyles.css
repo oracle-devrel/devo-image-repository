@@ -1,0 +1,155 @@
+.RedBull-Dash {
+    font-family: 'Oracle Sans';
+    color: #FFFFFF;
+}
+
+.RedBullHeader {
+    font-style: normal;
+    font-weight: 600;
+    font-size: 32px;
+    line-height: 42px;
+    margin-bottom: 10px;
+}
+
+.ScoreTableNames {
+    font-style: normal;
+    font-weight: 600;
+    font-size: 40px;
+    line-height: 52px;
+    margin: 0px;
+}
+
+.RedBullDescription-white {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 22px;
+}
+
+.FastestLap-Desc {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 26px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.FastestLap-Score {
+    font-style: normal;
+    font-weight: 700;
+    font-size: 40px;
+    line-height: 26px;
+    margin: 0px;
+}
+
+.FastestLap-ScoroDifference {
+    font-style: normal;
+    font-weight: 300;
+    font-size: 23px;
+    color: #EA1D2D;
+    margin: 0px;
+}
+
+.RedBullDescription-yellow {
+    font-style: normal;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 18px;
+    color: #F3F320;
+    margin-bottom: 20px;
+}
+
+.maxVersScore {
+    display: grid;
+    grid-template-columns: 1.2fr 3fr;
+    grid-template-rows: 1fr;
+    gap: 0px 60px;
+    grid-template-areas:
+        ". .";
+    justify-content: center;
+    align-content: center;
+    justify-items: center;
+    align-items: center;
+    margin-bottom: 10rem;
+}
+
+.maxVersScore-secundary {
+    margin-top: 60px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
+    gap: 0px 25px;
+    grid-template-areas:
+        ". .";
+    justify-content: start;
+    align-content: start;
+    justify-items: start;
+    align-items: start;
+}
+
+.beatBest {
+    display: flex;
+    gap: 15px;
+    flex-direction: row;
+    align-items: center;
+}
+
+.tableScores {
+    min-height: 50rem;
+}
+
+
+/*  TABLE*/
+table.redTable {
+    width: 100%;
+    margin-top: 3rem;
+    text-align: left;
+    border-collapse: collapse;
+
+}
+
+table.redTable td,
+table.redTable th {
+    padding: 10px 10px;
+}
+
+table.redTable tbody td {
+    font-size: 16px;
+}
+
+table.redTable tr:nth-child(even) {
+    background: #0C355E;
+}
+
+table.redTable thead {
+    background: #000000;
+    height: 48px;
+}
+
+table.redTable thead th {
+    font-size: 16px;
+    font-weight: bold;
+    color: #FFFFFF;
+    text-align: left;
+}
+
+.gapRED {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 26px;
+    color: #FF0000;
+}
+
+.strong {
+    font-weight: 800;
+}
+
+.gray {
+    color: #9F9F9F;
+}
+
+.RedBull-Feature{
+    
+}
