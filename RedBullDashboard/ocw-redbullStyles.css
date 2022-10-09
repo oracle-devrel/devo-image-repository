@@ -181,3 +181,30 @@ table.redTable thead th {
 .RedBull-Feature-btn:hover {
   text-decoration: underline;
 }
+
+@media (max-width: 1099px) {
+  .maxVersScore {
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-rows: 1fr 1fr;
+  }
+
+  .maxVersScore {
+    grid-template-columns: auto;
+    gap: 0;
+  }
+
+  .RedBullHeader,
+  .RedBullDescription-white,
+  .maxVersScore-secundary {
+    text-align: center;
+  }
+
+  .maxVersScore-secundary {
+    justify-items: center;
+  }
+
+  .beatBest {
+    justify-content: center;
+  }
+}
