@@ -1,10 +1,12 @@
 .RedBull-Dash {
-  font-family: "Oracle Sans Regular",sans-serif;
+  font-family: "Oracle Sans Regular", sans-serif;
   color: #ffffff;
 }
 
-.RedBull-Dash > h3{
-  font-family: "Oracle Sans Semi Bold",sans-serif;
+.RedBullHeader,
+.RedBullHeader,
+.RedBull-Feature-text {
+  font-family: "Oracle Sans Semi Bold", sans-serif;
 }
 
 .RedBullHeader {
@@ -210,7 +212,7 @@ table.redTable thead th {
   }
 
   .RedBull-Feature-text {
-    text-align: center!important;
+    text-align: center !important;
   }
 
   .maxVersScore-secundary {
@@ -223,10 +225,9 @@ table.redTable thead th {
 }
 
 @media (max-width: 710px) {
-
   table.redTable {
     width: 765px;
-}
+  }
 
   .maxVersScore-secundary {
     margin-top: 60px;
@@ -239,6 +240,4 @@ table.redTable thead th {
   .RedBull-Feature {
     padding: 34px 10px;
   }
-
-
 }
