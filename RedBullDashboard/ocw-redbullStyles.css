@@ -98,7 +98,7 @@
 }
 
 .tableScores {
-  min-height: 50rem;
+  /*min-height: 50rem; */
   overflow-x: scroll;
 }
 

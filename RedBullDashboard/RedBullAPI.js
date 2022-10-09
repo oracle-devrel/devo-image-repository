@@ -35,7 +35,9 @@ function callResults() {
               "</tr>"
           );
       });
+      adjustHeight();
     })
+
     .catch((error) => {
       console.log(error);
       console.log("API request failed");
@@ -49,12 +51,21 @@ function deleteScores() {
   }
 }
 
+function adjustHeight() {
+  var heightTable = document.querySelector(".redTable");
+  console.log(heightTable.clientHeight);
+  var containerNewHeight = document.querySelector(".tableScores");
+  var finalHeight = heightTable.clientHeight + 48;
+  containerNewHeight.style.minHeight = finalHeight + "px";
+}
+
 try {
   callResults();
 
   setInterval(function () {
     deleteScores();
     callResults();
+
     console.log("Scores Updated");
   }, 10000);
 } catch (e) {
