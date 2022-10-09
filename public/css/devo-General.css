@@ -1,12 +1,14 @@
-
 /* SAFARI problem on NAV */
-#b79e0b15-398a-4503-820a-4d0fbc85dd0bcustomComponentDiv > section > div.u30navBg.navexpand{
+#b79e0b15-398a-4503-820a-4d0fbc85dd0bcustomComponentDiv
+  > section
+  > div.u30navBg.navexpand {
   z-index: revert-layer;
 }
 
 /* Banners problems - Multiple CSS classes */
 .feature .content-container .message-container,
-.banner .banner-content-container .body-content-def .banner-text-content .body, .banner .banner-content-container .body-content-def .banner-text-content {
+.banner .banner-content-container .body-content-def .banner-text-content .body,
+.banner .banner-content-container .body-content-def .banner-text-content {
   font-family: "Oracle Sans Regular" !important;
 }
 
@@ -121,7 +123,6 @@ strong {
 .feature .content-container {
   gap: 0rem !important;
 }
-
 
 #b5ae7abb-556e-4dfd-a6d2-55b81d9cd031customComponentDiv
   > div
@@ -298,7 +299,12 @@ strong {
 #ace1ad90-cf1c-4988-b15e-2d94f4c15695customComponentDiv
   > div
   > div.card-container
-  > div.content.padding {
+  > div.content.padding,
+#a9c7d4d9-7e33-4333-8fdd-82d79b6a62edcustomComponentDiv
+  > div
+  > div.card-container
+  > div.content.padding
+  > span {
   margin-top: auto !important;
   margin-bottom: auto !important;
 }
