@@ -227,4 +227,10 @@ table.redTable thead th {
     align-items: center !important;
     flex-direction: column;
   }
+
+  .RedBull-Feature {
+    padding: 34px 10px;
+  }
+
+
 }
