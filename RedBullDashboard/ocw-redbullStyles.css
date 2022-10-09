@@ -1,6 +1,10 @@
 .RedBull-Dash {
-  font-family: "Oracle Sans";
+  font-family: "Oracle Sans Regular",sans-serif;
   color: #ffffff;
+}
+
+.RedBull-Dash > h3{
+  font-family: "Oracle Sans Semi Bold",sans-serif;
 }
 
 .RedBullHeader {
