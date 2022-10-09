@@ -185,7 +185,7 @@ table.redTable thead th {
 
 @media (max-width: 1099px) {
   .maxVersScore {
-    display: flex;
+    display: flex !important;
     flex-direction: column;
   }
 
@@ -196,7 +196,7 @@ table.redTable thead th {
   }
 
   .maxVersScore-secundary {
-    justify-items: center!important;
+    justify-items: center !important;
   }
 
   .beatBest {
@@ -207,10 +207,9 @@ table.redTable thead th {
 @media (max-width: 710px) {
   .maxVersScore-secundary {
     margin-top: 60px;
-    display: flex;
+    display: flex !important;
     gap: 60px;
-    align-items: center;
+    align-items: center !important;
     flex-direction: column;
-}
-
+  }
 }
