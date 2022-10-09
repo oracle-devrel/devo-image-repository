@@ -164,7 +164,7 @@ table.redTable thead th {
 .RedBull-Feature-btn {
   background-color: #fff;
   padding: 12px 30px;
-  color: #000000;
+  color: #000000 !important;
   font-style: normal;
   font-weight: 600;
 
@@ -189,10 +189,25 @@ table.redTable thead th {
     flex-direction: column;
   }
 
+  #MaxVerImage {
+    margin-bottom: 2.5rem;
+  }
+
   .RedBullHeader,
   .RedBullDescription-white,
   .maxVersScore-secundary {
     text-align: center;
+  }
+
+  .RedBull-Feature {
+    display: flex !important;
+    flex-direction: column;
+    gap: 25px;
+    align-items: center;
+  }
+
+  .RedBull-Feature-text {
+    text-align: center!important;
   }
 
   .maxVersScore-secundary {
