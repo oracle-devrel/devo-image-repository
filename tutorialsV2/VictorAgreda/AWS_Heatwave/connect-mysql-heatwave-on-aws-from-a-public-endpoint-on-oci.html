@@ -143,12 +143,33 @@
                         <code>3306</code> and
                         <code>33060</code>.<br>Here&#39;s the details:
                     </p>
-                    <pre><code class="lang-console">   Source CIDR: <span class="hljs-number">0.0</span>.<span class="hljs-number">0.0</span>/<span class="hljs-number">0</span>
 
-   Destination <span class="hljs-keyword">Port</span> <span class="hljs-keyword">Range</span>: <span class="hljs-number">3306</span>,<span class="hljs-number">33060</span>
+                    <div class="codeContainerTA01">
+                        <div class="codeTA01">
+                            <code><pre>
+Source CIDR: <span class="hljs-number">0.0</span>.<span class="hljs-number">0.0</span>/<span class="hljs-number">0</span>
+            
+    Destination <span class="hljs-keyword">Port</span> <span class="hljs-keyword">Range</span>: <span class="hljs-number">3306</span>,<span class="hljs-number">33060</span>
+                                   
+    Description: MySQL <span class="hljs-keyword">Port</span>
+</pre></code>
+                        </div>
+                        <div class="codeCopyBTN">
+                            <div class="codeCopyBTNCont" data-error="Error: Could not Copy"
+                                data-success="Copied to Clipboard">
+                                <a target="_blank" href="#copy" class="alignCenter">
+                                    <svg width="14" height="17" viewBox="0 0 14 17" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <rect x="4.88623" y="3.8999" width="7.80423" height="12.6" stroke="#00747A" />
+                                        <path d="M4.04762 14.6H1V1H9.80423V3" stroke="#00747A" />
+                                    </svg>
+                                    <span class="marginLeftTA01">Copy</span>
+                                </a>
+                            </div>
+                            <p class="codeLanguageText">Configuration</p>
+                        </div>
+                    </div>
 
-   Description: MySQL <span class="hljs-keyword">Port</span>
-</code></pre>
                 </li>
                 <li class="listTypeTwoLI">
                     <p class="textTA01">And click <strong>Add Ingress Rules</strong>.</p>
@@ -316,14 +337,11 @@
     </div>
 
     <p class="textTA01">For more information see: </p>
-    <ul>
-        <li class="listTypeTwoLI"><a target="_blank" class="textLinkTA01"
-                href="https://docs.oracle.com/en-us/iaas/developer-tutorials/tutorials/node-on-ol/01oci-ol-node-summary.htm#install-node-ol">Install
-                Node Express on an Oracle Linux Instance</a></li>
-        <li class="listTypeTwoLI"><a target="_blank" class="textLinkTA01"
-                href="https://www.youtube.com/watch?v=LMvYOSkXF1k">A video on
-                working with SSH keys</a>.</li>
+    <ul class="listTypeOne">
+        <li class="listTypeTwoLI"><a target="_blank" class="textLinkTA01" href="https://docs.oracle.com/en-us/iaas/developer-tutorials/tutorials/node-on-ol/01oci-ol-node-summary.htm#install-node-ol">Install Node Express on an Oracle Linux Instance</a></li>
+        <li class="listTypeTwoLI"><a target="_blank" class="textLinkTA01" href="https://www.youtube.com/watch?v=LMvYOSkXF1k">A video on working with SSH keys.</a></li>
     </ul>
+
     <h3 id="obtain-public-ip-for-compute-instance">Obtain public IP for compute instance</h3>
     <p class="textTA01">Of course, you&#39;ll need the public IP for your compute instance, which is found in
         <strong>Compute &gt;
@@ -405,13 +423,47 @@
         </li>
         <li class="listTypeTwoLI">
             <p class="textTA01">Now let&#39;s ssh in, first protecting the private key file. </p>
-            <pre><code class="lang-console">   chmod <span class="hljs-number">400</span> &lt;private-<span class="hljs-type">key</span>-filename&gt;.<span class="hljs-type">key</span>
+            <div class="codeContainerTA01">
+                <div class="codeTA01">
+<pre><code class="lang-console">chmod <span class="hljs-number">400</span> &lt;private-<span class="hljs-type">key</span>-filename&gt;.<span class="hljs-type">key</span>
 </code></pre>
+                </div>
+                <div class="codeCopyBTN">
+                    <div class="codeCopyBTNCont" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                        <a target="_blank" href="#copy" class="alignCenter">
+                            <svg width="14" height="17" viewBox="0 0 14 17" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <rect x="4.88623" y="3.8999" width="7.80423" height="12.6" stroke="#00747A" />
+                                <path d="M4.04762 14.6H1V1H9.80423V3" stroke="#00747A" />
+                            </svg>
+                            <span class="marginLeftTA01">Copy</span>
+                        </a>
+                    </div>
+                    <p class="codeLanguageText"></p>
+                </div>
+            </div>
         </li>
         <li class="listTypeTwoLI">
             <p class="textTA01">Then use your public IP address and username opc: </p>
-            <pre><code class="lang-console">   ssh -<span class="hljs-selector-tag">i</span> &lt;private-key-file-name&gt;<span class="hljs-selector-class">.key</span> opc@&lt;compute_instance_public_ip&gt;
+            <div class="codeContainerTA01">
+                <div class="codeTA01">
+<pre><code class="lang-console">ssh -<span class="hljs-selector-tag">i</span> &lt;private-key-file-name&gt;<span class="hljs-selector-class">.key</span> opc@&lt;compute_instance_public_ip&gt;
 </code></pre>
+                </div>
+                <div class="codeCopyBTN">
+                    <div class="codeCopyBTNCont" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                        <a target="_blank" href="#copy" class="alignCenter">
+                            <svg width="14" height="17" viewBox="0 0 14 17" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <rect x="4.88623" y="3.8999" width="7.80423" height="12.6" stroke="#00747A" />
+                                <path d="M4.04762 14.6H1V1H9.80423V3" stroke="#00747A" />
+                            </svg>
+                            <span class="marginLeftTA01">Copy</span>
+                        </a>
+                    </div>
+                    <p class="codeLanguageText"></p>
+                </div>
+            </div>
         </li>
         <li class="listTypeTwoLI">
             <p class="textTA01">If asked to accept the fingerprint, type <em>yes</em> and hit
@@ -424,7 +476,8 @@
                 my compute
                 instance (don’t forget you’ll need your private key) and used yum to install what I needed. </p>
             <p class="textTA01">Install the MySQL Client on the compute instance using the following
-                command:<br><code>sudo yum install mysql-shell</code> </p>
+                command:<br>
+                <code>sudo yum install mysql-shell</code> </p>
         </li>
         <li class="listTypeTwoLI">
             <p class="textTA01">Once we create our HeatWave-compatible DB System, we&#39;ll connect to to it using the
@@ -433,18 +486,12 @@
         </li>
     </ol>
     <p class="textTA01">For more information see: </p>
-    <ul>
-        <li class="listTypeTwoLI">
-            <p class="textTA01"><a target="_blank" class="textLinkTA01"
-                    href="https://dev.mysql.com/doc/mysql-shell/8.0/en/">Learning about MySQL Shell</a>.
-            </p>
-        </li>
-        <li class="listTypeTwoLI">
-            <p class="textTA01"><a target="_blank" class="textLinkTA01"
-                    href="https://docs.oracle.com/en-us/iaas/mysql-database/doc/connecting-db-system.html#GUID-70023ABD-5418-4C1F-975F-F3E2ABC0F93E">Learning
-                    about connecting database systems</a>.</p>
-        </li>
+
+    <ul class="listTypeOne">
+        <li class="listTypeTwoLI"><a target="_blank" class="textLinkTA01" href="https://dev.mysql.com/doc/mysql-shell/8.0/en/">Learning about MySQL Shell</a></li>
+        <li class="listTypeTwoLI"><a target="_blank" class="textLinkTA01" href="https://docs.oracle.com/en-us/iaas/mysql-database/doc/connecting-db-system.html#GUID-70023ABD-5418-4C1F-975F-F3E2ABC0F93E">Learning about connecting database systems</a></li>
     </ul>
+
     <h3 id="create-a-db-system">Create a DB System</h3>
     <p class="textTA01">Remember a little while ago when we mentioned the endpoint for your DB System? Let&#39;s set
         that up now. </p>
@@ -538,12 +585,11 @@
         <li class="listTypeTwoLI">If you&#39;ve assigned a password, type it now and press <strong>Enter</strong>.</li>
     </ul>
     <p class="textTA01">For more information: </p>
-    <ul>
-        <li class="listTypeTwoLI"><a target="_blank" class="textLinkTA01"
-                href="https://www.youtube.com/watch?v=gvcBDA2wJJ4">Here&#39;s a
-                video on importing using the command
-                line</a>. </li>
+
+    <ul class="listTypeOne">
+        <li class="listTypeOneLI"><a target="_blank" href="https://www.youtube.com/watch?v=gvcBDA2wJJ4">Here&#39;s a video on importing using the command line.</a></li>
     </ul>
+
     <h3 id="using-mysqldump">Using mysqldump</h3>
     <p class="textTA01">Lots of fans of mysqldump out there, so here’s how that works (using a made-up database for
         magazines): </p>
@@ -655,14 +701,32 @@
     <ol class="listTypeThree">
         <li class="listTypeTwoLI">Start MySQL Shell and connect to the MySQL DB System using the following command:</li>
     </ol>
-    <pre><code class="lang-console"><span class="hljs-variable">$&gt;</span> mysqlsh Username<span class="hljs-variable">@HostNameOfMySQLDBSystem</span>
+    <div class="codeContainerTA01">
+        <div class="codeTA01">
+<pre><code class="lang-console"><span class="hljs-variable">$&gt;</span> mysqlsh Username<span class="hljs-variable">@HostNameOfMySQLDBSystem</span>
 Please provide the password <span class="hljs-keyword">for</span> <span class="hljs-string">'Username@HostNameOfMySQLDBSystem'</span><span class="hljs-symbol">:</span>
 </code></pre>
+        </div>
+        <div class="codeCopyBTN">
+            <div class="codeCopyBTNCont" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <a target="_blank" href="#copy" class="alignCenter">
+                    <svg width="14" height="17" viewBox="0 0 14 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="4.88623" y="3.8999" width="7.80423" height="12.6" stroke="#00747A" />
+                        <path d="M4.04762 14.6H1V1H9.80423V3" stroke="#00747A" />
+                    </svg>
+                    <span class="marginLeftTA01">Copy</span>
+                </a>
+            </div>
+            <p class="codeLanguageText"></p>
+        </div>
+    </div>
     <p class="textTA01">This command starts a global session. MySQL Shell attempts to connect to port 33060 by default
         and, if that port
         is not available, falls back to port 3306.
         The connection is made and message similar to the following is displayed:</p>
-    <pre><code class="lang-console">$&gt; mysqlsh Username@HostNameOfMySQLDBSystem
+    <div class="codeContainerTA01">
+        <div class="codeTA01">
+<pre><code class="lang-console">$&gt; mysqlsh Username@HostNameOfMySQLDBSystem
 Please provide the password <span class="hljs-keyword">for</span> <span class="hljs-string">'Username@HostNameOfMySQLDBSystem'</span>:
 MySQL Shell <span class="hljs-number">8.0</span>.<span class="hljs-number">29</span>
 Copyright (c) <span class="hljs-number">2016</span>, <span class="hljs-number">2022</span>, Oracle <span class="hljs-keyword">and</span>/<span class="hljs-keyword">or</span> its affiliates.
@@ -672,15 +736,47 @@ Creating a session <span class="hljs-keyword">to</span> <span class="hljs-string
 Server version: <span class="hljs-number">8.0</span>.<span class="hljs-number">29</span>-u1-cloud MySQL Enterprise - Cloud
 No <span class="hljs-keyword">default</span> schema selected; <span class="hljs-keyword">type</span> \use &lt;schema&gt; <span class="hljs-keyword">to</span> <span class="hljs-keyword">set</span> one. MySQL HostNameOfMySQLDBSystem.dbsystem JS &gt;
 </code></pre>
+        </div>
+        <div class="codeCopyBTN">
+            <div class="codeCopyBTNCont" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <a target="_blank" href="#copy" class="alignCenter">
+                    <svg width="14" height="17" viewBox="0 0 14 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="4.88623" y="3.8999" width="7.80423" height="12.6" stroke="#00747A" />
+                        <path d="M4.04762 14.6H1V1H9.80423V3" stroke="#00747A" />
+                    </svg>
+                    <span class="marginLeftTA01">Copy</span>
+                </a>
+            </div>
+            <p class="codeLanguageText"></p>
+        </div>
+    </div>
     <p class="textTA01">From a command-line client:</p>
     <ol class="listTypeThree">
         <li class="listTypeTwoLI">Start MySQL client and connect to the MySQL DB System using the following command:
         </li>
     </ol>
-    <pre><code class="lang-console">$&gt; mysql <span class="hljs-comment">--host HostNameOfMySQLDBSystem -u Username -p</span>
+    <div class="codeContainerTA01">
+        <div class="codeTA01">
+<pre><code class="lang-console">$&gt; mysql <span class="hljs-comment">--host HostNameOfMySQLDBSystem -u Username -p</span>
 </code></pre>
+        </div>
+        <div class="codeCopyBTN">
+            <div class="codeCopyBTNCont" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <a target="_blank" href="#copy" class="alignCenter">
+                    <svg width="14" height="17" viewBox="0 0 14 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="4.88623" y="3.8999" width="7.80423" height="12.6" stroke="#00747A" />
+                        <path d="M4.04762 14.6H1V1H9.80423V3" stroke="#00747A" />
+                    </svg>
+                    <span class="marginLeftTA01">Copy</span>
+                </a>
+            </div>
+            <p class="codeLanguageText"></p>
+        </div>
+    </div>
     <p class="textTA01">The connection is made and a message similar to the following is displayed:</p>
-    <pre><code class="lang-console">Welcome to the MySQ<span class="hljs-class">L monitor. Commands end with ;</span><span class="hljs-built_in"> or </span>\g. Your MySQL connection id is 40
+    <div class="codeContainerTA01">
+        <div class="codeTA01">
+<pre><code class="lang-console">Welcome to the MySQ<span class="hljs-class">L monitor. Commands end with ;</span><span class="hljs-built_in"> or </span>\g. Your MySQL connection id is 40
 Server version: 8.0.29-u1-cloud MySQL Enterprise - Cloud
 Copyright (c) 2000, 2022, Oracle<span class="hljs-built_in"> and/or </span>its affiliates.
    39
@@ -688,6 +784,20 @@ Connecting with MySQL Workbench
 Oracle is a registered trademark of Oracle Corporation<span class="hljs-built_in"> and/or </span>its affiliates. Other names may be trademarks of their respective owners.
 Type 'help;'<span class="hljs-built_in"> or </span>'\h' for help. Type '\c' to clear the current input statement. mysql&gt;
 </code></pre>
+        </div>
+        <div class="codeCopyBTN">
+            <div class="codeCopyBTNCont" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <a target="_blank" href="#copy" class="alignCenter">
+                    <svg width="14" height="17" viewBox="0 0 14 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="4.88623" y="3.8999" width="7.80423" height="12.6" stroke="#00747A" />
+                        <path d="M4.04762 14.6H1V1H9.80423V3" stroke="#00747A" />
+                    </svg>
+                    <span class="marginLeftTA01">Copy</span>
+                </a>
+            </div>
+            <p class="codeLanguageText"></p>
+        </div>
+    </div>
     <h3 id="summary-and-next-steps">Summary and next steps</h3>
     <p class="textTA01">While we have the advantage of skipping complicated ETL pipelines, we still have to move our
         data into a DB

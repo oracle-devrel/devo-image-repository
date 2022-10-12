@@ -1,0 +1,600 @@
+<div class="techArticleContainer TA01">
+
+    <p class="textTA01">MySQL HeatWave for AWS makes perfect sense if you need a massively parallel, high performance,
+        in-memory query
+        accelerator for the MySQL Database Service. Instead of crafting complicated ETL pipelines to move data around,
+        HeatWave accelerates MySQL performance by orders of magnitude for combined analytics and transactional workloads
+        (OLAP and OLTP). The MySQL Database Service is built on MySQL Enterprise Edition, which allows developers to
+        quickly create and deploy secure cloud native applications using the world&#39;s most popular open source
+        database. </p>
+    <p class="textTA01">Oracle designed this so developers can focus on the important things, like managing data,
+        creating schemas, and
+        providing highly-available applications. HeatWave can perform analytics in real time, and MySQL HeatWave for
+        Amazon Web Services (AWS) is a fully managed service, developed and supported by the MySQL team in Oracle.
+        Oracle automates tasks such as backup, recovery, and database and operating system patching. &quot;Worry less,
+        crunch more,&quot; as we say!</p>
+    <p class="textTA01">One of the incredible things about Oracle MySQL HeatWave is the ability to <a target="_blank"
+            class="textLinkTA01" href="https://www.oracle.com/mysql/heatwave/">run analytics</a> directly against your
+        existing transactional
+        data, so there&#39;s no need to shuffle that data off to a separate system when you need to perform massively
+        parallel analysis.</p>
+    <p class="textTA01">To get started, we&#39;ll create a VCN, compute instance (to serve as our bastion host), and
+        install MySQL so we
+        can connect to HeatWave for analysis. Note that this is working within Oracle Cloud, but we’ll cover AWS setup
+        in another tutorial to show you how you can leverage HeatWave in a multi-cloud scenario. What a time to be
+        alive!</p>
+    <p class="textTA01">Let&#39;s look at how to get started. If you&#39;re already developing in Oracle Cloud (OCI),
+        you&#39;ll find
+        it&#39;s relatively easy to get going, as HeatWave on AWS is integrated with OCI&#39;s Identity and Access
+        Management system. When you sign up for HeatWave on AWS, you&#39;ll be directed to the OCI login page where you
+        must sign in with an OCI Cloud Account. After signing in, you&#39;ll be directed to the OCI Console to complete
+        the MySQL HeatWave on AWS sign-up process. When signing into the HeatWave Console, you are directed to OCI for
+        authentication and then back to the HeatWave Console. To keep things simple, billing is still managed and
+        monitored in OCI.</p>
+    <p class="textTA01">Since we&#39;re just getting started, let&#39;s begin truly at the beginning and create a
+        compute instance with
+        the proper access rules and see how to create a HeatWave cluster in OCI. If you&#39;re already using AWS,
+        we&#39;ll cover that in a separate tutorial.</p>
+
+    <div class="exampleTA01">
+        <p class="exampleTitleTA01">Prerequisites:</p>
+        <p class="textTA01">The MySQL HeatWave Console supports browser platforms supported by Oracle Jet, such as the
+            following browsers and
+            versions: </p>
+
+        <ul class="listTypeThree adjustTypeThreePre">
+            <li class="listTypeTwoLI">An OCI account and Oracle Cloud Account name</li>
+            <li class="listTypeTwoLI">Admin access</li>
+            <li class="listTypeTwoLI">A compatible browser (Chrome 69+, Safari 12.1+, or Firefox 62+ or any browser that
+                is Oracle Jet-approved)
+            </li>
+        </ul>
+    </div>
+
+
+    <h2 id="overview">Overview</h2>
+    <p class="textTA01">MySQL HeatWave on AWS uses predefined Oracle Identity Cloud Service (IDCS) groups and policies
+        to control user
+        access to MySQL HeatWave on AWS and the type of access. This is a little different than HeatWave on Oracle
+        Analytics Cloud (which has its own interface and services). You should have the ability to create and modify
+        policies, users, and the like. Also, we are assuming you&#39;re creating the database and administering it, or
+        at least getting the prep work done. Look at you, a one-stop shop!</p>
+    <ol class="listTypeThree">
+        <li class="listTypeTwoLI">Create a Compartment</li>
+        <li class="listTypeTwoLI">Create a a VCN and configure for database access</li>
+        <li class="listTypeTwoLI">Create users and groups (if you haven&#39;t already)</li>
+        <li class="listTypeTwoLI">Create a Bastion Host compute instance</li>
+        <li class="listTypeTwoLI">Connect and Install MySQL Shell</li>
+        <li class="listTypeTwoLI">Create a MySQL database</li>
+        <li class="listTypeTwoLI">Create a DB System with HeatWave-compatible shape</li>
+        <li class="listTypeTwoLI">Activate HeatWave on AWS</li>
+    </ol>
+    <p class="textTA01">Wondering why this is a &quot;bastion host&quot;? You can <a target="_blank"
+            class="textLinkTA01" href="https://www.oracle.com/security/cloud-security/bastion/">read more about bastions
+            here</a>.</p>
+    <p class="textTA01">NOTE: Once you’re connecting databases and analytics, there’s a better production method for
+        connecting, and
+        that’s creating a Private Access Channel (OAC), which you can <a target="_blank" class="textLinkTA01"
+            href="https://blogs.oracle.com/analytics/post/how-to-create-oac-instances-on-oci-native-using-multiple-stripes-or-instances-of-idcs">learn
+            all about here</a>.</p>
+    <p class="textTA01">In our example, we’re using a quick and dirty approach to set things up to use HeatWave. </p>
+    <p class="textTA01">Now let’s get started with the basics! We begin by slicing off a piece of the cloud as our own
+        little homestead.
+        There are a couple of ways to do this, but one of the simplest is to create a Compartment (you could also start
+        with a Compute instance). This is a “place for your stuff” within your tenancy and is quite flexible. As you
+        might imagine, we need to create a group of users who can administer our system, and Identity and Access
+        Management (IAM) is where you’ll go to configure this for any compartments you create. </p>
+    <ol class="listTypeThree">
+        <li class="listTypeTwoLI">
+            <p class="textTA01"><strong>Create a Compartment</strong></p>
+
+            <div class="imageContainer">
+                <img src="https://raw.githubusercontent.com/oracle-devrel/devo-image-repository/Devo/images/AWS_Heatwave/create-compartment-hwaws-devrel0266va.png"
+                    alt="" class="imageFullWidth borderImage" loading="lazy">
+                <p class="fullImageDescription">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent sed
+                    diam
+                    interdum, posuere quam
+                    sed, faucibu.</p>
+            </div>
+
+
+
+            <p class="textTA01"> Menu: Home &gt; Identity &amp; Security &gt; Compartments</p>
+            <p class="textTA01"> I could have set all of this up in my root compartment, but a new compartment is better
+                way to organize
+                things. </p>
+            <p class="textTA01"> Creating compartments is a simple matter, and a necessary starting point to organize
+                and configure your
+                work. I&#39;ve named mine something clever, like my_heatwave_testing so I know what it&#39;s for.</p>
+        </li>
+        <li class="listTypeTwoLI">
+            <p class="textTA01"><strong>Create a a VCN and configure for database access</strong></p>
+            <p class="textTA01"> Menu: Home &gt; Networking &gt; Virtual Cloud Networks</p>
+            <p class="textTA01"> Create VCN and subnets using Virtual Cloud Networks &gt; Start VCN Wizard &gt; Create a
+                VCN with
+                Internet Connectivity. Of course you&#39;ll get a private subnet as well.</p>
+
+            <div class="imageContainer">
+                <img src="https://raw.githubusercontent.com/oracle-devrel/devo-image-repository/Devo/images/AWS_Heatwave/start_a_vcn_wizard-devrel0622va.png"
+                    alt="" class="imageFullWidth borderImage" loading="lazy">
+                <p class="fullImageDescription">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent sed
+                    diam
+                    interdum, posuere quam
+                    sed, faucibu.</p>
+            </div>
+
+
+
+            <p class="textTA01"> The handy wizard will walk you through creating a network interface for your system,
+                although there are
+                lots of ways to configure this, let’s not get distracted. Notice that I chose the compartment I set up
+                earlier, my_heatwave_testing -- because that&#39;s important!</p>
+
+            <div class="imageContainer">
+                <img src="https://raw.githubusercontent.com/oracle-devrel/devo-image-repository/Devo/images/AWS_Heatwave/vcn_config_screen2-devrel0622va.png"
+                    alt="" class="imageFullWidth borderImage" loading="lazy">
+                <p class="fullImageDescription">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent sed
+                    diam
+                    interdum, posuere quam
+                    sed, faucibu.</p>
+            </div>
+
+
+
+            <p class="textTA01"> Now let&#39;s configure the VCN&#39;s security list to allow traffic through MySQL
+                Database Service
+                ports. Click on the Private Subnet for the VCN you created, and click the Security List for it. </p>
+
+            <div class="imageContainer">
+                <img src="https://raw.githubusercontent.com/oracle-devrel/devo-image-repository/Devo/images/AWS_Heatwave/vcn_edit_subnet_s1-devrel0622va.png"
+                    alt="" class="imageFullWidth borderImage" loading="lazy">
+                <p class="fullImageDescription">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent sed
+                    diam
+                    interdum, posuere quam
+                    sed, faucibu.</p>
+            </div>
+
+
+
+            <p class="textTA01"> Now click Add Security list.</p>
+            <p class="textTA01"> We&#39;ll add some ingress rules needed to enable the right ports, 3306 and 33060.
+                Here&#39;s the
+                details:</p>
+            <div class="codeContainerTA01">
+                <div class="codeTA01">
+
+                    <pre><code> Source CIDR: <span class="hljs-number">0.0</span>.<span class="hljs-number">0.0</span>/<span class="hljs-number">0</span>
+
+ Destination <span class="hljs-keyword">Port</span> <span class="hljs-keyword">Range</span>: <span class="hljs-number">3306</span>,<span class="hljs-number">33060</span>
+
+ Description: MySQL <span class="hljs-keyword">Port</span>
+</code></pre>
+                </div>
+                <div class="codeCopyBTN">
+                    <div class="codeCopyBTNCont" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                        <a target="_blank" href="#copy" class="alignCenter">
+                            <svg width="14" height="17" viewBox="0 0 14 17" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <rect x="4.88623" y="3.8999" width="7.80423" height="12.6" stroke="#00747A" />
+                                <path d="M4.04762 14.6H1V1H9.80423V3" stroke="#00747A" />
+                            </svg>
+                            <span class="marginLeftTA01">Copy</span>
+                        </a>
+                    </div>
+                    <p class="codeLanguageText">Python</p>
+                </div>
+            </div>
+
+            <p class="textTA01"> And click Add Ingress Rules.</p>
+
+            <div class="imageContainer">
+                <img src="https://raw.githubusercontent.com/oracle-devrel/devo-image-repository/Devo/images/AWS_Heatwave/vcn_ingress_rules_example-devrel0622va.png"
+                    alt="" class="imageFullWidth borderImage" loading="lazy">
+                <p class="fullImageDescription">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent sed
+                    diam
+                    interdum, posuere quam
+                    sed, faucibu.</p>
+            </div>
+
+
+
+            <p class="textTA01"> Looking good so far!</p>
+        </li>
+        <li class="listTypeTwoLI">
+            <p class="textTA01"><strong>Create users and groups (if you haven&#39;t already)</strong></p>
+            <p class="textTA01"> We’ll need to set permissions and limit access somewhat, even in our “quick and dirty”
+                example, but you
+                can <a target="_blank" class="textLinkTA01"
+                    href="https://docs.oracle.com/en-us/iaas/Content/Identity/Tasks/managinggroups.htm">read all
+                    about managing groups here</a>. Usually we&#39;ll create a group, create policies, then add users to
+                the group. </p>
+            <p class="textTA01"> Let’s make friends with the Identity and Security options.</p>
+            <p class="textTA01"> Create a group for your users; in my example I’ve created a group called database_user
+                (just to be
+                confusing, as I should have named it database_admins, but this was just a clever ploy to keep you on
+                your toes).</p>
+            <p class="textTA01"> Add users to the group. In our example, we’ll add ourselves to this group that will
+                administer our
+                compute instance running MySQL-shell. </p>
+            <p class="textTA01"> Of course, for a group you’ll first create all the users you need, add those into the
+                group needing
+                access at the levels you determine, and rest assured that you can set them loose with appropriate access
+                controls.</p>
+            <p class="textTA01"> We allow access by setting policies, allowing one group to have full access (admins),
+                and a group with
+                limited access (database users, for example). </p>
+            <p class="textTA01"> For MySQL HeatWave on AWS, there are some specific policy statements we can use,
+                detailed in the charts
+                below.</p>
+
+            <div class="imageContainer">
+                <img src="https://raw.githubusercontent.com/oracle-devrel/devo-image-repository/Devo/images/AWS_Heatwave/hw_policy_aws_statements-devrel0622va.png"
+                    alt="" class="imageFullWidth borderImage" loading="lazy">
+                <p class="fullImageDescription">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent sed
+                    diam
+                    interdum, posuere quam
+                    sed, faucibu.</p>
+            </div>
+
+
+
+            <p class="textTA01"> This is just making it possible to configure and administrate our compartment, and
+                defines the scope of
+                the access applied to the database instance.</p>
+            <p class="textTA01"> For more on adding users and setting policies in OCI, refer to <a target="_blank"
+                    class="textLinkTA01"
+                    href="https://docs.oracle.com/en-us/iaas/Content/GSG/Tasks/addingusers.htm#Add">this
+                    documentation</a>.</p>
+        </li>
+        <li class="listTypeTwoLI">
+            <p class="textTA01"><strong>Create a Bastion Host Compute Instance</strong></p>
+            <p class="textTA01"> MENU: Main &gt; Compute &gt; Instances</p>
+            <p class="textTA01"> Be sure to select the compartment you set up earlier, under List Scope.</p>
+
+            <div class="imageContainer">
+                <img src="https://raw.githubusercontent.com/oracle-devrel/devo-image-repository/Devo/images/AWS_Heatwave/compute_hw_listscope_compartment-devrel0622va.png"
+                    alt="" class="imageFullWidth borderImage" loading="lazy">
+                <p class="fullImageDescription">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent sed
+                    diam
+                    interdum, posuere quam
+                    sed, faucibu.</p>
+            </div>
+
+
+
+
+            <div class="imageContainer">
+                <img src="https://raw.githubusercontent.com/oracle-devrel/devo-image-repository/Devo/images/AWS_Heatwave/create_instance_hw_devrel_0522-0622va.png"
+                    alt="" class="imageFullWidth borderImage" loading="lazy">
+                <p class="fullImageDescription">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent sed
+                    diam
+                    interdum, posuere quam
+                    sed, faucibu.</p>
+            </div>
+
+
+            <p class="textTA01"> Click Create Instance (easy, right?)</p>
+            <p class="textTA01"> Name it something useful, and right now we&#39;ll leave the Availability Domain, Fault
+                Domain, Image,
+                and Shape as-is. You can use a free-tier compute!</p>
+            <p class="textTA01"> We’re going to use Oracle Linux, but one of the niceties here are the choices of
+                compute shapes and
+                Linux distributions to choose from. There’s even a developer distro, which comes pre-configured with key
+                frameworks. For our purposes, we’ll want to make sure it’s set up to work with HeatWave. Plus, we&#39;ll
+                use a Bastion Host for better security. Bastions provide &quot;restricted and time-limited access to
+                target resources that don&#39;t have public endpoints,&quot; and you can <a target="_blank"
+                    class="textLinkTA01"
+                    href="https://docs.oracle.com/en-us/iaas/Content/Bastion/Concepts/bastionoverview.htm">read all
+                    about them here</a>.</p>
+
+            <div class="imageContainer">
+                <img src="https://raw.githubusercontent.com/oracle-devrel/devo-image-repository/Devo/images/AWS_Heatwave/create_compute_hw_devrel0522aa.png"
+                    alt="" class="imageFullWidth borderImage" loading="lazy">
+                <p class="fullImageDescription">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent sed
+                    diam
+                    interdum, posuere quam
+                    sed, faucibu.</p>
+            </div>
+
+
+
+            <p class="textTA01"> If you want to know more, <a target="_blank" class="textLinkTA01"
+                    href="https://docs.oracle.com/en-us/iaas/Content/Compute/Tasks/launchinginstance.htm">here&#39;s a
+                    tutorial on launching a Linux instance</a>, but I&#39;ll walk you through the basics now. Bear in
+                mind that our compute instance can be pretty minimal, and there are free tier shapes that could work (<a
+                    target="_blank" class="textLinkTA01" href="https://www.oracle.com/cloud/free/">our always-free tier
+                    VM</a> is quite generous).</p>
+
+            <div class="imageContainer">
+                <img src="https://raw.githubusercontent.com/oracle-devrel/devo-image-repository/Devo/images/AWS_Heatwave/compute_network_hw_devrel0522aa.png"
+                    alt="" class="imageFullWidth borderImage" loading="lazy">
+                <p class="fullImageDescription">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent sed
+                    diam
+                    interdum, posuere quam
+                    sed, faucibu.</p>
+            </div>
+
+
+
+            <p class="textTA01"> Scrolling down, you&#39;ll see the Networking section, where you want to make sure to
+                use the VCN you
+                created previously, as well as make sure you&#39;re in the proper compartment. </p>
+            <p class="textTA01"> And of course, during this process you’ll generate SSH keys so you can access your
+                computer instance
+                remotely. You can do this within the Cloud Shell in OCI’s dashboard, or the SSH client of your choice.
+            </p>
+            <p class="textTA01"> More: <a target="_blank" class="textLinkTA01"
+                    href="https://docs.oracle.com/en-us/iaas/developer-tutorials/tutorials/node-on-ol/01oci-ol-node-summary.htm#install-node-ol">https://docs.oracle.com/en-us/iaas/developer-tutorials/tutorials/node-on-ol/01oci-ol-node-summary.htm#install-node-ol</a>
+            </p>
+            <p class="textTA01"> And here&#39;s <a target="_blank" class="textLinkTA01"
+                    href="https://www.youtube.com/watch?v=LMvYOSkXF1k">a video on working with SSH
+                    keys</a>.</p>
+            <p class="textTA01"> Also, the path of least resistance for creating a key pair will be letting Oracle
+                generate one. The key
+                pair will allow you to log in remotely and install MySQL-shell, etc. </p>
+            <p class="textTA01"> <strong>NOTE:</strong> In many labs we’ll have you use the Cloud Shell, which is a
+                convenient command
+                line interface available directly in the OCI dashboard. I’m old school, so I’m just using Terminal on my
+                Mac. You can use the SSH client of your choice, of course!</p>
+            <p class="textTA01"> Of course, you&#39;ll need the public IP for your compute instance, which is found in
+                Compute &gt;
+                Instances &gt; Instance details. Under &quot;Instance Access&quot; you&#39;ll find the public IP and
+                username (opc) you&#39;ll need to connect, with a handy &quot;copy&quot; button. </p>
+
+            <div class="imageContainer">
+                <img src="https://raw.githubusercontent.com/oracle-devrel/devo-image-repository/Devo/images/AWS_Heatwave/heres-public-ip-hw-oci-fy23-devrel.png"
+                    alt="" class="imageFullWidth borderImage" loading="lazy">
+                <p class="fullImageDescription">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent sed
+                    diam
+                    interdum, posuere quam
+                    sed, faucibu.</p>
+            </div>
+
+
+
+            <p class="textTA01"> Now, we&#39;ll be able to <a target="_blank" class="textLinkTA01"
+                    href="https://docs.oracle.com/en-us/iaas/Content/Compute/Tasks/accessinginstance.htm">connect via
+                    SSH or the Cloud Shell</a>, and since you have a public IP, you can just ssh in to your compartment
+                and the OCI Linux compute instance. As always, keep the private key in a safe place and
+                <code>chmod 400</code> the private key to keep it from being modified (and throwing a warning).
+            </p>
+            <p class="textTA01"> Go ahead and click Create. </p>
+            <p class="textTA01"> It&#39;ll take a moment for the provisioning to finish up, but when it&#39;s done the
+                large square icon
+                will turn green, meaning all systems are GO!</p>
+        </li>
+        <li class="listTypeTwoLI">
+            <p class="textTA01"><strong>Connect and install MySQL Shell</strong></p>
+            <p class="textTA01"> To connect, let&#39;s use the handy Cloud Shell. It&#39;s a little Linux terminal
+                embedded in the OCI
+                dashboard (and it&#39;s adorable). In the upper right corner, click the Cloud Shell prompt icon and a
+                command line will open at the bottom of the browser.</p>
+
+            <div class="imageContainer">
+                <img src="https://raw.githubusercontent.com/oracle-devrel/devo-image-repository/Devo/images/AWS_Heatwave/cloudshelliconhwtesting-devrel0622va.png"
+                    alt="" class="imageFullWidth borderImage" loading="lazy">
+                <p class="fullImageDescription">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent sed
+                    diam
+                    interdum, posuere quam
+                    sed, faucibu.</p>
+            </div>
+
+
+
+            <p class="textTA01"> Drag and drop the previously saved private key into the cloud shell, uploading it to
+                your home
+                directory.</p>
+
+            <div class="imageContainer">
+                <img src="https://raw.githubusercontent.com/oracle-devrel/devo-image-repository/Devo/images/AWS_Heatwave/cloudshelluploadprivkey_hwdevrel-devrel0622va.png"
+                    alt="" class="imageFullWidth borderImage" loading="lazy">
+                <p class="fullImageDescription">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent sed
+                    diam
+                    interdum, posuere quam
+                    sed, faucibu.</p>
+            </div>
+
+
+
+        </li>
+    </ol>
+    <div class="codeContainerTA01">
+        <div class="codeTA01">
+            <pre><code>Under Instance <span class="hljs-keyword">Access</span>, you<span class="hljs-symbol">'ll</span> see the public IP address, <span class="hljs-keyword">and</span> the handy *Copy* button. Copy the public IP.
+
+Now let<span class="hljs-symbol">'s</span> ssh <span class="hljs-keyword">in</span>, first protecting the private key <span class="hljs-keyword">file</span>.
+
+```console
+chmod <span class="hljs-number">400</span> &lt;private-key-filename&gt;.key
+```
+
+<span class="hljs-keyword">Then</span> <span class="hljs-keyword">use</span> your public IP address <span class="hljs-keyword">and</span> username opc:
+
+```console
+ssh -i &lt;private-key-<span class="hljs-keyword">file</span>-name&gt;.key opc@&lt;compute_instance_public_ip&gt;
+```
+
+<span class="hljs-keyword">If</span> asked <span class="hljs-keyword">to</span> accept the fingerprint, <span class="hljs-keyword">type</span> *yes* <span class="hljs-keyword">and</span> hit enter, <span class="hljs-keyword">and</span> you<span class="hljs-symbol">'ve</span> been added <span class="hljs-keyword">to</span> the list <span class="hljs-keyword">of</span> known hosts, congrats. We<span class="hljs-symbol">'re</span> <span class="hljs-keyword">in</span>! <span class="hljs-keyword">If</span> you see Tron, wave.
+
+Now we install MySQL Shell; pretty easy these days. <span class="hljs-keyword">In</span> my <span class="hljs-keyword">case</span>, I used SSH <span class="hljs-keyword">to</span> log into my compute instance (don’t forget you’ll need your private key) <span class="hljs-keyword">and</span> used yum <span class="hljs-keyword">to</span> install what I needed.
+
+You can first install MySQL <span class="hljs-keyword">on</span> compute <span class="hljs-keyword">with</span> `sudo yum install mysql`
+
+<span class="hljs-keyword">Then</span> install the MySQL Client <span class="hljs-keyword">on</span> the compute instance using the following command: `sudo yum install mysql-shell`
+
+Once we create our HeatWave-compatible DB System, we<span class="hljs-symbol">'ll</span> connect <span class="hljs-keyword">to</span> <span class="hljs-keyword">to</span> it using the MySQL Client. `mysqlsh <span class="hljs-comment">--host &lt;DBSystemEndpointIPAddress&gt; -u &lt;Username&gt; -p `</span>
+
+You can [learn more about MySQL Shell here](https://dev.mysql.com/doc/mysql-shell/<span class="hljs-number">8.0</span>/en/).
+
+More <span class="hljs-keyword">on</span> [connecting database systems here](https://docs.oracle.com/en-us/iaas/mysql-database/doc/connecting-db-system.html#GUID-<span class="hljs-number">70023</span>ABD-<span class="hljs-number">5418</span>-<span class="hljs-number">4</span>C1F-<span class="hljs-number">975</span>F-F3E2ABC0F93E). 
+</code></pre>
+        </div>
+        <div class="codeCopyBTN">
+            <div class="codeCopyBTNCont" data-error="Error: Could not Copy" data-success="Copied to Clipboard">
+                <a target="_blank" href="#copy" class="alignCenter">
+                    <svg width="14" height="17" viewBox="0 0 14 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="4.88623" y="3.8999" width="7.80423" height="12.6" stroke="#00747A" />
+                        <path d="M4.04762 14.6H1V1H9.80423V3" stroke="#00747A" />
+                    </svg>
+                    <span class="marginLeftTA01">Copy</span>
+                </a>
+            </div>
+            <p class="codeLanguageText">Python</p>
+        </div>
+    </div>
+    <ol class="listTypeThree">
+        <li class="listTypeTwoLI">
+            <p class="textTA01"><strong>Create a DB System</strong></p>
+            <p class="textTA01"> Remember a little while ago when we mentioned the endpoint for your DB System?
+                Let&#39;s set that up
+                now.</p>
+            <p class="textTA01"> Menu &gt; Databases &gt; DB Systems</p>
+
+            <div class="imageContainer">
+                <img src="https://raw.githubusercontent.com/oracle-devrel/devo-image-repository/Devo/images/AWS_Heatwave/createdbsys_warn_devrel_0522va.png"
+                    alt="" class="imageFullWidth borderImage" loading="lazy">
+                <p class="fullImageDescription">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent sed
+                    diam
+                    interdum, posuere quam
+                    sed, faucibu.</p>
+            </div>
+
+
+
+            <p class="textTA01"> Notice that the system warns you if you haven&#39;t already set up users, a VCN, and so
+                on. That&#39;s
+                nice. Don&#39;t forget to check which compartment you&#39;ll create this in, again under List Scope on
+                the left. Click Create DB System.</p>
+            <p class="textTA01"> Double-check the compartment, give it a name, and select HeatWave (of course).</p>
+            <p class="textTA01"> You&#39;ll create admin credentials, be sure to save those somewhere handy but safe.
+            </p>
+            <p class="textTA01"> In Configure Networking, you&#39;ll use the compute instance created earlier, but
+                we&#39;ll use the
+                private subnet. Leave the default domain and go to Configure Hardware.</p>
+            <p class="textTA01"> Confirm that in the Configure Hardware section, the selected shape is
+                MySQL.HeatWave.VM.Standard.E3.
+                Also: </p>
+            <ul class="listTypeThree">>
+                <li class="listTypeTwoLI">CPU Core Count: 16, </li>
+                <li class="listTypeTwoLI">Memory Size: 512 GB, </li>
+                <li class="listTypeTwoLI">
+                    <p class="textTA01">Data Storage Size: 1024</p>
+                    <p class="textTA01">In the Configure Backup section you may leave the default backup window of 7
+                        days.</p>
+                    <p class="textTA01">Keep scrolling and click Show Advanced Options.</p>
+                    <p class="textTA01">Go to the Networking tab, in the Hostname field enter the exact name of your DB
+                        System.</p>
+                    <p class="textTA01">Make sure port configuration corresponds to the following:</p>
+                </li>
+                <li class="listTypeTwoLI">MySQL Port: 3306</li>
+                <li class="listTypeTwoLI">
+                    <p class="textTA01">MySQL X Protocol Port: 33060</p>
+                    <p class="textTA01">And... click Create!</p>
+                    <p class="textTA01">This time a yellow hexagon will appear, and eventually it&#39;ll turn green and
+                        your DB System
+                        will be up and running. Make some tea or grab some water, you&#39;ve done a lot.</p>
+                </li>
+            </ul>
+        </li>
+    </ol>
+    <ol class="listTypeThree">
+        <li class="listTypeTwoLI">
+            <p class="textTA01"><strong>Create a MySQL database</strong></p>
+            <p class="textTA01"> Now, you&#39;ll want to create your database and import any data you need. HeatWave is
+                really designed
+                for big data sets, needing fast analysis, so even though I’m importing the tiniest database ever, you
+                can load up as much as you like (provided you have the storage for it). Plus, queries can be run in the
+                cluster without offloading to a separate database. Whether you&#39;re deploying to OCI or AWS, we got
+                you.</p>
+            <p class="textTA01"> Finally, the fun part! Import a .sql file. <a target="_blank" class="textLinkTA01"
+                    href="https://www.youtube.com/watch?v=gvcBDA2wJJ4">Here&#39;s a video on importing using the command
+                    line</a>.</p>
+            <p class="textTA01"> The key steps are:</p>
+            <ol class="listTypeThree">
+                <li class="listTypeTwoLI">Type: <code>mysql -u username -p database_name &lt; file.sql</code>.</li>
+                <li class="listTypeTwoLI">The username refers to your MySQL username.</li>
+                <li class="listTypeTwoLI">database_name refers to the database you want to import.</li>
+                <li class="listTypeTwoLI">file. sql is your file name.</li>
+                <li class="listTypeTwoLI">
+                    <p class="textTA01">If you&#39;ve assigned a password, type it now and press Enter.</p>
+                    <p class="textTA01">Lots of fans of mysqldump out there, so here’s how that works (using a made-up
+                        database for
+                        magazines):</p>
+                </li>
+                <li class="listTypeTwoLI">
+                    <p class="textTA01">To import a .sql file with mysqldump, use the mysqlimport command and use the
+                        following flags and
+                        syntax
+                        <code>$ mysqlimport -u magazine_admin -p magazines_production ~/backup/database/magazines.sql</code>
+                    </p>
+                </li>
+                <li class="listTypeTwoLI">-u and -p are needed for authentication, and is then followed by the name of
+                    the database you want
+                    to import into.</li>
+                <li class="listTypeTwoLI">You&#39;ll need to specify the path to your SQL dump file that will contain
+                    your import data:
+                    <code>~/backup/database/magazines.sql</code>
+                </li>
+                <li class="listTypeTwoLI">You won&#39;t need to use &gt; or &lt; for importing, but you will need them
+                    for exporting in the
+                    next guide.</li>
+                <li class="listTypeTwoLI">This will prompt a password request.</li>
+                <li class="listTypeTwoLI">
+                    <p class="textTA01">Your file will be automatically imported. </p>
+                    <p class="textTA01">Now that we have some data, we probably want to DO stuff with it, including
+                        visualize it in
+                        various ways. Let&#39;s add some analytics to accomplish this -- and continue our journey to the
+                        really big show, HeatWave. This is where things get really interesting, and you can see how
+                        Oracle has created a vast menu of options for your data needs.</p>
+                    <p class="textTA01">The key is that you have a database running on OCI, and that database now has an
+                        endpoint which
+                        we can connect to HeatWave for analytics. </p>
+                </li>
+            </ol>
+        </li>
+        <li class="listTypeTwoLI">
+            <p class="textTA01"><strong>Activate HeatWave on AWS</strong></p>
+            <p class="textTA01"> Remember the DB System we just created? Now we can activate MySQL HeatWave in AWS and
+                connect our DB
+                System to a HeatWave Cluster to run queries on!</p>
+
+            <div class="imageContainer">
+                <img src="https://raw.githubusercontent.com/oracle-devrel/devo-image-repository/Devo/images/AWS_Heatwave/hw-entercloudname-screen-devrel0922.png"
+                    alt="" class="imageFullWidth borderImage" loading="lazy">
+                <p class="fullImageDescription">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent sed
+                    diam
+                    interdum, posuere quam
+                    sed, faucibu.</p>
+            </div>
+
+
+
+            <p class="textTA01"> You&#39;ll go to <a target="_blank" class="textLinkTA01"
+                    href="http://cloud.mysql.com/">http://cloud.mysql.com/</a>, where you&#39;ll see the
+                welcome page. Enter your Oracle Cloud Account name and click Continue.</p>
+            <p class="textTA01"> Click Enable MySQL HeatWave on AWS. This takes you to a Admin page where you will go
+                through a brief
+                setup process. You may have to upgrade your account to paid with a credit card, and once complete,
+                you&#39;ll go to the OCI Console. Try not to time this for the last minute, as provisioning may take a
+                moment.</p>
+            <p class="textTA01"> From the OCI Console navigation menu, select Databases.</p>
+            <p class="textTA01"> MySQL HeatWave on AWS appears on the Home tab under the Featured label.</p>
+            <p class="textTA01"> Under MySQL HeatWave on AWS, click Administration, and you&#39;ll go back to the setup.
+            </p>
+            <p class="textTA01"> Now click Provision to (of course) provision MySQL on AWS. After the provisioning
+                operation is
+                completed, a message appears stating that MySQL HeatWave on AWS is ready and you are presented with
+                options to open the MySQL HeatWave console, set up users, and view billing information.</p>
+        </li>
+    </ol>
+    <h3 id="summary-so-far-">Summary - So far!</h3>
+    <p class="textTA01">What we&#39;ve done so far, all on OCI, is set up a Virtual Cloud Network with ports for MySQL
+        use, created a
+        Bastion Compute instance, then set up a MySQL database, and now we have an endpoint for our HeatWave on AWS
+        instance, and HeatWave should be provisioned on AWS. </p>
+    <p class="textTA01">Want to know more? Join the discussion in our <a target="_blank" class="textLinkTA01"
+            href="https://bit.ly/odevrel_slack">public Slack channel</a>!
+    </p>
+
+
+</div>

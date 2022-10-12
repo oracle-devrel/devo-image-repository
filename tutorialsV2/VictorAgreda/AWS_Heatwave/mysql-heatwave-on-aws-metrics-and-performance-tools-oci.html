@@ -1,0 +1,143 @@
+<div class="techArticleContainer TA01">
+
+    <p class="textTA01">As you’re working with your data, you’ll want to check out the performance of MySQL HeatWave on
+        AWS, and we
+        provide a number of metrics for you to examine.</p>
+    <h3 id="heatwave-cluster-workspaces">HeatWave Cluster Workspaces</h3>
+
+
+    <div class="imageContainer">
+        <img src="https://raw.githubusercontent.com/oracle-devrel/devo-image-repository/Devo/images/AWS_Heatwave/hwaws-query_already_run-devrel0622.png"
+            alt="" class="imageFullWidth" loading="lazy">
+        <p class="fullImageDescription">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent sed diam
+            interdum, posuere quam
+            sed, faucibu.</p>
+    </div>
+
+    <p class="textTA01">Above, we see the Workspaces tab in the Console, having just run a query. While we see a memory
+        snapshot, we can
+        go deeper in the Performance tab. </p>
+    <h3 id="performance">Performance</h3>
+    <div class="imageContainer">
+        <img src="https://raw.githubusercontent.com/oracle-devrel/devo-image-repository/Devo/images/AWS_Heatwave/hw_performance_monitoring-devrel0622.png"
+            alt="" class="imageFullWidth" loading="lazy">
+        <p class="fullImageDescription">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent sed diam
+            interdum, posuere quam
+            sed, faucibu.</p>
+    </div>
+
+    <p class="textTA01">Here’s the good stuff! Not only can you see performance per node, you can see the size of the
+        dataset, the data
+        dictionary, and if you click on Workload on the left side, you’ll see duration each step of the query took, and
+        when queries have taken place. </p>
+    <div class="imageContainer">
+        <img src="https://raw.githubusercontent.com/oracle-devrel/devo-image-repository/Devo/images/AWS_Heatwave/hw_performance_monitoring_03-devrel0622.png"
+            alt="" class="imageFullWidth" loading="lazy">
+        <p class="fullImageDescription">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent sed diam
+            interdum, posuere quam
+            sed, faucibu.</p>
+    </div>
+
+    <p class="textTA01">Clicking back on Cluster and scrolling down, we can see metrics related to the VM itself,
+        including memory and
+        connection usage, CPU, and so on. If you’re keen on squeezing every drop of performance that you can out of
+        HeatWave on AWS, we got you. </p>
+    <div class="imageContainer">
+        <img src="https://raw.githubusercontent.com/oracle-devrel/devo-image-repository/Devo/images/AWS_Heatwave/hw_performance_monitoring_02-devrel0622.png"
+            alt="" class="imageFullWidth" loading="lazy">
+        <p class="fullImageDescription">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent sed diam
+            interdum, posuere quam
+            sed, faucibu.</p>
+    </div>
+
+    <h3 id="getting-there-on-oci">Getting there on OCI</h3>
+    <p class="textTA01">However, HeatWave on OCI&#39;s Cloud Analytics platform is slightly different. You can find full
+        documentation
+        for <a target="_blank" class="textLinkTA01"
+            href="https://docs.oracle.com/en/solutions/oac-with-heatwave/index.html">using Oracle Analytics Cloud
+            service with MySQL HeatWave here</a>. For now, I&#39;ll just give a brief overview of how you get started:
+    </p>
+    <p class="textTA01">We create an Analytics instance in our compartment.</p>
+    <div class="imageContainer">
+        <img src="https://raw.githubusercontent.com/oracle-devrel/devo-image-repository/Devo/images/AWS_Heatwave/oci-dashboard-analytics-devrel1022.png"
+            alt="" class="imageFullWidth" loading="lazy">
+        <p class="fullImageDescription">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent sed diam
+            interdum, posuere quam
+            sed, faucibu.</p>
+    </div>
+
+    <div class="imageContainer">
+        <img src="https://raw.githubusercontent.com/oracle-devrel/devo-image-repository/Devo/images/AWS_Heatwave/oci-create-analytics-hwdevrel1022.png"
+            alt="" class="imageFullWidth" loading="lazy">
+        <p class="fullImageDescription">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent sed diam
+            interdum, posuere quam
+            sed, faucibu.</p>
+    </div>
+
+    <div class="imageContainer">
+        <img src="https://raw.githubusercontent.com/oracle-devrel/devo-image-repository/Devo/images/AWS_Heatwave/oci-analytics-compartment-hwdevrel1022.png"
+            alt="" class="imageFullWidth" loading="lazy">
+        <p class="fullImageDescription">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent sed diam
+            interdum, posuere quam
+            sed, faucibu.</p>
+    </div>
+
+    <p class="textTA01">Notice that as it starts up, the Analytics instance gives you an access URL -- that&#39;s
+        because the Oracle
+        Cloud Analytics is its own powerful platform including ML and other tools to help shape your solution to your
+        needs. Also, you can set up Analytics so anyone in your organization can view data or even run some analytics
+        without the concern of them having improper access.</p>
+    <div class="imageContainer">
+        <img src="https://raw.githubusercontent.com/oracle-devrel/devo-image-repository/Devo/images/AWS_Heatwave/oci-startanalytics-devrel1022.png"
+            alt="" class="imageFullWidth" loading="lazy">
+        <p class="fullImageDescription">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent sed diam
+            interdum, posuere quam
+            sed, faucibu.</p>
+    </div>
+
+    <p class="textTA01">Once in Analytics, you&#39;ll go to Connect to Your Data</p>
+    <div class="imageContainer">
+        <img src="https://raw.githubusercontent.com/oracle-devrel/devo-image-repository/Devo/images/AWS_Heatwave/oci-startanalytics-devrel1022.png"
+            alt="" class="imageFullWidth" loading="lazy">
+        <p class="fullImageDescription">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent sed diam
+            interdum, posuere quam
+            sed, faucibu.</p>
+    </div>
+
+    <p class="textTA01">Here we can see there are quite a few options! But we&#39;ll want humble but mighty MySQL.</p>
+    <div class="imageContainer">
+        <img src="https://raw.githubusercontent.com/oracle-devrel/devo-image-repository/Devo/images/AWS_Heatwave/oci-analytics-selecttype-devrel1022.png"
+            alt="" class="imageFullWidth" loading="lazy">
+        <p class="fullImageDescription">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent sed diam
+            interdum, posuere quam
+            sed, faucibu.</p>
+    </div>
+
+    <div class="imageContainer">
+        <img src="https://raw.githubusercontent.com/oracle-devrel/devo-image-repository/Devo/images/AWS_Heatwave/analytics-mysql-devrel1022.png"
+            alt="" class="imageFullWidth" loading="lazy">
+        <p class="fullImageDescription">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent sed diam
+            interdum, posuere quam
+            sed, faucibu.</p>
+    </div>
+
+    <p class="textTA01">Once we go to configure this connection, we see our usual inputs for authentication and
+        connecting! After that,
+        the metrics, etc. are pretty similar to what you see on the AWS side, with the addition of the Cloud Analytics
+        tools. </p>
+
+    <div class="imageContainer">
+        <img src="https://raw.githubusercontent.com/oracle-devrel/devo-image-repository/Devo/images/AWS_Heatwave/analytics-mysql-connect-devrel1022.png"
+            alt="" class="imageFullWidth" loading="lazy">
+        <p class="fullImageDescription">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent sed diam
+            interdum, posuere quam
+            sed, faucibu.</p>
+    </div>
+
+    <p class="textTA01">Want to know more? Join the discussion in our <a target="_blank" class="textLinkTA01"
+            href="https://bit.ly/odevrel_slack">public
+            Slack channel</a>!
+    </p>
+
+
+</div>

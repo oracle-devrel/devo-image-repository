@@ -1,5 +1,4 @@
-window.onload = function () {
-  let altImage = document.querySelectorAll("img");
+let altImage = document.querySelectorAll("img");
   for (var i = 0; i < altImage.length; i++) {
     var image = altImage[i].getAttribute("alt");
     //console.log(image)
@@ -50,4 +49,3 @@ window.onload = function () {
     //console.log(closeNavBTN[i]);
   }
   //console.log("Close BTN-ARIA updated");
-};
