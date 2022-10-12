@@ -13,6 +13,7 @@ function changeHeaderLink() {
     if (headerLinks[i].href.includes(domain)) {
       if (url.includes("/de/") === true) {
         generateNewLink("/de", headerLinks[i], domain);
+        
       } else if (url.includes("/es/") === true) {
         generateNewLink("/es", headerLinks[i], domain);
       } else if (url.includes("/fr/") === true) {

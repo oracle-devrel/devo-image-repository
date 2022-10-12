@@ -43,11 +43,11 @@ window.onresize = window.onload = function () {
       title[i].style.paddingTop = "5rem";
     }
   }
-
-  try {
-    changeHeaderLink();
-  } catch (e) {
-    console.error(e);
-    console.log("Links not updated");
-  }
 };
+
+try {
+  changeHeaderLink();
+} catch (e) {
+  console.error(e);
+  console.log("Links not updated");
+}
