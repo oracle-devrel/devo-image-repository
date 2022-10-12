@@ -32,7 +32,8 @@ function changeHeaderLink() {
   }
 }
 
-window.onresize = window.onload = function () {
+//window.onresize = window.onload = function () {
+window.onload = function () {
   var title = document.querySelectorAll(".section-header");
 
   if (window.innerWidth <= 767) {
@@ -44,14 +45,14 @@ window.onresize = window.onload = function () {
       title[i].style.paddingTop = "5rem";
     }
   }
-};
 
-try {
-  changeHeaderLink();
-} catch (e) {
-  console.error(e);
-  console.log("Links not updated");
-}
+  try {
+    changeHeaderLink();
+  } catch (e) {
+    console.error(e);
+    console.log("Links not updated");
+  }
+};
 
 /* 
 
