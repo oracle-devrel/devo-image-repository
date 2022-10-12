@@ -27,6 +27,8 @@ function changeHeaderLink() {
         generateNewLink("/pt-BR", headerLinks[i], domain);
       } else if (url.includes("/zh/") === true) {
         generateNewLink("/zh", headerLinks[i], domain);
+      } else if (url.includes("/zh-TW/") === true) {
+        generateNewLink("/zh-TW", headerLinks[i], domain);
       }
     }
   }
