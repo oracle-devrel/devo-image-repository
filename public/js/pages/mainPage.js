@@ -5,7 +5,7 @@ function generateNewLink(prefix, link, location) {
 
 function changeHeaderLink() {
   //let headerLinks = document.querySelectorAll("#Header a, #Footer a");
-  let headerLinks = document.querySelectorAll("#Header a");
+  let headerLinks = document.querySelectorAll(".u30 a");
   let domain = "https://orasites-prodapp.cec.ocp.oraclecloud.com";
   let url = location.href;
 
@@ -13,7 +13,7 @@ function changeHeaderLink() {
     if (headerLinks[i].href.includes(domain)) {
       if (url.includes("/de/") === true) {
         generateNewLink("/de", headerLinks[i], domain);
-        
+
       } else if (url.includes("/es/") === true) {
         generateNewLink("/es", headerLinks[i], domain);
       } else if (url.includes("/fr/") === true) {
