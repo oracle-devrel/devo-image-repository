@@ -6,7 +6,7 @@ function generateNewLink(prefix, link, location) {
 function changeHeaderLink() {
   //let headerLinks = document.querySelectorAll("#Header a, #Footer a");
   let headerLinks = document.querySelectorAll(".u30 a");
-  let domain = "https://orasites-prodapp.cec.ocp.oraclecloud.com";
+  let domain = "https://developer.oracle.com";
   let url = location.href;
 
   for (var i = 0; i < headerLinks.length; i++) {
