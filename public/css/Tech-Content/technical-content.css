@@ -413,3 +413,8 @@ td {
   font-weight: 400 !important;
   font-size: 1rem !important;
 }
+
+.content-container .technical-content-container .body .obttns a{
+  background-color: #00747a00!important;
+  border: solid!important;
+}
