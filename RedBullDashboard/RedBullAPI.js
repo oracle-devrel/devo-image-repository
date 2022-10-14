@@ -1,29 +1,35 @@
 function callResults() {
   //fetch("https://jsonplaceholder.typicode.com/users")
   fetch(
-    "https://g2f4dc3e5463897-ocwredbull.adb.us-phoenix-1.oraclecloudapps.com/ords/ocw2022/redbull/"
+    "https://gc3dd18cc561e12-f1db.adb.us-phoenix-1.oraclecloudapps.com/ords/livelapsar/ocw22_drivers_bestv2/"
   )
     .then((res) => {
       return res.json();
     })
     .then((data) => {
-      data.items.forEach((test) => {
-        //const markup = `<li class="newScore">${test.name}</li>`;
+      data.items.forEach((redScore) => {
+        //const markup = `<li class="newScore">${redScore.name}</li>`;
         //document.querySelector(".Names").insertAdjacentHTML("beforeend", markup);
-        //console.log(test)
+        //console.log(redScore)
 
-        const pos = `<td class="newScore">${test.pos}</td>`;
-        const name = `<td class="newScore">${test.name}</td>`;
-        const sector1 = `<td class="gray newScore">${test.sector1}</td>`;
-        const sector2 = `<td class="gray newScore">${test.sector2}</td>`;
-        const sector3 = `<td class="gray newScore">${test.sector3}</td>`;
-        const lapt = `<td class="strong newScore">${test.lapt}</td>`;
-        const gap = `<td class="gapRED newScore">${test.gap}</td>`;
+        let pos = `<td class="newScore">${redScore.rank}</td>`;
+        let name = `<td class="newScore">${redScore.driver}</td>`;
+        let sector1 = `<td class="gray newScore">${redScore.s1}</td>`;
+        let sector2 = `<td class="gray newScore">${redScore.s2}</td>`;
+        let sector3 = `<td class="gray newScore">${redScore.s3}</td>`;
+        let lapt = `<td class="strong newScore">${redScore.lap_time_dsp}</td>`;
+        let gap = `<td class="gapRED newScore">${redScore.gap}</td>`;
+
+        if (redScore.rank == "1") {
+          document.getElementById("compLapTime").innerHTML = lapt;
+          document.getElementById("compLapDifTime").innerHTML = gap;
+          document.getElementById("compLapName").innerHTML = name;
+        }
 
         document
           .querySelector(".maxVerScore-Table")
           .insertAdjacentHTML(
-            "afterend",
+            "beforebegin",
             "<tr class='newScore'>" +
               pos +
               name +
