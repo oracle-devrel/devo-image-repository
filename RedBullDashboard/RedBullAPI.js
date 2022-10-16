@@ -1,7 +1,7 @@
 function callResults() {
   //fetch("https://jsonplaceholder.typicode.com/users")
   fetch(
-    "https://gc3dd18cc561e12-f1db.adb.us-phoenix-1.oraclecloudapps.com/ords/livelapsar/ocw22_drivers_bestv2/"
+    "https://gc3dd18cc561e12-f1db.adb.us-phoenix-1.oraclecloudapps.com/ords/livelapsar/ocw22_drivers_valid_laps/"
   )
     .then((res) => {
       return res.json();
