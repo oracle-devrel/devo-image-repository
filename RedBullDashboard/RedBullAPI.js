@@ -20,10 +20,16 @@ function callResults() {
         let lapt = `<td class="strong newScore">${redScore.lap_time_dsp}</td>`;
         let gap = `<td class="gapRED newScore">${redScore.gap}</td>`;
 
-        if (redScore.rank == "1") {
+        if (redScore.rank == "2") {
           document.getElementById("compLapTime").innerHTML = lapt;
           document.getElementById("compLapDifTime").innerHTML = gap;
           document.getElementById("compLapName").innerHTML = name;
+        }
+
+        if (redScore.driver == "Max Verstappen") {
+          document.querySelector(
+            "body > div.RedBull-Dash > div.maxVersScore > div:nth-child(2) > div > div:nth-child(1) > p.FastestLap-Score"
+          ).innerHTML = lapt;
         }
 
         document
