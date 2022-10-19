@@ -26,12 +26,6 @@ function callResults() {
           document.getElementById("compLapName").innerHTML = name;
         }
 
-        if (redScore.driver == "Max Verstappen") {
-          document.querySelector(
-            "body > div.RedBull-Dash > div.maxVersScore > div:nth-child(2) > div > div:nth-child(1) > p.FastestLap-Score"
-          ).innerHTML = lapt;
-        }
-
         document
           .querySelector(".maxVerScore-Table")
           .insertAdjacentHTML(
