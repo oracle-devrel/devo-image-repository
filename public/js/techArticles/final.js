@@ -297,7 +297,7 @@ function altImages() {
     //console.log(image)
 
     if (image == null) {
-      altImage[i].setAttribute("alt", "Developer Resource Center Icon");
+      altImage[i].setAttribute("alt", "Developer Resource Center Image");
       //console.log(image + " ALT updated");
     }
   }
@@ -400,7 +400,18 @@ window.onload = function () {
 
     try {
       addPadding();
-      console.log("Padding added");
+    } catch (e) {
+      console.log(e);
+    }
+
+    try {
+      altImages();
+    } catch (e) {
+      console.log(e);
+    }
+
+    try {
+      addBlank();
     } catch (e) {
       console.log(e);
     }
@@ -417,14 +428,20 @@ window.onload = function () {
     changeHeaderLink();
   } catch (e) {
     console.error(e);
-    console.log("Links not updated");
   }
 
   try {
-    changeHeaderLink();
+    altImages();
   } catch (e) {
-    console.error(e);
-    console.log("Links not updated");
+    console.log(e);
+    reloadDEVO();
+  }
+
+  try {
+    addBlank();
+  } catch (e) {
+    console.log(e);
+    reloadDEVO();
   }
 
   /*

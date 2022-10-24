@@ -389,3 +389,9 @@
     aspect-ratio: 0;
   }
 }
+
+@media (max-width: 768px) {
+  #b822e6da-667e-42be-8b4c-f7f20001c916{
+    display: none;
+  }
+}
