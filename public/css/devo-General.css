@@ -5,7 +5,7 @@
   z-index: revert-layer;
 }
 
-.cta-btn.tertiary.text-color-primary, .card .content .list a {
+.cta-btn.tertiary.text-color-primary, .card .content .list a, .section-header .link {
   color: #34e7ce!important;
 }
 
