@@ -5,6 +5,10 @@
   z-index: revert-layer;
 }
 
+.cta-btn.tertiary.text-color-primary, .card .content .list a {
+  color: #34e7ce!important;
+}
+
 /* Banners problems - Multiple CSS classes */
 .feature .content-container .message-container,
 .banner .banner-content-container .body-content-def .banner-text-content .body,
